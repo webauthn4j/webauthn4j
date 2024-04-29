@@ -17,7 +17,7 @@
 package com.webauthn4j.util;
 
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class HexUtil {
 
@@ -27,7 +27,7 @@ public class HexUtil {
     private HexUtil() {
     }
 
-    public static @NonNull byte[] decode(@NonNull String source) {
+    public static @NotNull byte[] decode(@NotNull String source) {
         source = source.toUpperCase();
         int sourceLength = source.length();
         if (sourceLength % 2 != 0) {
@@ -42,7 +42,7 @@ public class HexUtil {
         return bytes;
     }
 
-    public static @NonNull String encodeToString(@NonNull byte[] source) {
+    public static @NotNull String encodeToString(@NotNull byte[] source) {
         StringBuilder stringBuilder = new StringBuilder(source.length * 2);
         for (byte item : source) {
             stringBuilder.append(HEX_CHAR_ARRAY[(item >> 4) & 0xF]);

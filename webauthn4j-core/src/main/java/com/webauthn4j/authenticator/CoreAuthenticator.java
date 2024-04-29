@@ -21,8 +21,8 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -37,7 +37,7 @@ public interface CoreAuthenticator {
      *
      * @return the {@link AttestedCredentialData}
      */
-    @NonNull AttestedCredentialData getAttestedCredentialData();
+    @NotNull AttestedCredentialData getAttestedCredentialData();
 
     /**
      * Returns the {@link AttestationStatement}

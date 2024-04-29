@@ -26,8 +26,8 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -46,7 +46,7 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
     private Set<AuthenticatorTransport> transports;
 
     public AuthenticatorImpl(
-            @NonNull AttestedCredentialData attestedCredentialData,
+            @NotNull AttestedCredentialData attestedCredentialData,
             @Nullable AttestationStatement attestationStatement,
             long counter,
             @Nullable Set<AuthenticatorTransport> transports,
@@ -58,7 +58,7 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
     }
 
     public AuthenticatorImpl(
-            @NonNull AttestedCredentialData attestedCredentialData,
+            @NotNull AttestedCredentialData attestedCredentialData,
             @Nullable AttestationStatement attestationStatement,
             long counter,
             @Nullable Set<AuthenticatorTransport> transports) {
@@ -66,13 +66,13 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
     }
 
     public AuthenticatorImpl(
-            @NonNull AttestedCredentialData attestedCredentialData,
+            @NotNull AttestedCredentialData attestedCredentialData,
             @Nullable AttestationStatement attestationStatement,
             long counter) {
         this(attestedCredentialData, attestationStatement, counter, Collections.emptySet());
     }
 
-    public static @NonNull AuthenticatorImpl createFromRegistrationData(@NonNull RegistrationData registrationData) {
+    public static @NotNull AuthenticatorImpl createFromRegistrationData(@NotNull RegistrationData registrationData) {
         AssertUtil.notNull(registrationData, "registrationData must not be null");
         AssertUtil.notNull(registrationData.getAttestationObject(), "attestationObject must not be null");
         AssertUtil.notNull(registrationData.getAttestationObject().getAuthenticatorData(), "authenticatorData must not be null");

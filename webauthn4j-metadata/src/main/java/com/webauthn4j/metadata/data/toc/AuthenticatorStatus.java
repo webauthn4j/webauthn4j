@@ -19,7 +19,7 @@ package com.webauthn4j.metadata.data.toc;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This enumeration describes the status of an authenticator webauthn as identified by its AAID and potentially some additional information (such as a specific attestation key).
@@ -101,15 +101,15 @@ public enum AuthenticatorStatus {
      */
     FIDO_CERTIFIED_L3_PLUS("FIDO_CERTIFIED_L3plus");
 
-    @NonNull
+    @NotNull
     private final String value;
 
-    AuthenticatorStatus(@NonNull String value) {
+    AuthenticatorStatus(@NotNull String value) {
         this.value = value;
     }
 
-    @NonNull
-    public static AuthenticatorStatus create(@NonNull String value) {
+    @NotNull
+    public static AuthenticatorStatus create(@NotNull String value) {
         switch (value) {
             case "NOT_FIDO_CERTIFIED":
                 return NOT_FIDO_CERTIFIED;
@@ -146,9 +146,9 @@ public enum AuthenticatorStatus {
         }
     }
 
-    @NonNull
+    @NotNull
     @JsonCreator
-    private static AuthenticatorStatus deserialize(@NonNull String value) throws InvalidFormatException {
+    private static AuthenticatorStatus deserialize(@NotNull String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

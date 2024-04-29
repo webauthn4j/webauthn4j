@@ -16,7 +16,7 @@
 
 package com.webauthn4j.anchor;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.security.KeyStore;
 

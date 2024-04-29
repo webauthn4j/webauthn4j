@@ -23,8 +23,8 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -50,24 +50,24 @@ public class AttestationObject {
 
     @JsonCreator
     public AttestationObject(
-            @NonNull @JsonProperty("authData") AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData,
-            @NonNull @JsonProperty("attStmt") AttestationStatement attestationStatement) {
+            @NotNull @JsonProperty("authData") AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData,
+            @NotNull @JsonProperty("attStmt") AttestationStatement attestationStatement) {
         AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
         AssertUtil.notNull(attestationStatement, "attestationStatement must not be null");
         this.authenticatorData = authenticatorData;
         this.attestationStatement = attestationStatement;
     }
 
-    public @NonNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> getAuthenticatorData() {
+    public @NotNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 
     @JsonProperty("fmt")
-    public @NonNull String getFormat() {
+    public @NotNull String getFormat() {
         return attestationStatement.getFormat();
     }
 
-    public @NonNull AttestationStatement getAttestationStatement() {
+    public @NotNull AttestationStatement getAttestationStatement() {
         return attestationStatement;
     }
 

@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,17 +39,17 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     private Map<Class<? extends T>, T> extensions;
 
     @JsonAnySetter
-    private void setUnknowns(@NonNull String name, @Nullable Object value) {
+    private void setUnknowns(@NotNull String name, @Nullable Object value) {
         this.unknowns.put(name, value);
     }
 
     @JsonAnyGetter
-    private @NonNull Map<String, Object> getUnknowns() {
+    private @NotNull Map<String, Object> getUnknowns() {
         return this.unknowns;
     }
 
     @JsonIgnore
-    public @NonNull Set<String> getKeys() {
+    public @NotNull Set<String> getKeys() {
         Set<String> keys = new HashSet<>();
         if (appid != null) {
             keys.add("appid");
@@ -71,12 +71,12 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     }
 
     @JsonIgnore
-    public @NonNull Set<String> getUnknownKeys() {
+    public @NotNull Set<String> getUnknownKeys() {
         return unknowns.keySet();
     }
 
     @JsonIgnore
-    public @Nullable Object getValue(@NonNull String key) {
+    public @Nullable Object getValue(@NotNull String key) {
         switch (key) {
             case "appid":
                 return appid;
@@ -119,13 +119,13 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     }
 
     @SuppressWarnings("unchecked")
-    public @Nullable <E extends T> E getExtension(@NonNull Class<E> tClass) {
+    public @Nullable <E extends T> E getExtension(@NotNull Class<E> tClass) {
         return (E) getExtensions().get(tClass);
     }
 
     @SuppressWarnings("unchecked")
     @JsonIgnore
-    public @NonNull Map<Class<? extends T>, T> getExtensions() {
+    public @NotNull Map<Class<? extends T>, T> getExtensions() {
         if (extensions == null) {
             Map<Class<? extends T>, T> map = new HashMap<>();
             if (appid != null) {
@@ -183,7 +183,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
         private CredentialPropertiesOutput credProps;
         private Boolean hmacCreateSecret;
 
-        public @NonNull AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> build() {
+        public @NotNull AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> build() {
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
             instance.uvm = this.uvm;
             instance.credProps = this.credProps;
@@ -193,22 +193,22 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             return instance;
         }
 
-        public @NonNull BuilderForRegistration setUvm(@Nullable UvmEntries uvm) {
+        public @NotNull BuilderForRegistration setUvm(@Nullable UvmEntries uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public @NonNull BuilderForRegistration setCredProps(@Nullable CredentialPropertiesOutput credProps) {
+        public @NotNull BuilderForRegistration setCredProps(@Nullable CredentialPropertiesOutput credProps) {
             this.credProps = credProps;
             return this;
         }
 
-        public @NonNull BuilderForRegistration setHMACCreateSecret(@Nullable Boolean hmacCreateSecret) {
+        public @NotNull BuilderForRegistration setHMACCreateSecret(@Nullable Boolean hmacCreateSecret) {
             this.hmacCreateSecret = hmacCreateSecret;
             return this;
         }
 
-        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Object value) {
+        public @NotNull BuilderForRegistration set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);
@@ -224,7 +224,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
         private UvmEntries uvm;
         private HMACGetSecretOutput hmacGetSecret;
 
-        public @NonNull AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> build() {
+        public @NotNull AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> build() {
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
             instance.appid = this.appid;
             instance.uvm = this.uvm;
@@ -234,22 +234,22 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             return instance;
         }
 
-        public @NonNull BuilderForAuthentication setAppid(@Nullable Boolean appid) {
+        public @NotNull BuilderForAuthentication setAppid(@Nullable Boolean appid) {
             this.appid = appid;
             return this;
         }
 
-        public @NonNull BuilderForAuthentication setUvm(@Nullable UvmEntries uvm) {
+        public @NotNull BuilderForAuthentication setUvm(@Nullable UvmEntries uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public @NonNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretOutput hmacGetSecret) {
+        public @NotNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretOutput hmacGetSecret) {
             this.hmacGetSecret = hmacGetSecret;
             return this;
         }
 
-        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Object value) {
+        public @NotNull BuilderForAuthentication set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);

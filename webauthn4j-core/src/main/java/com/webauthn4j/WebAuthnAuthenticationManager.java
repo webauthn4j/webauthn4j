@@ -33,7 +33,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.AuthenticationDataValidator;
 import com.webauthn4j.validator.CustomAuthenticationValidator;
 import com.webauthn4j.validator.exception.ValidationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,8 +53,8 @@ public class WebAuthnAuthenticationManager {
     private final AuthenticationDataValidator authenticationDataValidator;
 
     public WebAuthnAuthenticationManager(
-            @NonNull List<CustomAuthenticationValidator> customAuthenticationValidators,
-            @NonNull ObjectConverter objectConverter) {
+            @NotNull List<CustomAuthenticationValidator> customAuthenticationValidators,
+            @NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
@@ -66,7 +66,7 @@ public class WebAuthnAuthenticationManager {
     }
 
     public WebAuthnAuthenticationManager(
-            @NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
+            @NotNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
         this(customAuthenticationValidators, new ObjectConverter());
     }
 
@@ -75,7 +75,7 @@ public class WebAuthnAuthenticationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull AuthenticationData parse(@NonNull AuthenticationRequest authenticationRequest) throws DataConversionException {
+    public @NotNull AuthenticationData parse(@NotNull AuthenticationRequest authenticationRequest) throws DataConversionException {
         AssertUtil.notNull(authenticationRequest, "authenticationRequest must not be null");
 
         logger.trace("Parse: {}", authenticationRequest);
@@ -106,24 +106,24 @@ public class WebAuthnAuthenticationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull AuthenticationData validate(
-            @NonNull AuthenticationRequest authenticationRequest,
-            @NonNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
+    public @NotNull AuthenticationData validate(
+            @NotNull AuthenticationRequest authenticationRequest,
+            @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
         AuthenticationData authenticationData = parse(authenticationRequest);
         validate(authenticationData, authenticationParameters);
         return authenticationData;
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull AuthenticationData validate(
-            @NonNull AuthenticationData authenticationData,
-            @NonNull AuthenticationParameters authenticationParameters) throws ValidationException {
+    public @NotNull AuthenticationData validate(
+            @NotNull AuthenticationData authenticationData,
+            @NotNull AuthenticationParameters authenticationParameters) throws ValidationException {
         logger.trace("Validate: {}, {}", authenticationData, authenticationParameters);
         authenticationDataValidator.validate(authenticationData, authenticationParameters);
         return authenticationData;
     }
 
-    public @NonNull AuthenticationDataValidator getAuthenticationDataValidator() {
+    public @NotNull AuthenticationDataValidator getAuthenticationDataValidator() {
         return authenticationDataValidator;
     }
 }

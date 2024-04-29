@@ -28,7 +28,7 @@ import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.PublicKeyMismatchException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
@@ -46,7 +46,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
     private boolean teeEnforcedOnly = true;
 
     @Override
-    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+    public @NotNull AttestationType validate(@NotNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
 
         if (!supports(registrationObject)) {
@@ -88,7 +88,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         }
     }
 
-    private void validateSignature(@NonNull CoreRegistrationObject registrationObject) {
+    private void validateSignature(@NotNull CoreRegistrationObject registrationObject) {
         AndroidKeyAttestationStatement attestationStatement = (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
@@ -110,13 +110,13 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         }
     }
 
-    private @NonNull byte[] getSignedData(@NonNull CoreRegistrationObject registrationObject) {
+    private @NotNull byte[] getSignedData(@NotNull CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 
-    private @NonNull PublicKey getPublicKey(@NonNull AndroidKeyAttestationStatement attestationStatement) {
+    private @NotNull PublicKey getPublicKey(@NotNull AndroidKeyAttestationStatement attestationStatement) {
         AttestationCertificatePath x5c = attestationStatement.getX5c();
         Certificate cert = x5c.getEndEntityAttestationCertificate().getCertificate();
         return cert.getPublicKey();

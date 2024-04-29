@@ -25,8 +25,8 @@ import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -131,7 +131,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
         this.d = d;
     }
 
-    public static @NonNull EC2COSEKey create(@NonNull ECPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {
+    public static @NotNull EC2COSEKey create(@NotNull ECPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.notNull(privateKey, "privateKey must not be null");
 
         Curve curve = getCurve(privateKey.getParams());
@@ -139,7 +139,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
         return new EC2COSEKey(null, alg, null, curve, null, null, d);
     }
 
-    public static @NonNull EC2COSEKey create(@NonNull ECPublicKey publicKey, @Nullable COSEAlgorithmIdentifier alg) {
+    public static @NotNull EC2COSEKey create(@NotNull ECPublicKey publicKey, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.notNull(publicKey, "publicKey must not be null");
 
         ECPoint ecPoint = publicKey.getW();
@@ -149,7 +149,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
         return new EC2COSEKey(null, alg, null, curve, x, y);
     }
 
-    public static @NonNull EC2COSEKey create(@NonNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
+    public static @NotNull EC2COSEKey create(@NotNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.notNull(keyPair, "keyPair must not be null");
 
         if (keyPair.getPrivate() instanceof ECPrivateKey && keyPair.getPublic() instanceof ECPublicKey) {
@@ -173,7 +173,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
      * @param privateKey private key
      * @return {@link EC2COSEKey}
      */
-    public static @NonNull EC2COSEKey create(@NonNull ECPrivateKey privateKey) {
+    public static @NotNull EC2COSEKey create(@NotNull ECPrivateKey privateKey) {
         return create(privateKey, null);
     }
 
@@ -183,7 +183,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
      * @param publicKey public key
      * @return {@link EC2COSEKey}
      */
-    public static @NonNull EC2COSEKey create(@NonNull ECPublicKey publicKey) {
+    public static @NotNull EC2COSEKey create(@NotNull ECPublicKey publicKey) {
         return create(publicKey, null);
     }
 
@@ -193,7 +193,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
      * @param keyPair key pair
      * @return {@link EC2COSEKey}
      */
-    public static @NonNull EC2COSEKey create(@NonNull KeyPair keyPair) {
+    public static @NotNull EC2COSEKey create(@NotNull KeyPair keyPair) {
         return create(keyPair, null);
     }
 
@@ -203,7 +203,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
      * @param publicKey public key
      * @return {@link EC2COSEKey}
      */
-    public static @NonNull EC2COSEKey createFromUncompressedECCKey(@NonNull byte[] publicKey) {
+    public static @NotNull EC2COSEKey createFromUncompressedECCKey(@NotNull byte[] publicKey) {
         if (publicKey.length != 65) {
             throw new IllegalArgumentException("publicKey must be 65 bytes length");
         }
@@ -220,7 +220,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
         );
     }
 
-    static @NonNull Curve getCurve(@Nullable ECParameterSpec params) {
+    static @NotNull Curve getCurve(@Nullable ECParameterSpec params) {
         if (params == null) {
             throw new IllegalArgumentException("params must not be null");
         }
@@ -239,7 +239,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
     }
 
     @Override
-    public @NonNull COSEKeyType getKeyType() {
+    public @NotNull COSEKeyType getKeyType() {
         return COSEKeyType.EC2;
     }
 

@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 import java.util.Objects;
@@ -43,7 +43,7 @@ public class Origin {
     private final String schemeSpecificPart;
     private final boolean explicitPortNotation;
 
-    public Origin(@NonNull String originUrl) {
+    public Origin(@NotNull String originUrl) {
         AssertUtil.notNull(originUrl, "originUrl must not be null");
         URI uri = URI.create(originUrl);
 
@@ -87,7 +87,7 @@ public class Origin {
         }
     }
 
-    public static @NonNull Origin create(@NonNull String value) {
+    public static @NotNull Origin create(@NotNull String value) {
         try {
             return new Origin(value);
         } catch (NullPointerException e) {
@@ -97,7 +97,7 @@ public class Origin {
 
     @SuppressWarnings("unused")
     @JsonCreator
-    private static @NonNull Origin deserialize(@NonNull String value) throws InvalidFormatException {
+    private static @NotNull Origin deserialize(@NotNull String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -109,7 +109,7 @@ public class Origin {
         return s == null ? null : s.toLowerCase();
     }
 
-    public @NonNull String getScheme() {
+    public @NotNull String getScheme() {
         return scheme;
     }
 
@@ -121,13 +121,13 @@ public class Origin {
         return port;
     }
 
-    public @NonNull String getSchemeSpecificPart() {
+    public @NotNull String getSchemeSpecificPart() {
         return schemeSpecificPart;
     }
 
     @JsonValue
     @Override
-    public @NonNull String toString() {
+    public @NotNull String toString() {
         if (this.scheme == null) {
             return this.schemeSpecificPart;
         }

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.statement.tpm;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.Base64Util;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ public class MetadataAAGUIDRelaxedDeserializer extends StdDeserializer<AAGUID> {
     }
 
     @Override
-    public @NonNull AAGUID deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
+    public @NotNull AAGUID deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
         String value = p.getValueAsString();
         if(value.length() == 32){
             value = String.format("%s-%s-%s-%s-%s", value.substring(0, 8), value.substring(8, 12), value.substring(12, 16), value.substring(16, 20), value.substring(20, 32));

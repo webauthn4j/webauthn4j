@@ -19,8 +19,8 @@ package com.webauthn4j.data.attestation.statement;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -30,18 +30,18 @@ public class ECCUnique implements TPMUPublicId {
     private final byte[] x;
     private final byte[] y;
 
-    public ECCUnique(@NonNull byte[] x, @NonNull byte[] y) {
+    public ECCUnique(@NotNull byte[] x, @NotNull byte[] y) {
         AssertUtil.notNull(x, "x must not be null");
         AssertUtil.notNull(y, "y must not be null");
         this.x = x;
         this.y = y;
     }
 
-    public @NonNull byte[] getX() {
+    public @NotNull byte[] getX() {
         return ArrayUtil.clone(x);
     }
 
-    public @NonNull byte[] getY() {
+    public @NotNull byte[] getY() {
         return ArrayUtil.clone(y);
     }
 
@@ -63,7 +63,7 @@ public class ECCUnique implements TPMUPublicId {
     }
 
     @Override
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         ByteBuffer buffer = ByteBuffer.allocate(2 + x.length + 2 + y.length);
         buffer.put(UnsignedNumberUtil.toBytes(x.length));
         buffer.put(x);

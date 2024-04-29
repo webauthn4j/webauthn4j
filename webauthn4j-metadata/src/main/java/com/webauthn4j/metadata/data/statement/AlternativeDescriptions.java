@@ -18,7 +18,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.data.AbstractImmutableMap;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Map;
@@ -29,7 +29,7 @@ import java.util.Map;
 public class AlternativeDescriptions extends AbstractImmutableMap<String, String> {
 
     @JsonCreator
-    public AlternativeDescriptions(@NonNull Map<String, String> map) {
+    public AlternativeDescriptions(@NotNull Map<String, String> map) {
         super(map);
     }
 

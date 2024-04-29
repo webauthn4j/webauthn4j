@@ -18,8 +18,8 @@ package com.webauthn4j.server;
 
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -28,7 +28,7 @@ public class CoreServerProperty {
     private final String rpId;
     private final Challenge challenge;
 
-    public CoreServerProperty(@NonNull String rpId, @Nullable Challenge challenge) {
+    public CoreServerProperty(@NotNull String rpId, @Nullable Challenge challenge) {
         AssertUtil.notNull(rpId, "rpId must not be null");
         this.rpId = rpId;
         this.challenge = challenge;
@@ -39,7 +39,7 @@ public class CoreServerProperty {
      *
      * @return the rpId
      */
-    public @NonNull String getRpId() {
+    public @NotNull String getRpId() {
         return rpId;
     }
 

@@ -36,7 +36,7 @@ import com.webauthn4j.validator.attestation.statement.AttestationStatementValida
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -63,11 +63,11 @@ public class RegistrationDataValidator {
     private int maxCredentialIdLength = DEFAULT_MAX_CREDENTIAL_ID_LENGTH;
 
     public RegistrationDataValidator(
-            @NonNull List<AttestationStatementValidator> attestationStatementValidators,
-            @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-            @NonNull List<CustomRegistrationValidator> customRegistrationValidators,
-            @NonNull ObjectConverter objectConverter) {
+            @NotNull List<AttestationStatementValidator> attestationStatementValidators,
+            @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            @NotNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+            @NotNull List<CustomRegistrationValidator> customRegistrationValidators,
+            @NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
@@ -83,7 +83,7 @@ public class RegistrationDataValidator {
     }
 
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
-    public void validate(@NonNull RegistrationData registrationData, @NonNull RegistrationParameters registrationParameters) {
+    public void validate(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) {
 
         //spec| Step1
         //spec| Let options be a new PublicKeyCredentialCreationOptions structure configured to the Relying Party's needs for the ceremony.

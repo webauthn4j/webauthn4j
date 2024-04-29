@@ -17,7 +17,7 @@
 package com.webauthn4j.data.jws;
 
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 class JWSSignatureUtil {
 
@@ -58,7 +58,7 @@ class JWSSignatureUtil {
      * @author Vladimir Dzhuvinov
      * @author Aleksei Doroganov
      */
-    public static @NonNull byte[] convertJwsSignatureToDerSignature(@NonNull byte[] jwsSignature) {
+    public static @NotNull byte[] convertJwsSignatureToDerSignature(@NotNull byte[] jwsSignature) {
 
         AssertUtil.notNull(jwsSignature, "jwsSignature must not be null");
 
@@ -133,7 +133,7 @@ class JWSSignatureUtil {
      * @param derSignature signature in DER format
      * @return signature in JWS format
      */
-    public static @NonNull byte[] convertDerSignatureToJwsSignature(@NonNull byte[] derSignature) {
+    public static @NotNull byte[] convertDerSignatureToJwsSignature(@NotNull byte[] derSignature) {
         if (derSignature.length < 8 || derSignature[0] != 48) {
             throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }

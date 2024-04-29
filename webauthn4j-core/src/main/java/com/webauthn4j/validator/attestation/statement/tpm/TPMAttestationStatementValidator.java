@@ -28,7 +28,7 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -56,7 +56,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     private TPMDevicePropertyDecoder tpmDevicePropertyDecoder = new DefaultTPMDevicePropertyDecoder();
 
     @Override
-    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+    public @NotNull AttestationType validate(@NotNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());

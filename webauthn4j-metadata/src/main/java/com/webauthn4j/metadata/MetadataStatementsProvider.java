@@ -17,11 +17,11 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public interface MetadataStatementsProvider {
 
-    @NonNull List<MetadataStatement> provide();
+    @NotNull List<MetadataStatement> provide();
 }

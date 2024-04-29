@@ -17,8 +17,8 @@
 package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -40,7 +40,7 @@ public class ECUtil {
     private ECUtil() {
     }
 
-    public static @NonNull byte[] createUncompressedPublicKey(@NonNull ECPublicKey ecPublicKey) {
+    public static @NotNull byte[] createUncompressedPublicKey(@NotNull ECPublicKey ecPublicKey) {
         byte[] x = ArrayUtil.convertToFixedByteArray(ecPublicKey.getW().getAffineX());
         byte[] y = ArrayUtil.convertToFixedByteArray(ecPublicKey.getW().getAffineY());
 
@@ -52,11 +52,11 @@ public class ECUtil {
                 .array();
     }
 
-    public static @NonNull KeyPair createKeyPair() {
+    public static @NotNull KeyPair createKeyPair() {
         return createKeyPair((byte[]) null);
     }
 
-    public static @NonNull PublicKey createPublicKey(@NonNull ECPublicKeySpec ecPublicKeySpec) {
+    public static @NotNull PublicKey createPublicKey(@NotNull ECPublicKeySpec ecPublicKeySpec) {
         try {
             KeyFactory factory = KeyFactory.getInstance("EC");
             return factory.generatePublic(ecPublicKeySpec);
@@ -65,7 +65,7 @@ public class ECUtil {
         }
     }
 
-    public static @NonNull PrivateKey createPrivateKey(@NonNull ECPrivateKeySpec ecPrivateKeySpec) {
+    public static @NotNull PrivateKey createPrivateKey(@NotNull ECPrivateKeySpec ecPrivateKeySpec) {
         try {
             KeyFactory factory = KeyFactory.getInstance("EC");
             return factory.generatePrivate(ecPrivateKeySpec);
@@ -74,7 +74,7 @@ public class ECUtil {
         }
     }
 
-    private static @NonNull KeyPairGenerator createKeyPairGenerator() {
+    private static @NotNull KeyPairGenerator createKeyPairGenerator() {
         try {
             return KeyPairGenerator.getInstance("EC");
         } catch (NoSuchAlgorithmException e) {
@@ -82,7 +82,7 @@ public class ECUtil {
         }
     }
 
-    public static @NonNull KeyPair createKeyPair(@Nullable byte[] seed, @NonNull ECParameterSpec ecParameterSpec) {
+    public static @NotNull KeyPair createKeyPair(@Nullable byte[] seed, @NotNull ECParameterSpec ecParameterSpec) {
         KeyPairGenerator keyPairGenerator = createKeyPairGenerator();
         SecureRandom random;
         try {
@@ -100,15 +100,15 @@ public class ECUtil {
         }
     }
 
-    public static @NonNull KeyPair createKeyPair(@Nullable byte[] seed) {
+    public static @NotNull KeyPair createKeyPair(@Nullable byte[] seed) {
         return createKeyPair(seed, ECUtil.P_256_SPEC);
     }
 
-    public static @NonNull KeyPair createKeyPair(@NonNull ECParameterSpec ecParameterSpec) {
+    public static @NotNull KeyPair createKeyPair(@NotNull ECParameterSpec ecParameterSpec) {
         return createKeyPair(null, ecParameterSpec);
     }
 
-    public static @NonNull PublicKey createPublicKeyFromUncompressed(@NonNull byte[] publicKey) {
+    public static @NotNull PublicKey createPublicKeyFromUncompressed(@NotNull byte[] publicKey) {
         if (publicKey.length != 65) {
             throw new IllegalArgumentException("publicKey must be 65 bytes length");
         }
@@ -116,7 +116,7 @@ public class ECUtil {
                 Arrays.copyOfRange(publicKey, 1 + 32, publicKey.length));
     }
 
-    private static @NonNull PublicKey createPublicKey(@NonNull byte[] x, @NonNull byte[] y) {
+    private static @NotNull PublicKey createPublicKey(@NotNull byte[] x, @NotNull byte[] y) {
         try {
             byte[] encodedPublicKey = ByteBuffer.allocate(1 + x.length + y.length).put(new byte[]{0x04}).put(x).put(y).array();
             ECPoint point = createECPoint(encodedPublicKey);
@@ -126,7 +126,7 @@ public class ECUtil {
         }
     }
 
-    private static @NonNull ECPoint createECPoint(@NonNull byte[] publicKey) {
+    private static @NotNull ECPoint createECPoint(@NotNull byte[] publicKey) {
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
         return new ECPoint(
@@ -135,7 +135,7 @@ public class ECUtil {
         );
     }
 
-    private static @NonNull ECParameterSpec createECParameterSpec(@NonNull String name) {
+    private static @NotNull ECParameterSpec createECParameterSpec(@NotNull String name) {
         try {
             AlgorithmParameters parameters;
             parameters = AlgorithmParameters.getInstance("EC");

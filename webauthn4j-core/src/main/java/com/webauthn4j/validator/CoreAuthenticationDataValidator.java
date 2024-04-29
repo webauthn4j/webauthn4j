@@ -28,8 +28,8 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.NotAllowedCredentialIdException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class CoreAuthenticationDataValidator {
     private AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
     private CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
-    public CoreAuthenticationDataValidator(@NonNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
+    public CoreAuthenticationDataValidator(@NotNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
         this.customAuthenticationValidators = customAuthenticationValidators;
     }
 
@@ -53,8 +53,8 @@ public class CoreAuthenticationDataValidator {
     }
 
     protected CoreAuthenticationDataValidator(
-            @NonNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators,
-            @NonNull AssertionSignatureValidator assertionSignatureValidator) {
+            @NotNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators,
+            @NotNull AssertionSignatureValidator assertionSignatureValidator) {
 
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         AssertUtil.notNull(assertionSignatureValidator, "assertionSignatureValidator must not be null");
@@ -70,7 +70,7 @@ public class CoreAuthenticationDataValidator {
      * @param authenticationParameters authentication parameters
      */
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
-    public void validate(@NonNull CoreAuthenticationData authenticationData, @NonNull CoreAuthenticationParameters authenticationParameters) {
+    public void validate(@NotNull CoreAuthenticationData authenticationData, @NotNull CoreAuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
         AssertUtil.notNull(authenticationParameters, "authenticationParameters must not be null");
@@ -226,7 +226,7 @@ public class CoreAuthenticationDataValidator {
 
     }
 
-    protected @NonNull CoreAuthenticationObject createCoreAuthenticationObject(@NonNull CoreAuthenticationData authenticationData, @NonNull CoreAuthenticationParameters authenticationParameters) {
+    protected @NotNull CoreAuthenticationObject createCoreAuthenticationObject(@NotNull CoreAuthenticationData authenticationData, @NotNull CoreAuthenticationParameters authenticationParameters) {
         byte[] credentialId = authenticationData.getCredentialId();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
         byte[] authenticatorDataBytes = authenticationData.getAuthenticatorDataBytes();
@@ -249,22 +249,22 @@ public class CoreAuthenticationDataValidator {
         }
     }
 
-    void validateAuthenticatorData(@NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+    void validateAuthenticatorData(@NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getAttestedCredentialData() != null) {
             throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
         }
     }
 
-    public @NonNull CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
+    public @NotNull CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
         return coreMaliciousCounterValueHandler;
     }
 
-    public void setMaliciousCounterValueHandler(@NonNull CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler) {
+    public void setMaliciousCounterValueHandler(@NotNull CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler) {
         AssertUtil.notNull(coreMaliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
         this.coreMaliciousCounterValueHandler = coreMaliciousCounterValueHandler;
     }
 
-    public @NonNull List<CustomCoreAuthenticationValidator> getCustomAuthenticationValidators() {
+    public @NotNull List<CustomCoreAuthenticationValidator> getCustomAuthenticationValidators() {
         return customAuthenticationValidators;
     }
 }

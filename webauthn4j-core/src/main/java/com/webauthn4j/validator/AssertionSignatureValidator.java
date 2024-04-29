@@ -22,7 +22,7 @@ import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadSignatureException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public class AssertionSignatureValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(@NonNull CoreAuthenticationData authenticationData, @NonNull COSEKey coseKey) {
+    public void validate(@NotNull CoreAuthenticationData authenticationData, @NotNull COSEKey coseKey) {
         AssertUtil.notNull(authenticationData, "authenticationData must not be null");
         AssertUtil.notNull(coseKey, "coseKey must not be null");
 
@@ -50,13 +50,13 @@ public class AssertionSignatureValidator {
         }
     }
 
-    protected @NonNull byte[] getSignedData(@NonNull CoreAuthenticationData authenticationData) {
+    protected @NotNull byte[] getSignedData(@NotNull CoreAuthenticationData authenticationData) {
         byte[] rawAuthenticatorData = authenticationData.getAuthenticatorDataBytes();
         byte[] clientDataHash = authenticationData.getClientDataHash();
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
     }
 
-    private boolean verifySignature(@NonNull COSEKey coseKey, @NonNull byte[] signature, @NonNull byte[] data) {
+    private boolean verifySignature(@NotNull COSEKey coseKey, @NotNull byte[] signature, @NotNull byte[] data) {
         try {
             PublicKey publicKey = coseKey.getPublicKey();
             //noinspection ConstantConditions as null check is already done in caller

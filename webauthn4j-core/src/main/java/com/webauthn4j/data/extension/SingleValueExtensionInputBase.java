@@ -16,11 +16,11 @@
 
 package com.webauthn4j.data.extension;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class SingleValueExtensionInputBase<T> extends SingleValueExtensionBase<T> implements ExtensionInput {
 
-    protected SingleValueExtensionInputBase(@NonNull T value) {
+    protected SingleValueExtensionInputBase(@NotNull T value) {
         super(value);
     }
 }

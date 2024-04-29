@@ -18,8 +18,8 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,12 +37,12 @@ public class TPMTPublic {
     private final TPMUPublicId unique;
 
     public TPMTPublic(
-            @NonNull TPMIAlgPublic type,
-            @NonNull TPMIAlgHash nameAlg,
-            @NonNull TPMAObject objectAttributes,
-            @NonNull byte[] authPolicy,
-            @NonNull TPMUPublicParms parameters,
-            @NonNull TPMUPublicId unique) {
+            @NotNull TPMIAlgPublic type,
+            @NotNull TPMIAlgHash nameAlg,
+            @NotNull TPMAObject objectAttributes,
+            @NotNull byte[] authPolicy,
+            @NotNull TPMUPublicParms parameters,
+            @NotNull TPMUPublicId unique) {
         this.type = type;
         this.nameAlg = nameAlg;
         this.objectAttributes = objectAttributes;
@@ -51,31 +51,31 @@ public class TPMTPublic {
         this.unique = unique;
     }
 
-    public @NonNull TPMIAlgPublic getType() {
+    public @NotNull TPMIAlgPublic getType() {
         return type;
     }
 
-    public @NonNull TPMIAlgHash getNameAlg() {
+    public @NotNull TPMIAlgHash getNameAlg() {
         return nameAlg;
     }
 
-    public @NonNull TPMAObject getObjectAttributes() {
+    public @NotNull TPMAObject getObjectAttributes() {
         return objectAttributes;
     }
 
-    public @NonNull byte[] getAuthPolicy() {
+    public @NotNull byte[] getAuthPolicy() {
         return ArrayUtil.clone(authPolicy);
     }
 
-    public @NonNull TPMUPublicParms getParameters() {
+    public @NotNull TPMUPublicParms getParameters() {
         return parameters;
     }
 
-    public @NonNull TPMUPublicId getUnique() {
+    public @NotNull TPMUPublicId getUnique() {
         return unique;
     }
 
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             int typeValue = type.getValue();

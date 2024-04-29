@@ -18,7 +18,7 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class HMACSecretRegistrationExtensionClientOutput extends SingleValueExtensionOutputBase<Boolean>
         implements RegistrationExtensionClientOutput {
@@ -26,17 +26,17 @@ public class HMACSecretRegistrationExtensionClientOutput extends SingleValueExte
     public static final String ID = "hmac-secret";
     public static final String KEY_HMAC_CREATE_SECRET = "hmacCreateSecret";
 
-    public HMACSecretRegistrationExtensionClientOutput(@NonNull Boolean value) {
+    public HMACSecretRegistrationExtensionClientOutput(@NotNull Boolean value) {
         super(value);
     }
 
     @Override
-    public @NonNull String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return ID;
     }
 
     @Override
-    public @NonNull Boolean getValue(@NonNull String key) {
+    public @NotNull Boolean getValue(@NotNull String key) {
         if (!key.equals(KEY_HMAC_CREATE_SECRET)) {
             throw new IllegalArgumentException(String.format("%s is the only valid key.", KEY_HMAC_CREATE_SECRET));
         }

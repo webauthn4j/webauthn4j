@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -40,19 +40,19 @@ public class PublicKeyCredentialParameters {
 
     @JsonCreator
     public PublicKeyCredentialParameters(
-            @NonNull @JsonProperty("type") PublicKeyCredentialType type,
-            @NonNull @JsonProperty("alg") COSEAlgorithmIdentifier alg) {
+            @NotNull @JsonProperty("type") PublicKeyCredentialType type,
+            @NotNull @JsonProperty("alg") COSEAlgorithmIdentifier alg) {
         AssertUtil.notNull(type, "type must not be null");
         AssertUtil.notNull(alg, "alg must not be null");
         this.type = type;
         this.alg = alg;
     }
 
-    public @NonNull PublicKeyCredentialType getType() {
+    public @NotNull PublicKeyCredentialType getType() {
         return type;
     }
 
-    public @NonNull COSEAlgorithmIdentifier getAlg() {
+    public @NotNull COSEAlgorithmIdentifier getAlg() {
         return alg;
     }
 

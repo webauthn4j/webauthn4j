@@ -17,7 +17,7 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -41,12 +41,12 @@ public abstract class PublicKeyCredentialEntity {
     /**
      * @param name name
      */
-    protected PublicKeyCredentialEntity(@NonNull String name) {
+    protected PublicKeyCredentialEntity(@NotNull String name) {
         AssertUtil.notNull(name, "name must not be null");
         this.name = name;
     }
 
-    public @NonNull String getName() {
+    public @NotNull String getName() {
         return name;
     }
 

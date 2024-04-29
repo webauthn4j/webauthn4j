@@ -18,8 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -28,25 +28,25 @@ import java.util.Objects;
  */
 public class Version {
 
-    @NonNull
+    @NotNull
     private final Integer major;
-    @NonNull
+    @NotNull
     private final Integer minor;
 
     @JsonCreator
     public Version(
-            @JsonProperty("major") @NonNull Integer major,
-            @JsonProperty("minor") @NonNull Integer minor) {
+            @JsonProperty("major") @NotNull Integer major,
+            @JsonProperty("minor") @NotNull Integer minor) {
         this.major = major;
         this.minor = minor;
     }
 
-    @NonNull
+    @NotNull
     public Integer getMajor() {
         return major;
     }
 
-    @NonNull
+    @NotNull
     public Integer getMinor() {
         return minor;
     }

@@ -19,7 +19,7 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -49,12 +49,12 @@ public class AuthenticatorAttachment {
 
     private final String value;
 
-    private AuthenticatorAttachment(@NonNull String value) {
+    private AuthenticatorAttachment(@NotNull String value) {
         this.value = value;
     }
 
     @JsonCreator
-    public static @NonNull AuthenticatorAttachment create(@NonNull String value) {
+    public static @NotNull AuthenticatorAttachment create(@NotNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
             case "platform":
@@ -67,7 +67,7 @@ public class AuthenticatorAttachment {
     }
 
     @JsonValue
-    public @NonNull String getValue() {
+    public @NotNull String getValue() {
         return value;
     }
 

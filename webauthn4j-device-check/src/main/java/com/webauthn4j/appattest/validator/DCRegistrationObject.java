@@ -21,8 +21,8 @@ import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -33,12 +33,12 @@ public class DCRegistrationObject extends CoreRegistrationObject {
 
 
     public DCRegistrationObject(
-            @NonNull byte[] keyId,
-            @NonNull AttestationObject attestationObject,
-            @NonNull byte[] attestationObjectBytes,
-            @NonNull byte[] clientDataHash,
-            @NonNull CoreServerProperty serverProperty,
-            @NonNull Instant timestamp) {
+            @NotNull byte[] keyId,
+            @NotNull AttestationObject attestationObject,
+            @NotNull byte[] attestationObjectBytes,
+            @NotNull byte[] clientDataHash,
+            @NotNull CoreServerProperty serverProperty,
+            @NotNull Instant timestamp) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, timestamp);
 
         AssertUtil.notNull(keyId, "keyId must not be null");
@@ -47,11 +47,11 @@ public class DCRegistrationObject extends CoreRegistrationObject {
     }
 
     public DCRegistrationObject(
-            @NonNull byte[] keyId,
-            @NonNull AttestationObject attestationObject,
-            @NonNull byte[] attestationObjectBytes,
-            @NonNull byte[] clientDataHash,
-            @NonNull CoreServerProperty serverProperty) {
+            @NotNull byte[] keyId,
+            @NotNull AttestationObject attestationObject,
+            @NotNull byte[] attestationObjectBytes,
+            @NotNull byte[] clientDataHash,
+            @NotNull CoreServerProperty serverProperty) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty);
 
         AssertUtil.notNull(keyId, "keyId must not be null");
@@ -59,7 +59,7 @@ public class DCRegistrationObject extends CoreRegistrationObject {
         this.keyId = ArrayUtil.clone(keyId);
     }
 
-    public @NonNull byte[] getKeyId() {
+    public @NotNull byte[] getKeyId() {
         return ArrayUtil.clone(keyId);
     }
 

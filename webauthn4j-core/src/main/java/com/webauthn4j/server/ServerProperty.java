@@ -20,8 +20,8 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,7 +48,7 @@ public class ServerProperty extends CoreServerProperty {
      * @param challenge      challenge
      * @param tokenBindingId tokenBindingId
      */
-    public ServerProperty(@NonNull Origin origin, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
+    public ServerProperty(@NotNull Origin origin, @NotNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
         super(rpId, challenge);
         AssertUtil.notNull(origin, "origin must not be null");
         this.origins = Collections.singleton(origin);
@@ -61,7 +61,7 @@ public class ServerProperty extends CoreServerProperty {
      * @param challenge      challenge
      * @param tokenBindingId tokenBindingId
      */
-    public ServerProperty(@NonNull Set<Origin> origins, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
+    public ServerProperty(@NotNull Set<Origin> origins, @NotNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
         super(rpId, challenge);
         AssertUtil.notNull(origins, "origins must not be null");
         this.origins = Collections.unmodifiableSet(origins);
@@ -71,7 +71,7 @@ public class ServerProperty extends CoreServerProperty {
     // ~ Methods
     // ========================================================================================================
 
-    public @NonNull Set<Origin> getOrigins() {
+    public @NotNull Set<Origin> getOrigins() {
         return this.origins;
     }
 

@@ -18,19 +18,19 @@ package com.webauthn4j.data.extension.authenticator;
 
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class HMACSecretRegistrationExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<Boolean>
         implements RegistrationExtensionAuthenticatorOutput {
 
     public static final String ID = "hmac-secret";
 
-    public HMACSecretRegistrationExtensionAuthenticatorOutput(@NonNull Boolean value) {
+    public HMACSecretRegistrationExtensionAuthenticatorOutput(@NotNull Boolean value) {
         super(value);
     }
 
     @Override
-    public @NonNull String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return ID;
     }
 

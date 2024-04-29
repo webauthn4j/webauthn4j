@@ -18,8 +18,8 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -28,11 +28,11 @@ public class RSAUnique implements TPMUPublicId {
 
     private final byte[] n;
 
-    public RSAUnique(@NonNull byte[] n) {
+    public RSAUnique(@NotNull byte[] n) {
         this.n = n;
     }
 
-    public @NonNull byte[] getN() {
+    public @NotNull byte[] getN() {
         return ArrayUtil.clone(n);
     }
 
@@ -50,7 +50,7 @@ public class RSAUnique implements TPMUPublicId {
     }
 
     @Override
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         ByteBuffer buffer = ByteBuffer.allocate(2 + n.length);
         buffer.put(UnsignedNumberUtil.toBytes(getN().length));
         buffer.put(getN());

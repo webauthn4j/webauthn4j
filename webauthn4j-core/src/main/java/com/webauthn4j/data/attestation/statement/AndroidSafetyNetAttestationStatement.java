@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.*;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
@@ -39,8 +39,8 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
 
     @JsonCreator
     public AndroidSafetyNetAttestationStatement(
-            @NonNull @JsonProperty("ver") String ver,
-            @NonNull @JsonProperty("response") JWS<Response> response) {
+            @NotNull @JsonProperty("ver") String ver,
+            @NotNull @JsonProperty("response") JWS<Response> response) {
         AssertUtil.notNull(ver, "ver must not be null");
         AssertUtil.notNull(response, "response must not be null");
         this.ver = ver;
@@ -49,7 +49,7 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
 
     @JsonIgnore
     @Override
-    public @NonNull String getFormat() {
+    public @NotNull String getFormat() {
         return FORMAT;
     }
 
@@ -73,12 +73,12 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
     }
 
     @JsonGetter("ver")
-    public @NonNull String getVer() {
+    public @NotNull String getVer() {
         return ver;
     }
 
     @JsonGetter("response")
-    public @NonNull JWS<Response> getResponse() {
+    public @NotNull JWS<Response> getResponse() {
         return response;
     }
 

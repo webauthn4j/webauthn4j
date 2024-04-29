@@ -27,8 +27,8 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
@@ -48,7 +48,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+    public @NotNull AttestationType validate(@NotNull CoreRegistrationObject registrationObject) {
 
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
 
@@ -155,7 +155,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         }
     }
 
-    private void validateNonce(@Nullable String nonce, @NonNull byte[] authenticatorData, @NonNull byte[] clientDataHash) {
+    private void validateNonce(@Nullable String nonce, @NotNull byte[] authenticatorData, @NotNull byte[] clientDataHash) {
         if (nonce == null) {
             throw new BadAttestationStatementException("Nonce in the Android safetynet response is null.");
         }
@@ -185,11 +185,11 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         this.backwardThreshold = backwardThreshold;
     }
 
-    public @NonNull GooglePlayServiceVersionValidator getVersionValidator() {
+    public @NotNull GooglePlayServiceVersionValidator getVersionValidator() {
         return versionValidator;
     }
 
-    public void setVersionValidator(@NonNull GooglePlayServiceVersionValidator versionValidator) {
+    public void setVersionValidator(@NotNull GooglePlayServiceVersionValidator versionValidator) {
         AssertUtil.notNull(versionValidator, "versionValidator must not be null");
         this.versionValidator = versionValidator;
     }
@@ -199,7 +199,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         private static final int MINIMAL_VERSION = 0;
 
         @Override
-        public void validate(@NonNull String version) {
+        public void validate(@NotNull String version) {
             try {
                 int versionNumber = Integer.parseInt(version);
                 if (versionNumber < MINIMAL_VERSION) {

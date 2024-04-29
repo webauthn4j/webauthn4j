@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -34,21 +34,21 @@ import java.util.Objects;
  */
 public class TokenBinding {
 
-    @NonNull
+    @NotNull
     private final TokenBindingStatus status;
     @Nullable
     private final String id;
 
     @JsonCreator
     public TokenBinding(
-            @NonNull @JsonProperty("status") TokenBindingStatus status,
+            @NotNull @JsonProperty("status") TokenBindingStatus status,
             @Nullable @JsonProperty("id") String id) {
         AssertUtil.notNull(status, "status must not be null");
         this.status = status;
         this.id = id;
     }
 
-    public TokenBinding(@NonNull TokenBindingStatus status, @Nullable byte[] id) {
+    public TokenBinding(@NotNull TokenBindingStatus status, @Nullable byte[] id) {
         AssertUtil.notNull(status, "status must not be null");
         this.status = status;
         if (id == null) {
@@ -60,7 +60,7 @@ public class TokenBinding {
     }
 
 
-    public @NonNull TokenBindingStatus getStatus() {
+    public @NotNull TokenBindingStatus getStatus() {
         return status;
     }
 

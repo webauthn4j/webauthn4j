@@ -19,8 +19,8 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -29,24 +29,24 @@ import java.util.Objects;
  */
 public class ExtensionDescriptor {
 
-    @NonNull private final String id;
+    @NotNull private final String id;
     @Nullable private final Integer tag;
     @Nullable private final String data;
-    @NonNull private final Boolean failIfUnknown;
+    @NotNull private final Boolean failIfUnknown;
 
     @JsonCreator
     public ExtensionDescriptor(
-            @NonNull @JsonProperty("id") String id,
+            @NotNull @JsonProperty("id") String id,
             @Nullable @JsonProperty("tag") Integer tag,
             @Nullable @JsonProperty("data") String data,
-            @NonNull @JsonProperty("fail_if_unknown") Boolean failIfUnknown) {
+            @NotNull @JsonProperty("fail_if_unknown") Boolean failIfUnknown) {
         this.id = id;
         this.tag = tag;
         this.data = data;
         this.failIfUnknown = failIfUnknown;
     }
 
-    @NonNull
+    @NotNull
     @JsonGetter
     public String getId() {
         return id;
@@ -64,7 +64,7 @@ public class ExtensionDescriptor {
         return data;
     }
 
-    @NonNull
+    @NotNull
     @JsonGetter("fail_if_unknown")
     public Boolean getFailIfUnknown() {
         return failIfUnknown;

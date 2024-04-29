@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -66,17 +66,17 @@ public class AuthenticatorTransport {
 
     private final String value;
 
-    private AuthenticatorTransport(@NonNull String value) {
+    private AuthenticatorTransport(@NotNull String value) {
         this.value = value;
     }
 
-    public static @NonNull AuthenticatorTransport create(@NonNull String value) {
+    public static @NotNull AuthenticatorTransport create(@NotNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         return new AuthenticatorTransport(value);
     }
 
     @JsonCreator
-    static @NonNull AuthenticatorTransport deserialize(@NonNull String value) throws InvalidFormatException {
+    static @NotNull AuthenticatorTransport deserialize(@NotNull String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -85,7 +85,7 @@ public class AuthenticatorTransport {
     }
 
     @JsonValue
-    public @NonNull String getValue() {
+    public @NotNull String getValue() {
         return value;
     }
 

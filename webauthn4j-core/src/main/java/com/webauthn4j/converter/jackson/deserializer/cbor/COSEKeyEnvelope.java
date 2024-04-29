@@ -17,7 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Internal envelope class for {@link COSEKey} deserialization

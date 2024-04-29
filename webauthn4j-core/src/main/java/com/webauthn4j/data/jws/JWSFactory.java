@@ -21,7 +21,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +37,7 @@ public class JWSFactory {
 
     private final JsonConverter jsonConverter;
 
-    public JWSFactory(@NonNull ObjectConverter objectConverter) {
+    public JWSFactory(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
     }
@@ -46,7 +46,7 @@ public class JWSFactory {
         this(new ObjectConverter());
     }
 
-    public <T> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull PrivateKey privateKey) {
+    public <T> @NotNull JWS<T> create(@NotNull JWSHeader header, @NotNull T payload, @NotNull PrivateKey privateKey) {
         AssertUtil.notNull(header, HEADER_MUST_NOT_BE_NULL);
         AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(privateKey, "privateKey must not be null");
@@ -69,7 +69,7 @@ public class JWSFactory {
         }
     }
 
-    public <T> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull byte[] signature) {
+    public <T> @NotNull JWS<T> create(@NotNull JWSHeader header, @NotNull T payload, @NotNull byte[] signature) {
         AssertUtil.notNull(header, HEADER_MUST_NOT_BE_NULL);
         AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(signature, "signature must not be null");
@@ -79,7 +79,7 @@ public class JWSFactory {
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }
 
-    public <T> @NonNull JWS<T> parse(@NonNull String value, @NonNull Class<T> payloadType) {
+    public <T> @NotNull JWS<T> parse(@NotNull String value, @NotNull Class<T> payloadType) {
         AssertUtil.notNull(value, "value must not be null");
         AssertUtil.notNull(payloadType, "payloadType must not be null");
 

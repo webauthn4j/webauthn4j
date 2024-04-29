@@ -23,8 +23,8 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,10 +55,10 @@ public class PublicKeyCredentialCreationOptions {
     @SuppressWarnings("squid:S00107")
     @JsonCreator
     public PublicKeyCredentialCreationOptions(
-            @NonNull @JsonProperty("rp") PublicKeyCredentialRpEntity rp,
-            @NonNull @JsonProperty("user") PublicKeyCredentialUserEntity user,
-            @NonNull @JsonProperty("challenge") Challenge challenge,
-            @NonNull @JsonProperty("pubKeyCredParams") List<PublicKeyCredentialParameters> pubKeyCredParams,
+            @NotNull @JsonProperty("rp") PublicKeyCredentialRpEntity rp,
+            @NotNull @JsonProperty("user") PublicKeyCredentialUserEntity user,
+            @NotNull @JsonProperty("challenge") Challenge challenge,
+            @NotNull @JsonProperty("pubKeyCredParams") List<PublicKeyCredentialParameters> pubKeyCredParams,
             @Nullable @JsonProperty("timeout") Long timeout,
             @Nullable @JsonProperty("excludeCredentials") List<PublicKeyCredentialDescriptor> excludeCredentials,
             @Nullable @JsonProperty("authenticatorSelection") AuthenticatorSelectionCriteria authenticatorSelection,
@@ -80,26 +80,26 @@ public class PublicKeyCredentialCreationOptions {
     }
 
     public PublicKeyCredentialCreationOptions(
-            @NonNull PublicKeyCredentialRpEntity rp,
-            @NonNull PublicKeyCredentialUserEntity user,
-            @NonNull Challenge challenge,
-            @NonNull List<PublicKeyCredentialParameters> pubKeyCredParams) {
+            @NotNull PublicKeyCredentialRpEntity rp,
+            @NotNull PublicKeyCredentialUserEntity user,
+            @NotNull Challenge challenge,
+            @NotNull List<PublicKeyCredentialParameters> pubKeyCredParams) {
         this(rp, user, challenge, pubKeyCredParams, null, Collections.emptyList(), null, null, null);
     }
 
-    public @NonNull PublicKeyCredentialRpEntity getRp() {
+    public @NotNull PublicKeyCredentialRpEntity getRp() {
         return rp;
     }
 
-    public @NonNull PublicKeyCredentialUserEntity getUser() {
+    public @NotNull PublicKeyCredentialUserEntity getUser() {
         return user;
     }
 
-    public @NonNull Challenge getChallenge() {
+    public @NotNull Challenge getChallenge() {
         return challenge;
     }
 
-    public @NonNull List<PublicKeyCredentialParameters> getPubKeyCredParams() {
+    public @NotNull List<PublicKeyCredentialParameters> getPubKeyCredParams() {
         return pubKeyCredParams;
     }
 

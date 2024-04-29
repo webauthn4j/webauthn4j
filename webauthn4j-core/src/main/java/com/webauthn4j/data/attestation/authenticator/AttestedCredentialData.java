@@ -18,8 +18,8 @@ package com.webauthn4j.data.attestation.authenticator;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -39,7 +39,7 @@ public class AttestedCredentialData {
 
     private final COSEKey coseKey;
 
-    public AttestedCredentialData(@NonNull AAGUID aaguid, @NonNull byte[] credentialId, @NonNull COSEKey coseKey) {
+    public AttestedCredentialData(@NotNull AAGUID aaguid, @NotNull byte[] credentialId, @NotNull COSEKey coseKey) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
         AssertUtil.notNull(credentialId, "credentialId must not be null");
         AssertUtil.notNull(coseKey, "coseKey must not be null");
@@ -57,15 +57,15 @@ public class AttestedCredentialData {
         coseKey = null;
     }
 
-    public @NonNull AAGUID getAaguid() {
+    public @NotNull AAGUID getAaguid() {
         return aaguid;
     }
 
-    public @NonNull byte[] getCredentialId() {
+    public @NotNull byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
-    public @NonNull COSEKey getCOSEKey() {
+    public @NotNull COSEKey getCOSEKey() {
         return coseKey;
     }
 

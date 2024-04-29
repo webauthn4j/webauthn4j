@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.SignatureAlgorithm;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -86,11 +86,11 @@ public class COSEAlgorithmIdentifier {
     }
 
     // COSEAlgorithmIdentifier doesn't accept jcaName and messageDigestJcaName from caller for the time being
-    public static @NonNull COSEAlgorithmIdentifier create(long value) {
+    public static @NotNull COSEAlgorithmIdentifier create(long value) {
         return new COSEAlgorithmIdentifier(value);
     }
 
-    public static @NonNull COSEAlgorithmIdentifier create(@NonNull SignatureAlgorithm signatureAlgorithm) {
+    public static @NotNull COSEAlgorithmIdentifier create(@NotNull SignatureAlgorithm signatureAlgorithm) {
         COSEAlgorithmIdentifier coseAlgorithmIdentifier = reverseAlgorithmMap.get(signatureAlgorithm);
         if (coseAlgorithmIdentifier == null) {
             throw new IllegalArgumentException(String.format("SignatureAlgorithm %s is not supported.", signatureAlgorithm.getJcaName()));
@@ -100,7 +100,7 @@ public class COSEAlgorithmIdentifier {
 
     @SuppressWarnings("unused")
     @JsonCreator
-    private static @NonNull COSEAlgorithmIdentifier deserialize(long value) throws InvalidFormatException {
+    private static @NotNull COSEAlgorithmIdentifier deserialize(long value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -115,7 +115,7 @@ public class COSEAlgorithmIdentifier {
     }
 
     @JsonIgnore
-    public @NonNull COSEKeyType getKeyType() {
+    public @NotNull COSEKeyType getKeyType() {
         COSEKeyType coseKeyType = keyTypeMap.get(this);
         if (coseKeyType == null) {
             throw new IllegalArgumentException(String.format("COSEAlgorithmIdentifier %d is unknown.", this.getValue()));
@@ -123,7 +123,7 @@ public class COSEAlgorithmIdentifier {
         return coseKeyType;
     }
 
-    public @NonNull SignatureAlgorithm toSignatureAlgorithm() {
+    public @NotNull SignatureAlgorithm toSignatureAlgorithm() {
         SignatureAlgorithm signatureAlgorithm = algorithmMap.get(this);
         if (signatureAlgorithm == null) {
             throw new IllegalArgumentException(String.format("COSEAlgorithmIdentifier %d is unknown.", this.getValue()));

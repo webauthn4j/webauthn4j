@@ -17,7 +17,7 @@
 package com.webauthn4j.metadata.exception;
 
 import com.webauthn4j.validator.exception.ValidationException;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class UnknownProtocolFamilyException extends ValidationException {
     public UnknownProtocolFamilyException(@Nullable String message, @Nullable Throwable cause) {

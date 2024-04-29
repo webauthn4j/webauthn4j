@@ -18,7 +18,7 @@ package com.webauthn4j.converter.jackson.deserializer.cbor;
 
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Internal envelope class for {@link AuthenticationExtensionsAuthenticatorOutputs} deserialization
@@ -28,12 +28,12 @@ public class AuthenticationExtensionsAuthenticatorOutputsEnvelope<T extends Exte
     private final AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs;
     private final int length;
 
-    AuthenticationExtensionsAuthenticatorOutputsEnvelope(@NonNull AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs, int length) {
+    AuthenticationExtensionsAuthenticatorOutputsEnvelope(@NotNull AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs, int length) {
         this.authenticationExtensionsAuthenticatorOutputs = authenticationExtensionsAuthenticatorOutputs;
         this.length = length;
     }
 
-    public @NonNull AuthenticationExtensionsAuthenticatorOutputs<T> getAuthenticationExtensionsAuthenticatorOutputs() {
+    public @NotNull AuthenticationExtensionsAuthenticatorOutputs<T> getAuthenticationExtensionsAuthenticatorOutputs() {
         return authenticationExtensionsAuthenticatorOutputs;
     }
 

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.util;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -26,17 +26,17 @@ public class UUIDUtil {
     private UUIDUtil() {
     }
 
-    public static @NonNull UUID fromString(@NonNull String value) {
+    public static @NotNull UUID fromString(@NotNull String value) {
         return UUID.fromString(value);
     }
 
-    public static @NonNull byte[] convertUUIDToBytes(@NonNull UUID uuid) {
+    public static @NotNull byte[] convertUUIDToBytes(@NotNull UUID uuid) {
         long hi = uuid.getMostSignificantBits();
         long lo = uuid.getLeastSignificantBits();
         return ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
     }
 
-    public static @NonNull UUID fromBytes(@NonNull byte[] bytes) {
+    public static @NotNull UUID fromBytes(@NotNull byte[] bytes) {
         ByteBuffer bb = ByteBuffer.wrap(bytes);
         long hi = bb.getLong();
         long lo = bb.getLong();

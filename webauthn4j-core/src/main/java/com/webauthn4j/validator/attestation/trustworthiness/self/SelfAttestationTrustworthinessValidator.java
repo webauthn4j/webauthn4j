@@ -18,12 +18,12 @@ package com.webauthn4j.validator.attestation.trustworthiness.self;
 
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Validates the specified {@link AttestationStatement} trustworthiness based on self-attestation rule
  */
 public interface SelfAttestationTrustworthinessValidator {
 
-    void validate(@NonNull CertificateBaseAttestationStatement attestationStatement);
+    void validate(@NotNull CertificateBaseAttestationStatement attestationStatement);
 }

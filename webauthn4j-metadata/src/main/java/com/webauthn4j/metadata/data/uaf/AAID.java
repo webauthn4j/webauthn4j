@@ -19,8 +19,8 @@ package com.webauthn4j.metadata.data.uaf;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ public class AAID {
     private final int v;
     private final int m;
 
-    public AAID(@NonNull String aaid) {
+    public AAID(@NotNull String aaid) {
         String[] array = aaid.split("#");
         if (array.length != 2) {
             throw new IllegalArgumentException("AAID value is not divided by single '#' separator.");
@@ -45,7 +45,7 @@ public class AAID {
     }
 
     @JsonCreator
-    static AAID deserialize(@NonNull String aaid) throws InvalidFormatException {
+    static AAID deserialize(@NotNull String aaid) throws InvalidFormatException {
         try {
             return new AAID(aaid);
         } catch (IllegalArgumentException e) {
@@ -61,7 +61,7 @@ public class AAID {
         return m;
     }
 
-    @NonNull
+    @NotNull
     @JsonValue
     @Override
     public String toString() {

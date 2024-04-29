@@ -17,8 +17,8 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.validator.exception.CertificateException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingEnumeration;
@@ -39,7 +39,7 @@ public class AttestationCertificate {
     private static final int NON_CA = -1;
     private final X509Certificate certificate;
 
-    public AttestationCertificate(@NonNull X509Certificate certificate) {
+    public AttestationCertificate(@NotNull X509Certificate certificate) {
         this.certificate = certificate;
     }
 
@@ -60,7 +60,7 @@ public class AttestationCertificate {
         }
     }
 
-    public @NonNull X509Certificate getCertificate() {
+    public @NotNull X509Certificate getCertificate() {
         return certificate;
     }
 
@@ -121,7 +121,7 @@ public class AttestationCertificate {
         return Objects.hash(certificate);
     }
 
-    @Nullable String getValue(@NonNull String name) {
+    @Nullable String getValue(@NotNull String name) {
         try {
             LdapName subjectDN = new LdapName(getCertificate().getSubjectX500Principal().getName());
             Map<String, Object> map = subjectDN.getRdns().stream().flatMap(rdn -> toMap(rdn).entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

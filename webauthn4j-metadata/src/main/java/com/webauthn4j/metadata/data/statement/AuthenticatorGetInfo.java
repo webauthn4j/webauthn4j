@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +31,7 @@ import java.util.Objects;
 public class AuthenticatorGetInfo {
 
     @JsonProperty("versions")
-    @NonNull
+    @NotNull
     private final List<String> versions;
 
     @JsonProperty("extensions")
@@ -39,7 +39,7 @@ public class AuthenticatorGetInfo {
     private final List<String> extensions;
 
     @JsonProperty("aaguid")
-    @NonNull
+    @NotNull
     @JsonDeserialize(using = MetadataAAGUIDRelaxedDeserializer.class)
     private final AAGUID aaguid;
 
@@ -57,9 +57,9 @@ public class AuthenticatorGetInfo {
 
     @JsonCreator
     public AuthenticatorGetInfo(
-            @JsonProperty("versions") @NonNull List<String> versions,
+            @JsonProperty("versions") @NotNull List<String> versions,
             @JsonProperty("extensions") @Nullable List<String> extensions,
-            @JsonProperty("aaguid") @NonNull AAGUID aaguid,
+            @JsonProperty("aaguid") @NotNull AAGUID aaguid,
             @JsonProperty("options") @Nullable Options options,
             @JsonProperty("maxMsgSize") @Nullable Integer maxMsgSize,
             @JsonProperty("pinUvAuthProtocols") @Nullable List<PinProtocolVersion> pinUvAuthProtocols) {

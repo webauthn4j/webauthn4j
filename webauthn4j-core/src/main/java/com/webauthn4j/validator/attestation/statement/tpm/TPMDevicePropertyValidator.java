@@ -16,9 +16,9 @@
 
 package com.webauthn4j.validator.attestation.statement.tpm;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface TPMDevicePropertyValidator {
 
-    void validate(@NonNull TPMDeviceProperty tpmDeviceProperty);
+    void validate(@NotNull TPMDeviceProperty tpmDeviceProperty);
 }

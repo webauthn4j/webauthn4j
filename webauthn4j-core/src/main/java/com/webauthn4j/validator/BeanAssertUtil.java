@@ -33,7 +33,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Per field checker utility class
@@ -117,6 +117,7 @@ class BeanAssertUtil {
         validate(attestationObject.getAuthenticatorData());
     }
 
+    @SuppressWarnings("java:S2583")
     public static <T extends ExtensionAuthenticatorOutput> void validate(@Nullable AuthenticatorData<T> authenticatorData) {
         if (authenticatorData == null) {
             throw new ConstraintViolationException("authenticatorData must not be null");
@@ -144,11 +145,13 @@ class BeanAssertUtil {
         validateAuthenticatorExtensionsOutputs(extensions);
     }
 
+    @SuppressWarnings("java:S2583")
     public static void validate(@Nullable AttestedCredentialData attestedCredentialData) {
         if (attestedCredentialData == null) {
             throw new ConstraintViolationException("attestedCredentialData must not be null");
         }
-        if (attestedCredentialData.getCredentialId() == null) {
+        byte[] credentialId = attestedCredentialData.getCredentialId();
+        if (credentialId == null) {
             throw new ConstraintViolationException("credentialId must not be null");
         }
 

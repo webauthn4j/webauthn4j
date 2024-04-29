@@ -19,7 +19,7 @@ package com.webauthn4j.appattest.data;
 import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class DCAssertionData extends CoreAuthenticationData {
 

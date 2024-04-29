@@ -36,7 +36,7 @@ import com.webauthn4j.validator.AuthenticationObject;
 import com.webauthn4j.validator.OriginValidator;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadOriginException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -118,14 +118,14 @@ class CustomOriginValidatorTest {
 
     private static class CustomOriginValidator implements OriginValidator {
         @Override
-        public void validate(@NonNull RegistrationObject registrationObject) {
+        public void validate(@NotNull RegistrationObject registrationObject) {
             if (!Objects.equals(registrationObject.getCollectedClientData().getOrigin(), new Origin("http://example.com"))) {
                 throw new BadOriginException("origin must be http://example.com");
             }
         }
 
         @Override
-        public void validate(@NonNull AuthenticationObject authenticationObject) {
+        public void validate(@NotNull AuthenticationObject authenticationObject) {
             if (!Objects.equals(authenticationObject.getCollectedClientData().getOrigin(), new Origin("http://localhost"))) {
                 throw new BadOriginException("origin must be http://example.com");
             }

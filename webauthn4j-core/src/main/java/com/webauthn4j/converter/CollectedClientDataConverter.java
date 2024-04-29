@@ -22,8 +22,8 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 
@@ -39,7 +39,7 @@ public class CollectedClientDataConverter {
     //~ Constructors
     // ================================================================================================
 
-    public CollectedClientDataConverter(@NonNull ObjectConverter objectConverter) {
+    public CollectedClientDataConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
     }
@@ -54,7 +54,7 @@ public class CollectedClientDataConverter {
      * @param base64UrlString the source byte array to convert
      * @return the converted object
      */
-    public @Nullable CollectedClientData convert(@NonNull String base64UrlString) {
+    public @Nullable CollectedClientData convert(@NotNull String base64UrlString) {
         try {
             AssertUtil.notNull(base64UrlString, "base64UrlString must not be null");
             byte[] bytes = Base64UrlUtil.decode(base64UrlString);
@@ -70,7 +70,7 @@ public class CollectedClientDataConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public @Nullable CollectedClientData convert(@NonNull byte[] source) {
+    public @Nullable CollectedClientData convert(@NotNull byte[] source) {
         try {
             AssertUtil.notNull(source, "source must not be null");
             String jsonString = new String(source, StandardCharsets.UTF_8);
@@ -86,7 +86,7 @@ public class CollectedClientDataConverter {
      * @param source the source object to convert
      * @return the converted byte array
      */
-    public @NonNull byte[] convertToBytes(@NonNull CollectedClientData source) {
+    public @NotNull byte[] convertToBytes(@NotNull CollectedClientData source) {
         try {
             AssertUtil.notNull(source, "source must not be null");
             return jsonConverter.writeValueAsBytes(source);
@@ -101,7 +101,7 @@ public class CollectedClientDataConverter {
      * @param source the source object to convert
      * @return the converted byte array
      */
-    public @NonNull String convertToBase64UrlString(@NonNull CollectedClientData source) {
+    public @NotNull String convertToBase64UrlString(@NotNull CollectedClientData source) {
         try {
             byte[] bytes = convertToBytes(source);
             return Base64UrlUtil.encodeToString(bytes);

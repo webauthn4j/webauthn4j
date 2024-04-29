@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,21 +31,21 @@ import java.util.Objects;
 public class MetadataBLOBPayload {
     @Nullable
     private final String legalHeader;
-    @NonNull
+    @NotNull
     private final Integer no;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
-    @NonNull
+    @NotNull
     private final LocalDate nextUpdate;
-    @NonNull
+    @NotNull
     private final List<MetadataBLOBPayloadEntry> entries;
 
     public MetadataBLOBPayload(
             @JsonProperty("legalHeader") @Nullable String legalHeader,
-            @JsonProperty("no") @NonNull Integer no,
-            @JsonProperty("nextUpdate") @NonNull LocalDate nextUpdate,
-            @JsonProperty("entries") @NonNull List<MetadataBLOBPayloadEntry> entries) {
+            @JsonProperty("no") @NotNull Integer no,
+            @JsonProperty("nextUpdate") @NotNull LocalDate nextUpdate,
+            @JsonProperty("entries") @NotNull List<MetadataBLOBPayloadEntry> entries) {
         this.legalHeader = legalHeader;
         this.no = no;
         this.nextUpdate = nextUpdate;
@@ -57,17 +57,17 @@ public class MetadataBLOBPayload {
         return legalHeader;
     }
 
-    @NonNull
+    @NotNull
     public Integer getNo() {
         return no;
     }
 
-    @NonNull
+    @NotNull
     public LocalDate getNextUpdate() {
         return nextUpdate;
     }
 
-    @NonNull
+    @NotNull
     public List<MetadataBLOBPayloadEntry> getEntries() {
         return entries;
     }

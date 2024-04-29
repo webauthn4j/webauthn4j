@@ -20,8 +20,8 @@ import com.webauthn4j.authenticator.CoreAuthenticator;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -44,8 +44,8 @@ public class CoreAuthenticationParameters {
      * @param userPresenceRequired true if user presence is required. Otherwise, false
      */
     public CoreAuthenticationParameters(
-            @NonNull CoreServerProperty serverProperty,
-            @NonNull CoreAuthenticator authenticator,
+            @NotNull CoreServerProperty serverProperty,
+            @NotNull CoreAuthenticator authenticator,
             @Nullable List<byte[]> allowCredentials,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
@@ -65,8 +65,8 @@ public class CoreAuthenticationParameters {
      * @param userVerificationRequired true if user verification is required. Otherwise, false
      */
     public CoreAuthenticationParameters(
-            @NonNull CoreServerProperty serverProperty,
-            @NonNull CoreAuthenticator authenticator,
+            @NotNull CoreServerProperty serverProperty,
+            @NotNull CoreAuthenticator authenticator,
             @Nullable List<byte[]> allowCredentials,
             boolean userVerificationRequired) {
         this(
@@ -84,8 +84,8 @@ public class CoreAuthenticationParameters {
     @SuppressWarnings("squid:S1133")
     @Deprecated
     public CoreAuthenticationParameters(
-            @NonNull CoreServerProperty serverProperty,
-            @NonNull CoreAuthenticator authenticator,
+            @NotNull CoreServerProperty serverProperty,
+            @NotNull CoreAuthenticator authenticator,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
         this(
@@ -103,8 +103,8 @@ public class CoreAuthenticationParameters {
     @SuppressWarnings("squid:S1133")
     @Deprecated
     public CoreAuthenticationParameters(
-            @NonNull CoreServerProperty serverProperty,
-            @NonNull CoreAuthenticator authenticator,
+            @NotNull CoreServerProperty serverProperty,
+            @NotNull CoreAuthenticator authenticator,
             boolean userVerificationRequired) {
         this(
                 serverProperty,
@@ -115,11 +115,11 @@ public class CoreAuthenticationParameters {
         );
     }
 
-    public @NonNull CoreServerProperty getServerProperty() {
+    public @NotNull CoreServerProperty getServerProperty() {
         return serverProperty;
     }
 
-    public @NonNull CoreAuthenticator getAuthenticator() {
+    public @NotNull CoreAuthenticator getAuthenticator() {
         return authenticator;
     }
 

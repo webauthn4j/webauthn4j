@@ -28,7 +28,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CustomCoreRegistrationValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ValidationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -41,9 +41,9 @@ public class DeviceCheckAttestationManager {
     private final DCAttestationDataValidator dcAttestationDataValidator;
 
     public DeviceCheckAttestationManager(
-            @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            @NonNull List<CustomCoreRegistrationValidator> customRegistrationValidators,
-            @NonNull ObjectConverter objectConverter) {
+            @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            @NotNull List<CustomCoreRegistrationValidator> customRegistrationValidators,
+            @NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
@@ -55,7 +55,7 @@ public class DeviceCheckAttestationManager {
     }
 
     @SuppressWarnings("java:S1130")
-    public @NonNull DCAttestationData parse(@NonNull DCAttestationRequest dcAttestationRequest) throws DataConversionException {
+    public @NotNull DCAttestationData parse(@NotNull DCAttestationRequest dcAttestationRequest) throws DataConversionException {
         AssertUtil.notNull(dcAttestationRequest, "dcAttestationRequest must not be null");
 
         byte[] keyId = dcAttestationRequest.getKeyId();
@@ -73,18 +73,18 @@ public class DeviceCheckAttestationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull DCAttestationData validate(@NonNull DCAttestationRequest dcAttestationRequest, @NonNull DCAttestationParameters dcAttestationParameters) throws DataConversionException, ValidationException {
+    public @NotNull DCAttestationData validate(@NotNull DCAttestationRequest dcAttestationRequest, @NotNull DCAttestationParameters dcAttestationParameters) throws DataConversionException, ValidationException {
         DCAttestationData dcAttestationData = parse(dcAttestationRequest);
         return validate(dcAttestationData, dcAttestationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull DCAttestationData validate(@NonNull DCAttestationData dcAttestationData, @NonNull DCAttestationParameters dcAttestationParameters) throws ValidationException {
+    public @NotNull DCAttestationData validate(@NotNull DCAttestationData dcAttestationData, @NotNull DCAttestationParameters dcAttestationParameters) throws ValidationException {
         getDCAttestationDataValidator().validate(dcAttestationData, dcAttestationParameters);
         return dcAttestationData;
     }
 
-    public @NonNull DCAttestationDataValidator getDCAttestationDataValidator() {
+    public @NotNull DCAttestationDataValidator getDCAttestationDataValidator() {
         return dcAttestationDataValidator;
     }
 }

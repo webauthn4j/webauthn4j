@@ -2,7 +2,7 @@ package com.webauthn4j.credential;
 
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.data.client.CollectedClientData;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Core interface that represents Passkey(WebAuthn) credential record

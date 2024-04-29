@@ -26,8 +26,8 @@ import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.BiometricStatusReport;
 import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.metadata.data.uaf.AAID;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,12 +45,12 @@ public class MetadataBLOBPayloadEntry {
     private final MetadataStatement metadataStatement;
     @Nullable
     private final List<BiometricStatusReport> biometricStatusReports;
-    @NonNull
+    @NotNull
     private final List<StatusReport> statusReports;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
-    @NonNull
+    @NotNull
     private final LocalDate timeOfLastStatusChange;
     @Nullable
     private final String rogueListURL;
@@ -63,8 +63,8 @@ public class MetadataBLOBPayloadEntry {
             @JsonProperty("attestationCertificateKeyIdentifiers") @Nullable List<String> attestationCertificateKeyIdentifiers,
             @JsonProperty("metadataStatement") @Nullable MetadataStatement metadataStatement,
             @JsonProperty("biometricStatusReports") @Nullable List<BiometricStatusReport> biometricStatusReports,
-            @JsonProperty("statusReports") @NonNull List<StatusReport> statusReports,
-            @JsonProperty("timeOfLastStatusChange") @NonNull LocalDate timeOfLastStatusChange,
+            @JsonProperty("statusReports") @NotNull List<StatusReport> statusReports,
+            @JsonProperty("timeOfLastStatusChange") @NotNull LocalDate timeOfLastStatusChange,
             @JsonProperty("rogueListURL") @Nullable String rogueListURL,
             @JsonProperty("rogueListHash") @Nullable String rogueListHash) {
         this.aaid = aaid;
@@ -103,12 +103,12 @@ public class MetadataBLOBPayloadEntry {
         return biometricStatusReports;
     }
 
-    @NonNull
+    @NotNull
     public List<StatusReport> getStatusReports() {
         return statusReports;
     }
 
-    @NonNull
+    @NotNull
     public LocalDate getTimeOfLastStatusChange() {
         return timeOfLastStatusChange;
     }

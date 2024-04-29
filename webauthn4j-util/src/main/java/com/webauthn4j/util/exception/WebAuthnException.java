@@ -16,7 +16,7 @@
 
 package com.webauthn4j.util.exception;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class WebAuthnException extends RuntimeException {
     public WebAuthnException(@Nullable String message, @Nullable Throwable cause) {

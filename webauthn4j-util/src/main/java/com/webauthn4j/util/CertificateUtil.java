@@ -21,7 +21,7 @@ import org.apache.kerby.asn1.parse.Asn1Container;
 import org.apache.kerby.asn1.parse.Asn1ParseResult;
 import org.apache.kerby.asn1.parse.Asn1Parser;
 import org.apache.kerby.asn1.type.Asn1BitString;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class CertificateUtil {
     private CertificateUtil() {
     }
 
-    public static @NonNull CertPathValidator createCertPathValidator() {
+    public static @NotNull CertPathValidator createCertPathValidator() {
         try {
             return CertPathValidator.getInstance("PKIX");
         } catch (NoSuchAlgorithmException e) {
@@ -63,7 +63,7 @@ public class CertificateUtil {
         }
     }
 
-    public static @NonNull PKIXParameters createPKIXParameters(@NonNull Set<TrustAnchor> trustAnchors) {
+    public static @NotNull PKIXParameters createPKIXParameters(@NotNull Set<TrustAnchor> trustAnchors) {
         AssertUtil.notEmpty(trustAnchors, "trustAnchors is required; it must not be empty");
         try {
             return new PKIXParameters(trustAnchors);
@@ -72,7 +72,7 @@ public class CertificateUtil {
         }
     }
 
-    public static @NonNull KeyStore createKeyStore() {
+    public static @NotNull KeyStore createKeyStore() {
         try {
             return KeyStore.getInstance(KeyStore.getDefaultType());
         } catch (KeyStoreException e) {
@@ -80,11 +80,11 @@ public class CertificateUtil {
         }
     }
 
-    public static @NonNull <C extends X509Certificate> Set<TrustAnchor> generateTrustAnchors(@NonNull List<C> certificates) {
+    public static @NotNull <C extends X509Certificate> Set<TrustAnchor> generateTrustAnchors(@NotNull List<C> certificates) {
         return certificates.stream().map(certificate -> new TrustAnchor(certificate, null)).collect(Collectors.toSet());
     }
 
-    public static @NonNull <C extends Certificate> CertPath generateCertPath(@NonNull List<C> certificates) {
+    public static @NotNull <C extends Certificate> CertPath generateCertPath(@NotNull List<C> certificates) {
         try {
             return certificateFactory.generateCertPath(certificates);
         } catch (CertificateException e) {
@@ -92,11 +92,11 @@ public class CertificateUtil {
         }
     }
 
-    public static @NonNull X509Certificate generateX509Certificate(@NonNull byte[] bytes) {
+    public static @NotNull X509Certificate generateX509Certificate(@NotNull byte[] bytes) {
         return generateX509Certificate(new ByteArrayInputStream(bytes));
     }
 
-    public static @NonNull X509Certificate generateX509Certificate(@NonNull InputStream inputStream) {
+    public static @NotNull X509Certificate generateX509Certificate(@NotNull InputStream inputStream) {
         try {
             return (X509Certificate) certificateFactory.generateCertificate(inputStream);
         } catch (CertificateException e) {
@@ -104,7 +104,7 @@ public class CertificateUtil {
         }
     }
 
-    public static @NonNull byte[] extractSubjectKeyIdentifier(X509Certificate certificate){
+    public static @NotNull byte[] extractSubjectKeyIdentifier(X509Certificate certificate){
         try{
             byte[] publicKeyEncoded = certificate.getPublicKey().getEncoded();
             Asn1ParseResult result = Asn1Parser.parse(ByteBuffer.wrap(publicKeyEncoded));

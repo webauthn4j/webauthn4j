@@ -16,13 +16,13 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Attestation metadata.certs container
  */
 public interface AttestationStatement {
-    @NonNull String getFormat();
+    @NotNull String getFormat();
 
     /**
      * Validates the instance per field basis.

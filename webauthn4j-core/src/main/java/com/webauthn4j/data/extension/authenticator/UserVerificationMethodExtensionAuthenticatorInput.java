@@ -18,7 +18,7 @@ package com.webauthn4j.data.extension.authenticator;
 
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class UserVerificationMethodExtensionAuthenticatorInput extends SingleValueExtensionInputBase<Boolean>
         implements RegistrationExtensionAuthenticatorInput, AuthenticationExtensionAuthenticatorInput {
@@ -26,16 +26,16 @@ public class UserVerificationMethodExtensionAuthenticatorInput extends SingleVal
     public static final String ID = "uvm";
     public static final String KEY_UVM = "uvm";
 
-    public UserVerificationMethodExtensionAuthenticatorInput(@NonNull Boolean value) {
+    public UserVerificationMethodExtensionAuthenticatorInput(@NotNull Boolean value) {
         super(value);
     }
 
     @Override
-    public @NonNull String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return ID;
     }
 
-    public @NonNull Boolean getUvm() {
+    public @NotNull Boolean getUvm() {
         return getValue(KEY_UVM);
     }
 

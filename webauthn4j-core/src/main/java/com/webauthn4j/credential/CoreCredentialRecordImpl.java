@@ -6,8 +6,8 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -19,7 +19,7 @@ public class CoreCredentialRecordImpl extends CoreAuthenticatorImpl implements C
     private Boolean backupEligible;
     private Boolean backupState;
 
-    public CoreCredentialRecordImpl(@NonNull AttestationObject attestationObject){
+    public CoreCredentialRecordImpl(@NotNull AttestationObject attestationObject){
 
         //As AttestationObject always have AttestedCredentialData, this won't be an issue
         //noinspection DataFlowIssue
@@ -38,7 +38,7 @@ public class CoreCredentialRecordImpl extends CoreAuthenticatorImpl implements C
             @Nullable Boolean backupEligible,
             @Nullable Boolean backupState,
             long counter,
-            @NonNull AttestedCredentialData attestedCredentialData,
+            @NotNull AttestedCredentialData attestedCredentialData,
             @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         super(attestedCredentialData, attestationStatement, counter, authenticatorExtensions);
         this.uvInitialized = uvInitialized;

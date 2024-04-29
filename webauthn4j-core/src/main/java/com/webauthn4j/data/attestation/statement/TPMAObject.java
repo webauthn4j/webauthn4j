@@ -16,8 +16,8 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
@@ -87,7 +87,7 @@ public class TPMAObject {
         return (value & SIGN_ENCRYPT_BIT) != 0;
     }
 
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         return ByteBuffer.allocate(4).putInt(value).array();
     }
 

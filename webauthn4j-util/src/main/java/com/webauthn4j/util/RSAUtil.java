@@ -17,7 +17,7 @@
 package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
@@ -30,7 +30,7 @@ public class RSAUtil {
     private RSAUtil() {
     }
 
-    public static @NonNull PublicKey createPublicKey(@NonNull RSAPublicKeySpec rsaPublicKeySpec) {
+    public static @NotNull PublicKey createPublicKey(@NotNull RSAPublicKeySpec rsaPublicKeySpec) {
         try {
             KeyFactory factory = KeyFactory.getInstance("RSA");
             return factory.generatePublic(rsaPublicKeySpec);
@@ -39,7 +39,7 @@ public class RSAUtil {
         }
     }
 
-    public static @NonNull PrivateKey createPrivateKey(@NonNull RSAPrivateKeySpec rsaPrivateKeySpec) {
+    public static @NotNull PrivateKey createPrivateKey(@NotNull RSAPrivateKeySpec rsaPrivateKeySpec) {
         try {
             KeyFactory factory = KeyFactory.getInstance("RSA");
             return factory.generatePrivate(rsaPrivateKeySpec);
@@ -48,7 +48,7 @@ public class RSAUtil {
         }
     }
 
-    public static @NonNull KeyPair createKeyPair() {
+    public static @NotNull KeyPair createKeyPair() {
         KeyPairGenerator keyPairGenerator;
         try {
             keyPairGenerator = KeyPairGenerator.getInstance("RSA");

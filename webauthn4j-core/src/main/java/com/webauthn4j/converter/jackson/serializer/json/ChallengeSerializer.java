@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -38,7 +38,7 @@ public class ChallengeSerializer extends StdSerializer<Challenge> {
      * {@inheritDoc}
      */
     @Override
-    public void serialize(@NonNull Challenge value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull Challenge value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
         String challenge = Base64UrlUtil.encodeToString(value.getValue());
         gen.writeString(challenge);
     }

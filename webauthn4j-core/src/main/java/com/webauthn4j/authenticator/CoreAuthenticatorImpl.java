@@ -24,8 +24,8 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.ConstUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -44,7 +44,7 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     private long counter;
     private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
 
-    public CoreAuthenticatorImpl(@NonNull AttestedCredentialData attestedCredentialData,
+    public CoreAuthenticatorImpl(@NotNull AttestedCredentialData attestedCredentialData,
                                  @Nullable AttestationStatement attestationStatement,
                                  long counter,
                                  @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
@@ -57,7 +57,7 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
         this.authenticatorExtensions = authenticatorExtensions;
     }
 
-    public static @NonNull CoreAuthenticatorImpl createFromCoreRegistrationData(@NonNull CoreRegistrationData coreRegistrationData) {
+    public static @NotNull CoreAuthenticatorImpl createFromCoreRegistrationData(@NotNull CoreRegistrationData coreRegistrationData) {
 
         AssertUtil.notNull(coreRegistrationData.getAttestationObject(), "attestationObject must not be null");
         AssertUtil.notNull(coreRegistrationData.getAttestationObject().getAuthenticatorData(), "authenticatorData must not be null");
@@ -71,11 +71,11 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     }
 
     @Override
-    public @NonNull AttestedCredentialData getAttestedCredentialData() {
+    public @NotNull AttestedCredentialData getAttestedCredentialData() {
         return attestedCredentialData;
     }
 
-    public void setAttestedCredentialData(@NonNull AttestedCredentialData attestedCredentialData) {
+    public void setAttestedCredentialData(@NotNull AttestedCredentialData attestedCredentialData) {
         AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
         this.attestedCredentialData = attestedCredentialData;
     }

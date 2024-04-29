@@ -18,7 +18,7 @@ package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +40,7 @@ public class LocalFilesMetadataStatementsProvider implements MetadataStatementsP
     }
 
     @Override
-    public @NonNull List<MetadataStatement> provide() {
+    public @NotNull List<MetadataStatement> provide() {
         return Arrays.stream(paths).map(path ->{
             try (InputStream inputStream = Files.newInputStream(path)) {
                 return objectConverter.getJsonConverter().readValue(inputStream, MetadataStatement.class);

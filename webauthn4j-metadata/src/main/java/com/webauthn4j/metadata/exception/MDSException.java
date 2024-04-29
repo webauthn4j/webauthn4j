@@ -16,7 +16,7 @@
 
 package com.webauthn4j.metadata.exception;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class MDSException extends RuntimeException {
     public MDSException(@Nullable String message, @Nullable Throwable cause) {

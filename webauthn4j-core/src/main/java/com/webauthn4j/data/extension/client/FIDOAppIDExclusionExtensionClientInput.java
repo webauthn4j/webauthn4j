@@ -18,22 +18,22 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class FIDOAppIDExclusionExtensionClientInput extends SingleValueExtensionInputBase<String> implements AuthenticationExtensionClientInput {
 
     public static final String ID = "appidExclude";
 
-    public FIDOAppIDExclusionExtensionClientInput(@NonNull String appIdExclude) {
+    public FIDOAppIDExclusionExtensionClientInput(@NotNull String appIdExclude) {
         super(appIdExclude);
     }
 
     @Override
-    public @NonNull String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return ID;
     }
 
-    public @NonNull String getAppidExclude() {
+    public @NotNull String getAppidExclude() {
         return getValue(ID);
     }
 

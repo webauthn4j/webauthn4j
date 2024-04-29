@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -38,7 +38,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
     }
 
     @Override
-    public @NonNull TPMTPublic deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
+    public @NotNull TPMTPublic deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();
         try {
             return deserialize(value);
@@ -47,7 +47,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         }
     }
 
-    @NonNull TPMTPublic deserialize(@NonNull byte[] value) {
+    @NotNull TPMTPublic deserialize(@NotNull byte[] value) {
         ByteBuffer buffer = ByteBuffer.wrap(value);
 
         int typeValue = UnsignedNumberUtil.getUnsignedShort(buffer);
@@ -67,12 +67,12 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
     }
 
 
-    private @NonNull TPMAObject extractTPMAObject(@NonNull ByteBuffer buffer) {
+    private @NotNull TPMAObject extractTPMAObject(@NotNull ByteBuffer buffer) {
         int value = buffer.getInt();
         return new TPMAObject(value);
     }
 
-    private @NonNull TPMUPublicParms extractTPMUPublicParms(@NonNull TPMIAlgPublic type, @NonNull ByteBuffer buffer) {
+    private @NotNull TPMUPublicParms extractTPMUPublicParms(@NotNull TPMIAlgPublic type, @NotNull ByteBuffer buffer) {
         switch (type) {
             case TPM_ALG_RSA:
                 return extractTPMSRSAParms(buffer);
@@ -83,7 +83,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         }
     }
 
-    private @NonNull TPMSRSAParms extractTPMSRSAParms(@NonNull ByteBuffer buffer) {
+    private @NotNull TPMSRSAParms extractTPMSRSAParms(@NotNull ByteBuffer buffer) {
         byte[] symmetric = new byte[2];
         buffer.get(symmetric);
         byte[] scheme = new byte[2];
@@ -95,7 +95,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         return new TPMSRSAParms(symmetric, scheme, keyBits, exponent);
     }
 
-    private @NonNull TPMSECCParms extractTPMSECCParms(@NonNull ByteBuffer buffer) {
+    private @NotNull TPMSECCParms extractTPMSECCParms(@NotNull ByteBuffer buffer) {
         byte[] symmetric = new byte[2];
         buffer.get(symmetric);
         byte[] scheme = new byte[2];
@@ -107,7 +107,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         return new TPMSECCParms(symmetric, scheme, TPMEccCurve.create(UnsignedNumberUtil.getUnsignedShort(curveId)), kdf);
     }
 
-    private @NonNull TPMUPublicId extractTPMUPublicId(@NonNull TPMIAlgPublic type, @NonNull ByteBuffer buffer) {
+    private @NotNull TPMUPublicId extractTPMUPublicId(@NotNull TPMIAlgPublic type, @NotNull ByteBuffer buffer) {
         if (type == TPMIAlgPublic.TPM_ALG_RSA) {
             int nSize = UnsignedNumberUtil.getUnsignedShort(buffer);
             byte[] n = new byte[nSize];

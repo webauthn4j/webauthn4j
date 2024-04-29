@@ -19,13 +19,13 @@ package com.webauthn4j.appattest.data;
 import com.webauthn4j.appattest.authenticator.DCAppleDevice;
 import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.data.CoreAuthenticationParameters;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class DCAssertionParameters extends CoreAuthenticationParameters {
 
     public DCAssertionParameters(
-            @NonNull DCServerProperty serverProperty,
-            @NonNull DCAppleDevice dcAppleDevice) {
+            @NotNull DCServerProperty serverProperty,
+            @NotNull DCAppleDevice dcAppleDevice) {
         super(serverProperty, dcAppleDevice, null, false, false);
     }
 }

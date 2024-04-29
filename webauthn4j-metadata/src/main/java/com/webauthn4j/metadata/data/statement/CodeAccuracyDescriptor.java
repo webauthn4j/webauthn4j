@@ -18,8 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -28,15 +28,15 @@ import java.util.Objects;
  */
 public class CodeAccuracyDescriptor {
 
-    @NonNull private final Integer base;
-    @NonNull private final Integer minLength;
+    @NotNull private final Integer base;
+    @NotNull private final Integer minLength;
     @Nullable private final Integer maxRetries;
     @Nullable private final Integer blockSlowdown;
 
     @JsonCreator
     public CodeAccuracyDescriptor(
-            @NonNull @JsonProperty("base") Integer base,
-            @NonNull @JsonProperty("minLength") Integer minLength,
+            @NotNull @JsonProperty("base") Integer base,
+            @NotNull @JsonProperty("minLength") Integer minLength,
             @Nullable @JsonProperty("maxRetries") Integer maxRetries,
             @Nullable @JsonProperty("blockSlowdown") Integer blockSlowdown) {
         this.base = base;
@@ -45,12 +45,12 @@ public class CodeAccuracyDescriptor {
         this.blockSlowdown = blockSlowdown;
     }
 
-    @NonNull
+    @NotNull
     public Integer getBase() {
         return base;
     }
 
-    @NonNull
+    @NotNull
     public Integer getMinLength() {
         return minLength;
     }

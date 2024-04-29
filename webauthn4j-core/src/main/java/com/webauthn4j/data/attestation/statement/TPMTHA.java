@@ -18,8 +18,8 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -30,20 +30,20 @@ public class TPMTHA {
     private final TPMIAlgHash hashAlg;
     private final byte[] digest;
 
-    public TPMTHA(@NonNull TPMIAlgHash hashAlg, @NonNull byte[] digest) {
+    public TPMTHA(@NotNull TPMIAlgHash hashAlg, @NotNull byte[] digest) {
         this.hashAlg = hashAlg;
         this.digest = digest;
     }
 
-    public @NonNull TPMIAlgHash getHashAlg() {
+    public @NotNull TPMIAlgHash getHashAlg() {
         return hashAlg;
     }
 
-    public @NonNull byte[] getDigest() {
+    public @NotNull byte[] getDigest() {
         return ArrayUtil.clone(digest);
     }
 
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         ByteBuffer buffer = ByteBuffer.allocate(2 + digest.length);
         buffer.put(UnsignedNumberUtil.toBytes(hashAlg.getValue()));
         buffer.put(digest);

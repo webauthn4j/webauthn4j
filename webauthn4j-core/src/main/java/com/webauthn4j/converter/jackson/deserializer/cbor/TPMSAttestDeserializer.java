@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -39,7 +39,7 @@ public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
     }
 
     @Override
-    public @NonNull TPMSAttest deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
+    public @NotNull TPMSAttest deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();
         ByteBuffer buffer = ByteBuffer.wrap(value);
         byte[] magicBytes = new byte[4];
@@ -64,7 +64,7 @@ public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
         return new TPMSAttest(magic, type, qualifiedSigner, extraData, clock, firmwareVersion, attested);
     }
 
-    private @NonNull TPMSClockInfo extractClockInfo(@NonNull ByteBuffer buffer) {
+    private @NotNull TPMSClockInfo extractClockInfo(@NotNull ByteBuffer buffer) {
         BigInteger clock = UnsignedNumberUtil.getUnsignedLong(buffer);
         long resetCount = UnsignedNumberUtil.getUnsignedInt(buffer);
         long restartCount = UnsignedNumberUtil.getUnsignedInt(buffer);
@@ -72,7 +72,7 @@ public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
         return new TPMSClockInfo(clock, resetCount, restartCount, safe);
     }
 
-    private @NonNull TPMUAttest extractTPMUAttest(@NonNull TPMISTAttest type, @NonNull ByteBuffer buffer) {
+    private @NotNull TPMUAttest extractTPMUAttest(@NotNull TPMISTAttest type, @NotNull ByteBuffer buffer) {
         if (type != TPMISTAttest.TPM_ST_ATTEST_CERTIFY) {
             throw new NotImplementedException();
         }
@@ -85,7 +85,7 @@ public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
         return new TPMSCertifyInfo(name, qualifiedName);
     }
 
-    private @NonNull TPMTHA extractTPMTHA(@NonNull ByteBuffer buffer, int digestLength) {
+    private @NotNull TPMTHA extractTPMTHA(@NotNull ByteBuffer buffer, int digestLength) {
         TPMIAlgHash hashAlg = TPMIAlgHash.create(UnsignedNumberUtil.getUnsignedShort(buffer));
         byte[] digest = new byte[digestLength];
         buffer.get(digest);

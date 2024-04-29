@@ -17,8 +17,8 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -30,30 +30,30 @@ public class TPMSRSAParms implements TPMUPublicParms {
     private final byte[] keyBits;
     private final byte[] exponent;
 
-    public TPMSRSAParms(@NonNull byte[] symmetric, @NonNull byte[] scheme, @NonNull byte[] keyBits, @NonNull byte[] exponent) {
+    public TPMSRSAParms(@NotNull byte[] symmetric, @NotNull byte[] scheme, @NotNull byte[] keyBits, @NotNull byte[] exponent) {
         this.symmetric = symmetric;
         this.scheme = scheme;
         this.keyBits = keyBits;
         this.exponent = exponent;
     }
 
-    public @NonNull byte[] getSymmetric() {
+    public @NotNull byte[] getSymmetric() {
         return ArrayUtil.clone(symmetric);
     }
 
-    public @NonNull byte[] getScheme() {
+    public @NotNull byte[] getScheme() {
         return ArrayUtil.clone(scheme);
     }
 
-    public @NonNull byte[] getKeyBits() {
+    public @NotNull byte[] getKeyBits() {
         return ArrayUtil.clone(keyBits);
     }
 
-    public @NonNull byte[] getExponent() {
+    public @NotNull byte[] getExponent() {
         return ArrayUtil.clone(exponent);
     }
 
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         return ByteBuffer.allocate(10)
                 .put(symmetric)
                 .put(scheme)

@@ -17,7 +17,7 @@
 package com.webauthn4j.appattest.data;
 
 import com.webauthn4j.util.ArrayUtil;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 

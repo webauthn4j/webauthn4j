@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.exception;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Thrown if bad aaguid is detected

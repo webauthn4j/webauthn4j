@@ -18,8 +18,8 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -43,9 +43,9 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
     // ========================================================================================================
 
     public AuthenticatorAssertionResponse(
-            @NonNull byte[] clientDataJSON,
-            @NonNull byte[] authenticatorData,
-            @NonNull byte[] signature,
+            @NotNull byte[] clientDataJSON,
+            @NotNull byte[] authenticatorData,
+            @NotNull byte[] signature,
             @Nullable byte[] userHandle) {
         super(clientDataJSON);
         AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
@@ -55,11 +55,11 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         this.userHandle = userHandle;
     }
 
-    public @NonNull byte[] getAuthenticatorData() {
+    public @NotNull byte[] getAuthenticatorData() {
         return ArrayUtil.clone(authenticatorData);
     }
 
-    public @NonNull byte[] getSignature() {
+    public @NotNull byte[] getSignature() {
         return ArrayUtil.clone(signature);
     }
 

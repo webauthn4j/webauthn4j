@@ -18,7 +18,7 @@ package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
 
@@ -27,7 +27,7 @@ import java.time.Instant;
  */
 public class NullCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
     @Override
-    public void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp) {
+    public void validate(@NotNull AAGUID aaguid, @NotNull CertificateBaseAttestationStatement attestationStatement, @NotNull Instant timestamp) {
         // nop
     }
 }

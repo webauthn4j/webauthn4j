@@ -17,13 +17,13 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.metadata.exception.MDSException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * HTTP Client for FIDO MetadataItemImpl Service
  */
 public interface HttpClient {
 
-    @NonNull String fetch(@NonNull String uri) throws MDSException;
+    @NotNull String fetch(@NotNull String uri) throws MDSException;
 
 }

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.UncheckedIOException;
@@ -129,7 +129,7 @@ class JsonConverterTest {
             private final String value;
 
             @JsonCreator
-            public NonNullDto(@NonNull @JsonProperty("value") String value) {
+            public NonNullDto(@NotNull @JsonProperty("value") String value) {
                 AssertUtil.notNull(value, "value must not be null");
                 this.value = value;
             }
@@ -144,7 +144,7 @@ class JsonConverterTest {
             private final Integer value;
 
             @JsonCreator
-            public IntegerDto(@NonNull @JsonProperty("value") Integer value) {
+            public IntegerDto(@NotNull @JsonProperty("value") Integer value) {
                 AssertUtil.notNull(value, "value must not be null");
                 this.value = value;
             }

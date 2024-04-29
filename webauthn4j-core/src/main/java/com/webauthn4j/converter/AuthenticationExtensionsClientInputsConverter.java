@@ -23,8 +23,8 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.ExtensionClientInput;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientInputs}
@@ -38,7 +38,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ~ Constructors
     // ================================================================================================
 
-    public AuthenticationExtensionsClientInputsConverter(@NonNull ObjectConverter objectConverter) {
+    public AuthenticationExtensionsClientInputsConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
     }
@@ -46,7 +46,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ~ Methods
     // ================================================================================================
 
-    public <T extends ExtensionClientInput> @Nullable AuthenticationExtensionsClientInputs<T> convert(@NonNull String value) {
+    public <T extends ExtensionClientInput> @Nullable AuthenticationExtensionsClientInputs<T> convert(@NotNull String value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
             return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientInputs<T>>() {
@@ -57,7 +57,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     }
 
 
-    public <T extends ExtensionClientInput> @NonNull String convertToString(@NonNull AuthenticationExtensionsClientInputs<T> value) {
+    public <T extends ExtensionClientInput> @NotNull String convertToString(@NotNull AuthenticationExtensionsClientInputs<T> value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
             return jsonConverter.writeValueAsString(value);

@@ -18,8 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -28,31 +28,31 @@ import java.util.Objects;
  */
 public class RGBPaletteEntry {
 
-    @NonNull private final Integer r;
-    @NonNull private final Integer g;
-    @NonNull private final Integer b;
+    @NotNull private final Integer r;
+    @NotNull private final Integer g;
+    @NotNull private final Integer b;
 
     @JsonCreator
     public RGBPaletteEntry(
-            @JsonProperty("r") @NonNull Integer r,
-            @JsonProperty("g") @NonNull Integer g,
-            @JsonProperty("b") @NonNull Integer b) {
+            @JsonProperty("r") @NotNull Integer r,
+            @JsonProperty("g") @NotNull Integer g,
+            @JsonProperty("b") @NotNull Integer b) {
         this.r = r;
         this.g = g;
         this.b = b;
     }
 
-    @NonNull
+    @NotNull
     public Integer getR() {
         return r;
     }
 
-    @NonNull
+    @NotNull
     public Integer getG() {
         return g;
     }
 
-    @NonNull
+    @NotNull
     public Integer getB() {
         return b;
     }

@@ -23,8 +23,8 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -49,7 +49,7 @@ public class PublicKeyCredentialRequestOptions {
     private final AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions;
 
     @JsonCreator
-    public PublicKeyCredentialRequestOptions(@NonNull @JsonProperty("challenge") Challenge challenge,
+    public PublicKeyCredentialRequestOptions(@NotNull @JsonProperty("challenge") Challenge challenge,
                                              @Nullable @JsonProperty("timeout") Long timeout,
                                              @Nullable @JsonProperty("rpId") String rpId,
                                              @Nullable @JsonProperty("allowCredentials") List<PublicKeyCredentialDescriptor> allowCredentials,
@@ -64,7 +64,7 @@ public class PublicKeyCredentialRequestOptions {
         this.extensions = extensions;
     }
 
-    public @NonNull Challenge getChallenge() {
+    public @NotNull Challenge getChallenge() {
         return challenge;
     }
 

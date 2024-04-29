@@ -18,7 +18,7 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class FIDOAppIDExtensionClientOutput
         extends SingleValueExtensionOutputBase<Boolean>
@@ -26,16 +26,16 @@ public class FIDOAppIDExtensionClientOutput
 
     public static final String ID = "appid";
 
-    public FIDOAppIDExtensionClientOutput(@NonNull Boolean value) {
+    public FIDOAppIDExtensionClientOutput(@NotNull Boolean value) {
         super(value);
     }
 
     @Override
-    public @NonNull String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return ID;
     }
 
-    public @NonNull Boolean getAppid() {
+    public @NotNull Boolean getAppid() {
         return getValue(ID);
     }
 

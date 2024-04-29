@@ -16,7 +16,7 @@
 
 package com.webauthn4j.data.extension;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public enum CredentialProtectionPolicy {
 
@@ -27,12 +27,12 @@ public enum CredentialProtectionPolicy {
     final String string;
     final byte value;
 
-    CredentialProtectionPolicy(@NonNull String string, @NonNull byte value) {
+    CredentialProtectionPolicy(@NotNull String string, @NotNull byte value) {
         this.string = string;
         this.value = value;
     }
 
-    public static CredentialProtectionPolicy create(@NonNull String string) {
+    public static CredentialProtectionPolicy create(@NotNull String string) {
         switch (string) {
             case "userVerificationOptional":
                 return USER_VERIFICATION_OPTIONAL;
@@ -59,7 +59,7 @@ public enum CredentialProtectionPolicy {
     }
 
     @Override
-    public @NonNull String toString() {
+    public @NotNull String toString() {
         return string;
     }
 

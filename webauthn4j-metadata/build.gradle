@@ -25,7 +25,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
-    implementation("org.checkerframework:checker-qual")
+    compileOnly("org.jetbrains:annotations")
 
     //Test
     testImplementation project(':webauthn4j-test')
@@ -38,6 +38,7 @@ dependencies {
     testImplementation('org.assertj:assertj-core')
     testImplementation('org.junit.jupiter:junit-jupiter-api')
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
+    testCompileOnly("org.jetbrains:annotations")
 
 }
 

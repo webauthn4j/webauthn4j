@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -46,8 +46,8 @@ public class PublicKeyCredentialDescriptor {
 
     @JsonCreator
     public PublicKeyCredentialDescriptor(
-            @NonNull @JsonProperty("type") PublicKeyCredentialType type,
-            @NonNull @JsonProperty("id") byte[] id,
+            @NotNull @JsonProperty("type") PublicKeyCredentialType type,
+            @NotNull @JsonProperty("id") byte[] id,
             @Nullable @JsonProperty("transports") Set<AuthenticatorTransport> transports) {
         AssertUtil.notNull(type, "type must not be null");
         AssertUtil.notNull(id, "id must not be null");

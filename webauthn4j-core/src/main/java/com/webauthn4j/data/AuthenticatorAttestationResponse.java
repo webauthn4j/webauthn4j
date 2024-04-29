@@ -26,8 +26,8 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -51,13 +51,13 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     // ~ Constructor
     // ========================================================================================================
 
-    public AuthenticatorAttestationResponse(@NonNull byte[] clientDataJSON,
-                                            @NonNull byte[] attestationObject) {
+    public AuthenticatorAttestationResponse(@NotNull byte[] clientDataJSON,
+                                            @NotNull byte[] attestationObject) {
         this(clientDataJSON, attestationObject, Collections.emptySet());
     }
 
-    public AuthenticatorAttestationResponse(@NonNull byte[] clientDataJSON,
-                                            @NonNull byte[] attestationObject,
+    public AuthenticatorAttestationResponse(@NotNull byte[] clientDataJSON,
+                                            @NotNull byte[] attestationObject,
                                             @Nullable Set<AuthenticatorTransport> transports) {
         super(clientDataJSON);
         AssertUtil.notNull(attestationObject, "attestationObject must not be null");
@@ -73,7 +73,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      *
      * @return byte array representation of {@link com.webauthn4j.data.attestation.AttestationObject}
      */
-    public @NonNull byte[] getAttestationObject() {
+    public @NotNull byte[] getAttestationObject() {
         return ArrayUtil.clone(attestationObject);
     }
 
@@ -84,16 +84,16 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      *
      * @return list of {@link AuthenticatorTransport}
      */
-    public @NonNull Set<AuthenticatorTransport> getTransports() {
+    public @NotNull Set<AuthenticatorTransport> getTransports() {
         return this.transports;
     }
 
-    public @NonNull byte[] getAuthenticatorData(ObjectConverter objectConverter){
+    public @NotNull byte[] getAuthenticatorData(ObjectConverter objectConverter){
         AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
         return attestationObjectConverter.extractAuthenticatorData(this.attestationObject);
     }
 
-    public @NonNull byte[] getAuthenticatorData(){
+    public @NotNull byte[] getAuthenticatorData(){
         return getAuthenticatorData(new ObjectConverter());
     }
 
@@ -113,7 +113,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         return getCOSEKey(new ObjectConverter()).getAlgorithm();
     }
 
-    private @NonNull COSEKey getCOSEKey(ObjectConverter objectConverter){
+    private @NotNull COSEKey getCOSEKey(ObjectConverter objectConverter){
         AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
         AttestedCredentialDataConverter attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
         byte[] attestedCredentialDataBytes = authenticatorDataConverter.extractAttestedCredentialData(this.getAuthenticatorData(objectConverter));

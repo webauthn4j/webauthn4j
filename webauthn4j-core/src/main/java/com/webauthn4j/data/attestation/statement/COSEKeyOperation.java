@@ -19,7 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public enum COSEKeyOperation {
     SIGN(1),
@@ -39,7 +39,7 @@ public enum COSEKeyOperation {
         this.value = value;
     }
 
-    public static @NonNull COSEKeyOperation create(int value) {
+    public static @NotNull COSEKeyOperation create(int value) {
         switch (value) {
             case 1:
                 return COSEKeyOperation.SIGN;
@@ -68,7 +68,7 @@ public enum COSEKeyOperation {
     }
 
     @JsonCreator
-    private static @NonNull COSEKeyOperation deserialize(int value) throws InvalidFormatException {
+    private static @NotNull COSEKeyOperation deserialize(int value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

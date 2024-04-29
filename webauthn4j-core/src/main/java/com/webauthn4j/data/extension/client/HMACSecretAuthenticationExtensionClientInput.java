@@ -19,24 +19,24 @@ package com.webauthn4j.data.extension.client;
 import com.webauthn4j.data.extension.HMACGetSecretInput;
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class HMACSecretAuthenticationExtensionClientInput extends SingleValueExtensionInputBase<HMACGetSecretInput> implements AuthenticationExtensionClientInput {
 
     public static final String ID = "hmac-secret";
     public static final String KEY_HMAC_GET_SECRET = "hmacGetSecret";
 
-    public HMACSecretAuthenticationExtensionClientInput(@NonNull HMACGetSecretInput value) {
+    public HMACSecretAuthenticationExtensionClientInput(@NotNull HMACGetSecretInput value) {
         super(value);
     }
 
     @Override
-    public @NonNull String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return ID;
     }
 
     @Override
-    public @NonNull HMACGetSecretInput getValue(@NonNull String key) {
+    public @NotNull HMACGetSecretInput getValue(@NotNull String key) {
         if (!key.equals(KEY_HMAC_GET_SECRET)) {
             throw new IllegalArgumentException(String.format("%s is the only valid key.", KEY_HMAC_GET_SECRET));
         }

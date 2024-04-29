@@ -9,8 +9,8 @@ import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.security.*;
@@ -67,7 +67,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
      * @param alg COSE algorithm identifier
      * @return {@link EdDSACOSEKey}
      */
-    public static @NonNull EdDSACOSEKey create(@NonNull EdECPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {
+    public static @NotNull EdDSACOSEKey create(@NotNull EdECPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.isTrue(alg == COSEAlgorithmIdentifier.EdDSA, ALG_VALUE_CHECK_MESSAGE);
         byte[] d = privateKey.getBytes().orElseThrow(()-> new IllegalArgumentException("privateKey must not be null"));
         Curve curve = getCurve(privateKey.getParams());
@@ -89,7 +89,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
      * @param alg COSE algorithm identifier
      * @return {@link EdDSACOSEKey}
      */
-    public static @NonNull EdDSACOSEKey create(@NonNull EdECPublicKey publicKey, @Nullable COSEAlgorithmIdentifier alg) {
+    public static @NotNull EdDSACOSEKey create(@NotNull EdECPublicKey publicKey, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.isTrue(alg == COSEAlgorithmIdentifier.EdDSA, ALG_VALUE_CHECK_MESSAGE);
         Curve curve = getCurve(publicKey.getParams());
         byte[] x = calcCOSEXParam(publicKey);
@@ -109,7 +109,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
      * @param keyPair key pair
      * @return {@link EdDSACOSEKey}
      */
-    public static @NonNull EdDSACOSEKey create(@NonNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
+    public static @NotNull EdDSACOSEKey create(@NotNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.isTrue(alg == COSEAlgorithmIdentifier.EdDSA, ALG_VALUE_CHECK_MESSAGE);
         EdECPublicKey edECPublicKey = (EdECPublicKey)keyPair.getPublic();
         EdECPrivateKey edECPrivateKey = (EdECPrivateKey) keyPair.getPrivate();
@@ -133,7 +133,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
      * @param privateKey private key
      * @return {@link EdDSACOSEKey}
      */
-    public static @NonNull EdDSACOSEKey create(@NonNull EdECPrivateKey privateKey){
+    public static @NotNull EdDSACOSEKey create(@NotNull EdECPrivateKey privateKey){
         return create(privateKey, COSEAlgorithmIdentifier.EdDSA);
     }
 
@@ -143,7 +143,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
      * @param publicKey public key
      * @return {@link EdDSACOSEKey}
      */
-    public static @NonNull EdDSACOSEKey create(@NonNull EdECPublicKey publicKey) {
+    public static @NotNull EdDSACOSEKey create(@NotNull EdECPublicKey publicKey) {
         return create(publicKey, COSEAlgorithmIdentifier.EdDSA);
     }
 
@@ -153,7 +153,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
      * @param keyPair key pair
      * @return {@link EdDSACOSEKey}
      */
-    public static @NonNull EdDSACOSEKey create(@NonNull KeyPair keyPair) {
+    public static @NotNull EdDSACOSEKey create(@NotNull KeyPair keyPair) {
         return create(keyPair, COSEAlgorithmIdentifier.EdDSA);
     }
 
@@ -201,7 +201,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
     }
 
     @Override
-    public @NonNull COSEKeyType getKeyType() {
+    public @NotNull COSEKeyType getKeyType() {
         return COSEKeyType.OKP;
     }
 

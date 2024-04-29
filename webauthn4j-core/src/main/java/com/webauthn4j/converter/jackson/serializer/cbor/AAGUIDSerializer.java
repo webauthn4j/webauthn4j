@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ public class AAGUIDSerializer extends StdSerializer<AAGUID> {
     }
 
     @Override
-    public void serialize(@NonNull AAGUID value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull AAGUID value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
         AssertUtil.notNull(value, "value is null");
         gen.writeBinary(value.getBytes());
     }

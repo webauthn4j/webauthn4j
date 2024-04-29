@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.CertificateUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
@@ -22,7 +22,7 @@ public class MetadataX509CertificateRelaxedDeserializer extends StdDeserializer<
      * {@inheritDoc}
      */
     @Override
-    public @Nullable X509Certificate deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
+    public @Nullable X509Certificate deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
         String value = p.getValueAsString().trim().replace("\r", "").replace("\n", ""); ; //trimming added
         byte[] bytes = Base64Util.decode(value);
         if (bytes.length == 0) {

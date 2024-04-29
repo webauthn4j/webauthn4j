@@ -25,8 +25,8 @@ import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataX509CertificateRelaxedDeserializer;
 import com.webauthn4j.metadata.data.uaf.AAID;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.security.cert.X509Certificate;
 import java.util.List;
@@ -40,32 +40,32 @@ public class MetadataStatement {
     @Nullable private final AAID aaid;
     @Nullable private final AAGUID aaguid;
     @Nullable private final List<String> attestationCertificateKeyIdentifiers;
-    @NonNull private final String description;
+    @NotNull private final String description;
     @Nullable private final AlternativeDescriptions alternativeDescriptions;
-    @NonNull private final Integer authenticatorVersion;
-    @NonNull private final String protocolFamily;
-    @NonNull private final Integer schema;
-    @NonNull private final List<Version> upv;
+    @NotNull private final Integer authenticatorVersion;
+    @NotNull private final String protocolFamily;
+    @NotNull private final Integer schema;
+    @NotNull private final List<Version> upv;
 
-    @NonNull
+    @NotNull
     @JsonSerialize(contentUsing = AuthenticationAlgorithmToStringSerializer.class)
     @JsonDeserialize(contentUsing = AuthenticationAlgorithmFromStringDeserializer.class)
     private final List<AuthenticationAlgorithm> authenticationAlgorithms;
 
-    @NonNull
+    @NotNull
     @JsonSerialize(contentUsing = PublicKeyRepresentationFormatToStringSerializer.class)
     @JsonDeserialize(contentUsing = PublicKeyRepresentationFormatFromStringDeserializer.class)
     private final List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings;
 
-    @NonNull
+    @NotNull
     @JsonSerialize(contentUsing = AuthenticatorAttestationTypeToStringSerializer.class)
     @JsonDeserialize(contentUsing = AuthenticatorAttestationTypeFromStringDeserializer.class)
     private final List<AuthenticatorAttestationType> attestationTypes;
 
-    @NonNull
+    @NotNull
     private final List<VerificationMethodANDCombinations> userVerificationDetails;
 
-    @NonNull
+    @NotNull
     @JsonSerialize(contentUsing = KeyProtectionTypeToStringSerializer.class)
     @JsonDeserialize(contentUsing = KeyProtectionTypeFromStringDeserializer.class)
     private final List<KeyProtectionType> keyProtection;
@@ -75,7 +75,7 @@ public class MetadataStatement {
     @Nullable
     private final Boolean isFreshUserVerificationRequired;
 
-    @NonNull
+    @NotNull
     @JsonSerialize(contentUsing = MatcherProtectionTypeToStringSerializer.class)
     @JsonDeserialize(contentUsing = MatcherProtectionTypeFromStringDeserializer.class)
     private final List<MatcherProtectionType> matcherProtection;
@@ -89,7 +89,7 @@ public class MetadataStatement {
     @JsonDeserialize(contentUsing = AttachmentHintFromStringDeserializer.class)
     private final List<AttachmentHint> attachmentHint;
 
-    @NonNull
+    @NotNull
     @JsonSerialize(contentUsing = TransactionConfirmationDisplayToStringSerializer.class)
     @JsonDeserialize(contentUsing = TransactionConfirmationDisplayFromStringDeserializer.class)
     private final List<TransactionConfirmationDisplay> tcDisplay;
@@ -100,7 +100,7 @@ public class MetadataStatement {
     @Nullable
     private final List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics;
 
-    @NonNull
+    @NotNull
     @JsonSerialize(contentUsing = X509CertificateSerializer.class)
     @JsonDeserialize(contentUsing = MetadataX509CertificateRelaxedDeserializer.class)
     private final List<X509Certificate> attestationRootCertificates;
@@ -120,26 +120,26 @@ public class MetadataStatement {
             @JsonProperty("aaid") @Nullable AAID aaid,
             @JsonProperty("aaguid") @Nullable AAGUID aaguid,
             @JsonProperty("attestationCertificateKeyIdentifiers") @Nullable List<String> attestationCertificateKeyIdentifiers,
-            @JsonProperty("description") @NonNull String description,
+            @JsonProperty("description") @NotNull String description,
             @JsonProperty("alternativeDescriptions") @Nullable AlternativeDescriptions alternativeDescriptions,
-            @JsonProperty("authenticatorVersion") @NonNull Integer authenticatorVersion,
-            @JsonProperty("protocolFamily") @NonNull String protocolFamily,
-            @JsonProperty("schema") @NonNull Integer schema,
-            @JsonProperty("upv") @NonNull List<Version> upv,
-            @JsonProperty("authenticationAlgorithms") @NonNull List<AuthenticationAlgorithm> authenticationAlgorithms,
-            @JsonProperty("publicKeyAlgAndEncodings") @NonNull List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings,
-            @JsonProperty("attestationTypes") @NonNull List<AuthenticatorAttestationType> attestationTypes,
-            @JsonProperty("userVerificationDetails") @NonNull List<VerificationMethodANDCombinations> userVerificationDetails,
-            @JsonProperty("keyProtection") @NonNull List<KeyProtectionType> keyProtection,
+            @JsonProperty("authenticatorVersion") @NotNull Integer authenticatorVersion,
+            @JsonProperty("protocolFamily") @NotNull String protocolFamily,
+            @JsonProperty("schema") @NotNull Integer schema,
+            @JsonProperty("upv") @NotNull List<Version> upv,
+            @JsonProperty("authenticationAlgorithms") @NotNull List<AuthenticationAlgorithm> authenticationAlgorithms,
+            @JsonProperty("publicKeyAlgAndEncodings") @NotNull List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings,
+            @JsonProperty("attestationTypes") @NotNull List<AuthenticatorAttestationType> attestationTypes,
+            @JsonProperty("userVerificationDetails") @NotNull List<VerificationMethodANDCombinations> userVerificationDetails,
+            @JsonProperty("keyProtection") @NotNull List<KeyProtectionType> keyProtection,
             @JsonProperty("isKeyRestricted") @Nullable Boolean isKeyRestricted,
             @JsonProperty("isFreshUserVerificationRequired") @Nullable Boolean isFreshUserVerificationRequired,
-            @JsonProperty("matcherProtection") @NonNull List<MatcherProtectionType> matcherProtection,
+            @JsonProperty("matcherProtection") @NotNull List<MatcherProtectionType> matcherProtection,
             @JsonProperty("cryptoStrength") @Nullable Integer cryptoStrength,
             @JsonProperty("attachmentHint") @Nullable List<AttachmentHint> attachmentHint,
-            @JsonProperty("tcDisplay") @NonNull List<TransactionConfirmationDisplay> tcDisplay,
+            @JsonProperty("tcDisplay") @NotNull List<TransactionConfirmationDisplay> tcDisplay,
             @JsonProperty("tcDisplayContentType") @Nullable String tcDisplayContentType,
             @JsonProperty("tcDisplayPNGCharacteristics") @Nullable List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics,
-            @JsonProperty("attestationRootCertificates") @NonNull List<X509Certificate> attestationRootCertificates,
+            @JsonProperty("attestationRootCertificates") @NotNull List<X509Certificate> attestationRootCertificates,
             @JsonProperty("ecdaaTrustAnchors") @Nullable List<EcdaaTrustAnchor> ecdaaTrustAnchors,
             @JsonProperty("icon") @Nullable String icon,
             @JsonProperty("supportedExtensions") @Nullable List<ExtensionDescriptor> supportedExtensions,
@@ -194,7 +194,7 @@ public class MetadataStatement {
         return attestationCertificateKeyIdentifiers;
     }
 
-    @NonNull
+    @NotNull
     public String getDescription() {
         return description;
     }
@@ -204,47 +204,47 @@ public class MetadataStatement {
         return alternativeDescriptions;
     }
 
-    @NonNull
+    @NotNull
     public Integer getAuthenticatorVersion() {
         return authenticatorVersion;
     }
 
-    @NonNull
+    @NotNull
     public String getProtocolFamily() {
         return protocolFamily;
     }
 
-    @NonNull
+    @NotNull
     public Integer getSchema() {
         return schema;
     }
 
-    @NonNull
+    @NotNull
     public List<Version> getUpv() {
         return upv;
     }
 
-    @NonNull
+    @NotNull
     public List<AuthenticationAlgorithm> getAuthenticationAlgorithms() {
         return authenticationAlgorithms;
     }
 
-    @NonNull
+    @NotNull
     public List<PublicKeyRepresentationFormat> getPublicKeyAlgAndEncodings() {
         return publicKeyAlgAndEncodings;
     }
 
-    @NonNull
+    @NotNull
     public List<AuthenticatorAttestationType> getAttestationTypes() {
         return attestationTypes;
     }
 
-    @NonNull
+    @NotNull
     public List<VerificationMethodANDCombinations> getUserVerificationDetails() {
         return userVerificationDetails;
     }
 
-    @NonNull
+    @NotNull
     public List<KeyProtectionType> getKeyProtection() {
         return keyProtection;
     }
@@ -259,7 +259,7 @@ public class MetadataStatement {
         return isFreshUserVerificationRequired;
     }
 
-    @NonNull
+    @NotNull
     public List<MatcherProtectionType> getMatcherProtection() {
         return matcherProtection;
     }
@@ -274,7 +274,7 @@ public class MetadataStatement {
         return attachmentHint;
     }
 
-    @NonNull
+    @NotNull
     public List<TransactionConfirmationDisplay> getTcDisplay() {
         return tcDisplay;
     }
@@ -289,7 +289,7 @@ public class MetadataStatement {
         return tcDisplayPNGCharacteristics;
     }
 
-    @NonNull
+    @NotNull
     public List<X509Certificate> getAttestationRootCertificates() {
         return attestationRootCertificates;
     }

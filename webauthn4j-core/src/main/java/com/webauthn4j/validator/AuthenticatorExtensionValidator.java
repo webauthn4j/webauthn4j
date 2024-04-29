@@ -18,7 +18,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Validates authenticatorExtensionOutputs
@@ -29,7 +29,7 @@ class AuthenticatorExtensionValidator {
     // ========================================================================================================
 
     @SuppressWarnings("unused")
-    public <A extends ExtensionAuthenticatorOutput> void validate(@NonNull AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs) {
+    public <A extends ExtensionAuthenticatorOutput> void validate(@NotNull AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs) {
         //nop for now
     }
 

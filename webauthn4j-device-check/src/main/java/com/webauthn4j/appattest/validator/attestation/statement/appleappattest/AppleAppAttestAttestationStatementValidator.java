@@ -29,8 +29,8 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.apache.kerby.asn1.parse.Asn1Container;
 import org.apache.kerby.asn1.parse.Asn1Parser;
 import org.apache.kerby.asn1.type.Asn1OctetString;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -47,7 +47,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
     public static final String APPLE_CRED_CERT_EXTENSION_OID = "1.2.840.113635.100.8.2";
 
     @Override
-    public AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+    public AttestationType validate(@NotNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
 
         if (!(registrationObject instanceof DCRegistrationObject)) {
@@ -73,7 +73,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
     }
 
 
-    void validateX5c(@NonNull AppleAppAttestAttestationStatement attestationStatement) {
+    void validateX5c(@NotNull AppleAppAttestAttestationStatement attestationStatement) {
         if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException(
                     "No attestation certificate is found in Apple App Attest attestation statement."

@@ -30,7 +30,7 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CustomCoreAuthenticationValidator;
 import com.webauthn4j.validator.exception.ValidationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +45,7 @@ public class DeviceCheckAssertionManager {
     private final DCAssertionDataValidator dcAssertionDataValidator;
     private final CborConverter cborConverter;
 
-    public DeviceCheckAssertionManager(@NonNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators, @NonNull ObjectConverter objectConverter) {
+    public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators, @NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
@@ -54,7 +54,7 @@ public class DeviceCheckAssertionManager {
         cborConverter = objectConverter.getCborConverter();
     }
 
-    public DeviceCheckAssertionManager(@NonNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
+    public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
         this(customAuthenticationValidators, new ObjectConverter());
     }
 
@@ -63,7 +63,7 @@ public class DeviceCheckAssertionManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull DCAssertionData parse(@NonNull DCAssertionRequest dcAssertionRequest) throws DataConversionException {
+    public @NotNull DCAssertionData parse(@NotNull DCAssertionRequest dcAssertionRequest) throws DataConversionException {
         AssertUtil.notNull(dcAssertionRequest, "dcAssertionRequest must not be null");
 
         byte[] credentialId = dcAssertionRequest.getKeyId();
@@ -84,18 +84,18 @@ public class DeviceCheckAssertionManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull DCAssertionData validate(@NonNull DCAssertionRequest dcAssertionRequest, @NonNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, ValidationException {
+    public @NotNull DCAssertionData validate(@NotNull DCAssertionRequest dcAssertionRequest, @NotNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, ValidationException {
         DCAssertionData dcAssertionData = parse(dcAssertionRequest);
         return validate(dcAssertionData, dcAssertionParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull DCAssertionData validate(@NonNull DCAssertionData dcAssertionData, @NonNull DCAssertionParameters dcAssertionParameters) throws ValidationException {
+    public @NotNull DCAssertionData validate(@NotNull DCAssertionData dcAssertionData, @NotNull DCAssertionParameters dcAssertionParameters) throws ValidationException {
         getDCAssertionDataValidator().validate(dcAssertionData, dcAssertionParameters);
         return dcAssertionData;
     }
 
-    public @NonNull DCAssertionDataValidator getDCAssertionDataValidator() {
+    public @NotNull DCAssertionDataValidator getDCAssertionDataValidator() {
         return dcAssertionDataValidator;
     }
 

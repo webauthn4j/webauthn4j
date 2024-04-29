@@ -30,7 +30,7 @@ import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.CollectionUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -84,7 +84,7 @@ class AuthenticatorTest {
         }
 
         @Override
-        public @NonNull AttestedCredentialData getAttestedCredentialData() {
+        public @NotNull AttestedCredentialData getAttestedCredentialData() {
             return attestedCredentialData;
         }
 

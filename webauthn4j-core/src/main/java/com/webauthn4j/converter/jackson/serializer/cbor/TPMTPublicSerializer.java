@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.attestation.statement.TPMTPublic;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -34,7 +34,7 @@ public class TPMTPublicSerializer extends StdSerializer<TPMTPublic> {
     }
 
     @Override
-    public void serialize(@NonNull TPMTPublic value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull TPMTPublic value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
         gen.writeBinary(value.getBytes());
     }
 

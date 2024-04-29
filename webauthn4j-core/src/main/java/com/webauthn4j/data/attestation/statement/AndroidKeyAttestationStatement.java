@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -45,9 +45,9 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
 
     @JsonCreator
     public AndroidKeyAttestationStatement(
-            @NonNull @JsonProperty("alg") COSEAlgorithmIdentifier alg,
-            @NonNull @JsonProperty("sig") byte[] sig,
-            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c) {
+            @NotNull @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @NotNull @JsonProperty("sig") byte[] sig,
+            @NotNull @JsonProperty("x5c") AttestationCertificatePath x5c) {
         AssertUtil.notNull(alg, "alg must not be null");
         AssertUtil.notNull(sig, "sig must not be null");
         AssertUtil.notNull(x5c, "x5c must not be null");
@@ -56,21 +56,21 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
         this.x5c = x5c;
     }
 
-    public @NonNull COSEAlgorithmIdentifier getAlg() {
+    public @NotNull COSEAlgorithmIdentifier getAlg() {
         return alg;
     }
 
-    public @NonNull byte[] getSig() {
+    public @NotNull byte[] getSig() {
         return ArrayUtil.clone(sig);
     }
 
     @Override
-    public @NonNull AttestationCertificatePath getX5c() {
+    public @NotNull AttestationCertificatePath getX5c() {
         return x5c;
     }
 
     @Override
-    public @NonNull String getFormat() {
+    public @NotNull String getFormat() {
         return FORMAT;
     }
 

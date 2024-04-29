@@ -18,11 +18,11 @@ package com.webauthn4j.appattest.data;
 
 import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.data.CoreRegistrationParameters;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class DCAttestationParameters extends CoreRegistrationParameters {
 
-    public DCAttestationParameters(@NonNull DCServerProperty serverProperty) {
+    public DCAttestationParameters(@NotNull DCServerProperty serverProperty) {
         super(serverProperty, null, false, false);
     }
 }

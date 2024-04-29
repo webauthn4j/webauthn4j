@@ -16,8 +16,8 @@
 
 package com.webauthn4j.data.extension;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -25,20 +25,20 @@ public abstract class SingleValueExtensionBase<T> {
 
     private final T value;
 
-    protected SingleValueExtensionBase(@NonNull T value) {
+    protected SingleValueExtensionBase(@NotNull T value) {
         this.value = value;
     }
 
-    public T getValue(@NonNull String key) {
+    public T getValue(@NotNull String key) {
         if (!key.equals(getIdentifier())) {
             throw new IllegalArgumentException(String.format("%s is the only valid key.", getIdentifier()));
         }
         return value;
     }
 
-    protected abstract @NonNull String getIdentifier();
+    protected abstract @NotNull String getIdentifier();
 
-    public @NonNull T getValue() {
+    public @NotNull T getValue() {
         return value;
     }
 

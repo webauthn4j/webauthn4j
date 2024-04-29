@@ -19,7 +19,7 @@ package com.webauthn4j.data.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -51,12 +51,12 @@ public class TokenBindingStatus {
 
     private final String value;
 
-    private TokenBindingStatus(@NonNull String value) {
+    private TokenBindingStatus(@NotNull String value) {
         this.value = value;
     }
 
     @JsonCreator
-    public static @NonNull TokenBindingStatus create(@NonNull String value) {
+    public static @NotNull TokenBindingStatus create(@NotNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
             case "present":
@@ -71,7 +71,7 @@ public class TokenBindingStatus {
     }
 
     @JsonValue
-    public @NonNull String getValue() {
+    public @NotNull String getValue() {
         return this.value;
     }
 

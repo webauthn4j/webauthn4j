@@ -6,8 +6,8 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -30,12 +30,12 @@ public class CoreAuthenticationObject {
 
     @SuppressWarnings("squid:S00107")
     public CoreAuthenticationObject(
-            @NonNull byte[] credentialId,
-            @NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
-            @NonNull byte[] authenticatorDataBytes,
-            @NonNull byte[] clientDataHash,
-            @NonNull CoreServerProperty serverProperty,
-            @NonNull CoreAuthenticator authenticator) {
+            @NotNull byte[] credentialId,
+            @NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @NotNull byte[] authenticatorDataBytes,
+            @NotNull byte[] clientDataHash,
+            @NotNull CoreServerProperty serverProperty,
+            @NotNull CoreAuthenticator authenticator) {
 
         AssertUtil.notNull(credentialId, "credentialId must not be null");
         AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
@@ -52,27 +52,27 @@ public class CoreAuthenticationObject {
         this.authenticator = authenticator;
     }
 
-    public @NonNull byte[] getCredentialId() {
+    public @NotNull byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
-    public @NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
+    public @NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 
-    public @NonNull byte[] getAuthenticatorDataBytes() {
+    public @NotNull byte[] getAuthenticatorDataBytes() {
         return ArrayUtil.clone(authenticatorDataBytes);
     }
 
-    public @NonNull byte[] getClientDataHash() {
+    public @NotNull byte[] getClientDataHash() {
         return ArrayUtil.clone(clientDataHash);
     }
 
-    public @NonNull CoreServerProperty getServerProperty() {
+    public @NotNull CoreServerProperty getServerProperty() {
         return this.serverProperty;
     }
 
-    public @NonNull CoreAuthenticator getAuthenticator() {
+    public @NotNull CoreAuthenticator getAuthenticator() {
         return authenticator;
     }
 

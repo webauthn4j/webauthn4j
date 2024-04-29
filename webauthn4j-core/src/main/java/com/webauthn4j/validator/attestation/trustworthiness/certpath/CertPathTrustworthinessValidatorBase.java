@@ -22,7 +22,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
@@ -36,7 +36,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
     private boolean revocationCheckEnabled = false;
     private boolean policyQualifiersRejected = false;
 
-    public void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp) {
+    public void validate(@NotNull AAGUID aaguid, @NotNull CertificateBaseAttestationStatement attestationStatement, @NotNull Instant timestamp) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
         AssertUtil.notNull(aaguid, "attestationStatement must not be null");
         AssertUtil.notNull(aaguid, "timestamp must not be null");
@@ -70,7 +70,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         }
     }
 
-    protected abstract @NonNull Set<TrustAnchor> resolveTrustAnchors(@NonNull AAGUID aaguid);
+    protected abstract @NotNull Set<TrustAnchor> resolveTrustAnchors(@NotNull AAGUID aaguid);
 
 
     public boolean isFullChainProhibited() {

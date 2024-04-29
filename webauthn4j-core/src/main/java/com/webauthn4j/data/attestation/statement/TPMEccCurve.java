@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.spec.EllipticCurve;
 
@@ -43,7 +43,7 @@ public enum TPMEccCurve {
         this.value = value;
     }
 
-    public static @NonNull TPMEccCurve create(int value) {
+    public static @NotNull TPMEccCurve create(int value) {
         switch (value) {
             case 0x0000:
                 return TPM_ECC_NONE;
@@ -68,7 +68,7 @@ public enum TPMEccCurve {
         }
     }
 
-    public static @NonNull TPMEccCurve create(@NonNull EllipticCurve value) {
+    public static @NotNull TPMEccCurve create(@NotNull EllipticCurve value) {
         if (ECUtil.P_256_SPEC.getCurve().equals(value)) {
             return TPM_ECC_NIST_P256;
         }
@@ -82,7 +82,7 @@ public enum TPMEccCurve {
     }
 
     @JsonCreator
-    private static @NonNull TPMEccCurve deserialize(int value) throws InvalidFormatException {
+    private static @NotNull TPMEccCurve deserialize(int value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -90,7 +90,7 @@ public enum TPMEccCurve {
         }
     }
 
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         return UnsignedNumberUtil.toBytes(getValue());
     }
 
@@ -99,7 +99,7 @@ public enum TPMEccCurve {
         return value;
     }
 
-    public @NonNull EllipticCurve getEllipticCurve() {
+    public @NotNull EllipticCurve getEllipticCurve() {
         switch (this) {
             case TPM_ECC_NIST_P256:
                 return ECUtil.P_256_SPEC.getCurve();

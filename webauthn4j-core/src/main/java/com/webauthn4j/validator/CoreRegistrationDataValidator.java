@@ -35,7 +35,7 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.NotAllowedAlgorithmException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -50,11 +50,11 @@ public class CoreRegistrationDataValidator {
     private final List<CustomCoreRegistrationValidator> customRegistrationValidators;
 
     public CoreRegistrationDataValidator(
-            @NonNull List<AttestationStatementValidator> attestationStatementValidators,
-            @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-            @NonNull List<CustomCoreRegistrationValidator> customRegistrationValidators,
-            @NonNull ObjectConverter objectConverter) {
+            @NotNull List<AttestationStatementValidator> attestationStatementValidators,
+            @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            @NotNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+            @NotNull List<CustomCoreRegistrationValidator> customRegistrationValidators,
+            @NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
@@ -76,7 +76,7 @@ public class CoreRegistrationDataValidator {
      * @param registrationParameters registration parameters
      */
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
-    public void validate(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
+    public void validate(@NotNull CoreRegistrationData registrationData, @NotNull CoreRegistrationParameters registrationParameters) {
 
         //spec| Step1
         //spec| Let options be a new PublicKeyCredentialCreationOptions structure configured to the Relying Party's needs for the ceremony.
@@ -223,7 +223,7 @@ public class CoreRegistrationDataValidator {
     }
 
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
-    protected CoreRegistrationObject createCoreRegistrationObject(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
+    protected CoreRegistrationObject createCoreRegistrationObject(@NotNull CoreRegistrationData registrationData, @NotNull CoreRegistrationParameters registrationParameters) {
         return new CoreRegistrationObject(
                 registrationData.getAttestationObject(),
                 registrationData.getAttestationObjectBytes(),
@@ -232,14 +232,14 @@ public class CoreRegistrationDataValidator {
         );
     }
 
-    void validateAuthenticatorDataField(@NonNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+    void validateAuthenticatorDataField(@NotNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         // attestedCredentialData must be present on registration
         if (authenticatorData.getAttestedCredentialData() == null) {
             throw new ConstraintViolationException("attestedCredentialData must not be null on registration");
         }
     }
 
-    void validateUVUPFlags(@NonNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
+    void validateUVUPFlags(@NotNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
         //spec| Step10
         //spec| If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
         if (isUserVerificationRequired && !authenticatorData.isFlagUV()) {
@@ -253,7 +253,7 @@ public class CoreRegistrationDataValidator {
         }
     }
 
-    public @NonNull List<CustomCoreRegistrationValidator> getCustomRegistrationValidators() {
+    public @NotNull List<CustomCoreRegistrationValidator> getCustomRegistrationValidators() {
         return customRegistrationValidators;
     }
 
