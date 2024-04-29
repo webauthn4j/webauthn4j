@@ -17,7 +17,7 @@
 package integration.scenario.webauthn;
 
 import com.webauthn4j.WebAuthnManager;
-import com.webauthn4j.anchor.TrustAnchorsResolver;
+import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
@@ -35,7 +35,7 @@ import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.attestation.statement.androidkey.AndroidKeyAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import org.junit.jupiter.api.Test;
 
@@ -54,10 +54,10 @@ class AndroidKeyAuthenticatorRegistrationValidationTest {
     private final WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.ANDROID_KEY_AUTHENTICATOR);
     private final ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
     private final AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
-    private final TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
+    private final TrustAnchorRepository trustAnchorRepository = TestAttestationUtil.createTrustAnchorRepositoryWith3tierTestRootCACertificate();
     private final WebAuthnManager target = new WebAuthnManager(
             Collections.singletonList(androidKeyAttestationStatementValidator),
-            new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
+            new DefaultCertPathTrustworthinessValidator(trustAnchorRepository),
             new DefaultSelfAttestationTrustworthinessValidator()
     );
 

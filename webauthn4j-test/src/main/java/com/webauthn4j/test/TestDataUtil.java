@@ -45,9 +45,6 @@ import com.webauthn4j.metadata.data.statement.AlternativeDescriptions;
 import com.webauthn4j.metadata.data.statement.Version;
 import com.webauthn4j.metadata.data.toc.AuthenticatorStatus;
 import com.webauthn4j.metadata.data.toc.StatusReport;
-import com.webauthn4j.metadata.legacy.data.MetadataItem;
-import com.webauthn4j.metadata.legacy.data.MetadataItemImpl;
-import com.webauthn4j.metadata.legacy.data.statement.*;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
 import com.webauthn4j.util.*;
@@ -441,52 +438,5 @@ public class TestDataUtil {
         }
     }
 
-    public static MetadataItem createFidoMdsMetadataItem() {
-        return new MetadataItemImpl(
-                null,
-                new AAGUID("00471bc1-9ad3-4d4a-afb1-08d96c1b8f48"),
-                null,
-                null,
-                Collections.singletonList(new StatusReport(AuthenticatorStatus.FIDO_CERTIFIED, null, null, null, null, null, null, null)),
-                null,
-                createLegacyMetadataStatement()
-        );
-    }
-
-    public static MetadataStatement createLegacyMetadataStatement() {
-        return new MetadataStatement(
-                null,
-                null,
-                new AAGUID("00471bc1-9ad3-4d4a-afb1-08d96c1b8f48"),
-                null,
-                "dummy statement",
-                new AlternativeDescriptions(),
-                2,
-                "fido2",
-                Collections.singletonList(new Version(1, 0)),
-                "FIDOV2",
-                AuthenticationAlgorithm.RSASSA_PKCSV15_SHA1_RAW,
-                null,
-                PublicKeyRepresentationFormat.COSE,
-                null,
-                Collections.singletonList(AuthenticatorAttestationType.BASIC_FULL),
-                null,
-                new KeyProtections(10),
-                null,
-                null,
-                new MatcherProtections(4),
-                128,
-                "Secure Element (SE)",
-                new AttachmentHints(2),
-                false,
-                new TransactionConfirmationDisplays(0),
-                null,
-                null,
-                Collections.singletonList(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate()),
-                null,
-                null,
-                null
-        );
-    }
 
 }
