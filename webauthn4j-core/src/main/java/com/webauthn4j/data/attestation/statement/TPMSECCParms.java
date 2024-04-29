@@ -55,7 +55,7 @@ public class TPMSECCParms implements TPMUPublicParms {
     }
 
     @Override
-    public @Nullable byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         return ByteBuffer.allocate(8)
                 .put(symmetric)
                 .put(scheme)

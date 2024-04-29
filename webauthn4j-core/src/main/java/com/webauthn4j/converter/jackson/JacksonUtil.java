@@ -32,7 +32,7 @@ public class JacksonUtil {
         }
     }
 
-    public static @NotNull byte[] binaryValue(@Nullable JsonNode jsonNode) {
+    public static @Nullable byte[] binaryValue(@Nullable JsonNode jsonNode) {
         try {
             return jsonNode == null ? null : jsonNode.binaryValue();
         } catch (IOException e) {

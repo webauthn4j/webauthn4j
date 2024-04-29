@@ -59,7 +59,7 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
             @Nullable R response,
             @Nullable AuthenticatorAttachment authenticatorAttachment,
             @Nullable AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
-        this.id = Base64UrlUtil.encodeToString(credentialId);
+        this.id = credentialId == null ? null : Base64UrlUtil.encodeToString(credentialId);
         this.rawId = credentialId;
         this.response = response;
         this.authenticatorAttachment = authenticatorAttachment;
