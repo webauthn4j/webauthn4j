@@ -16,11 +16,13 @@
 
 package com.webauthn4j.test;
 
-import com.webauthn4j.anchor.TrustAnchorsResolver;
+import com.webauthn4j.anchor.TrustAnchorRepository;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.RSAUtil;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
@@ -79,19 +81,39 @@ public class TestAttestationUtil {
     // ~ Trust Anchors
     // ========================================================================================================
 
-    public static TrustAnchorsResolver createTrustAnchorProviderWith2tierTestRootCACertificate() {
-        return (aaguid) -> {
-            Set<TrustAnchor> set = new HashSet<>();
-            set.add(new TrustAnchor(load2tierTestRootCACertificate(), null));
-            return set;
+    public static TrustAnchorRepository createTrustAnchorRepositoryWith3tierTestRootCACertificate() {
+        return new TrustAnchorRepository() {
+            @Override
+            public Set<TrustAnchor> find(AAGUID aaguid) {
+                Set<TrustAnchor> set = new HashSet<>();
+                set.add(new TrustAnchor(load3tierTestRootCACertificate(), null));
+                return set;
+            }
+
+            @Override
+            public Set<TrustAnchor> find(byte[] attestationCertificateKeyIdentifier) {
+                Set<TrustAnchor> set = new HashSet<>();
+                set.add(new TrustAnchor(load3tierTestRootCACertificate(), null));
+                return set;
+            }
         };
     }
 
-    public static TrustAnchorsResolver createTrustAnchorProviderWith3tierTestRootCACertificate() {
-        return (aaguid) -> {
-            Set<TrustAnchor> set = new HashSet<>();
-            set.add(new TrustAnchor(load3tierTestRootCACertificate(), null));
-            return set;
+    public static TrustAnchorRepository createTrustAnchorRepositoryWith2tierTestRootCACertificate() {
+        return new TrustAnchorRepository() {
+            @Override
+            public Set<TrustAnchor> find(AAGUID aaguid) {
+                Set<TrustAnchor> set = new HashSet<>();
+                set.add(new TrustAnchor(load2tierTestRootCACertificate(), null));
+                return set;
+            }
+
+            @Override
+            public Set<TrustAnchor> find(byte[] attestationCertificateKeyIdentifier) {
+                Set<TrustAnchor> set = new HashSet<>();
+                set.add(new TrustAnchor(load2tierTestRootCACertificate(), null));
+                return set;
+            }
         };
     }
 

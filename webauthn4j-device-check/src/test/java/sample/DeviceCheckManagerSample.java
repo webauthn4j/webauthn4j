@@ -16,26 +16,36 @@
 
 package sample;
 
-import com.webauthn4j.anchor.CertFileTrustAnchorsProvider;
-import com.webauthn4j.anchor.TrustAnchorsResolverImpl;
+import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.appattest.DeviceCheckManager;
 import com.webauthn4j.appattest.authenticator.DCAppleDevice;
 import com.webauthn4j.appattest.authenticator.DCAppleDeviceImpl;
 import com.webauthn4j.appattest.data.*;
 import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
+import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.cert.TrustAnchor;
+import java.security.cert.X509Certificate;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.webauthn4j.test.TestAttestationUtil.loadCertificateFromResourcePath;
 
 @SuppressWarnings({"CaughtExceptionImmediatelyRethrown", "ConstantConditions"})
 public class DeviceCheckManagerSample {
@@ -44,8 +54,8 @@ public class DeviceCheckManagerSample {
     private Logger logger = LoggerFactory.getLogger(DeviceCheckManagerSample.class);
 
     public DeviceCheckManagerSample() {
-        CertFileTrustAnchorsProvider certFileTrustAnchorsProvider = getAppleAppAttestCertFileTrustAnchorsProvider();
-        deviceCheckManager = new DeviceCheckManager(new TrustAnchorCertPathTrustworthinessValidator(new TrustAnchorsResolverImpl(certFileTrustAnchorsProvider)));
+        TrustAnchorRepository trustAnchorRepository = getAppleAppAttestCertFileTrustAnchorsRepository();
+        deviceCheckManager = new DeviceCheckManager(new DefaultCertPathTrustworthinessValidator(trustAnchorRepository));
     }
 
     public void attestationValidationSample() {
@@ -150,15 +160,29 @@ public class DeviceCheckManagerSample {
         // Arrays.equals(authenticator.getAttestedCredentialData().getCredentialId(), keyId)
     }
 
-    private CertFileTrustAnchorsProvider getAppleAppAttestCertFileTrustAnchorsProvider() {
-        CertFileTrustAnchorsProvider certFileTrustAnchorsProvider = new CertFileTrustAnchorsProvider();
-        try {
-            Path path = Paths.get(ClassLoader.getSystemResource("apple-app-attest/Apple_App_Attestation_Root_CA.pem").toURI());
-            certFileTrustAnchorsProvider.setCertificates(Collections.singletonList(path));
-            return certFileTrustAnchorsProvider;
-        } catch (URISyntaxException e) {
-            throw new UnexpectedCheckedException(e);
-        }
+    private TrustAnchorRepository getAppleAppAttestCertFileTrustAnchorsRepository() {
+        return new TrustAnchorRepository() {
+            @Override
+            public Set<TrustAnchor> find(AAGUID aaguid) {
+                Set<TrustAnchor> set = new HashSet<>();
+                set.add(new TrustAnchor(loadCertificateFromClassPath("apple-app-attest/Apple_App_Attestation_Root_CA.pem"), null));
+                return set;
+            }
+
+            @Override
+            public Set<TrustAnchor> find(byte[] attestationCertificateKeyIdentifier) {
+                Set<TrustAnchor> set = new HashSet<>();
+                set.add(new TrustAnchor(loadCertificateFromClassPath("apple-app-attest/Apple_App_Attestation_Root_CA.pem"), null));
+                return set;
+            }
+        };
     }
 
+    private static X509Certificate loadCertificateFromClassPath(String classPath) {
+        try(InputStream inputStream = ClassLoader.getSystemResource(classPath).openStream()){
+            return CertificateUtil.generateX509Certificate(inputStream);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 }

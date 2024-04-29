@@ -16,7 +16,7 @@
 
 package integration.scenario.fido;
 
-import com.webauthn4j.anchor.TrustAnchorsResolver;
+import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
@@ -39,7 +39,7 @@ import com.webauthn4j.validator.attestation.statement.androidkey.AndroidKeyAttes
 import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.packed.PackedAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import org.junit.jupiter.api.Test;
 
@@ -59,14 +59,14 @@ class FIDOAuthenticatorCoreRegistrationValidationTest {
     private final PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
     private final FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
     private final AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
-    private final TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
+    private final TrustAnchorRepository trustAnchorRepository = TestAttestationUtil.createTrustAnchorRepositoryWith3tierTestRootCACertificate();
     private final CoreRegistrationDataValidator target = new CoreRegistrationDataValidator(
             Arrays.asList(
                     noneAttestationStatementValidator,
                     packedAttestationStatementValidator,
                     fidoU2FAttestationStatementValidator,
                     androidKeyAttestationStatementValidator),
-            new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
+            new DefaultCertPathTrustworthinessValidator(trustAnchorRepository),
             new DefaultSelfAttestationTrustworthinessValidator(),
             Collections.emptyList(),
             objectConverter

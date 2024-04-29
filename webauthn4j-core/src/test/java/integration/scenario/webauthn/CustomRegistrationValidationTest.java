@@ -17,7 +17,7 @@
 package integration.scenario.webauthn;
 
 import com.webauthn4j.WebAuthnManager;
-import com.webauthn4j.anchor.TrustAnchorsResolver;
+import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorTransportConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -34,7 +34,7 @@ import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import org.junit.jupiter.api.Test;
 
@@ -54,10 +54,10 @@ class CustomRegistrationValidationTest {
     private final ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
     private final NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
     private final FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
-    private final TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
+    private final TrustAnchorRepository trustAnchorRepository = TestAttestationUtil.createTrustAnchorRepositoryWith3tierTestRootCACertificate();
     private final WebAuthnManager target = new WebAuthnManager(
             Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
-            new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
+            new DefaultCertPathTrustworthinessValidator(trustAnchorRepository),
             new DefaultSelfAttestationTrustworthinessValidator()
     );
 
