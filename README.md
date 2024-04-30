@@ -110,11 +110,12 @@ byte[] tokenBindingId = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
 // expectations
+List<PublicKeyCredentialParameters> pubKeyCredParams = null;
 boolean userVerificationRequired = false;
 boolean userPresenceRequired = true;
 
 RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired);
+RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, pubKeyCredParams, userVerificationRequired, userPresenceRequired);
 RegistrationData registrationData;
 try {
     registrationData = webAuthnManager.parse(registrationRequest);
@@ -129,14 +130,15 @@ try {
     throw e;
 }
 
-// please persist Authenticator object, which will be used in the authentication process.
-Authenticator authenticator =
-        new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
-                registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
-                registrationData.getAttestationObject().getAttestationStatement(),
-                registrationData.getAttestationObject().getAuthenticatorData().getSignCount()
+// please persist CredentialRecord object, which will be used in the authentication process.
+CredentialRecord credentialRecord =
+        new CredentialRecordImpl( // You may create your own CredentialRecord implementation to save friendly authenticator name
+                registrationData.getAttestationObject(),
+                registrationData.getCollectedClientData(),
+                registrationData.getClientExtensions(),
+                registrationData.getTransports()
         );
-save(authenticator); // please persist authenticator in your manner
+save(credentialRecord); // please persist credentialRecord in your manner
 ```
 
 Parse and Validation on authentication
@@ -161,7 +163,7 @@ List<byte[]> allowCredentials = null;
 boolean userVerificationRequired = true;
 boolean userPresenceRequired = true;
 
-Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
+CredentialRecord credentialRecord = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
 AuthenticationRequest authenticationRequest =
         new AuthenticationRequest(
@@ -175,7 +177,7 @@ AuthenticationRequest authenticationRequest =
 AuthenticationParameters authenticationParameters =
         new AuthenticationParameters(
                 serverProperty,
-                authenticator,
+                credentialRecord,
                 allowCredentials,
                 userVerificationRequired,
                 userPresenceRequired
