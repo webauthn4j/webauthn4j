@@ -7,7 +7,7 @@
 [![Build Status](https://img.shields.io/maven-central/v/com.webauthn4j/webauthn4j-core.svg)](https://search.maven.org/#search%7Cga%7C1%7Cwebauthn4j)
 [![license](https://img.shields.io/github/license/webauthn4j/webauthn4j.svg)](https://github.com/webauthn4j/webauthn4j/blob/master/LICENSE.txt)
 
-A portable Java library for WebAuthn and Apple App Attest server side verification
+A portable Java library for WebAuthn(Passkeys) server side verification
 
 ### Conformance
 
@@ -29,7 +29,7 @@ All attestation statement formats are supported.
 
 ### Kotlin friendly
 
-Although WebAuthn4J is written in Java, public members are marked by `NonNull` or `Nullable` annotation 
+Although WebAuthn4J is written in Java, public members are marked by `NotNull` or `Nullable` annotation
 to declare nullability explicitly.
 
 ### Projects using WebAuthn4J
@@ -74,7 +74,7 @@ self-contained bootstrap mechanism for the build.
 
 ### Prerequisites
 
-Java15 or later is required to build WebAuthn4J.
+Java17 or later is required to build WebAuthn4J.
 To use WebAuthn4J library, JDK11 is OK if you don't need EdDSA support.
 
 ### Checkout sources
