@@ -18,12 +18,12 @@ package com.webauthn4j;
 
 import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.test.TestAttestationUtil;
-import com.webauthn4j.validator.attestation.statement.androidkey.AndroidKeyAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.packed.PackedAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
+import com.webauthn4j.verifier.attestation.statement.androidkey.AndroidKeyAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.none.NoneAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.packed.PackedAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.u2f.FIDOU2FAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -34,10 +34,10 @@ class WebAuthnRegistrationManagerTest {
 
     @Test
     void constructor_test() {
-        NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
-        PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
-        FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
-        AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
+        NoneAttestationStatementVerifier noneAttestationStatementValidator = new NoneAttestationStatementVerifier();
+        PackedAttestationStatementVerifier packedAttestationStatementValidator = new PackedAttestationStatementVerifier();
+        FIDOU2FAttestationStatementVerifier fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementVerifier();
+        AndroidKeyAttestationStatementVerifier androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementVerifier();
         TrustAnchorRepository trustAnchorRepository = TestAttestationUtil.createTrustAnchorRepositoryWith3tierTestRootCACertificate();
         WebAuthnRegistrationManager webAuthnRegistrationManager = new WebAuthnRegistrationManager(
                 Arrays.asList(
@@ -45,8 +45,8 @@ class WebAuthnRegistrationManagerTest {
                         packedAttestationStatementValidator,
                         fidoU2FAttestationStatementValidator,
                         androidKeyAttestationStatementValidator),
-                new DefaultCertPathTrustworthinessValidator(trustAnchorRepository),
-                new DefaultSelfAttestationTrustworthinessValidator()
+                new DefaultCertPathTrustworthinessVerifier(trustAnchorRepository),
+                new DefaultSelfAttestationTrustworthinessVerifier()
         );
         assertThat(webAuthnRegistrationManager).isNotNull();
     }

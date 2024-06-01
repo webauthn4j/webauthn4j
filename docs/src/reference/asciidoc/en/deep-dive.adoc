@@ -177,13 +177,13 @@ constructor and specify the `ObjectConverter` instance to the `WebAuthnManager` 
 === Custom validator implementation
 
 WebAuthn4J can add custom validator.
-For registration validation, implement `CustomRegistrationValidator`.
-For authentication validation, implement `CustomAuthenticationValidator`.
+For registration validation, implement `CustomRegistrationVerifier`.
+For authentication validation, implement `CustomAuthenticationVerifier`.
 
 ==== Custom validator registration
 
-`CustomRegistrationValidator` and `CustomAuthenticationValidator` implementation can be registered to `WebAuthnManager`
-via its constructor's `customRegistrationValidators` and `customAuthenticationValidators` parameters.
+`CustomRegistrationVerifier` and `CustomAuthenticationVerifier` implementation can be registered to `WebAuthnManager`
+via its constructor's `customRegistrationVerifiers` and `customAuthenticationVerifiers` parameters.
 
 === Classes
 

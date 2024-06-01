@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Data transfer object that represents relying party server property for validators
+ * Data transfer object that represents relying party server property for verifiers
  */
 public class ServerProperty extends CoreServerProperty {
 

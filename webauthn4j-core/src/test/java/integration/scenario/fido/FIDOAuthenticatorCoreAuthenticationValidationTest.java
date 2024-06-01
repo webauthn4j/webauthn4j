@@ -36,7 +36,7 @@ import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.validator.CoreAuthenticationDataValidator;
+import com.webauthn4j.verifier.CoreAuthenticationDataVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -48,7 +48,7 @@ class FIDOAuthenticatorCoreAuthenticationValidationTest {
 
     private final Origin origin = new Origin("http://example.com");
     private final ClientPlatform clientPlatform = EmulatorUtil.createClientPlatform(EmulatorUtil.PACKED_AUTHENTICATOR);
-    private final CoreAuthenticationDataValidator target = new CoreAuthenticationDataValidator(
+    private final CoreAuthenticationDataVerifier target = new CoreAuthenticationDataVerifier(
             Collections.emptyList()
     );
 
@@ -96,7 +96,7 @@ class FIDOAuthenticatorCoreAuthenticationValidationTest {
                         true
                 );
 
-        target.validate(coreAuthenticationData, authenticationParameters);
+        target.verify(coreAuthenticationData, authenticationParameters);
     }
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {

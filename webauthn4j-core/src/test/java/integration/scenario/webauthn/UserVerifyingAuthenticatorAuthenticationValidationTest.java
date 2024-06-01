@@ -37,7 +37,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.exception.*;
+import com.webauthn4j.verifier.exception.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -104,7 +104,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        target.validate(authenticationData, authenticationParameters);
+        target.verify(authenticationData, authenticationParameters);
 
         assertAll(
                 () -> assertThat(authenticationData.getCollectedClientData()).isNotNull(),
@@ -161,7 +161,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        target.validate(authenticationData, authenticationParameters);
+        target.verify(authenticationData, authenticationParameters);
 
         assertAll(
                 () -> assertThat(authenticationData.getCollectedClientData()).isNotNull(),
@@ -213,7 +213,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        assertThrows(InconsistentClientDataTypeException.class, () -> target.validate(authenticationData, authenticationParameters));
+        assertThrows(InconsistentClientDataTypeException.class, () -> target.verify(authenticationData, authenticationParameters));
     }
 
     @Test
@@ -258,7 +258,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        assertThrows(BadChallengeException.class, () -> target.validate(authenticationData, authenticationParameters));
+        assertThrows(BadChallengeException.class, () -> target.verify(authenticationData, authenticationParameters));
     }
 
     @Test
@@ -302,7 +302,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        assertThrows(BadOriginException.class, () -> target.validate(authenticationData, authenticationParameters));
+        assertThrows(BadOriginException.class, () -> target.verify(authenticationData, authenticationParameters));
     }
 
     @Test
@@ -348,7 +348,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        assertThrows(TokenBindingException.class, () -> target.validate(authenticationData, authenticationParameters));
+        assertThrows(TokenBindingException.class, () -> target.verify(authenticationData, authenticationParameters));
     }
 
 
@@ -394,7 +394,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        assertThrows(BadRpIdException.class, () -> target.validate(authenticationData, authenticationParameters));
+        assertThrows(BadRpIdException.class, () -> target.verify(authenticationData, authenticationParameters));
 
     }
 
@@ -438,7 +438,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        assertThrows(UserNotVerifiedException.class, () -> target.validate(authenticationData, authenticationParameters));
+        assertThrows(UserNotVerifiedException.class, () -> target.verify(authenticationData, authenticationParameters));
 
     }
 

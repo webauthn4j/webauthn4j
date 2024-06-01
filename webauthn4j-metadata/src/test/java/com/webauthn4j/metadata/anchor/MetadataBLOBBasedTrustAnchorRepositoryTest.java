@@ -21,7 +21,7 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.LocalFileMetadataBLOBProvider;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.HexUtil;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.verifier.RegistrationObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

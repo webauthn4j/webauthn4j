@@ -23,7 +23,7 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.validator.attestation.statement.androidkey.KeyDescriptionValidator;
+import com.webauthn4j.verifier.attestation.statement.androidkey.KeyDescriptionVerifier;
 import org.bouncycastle.asn1.*;
 
 import javax.security.auth.x500.X500Principal;
@@ -79,8 +79,8 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
         DLSequence softwareEnforced = new DLSequence(softwareEnforcedVector);
 
         ASN1EncodableVector teeEnforcedVector = new ASN1EncodableVector();
-        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionValidator.KM_TAG_ORIGIN, new ASN1Integer(KeyDescriptionValidator.KM_ORIGIN_GENERATED)));
-        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionValidator.KM_TAG_PURPOSE, new DERSet(new ASN1Integer(KeyDescriptionValidator.KM_PURPOSE_SIGN))));
+        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionVerifier.KM_TAG_ORIGIN, new ASN1Integer(KeyDescriptionVerifier.KM_ORIGIN_GENERATED)));
+        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionVerifier.KM_TAG_PURPOSE, new DERSet(new ASN1Integer(KeyDescriptionVerifier.KM_PURPOSE_SIGN))));
         DLSequence teeEnforced = new DLSequence(teeEnforcedVector);
 
         ASN1EncodableVector asn1EncodableVector = new ASN1EncodableVector();

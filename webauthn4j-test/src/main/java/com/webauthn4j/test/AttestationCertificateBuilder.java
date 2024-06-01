@@ -108,7 +108,7 @@ public class AttestationCertificateBuilder {
             X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
             return new JcaX509CertificateConverter().getCertificate(certificateHolder);
         } catch (CertificateException e) {
-            throw new com.webauthn4j.validator.exception.CertificateException(e);
+            throw new com.webauthn4j.verifier.exception.CertificateException(e);
         } catch (OperatorCreationException e) {
             throw new UnexpectedCheckedException(e);
         }

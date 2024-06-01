@@ -17,7 +17,7 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.verifier.RegistrationObject;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;

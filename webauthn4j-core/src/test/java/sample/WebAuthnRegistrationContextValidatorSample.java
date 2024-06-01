@@ -62,7 +62,7 @@ class RegistrationContextValidatorSample {
         // RegistrationContextValidator and provide validators you like
         WebAuthnManager webAuthnManager = WebAuthnManager.createNonStrictWebAuthnManager();
 
-        RegistrationData response = webAuthnManager.validate(registrationRequest, registrationParameters);
+        RegistrationData response = webAuthnManager.verify(registrationRequest, registrationParameters);
 
         // please persist Authenticator object, which will be used in the authentication process.
         Authenticator authenticator =
@@ -109,7 +109,7 @@ class RegistrationContextValidatorSample {
 
         WebAuthnManager webAuthnManager = WebAuthnManager.createNonStrictWebAuthnManager();
 
-        AuthenticationData response = webAuthnManager.validate(authenticationRequest, authenticationParameters);
+        AuthenticationData response = webAuthnManager.verify(authenticationRequest, authenticationParameters);
 
         // please update the counter of the authenticator record
         updateCounter(

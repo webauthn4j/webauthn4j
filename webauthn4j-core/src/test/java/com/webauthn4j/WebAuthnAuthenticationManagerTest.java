@@ -17,7 +17,7 @@
 package com.webauthn4j;
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.validator.CustomAuthenticationValidator;
+import com.webauthn4j.verifier.CustomAuthenticationVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -30,10 +30,10 @@ class WebAuthnAuthenticationManagerTest {
     @Test
     void constructor_test() {
         ObjectConverter objectConverter = new ObjectConverter();
-        List<CustomAuthenticationValidator> customAuthenticationValidators = Collections.emptyList();
+        List<CustomAuthenticationVerifier> customAuthenticationVerifiers = Collections.emptyList();
         assertThatCode(WebAuthnAuthenticationManager::new).doesNotThrowAnyException();
-        assertThatCode(() -> new WebAuthnAuthenticationManager(customAuthenticationValidators)).doesNotThrowAnyException();
-        assertThatCode(() -> new WebAuthnAuthenticationManager(customAuthenticationValidators, objectConverter)).doesNotThrowAnyException();
+        assertThatCode(() -> new WebAuthnAuthenticationManager(customAuthenticationVerifiers)).doesNotThrowAnyException();
+        assertThatCode(() -> new WebAuthnAuthenticationManager(customAuthenticationVerifiers, objectConverter)).doesNotThrowAnyException();
     }
 
 

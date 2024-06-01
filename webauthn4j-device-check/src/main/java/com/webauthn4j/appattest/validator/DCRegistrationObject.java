@@ -20,7 +20,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.CoreRegistrationObject;
+import com.webauthn4j.verifier.CoreRegistrationObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

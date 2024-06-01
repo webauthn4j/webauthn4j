@@ -103,10 +103,10 @@ class CustomAuthenticationValidationTest {
                 );
 
         // You can add custom authentication validator
-        target.getAuthenticationDataValidator().getCustomAuthenticationValidators().add(authenticationObject ->
+        target.getAuthenticationDataVerifier().getCustomAuthenticationVerifiers().add(authenticationObject ->
                 assertThat(authenticationObject).isNotNull()
         );
-        target.validate(authenticationRequest, authenticationParameters);
+        target.verify(authenticationRequest, authenticationParameters);
     }
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {

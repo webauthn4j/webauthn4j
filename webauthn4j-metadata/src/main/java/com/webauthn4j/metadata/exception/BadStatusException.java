@@ -16,7 +16,7 @@
 
 package com.webauthn4j.metadata.exception;
 
-import com.webauthn4j.validator.exception.ValidationException;
+import com.webauthn4j.verifier.exception.ValidationException;
 import org.jetbrains.annotations.Nullable;
 
 /**

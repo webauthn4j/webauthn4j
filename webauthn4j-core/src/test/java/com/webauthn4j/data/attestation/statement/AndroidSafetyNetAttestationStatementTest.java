@@ -18,7 +18,7 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSHeader;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

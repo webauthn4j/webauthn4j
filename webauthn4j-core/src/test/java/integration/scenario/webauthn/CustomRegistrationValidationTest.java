@@ -32,10 +32,10 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
+import com.webauthn4j.verifier.attestation.statement.none.NoneAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.u2f.FIDOU2FAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -52,13 +52,13 @@ class CustomRegistrationValidationTest {
 
     private final Origin origin = new Origin("http://localhost");
     private final ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
-    private final NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
-    private final FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
+    private final NoneAttestationStatementVerifier noneAttestationStatementValidator = new NoneAttestationStatementVerifier();
+    private final FIDOU2FAttestationStatementVerifier fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementVerifier();
     private final TrustAnchorRepository trustAnchorRepository = TestAttestationUtil.createTrustAnchorRepositoryWith3tierTestRootCACertificate();
     private final WebAuthnManager target = new WebAuthnManager(
             Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
-            new DefaultCertPathTrustworthinessValidator(trustAnchorRepository),
-            new DefaultSelfAttestationTrustworthinessValidator()
+            new DefaultCertPathTrustworthinessVerifier(trustAnchorRepository),
+            new DefaultSelfAttestationTrustworthinessVerifier()
     );
 
     private final AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
@@ -101,9 +101,9 @@ class CustomRegistrationValidationTest {
                 true
         );
 
-        target.getRegistrationDataValidator().getCustomRegistrationValidators().add(registrationObject ->
+        target.getRegistrationDataVerifier().getCustomRegistrationVerifiers().add(registrationObject ->
                 assertThat(registrationObject).isNotNull());
-        target.validate(registrationRequest, registrationParameters);
+        target.verify(registrationRequest, registrationParameters);
 
     }
 

@@ -34,12 +34,12 @@ import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.attestation.statement.androidkey.AndroidKeyAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.packed.PackedAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
+import com.webauthn4j.verifier.attestation.statement.androidkey.AndroidKeyAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.none.NoneAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.packed.PackedAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.u2f.FIDOU2FAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -58,10 +58,10 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
     private final Origin origin = new Origin("http://localhost");
     private final WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.PACKED_AUTHENTICATOR);
     private final ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
-    private final NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
-    private final PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
-    private final FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
-    private final AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
+    private final NoneAttestationStatementVerifier noneAttestationStatementValidator = new NoneAttestationStatementVerifier();
+    private final PackedAttestationStatementVerifier packedAttestationStatementValidator = new PackedAttestationStatementVerifier();
+    private final FIDOU2FAttestationStatementVerifier fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementVerifier();
+    private final AndroidKeyAttestationStatementVerifier androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementVerifier();
     private final TrustAnchorRepository trustAnchorRepository = TestAttestationUtil.createTrustAnchorRepositoryWith3tierTestRootCACertificate();
     private final WebAuthnManager target = new WebAuthnManager(
             Arrays.asList(
@@ -69,8 +69,8 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
                     packedAttestationStatementValidator,
                     fidoU2FAttestationStatementValidator,
                     androidKeyAttestationStatementValidator),
-            new DefaultCertPathTrustworthinessValidator(trustAnchorRepository),
-            new DefaultSelfAttestationTrustworthinessValidator(),
+            new DefaultCertPathTrustworthinessVerifier(trustAnchorRepository),
+            new DefaultSelfAttestationTrustworthinessVerifier(),
             objectConverter
     );
 
@@ -126,7 +126,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
 
 
         RegistrationData registrationData = target.parse(webAuthnRegistrationRequest);
-        target.validate(registrationData, registrationParameters);
+        target.verify(registrationData, registrationParameters);
 
         assertAll(
                 () -> assertThat(registrationData.getCollectedClientData()).isNotNull(),
@@ -184,8 +184,8 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         );
 
 
-        RegistrationData registrationData = target.validate(webAuthnRegistrationRequest, registrationParameters);
-        target.validate(registrationData, registrationParameters);
+        RegistrationData registrationData = target.verify(webAuthnRegistrationRequest, registrationParameters);
+        target.verify(registrationData, registrationParameters);
 
         assertAll(
                 () -> assertThat(registrationData.getCollectedClientData()).isNotNull(),

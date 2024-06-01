@@ -16,7 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.verifier.exception.CertificateException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

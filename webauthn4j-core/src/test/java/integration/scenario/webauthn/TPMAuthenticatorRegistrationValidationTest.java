@@ -34,9 +34,9 @@ import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.attestation.statement.tpm.TPMAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
+import com.webauthn4j.verifier.attestation.statement.tpm.TPMAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -54,12 +54,12 @@ class TPMAuthenticatorRegistrationValidationTest {
     private final Origin origin = new Origin("http://localhost");
     private final WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.TPM_AUTHENTICATOR);
     private final ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
-    private final TPMAttestationStatementValidator tpmAttestationStatementValidator = new TPMAttestationStatementValidator();
+    private final TPMAttestationStatementVerifier tpmAttestationStatementValidator = new TPMAttestationStatementVerifier();
     private final TrustAnchorRepository trustAnchorRepository = TestAttestationUtil.createTrustAnchorRepositoryWith3tierTestRootCACertificate();
     private final WebAuthnManager target = new WebAuthnManager(
             Collections.singletonList(tpmAttestationStatementValidator),
-            new DefaultCertPathTrustworthinessValidator(trustAnchorRepository),
-            new DefaultSelfAttestationTrustworthinessValidator()
+            new DefaultCertPathTrustworthinessVerifier(trustAnchorRepository),
+            new DefaultSelfAttestationTrustworthinessVerifier()
     );
 
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
@@ -114,7 +114,7 @@ class TPMAuthenticatorRegistrationValidationTest {
                 true
         );
 
-        RegistrationData response = target.validate(registrationRequest, registrationParameters);
+        RegistrationData response = target.verify(registrationRequest, registrationParameters);
 
         assertAll(
                 () -> assertThat(response.getCollectedClientData()).isNotNull(),
