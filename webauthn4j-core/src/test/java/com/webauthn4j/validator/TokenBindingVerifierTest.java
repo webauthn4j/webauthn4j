@@ -24,47 +24,47 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ConstantConditions")
-class TokenBindingValidatorTest {
+class TokenBindingVerifierTest {
 
-    private final TokenBindingValidator target = new TokenBindingValidator();
+    private final TokenBindingVerifier target = new TokenBindingVerifier();
 
     @Test
-    void validate_test() {
+    void verify_test() {
         byte[] bindingId = new byte[]{0x01, 0x23, 0x45};
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.PRESENT, bindingId);
-        target.validate(tokenBinding, bindingId);
+        target.verify(tokenBinding, bindingId);
     }
 
     @Test
-    void validate_invalid_bindingId_test() {
+    void verify_invalid_bindingId_test() {
         byte[] bindingId = new byte[]{0x01, 0x23, 0x45};
         byte[] invalidBindingId = new byte[]{0x00, 0x00, 0x00};
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.PRESENT, bindingId);
         assertThrows(TokenBindingException.class,
-                () -> target.validate(tokenBinding, invalidBindingId)
+                () -> target.verify(tokenBinding, invalidBindingId)
         );
     }
 
     @Test
-    void validate_TokenBindingStatus_not_supported_test() {
+    void verify_TokenBindingStatus_not_supported_test() {
         byte[] bindingId = null;
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.NOT_SUPPORTED, bindingId);
-        target.validate(tokenBinding, bindingId);
+        target.verify(tokenBinding, bindingId);
     }
 
     @Test
-    void validate_TokenBindingStatus_supported_test() {
+    void verify_TokenBindingStatus_supported_test() {
         byte[] bindingId = null;
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.SUPPORTED, bindingId);
-        target.validate(tokenBinding, bindingId);
+        target.verify(tokenBinding, bindingId);
     }
 
     @Test
-    void validate_TokenBindingStatus_unknown_value_test() {
+    void verify_TokenBindingStatus_unknown_value_test() {
         byte[] bindingId = null;
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.create("unknown"), bindingId);
         assertThrows(TokenBindingException.class,
-                () -> target.validate(tokenBinding, bindingId)
+                () -> target.verify(tokenBinding, bindingId)
         );
     }
 

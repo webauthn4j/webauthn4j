@@ -37,8 +37,8 @@ import java.util.List;
 
 public class CoreAuthenticationDataValidator {
 
-    private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
-    private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
+    private final RpIdHashVerifier rpIdHashVerifier = new RpIdHashVerifier();
+    private final AuthenticatorExtensionVerifier authenticatorExtensionVerifier = new AuthenticatorExtensionVerifier();
     private final List<CustomCoreAuthenticationValidator> customAuthenticationValidators;
 
     private AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
@@ -162,7 +162,7 @@ public class CoreAuthenticationDataValidator {
 
         //spec| Step15
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
-        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
+        rpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
 
         //spec| Step16
         //spec| Verify that the User Present bit of the flags in authData is set.
@@ -185,7 +185,7 @@ public class CoreAuthenticationDataValidator {
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         //      (This clientExtensionResults verification is only applicable to WebAuthn)
-        authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
+        authenticatorExtensionVerifier.verify(authenticationExtensionsAuthenticatorOutputs);
 
         //spec| Step19
         //spec| Let hash be the result of computing a hash over the cData using SHA-256.

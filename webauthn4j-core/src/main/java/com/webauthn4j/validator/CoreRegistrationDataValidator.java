@@ -44,9 +44,9 @@ public class CoreRegistrationDataValidator {
     // ~ Instance fields
     // ================================================================================================
 
-    private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
-    private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
-    private final AttestationValidator attestationValidator;
+    private final RpIdHashVerifier rpIdHashVerifier = new RpIdHashVerifier();
+    private final AuthenticatorExtensionVerifier authenticatorExtensionVerifier = new AuthenticatorExtensionVerifier();
+    private final AttestationVerifier attestationVerifier;
     private final List<CustomCoreRegistrationValidator> customRegistrationValidators;
 
     public CoreRegistrationDataValidator(
@@ -61,7 +61,7 @@ public class CoreRegistrationDataValidator {
         AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        this.attestationValidator = new AttestationValidator(
+        this.attestationVerifier = new AttestationVerifier(
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator);
@@ -154,7 +154,7 @@ public class CoreRegistrationDataValidator {
 
         //spec| Step13
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
-        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
+        rpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
 
         //spec| Step14, 15
         //spec| Verify that the User Present bit of the flags in authData is set.
@@ -173,10 +173,10 @@ public class CoreRegistrationDataValidator {
         //spec| i.e., those that were not specified as part of options.extensions.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
-        authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
+        authenticatorExtensionVerifier.verify(authenticationExtensionsAuthenticatorOutputs);
 
         //spec| Step18-21
-        attestationValidator.validate(registrationObject);
+        attestationVerifier.verify(registrationObject);
 
         //spec| Step22
         //spec| Check that the credentialId is not yet registered to any other user.

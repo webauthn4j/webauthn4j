@@ -34,9 +34,9 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Validates the attestation
+ * Verifies the attestation
  */
-class AttestationValidator {
+class AttestationVerifier {
 
     // ~ Instance fields
     // ================================================================================================
@@ -51,7 +51,7 @@ class AttestationValidator {
     // ~ Constructor
     // ========================================================================================================
 
-    AttestationValidator(
+    AttestationVerifier(
             @NotNull List<AttestationStatementValidator> attestationStatementValidators,
             @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             @NotNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
@@ -66,7 +66,7 @@ class AttestationValidator {
     }
 
 
-    public void validate(@NotNull CoreRegistrationObject registrationObject) {
+    public void verify(@NotNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
@@ -80,9 +80,9 @@ class AttestationValidator {
         //spec| Verify that attStmt is a correct attestation statement, conveying a valid attestation signature,
         //spec| by using the attestation statement format fmt’s verification procedure given attStmt, authData and hash.
 
-        AttestationType attestationType = validateAttestationStatement(registrationObject);
+        AttestationType attestationType = verifyAttestationStatement(registrationObject);
 
-        validateAAGUID(attestationObject);
+        verifyAAGUID(attestationObject);
 
         //spec| Step23
         //spec| If validation is successful, obtain a list of acceptable trust anchors (i.e. attestation root certificates)
@@ -133,7 +133,7 @@ class AttestationValidator {
 
     }
 
-    void validateAAGUID(@NotNull AttestationObject attestationObject) {
+    void verifyAAGUID(@NotNull AttestationObject attestationObject) {
         if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
             //noinspection ConstantConditions as null check is already done in caller
             AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
@@ -143,7 +143,7 @@ class AttestationValidator {
         }
     }
 
-    private @NotNull AttestationType validateAttestationStatement(@NotNull CoreRegistrationObject registrationObject) {
+    private @NotNull AttestationType verifyAttestationStatement(@NotNull CoreRegistrationObject registrationObject) {
         for (AttestationStatementValidator validator : attestationStatementValidators) {
             if (validator.supports(registrationObject)) {
                 return validator.validate(registrationObject);

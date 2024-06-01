@@ -30,11 +30,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Created by ynojima on 2017/08/27.
  */
 @SuppressWarnings("ConstantConditions")
-class RpIdHashValidatorTest {
+class RpIdHashVerifierTest {
 
     private final Origin origin = Origin.create("https://example.com");
 
-    private final RpIdHashValidator target = new RpIdHashValidator();
+    private final RpIdHashVerifier target = new RpIdHashVerifier();
 
     @Test
     void verifyRpIdHash_test() {
@@ -47,7 +47,7 @@ class RpIdHashValidatorTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpIdB, null, null);
 
         //When
-        target.validate(rpIdHashA, serverProperty);
+        target.verify(rpIdHashA, serverProperty);
     }
 
     @Test
@@ -62,7 +62,7 @@ class RpIdHashValidatorTest {
 
         //When
         assertThrows(BadRpIdException.class,
-                () -> target.validate(rpIdHashA, serverProperty)
+                () -> target.verify(rpIdHashA, serverProperty)
         );
     }
 
@@ -75,7 +75,7 @@ class RpIdHashValidatorTest {
 
         //When
         assertThrows(IllegalArgumentException.class,
-                () -> target.validate(rpIdHashA, null)
+                () -> target.verify(rpIdHashA, null)
         );
     }
 

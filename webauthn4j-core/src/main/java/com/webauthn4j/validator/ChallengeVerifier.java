@@ -27,9 +27,9 @@ import org.jetbrains.annotations.NotNull;
 import java.security.MessageDigest;
 
 /**
- * Validates the specified {@link Challenge}
+ * Verifies the specified {@link Challenge}
  */
-class ChallengeValidator {
+class ChallengeVerifier {
 
     //~ Instance fields
     // ================================================================================================
@@ -37,7 +37,7 @@ class ChallengeValidator {
 
     // ~ Methods
     // ========================================================================================================
-    public void validate(@NotNull CollectedClientData collectedClientData, @NotNull ServerProperty serverProperty) {
+    public void verify(@NotNull CollectedClientData collectedClientData, @NotNull ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         Challenge savedChallenge = serverProperty.getChallenge();
@@ -49,10 +49,10 @@ class ChallengeValidator {
 
         // Verify that the challenge member of the collectedClientData matches the challenge that was sent to
         // the authenticator in the PublicKeyCredentialRequestOptions passed to the get() call.
-        validate(savedChallenge, collectedChallenge);
+        verify(savedChallenge, collectedChallenge);
     }
 
-    public void validate(@NotNull Challenge expected, @NotNull Challenge actual) {
+    public void verify(@NotNull Challenge expected, @NotNull Challenge actual) {
         AssertUtil.notNull(expected, "expected must not be null");
         AssertUtil.notNull(actual, "actual must not be null");
         byte[] expectedChallengeBytes = expected.getValue();

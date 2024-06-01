@@ -39,11 +39,11 @@ import static org.mockito.Mockito.when;
 
 @SuppressWarnings("ConstantConditions")
 @ExtendWith(MockitoExtension.class)
-class AttestationValidatorTest {
+class AttestationVerifierTest {
 
     @Test
-    void validateAAGUID(@Mock(answer = Answers.RETURNS_DEEP_STUBS) AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
-        AttestationValidator attestationValidator = new AttestationValidator(
+    void verifyAAGUID(@Mock(answer = Answers.RETURNS_DEEP_STUBS) AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+        AttestationVerifier attestationVerifier = new AttestationVerifier(
                 Collections.singletonList(new FIDOU2FAttestationStatementValidator()),
                 new NullCertPathTrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator());
@@ -53,7 +53,7 @@ class AttestationValidatorTest {
         when(authenticatorData.getAttestedCredentialData().getAaguid()).thenReturn(new AAGUID("fea37a71-08ce-479f-bf4b-472a93e2d17d"));
         when(attestationObject.getAuthenticatorData()).thenReturn(authenticatorData);
         assertThrows(BadAaguidException.class,
-                () -> attestationValidator.validateAAGUID(attestationObject)
+                () -> attestationVerifier.verifyAAGUID(attestationObject)
         );
     }
 }

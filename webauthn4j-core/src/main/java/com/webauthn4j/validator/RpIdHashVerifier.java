@@ -27,9 +27,9 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 /**
- * Validates the specified rpIdHash
+ * Verifies the specified rpIdHash
  */
-class RpIdHashValidator {
+class RpIdHashVerifier {
 
     //~ Instance fields
     // ================================================================================================
@@ -38,7 +38,7 @@ class RpIdHashValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(@NotNull byte[] rpIdHash, @NotNull CoreServerProperty serverProperty) {
+    public void verify(@NotNull byte[] rpIdHash, @NotNull CoreServerProperty serverProperty) {
         AssertUtil.notNull(rpIdHash, "rpIdHash must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         String rpId = serverProperty.getRpId();

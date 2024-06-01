@@ -16,20 +16,20 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Validates clientExtensionOutputs
+ * Verifies authenticatorExtensionOutputs
  */
-class ClientExtensionValidator {
+class AuthenticatorExtensionVerifier {
 
     // ~ Methods
     // ========================================================================================================
 
     @SuppressWarnings("unused")
-    public <C extends ExtensionClientOutput> void validate(@NotNull AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs) {
+    public <A extends ExtensionAuthenticatorOutput> void verify(@NotNull AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs) {
         //nop for now
     }
 

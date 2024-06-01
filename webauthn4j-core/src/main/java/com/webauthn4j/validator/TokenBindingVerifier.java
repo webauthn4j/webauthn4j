@@ -25,14 +25,14 @@ import org.jetbrains.annotations.Nullable;
 import java.security.MessageDigest;
 
 /**
- * Validates the specified {@link TokenBinding}
+ * Verifies the specified {@link TokenBinding}
  */
-class TokenBindingValidator {
+class TokenBindingVerifier {
 
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(@Nullable TokenBinding clientDataTokenBinding, @Nullable byte[] serverTokenBindingId) {
+    public void verify(@Nullable TokenBinding clientDataTokenBinding, @Nullable byte[] serverTokenBindingId) {
         if (clientDataTokenBinding != null) {
             byte[] clientDataTokenBindingId;
             if (clientDataTokenBinding.getId() == null) {

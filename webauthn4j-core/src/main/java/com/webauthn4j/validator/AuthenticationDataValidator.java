@@ -40,12 +40,12 @@ import java.util.Objects;
 
 public class AuthenticationDataValidator {
 
-    private final ChallengeValidator challengeValidator = new ChallengeValidator();
-    private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
-    private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
+    private final ChallengeVerifier challengeVerifier = new ChallengeVerifier();
+    private final TokenBindingVerifier tokenBindingVerifier = new TokenBindingVerifier();
+    private final RpIdHashVerifier rpIdHashVerifier = new RpIdHashVerifier();
     private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
-    private final ClientExtensionValidator clientExtensionValidator = new ClientExtensionValidator();
-    private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
+    private final ClientExtensionVerifier clientExtensionVerifier = new ClientExtensionVerifier();
+    private final AuthenticatorExtensionVerifier authenticatorExtensionVerifier = new AuthenticatorExtensionVerifier();
 
     private final List<CustomAuthenticationValidator> customAuthenticationValidators;
 
@@ -150,7 +150,7 @@ public class AuthenticationDataValidator {
 
         //spec| Step13
         //spec| Verify that the value of C.challenge equals the base64url encoding of options.challenge.
-        challengeValidator.validate(collectedClientData, serverProperty);
+        challengeVerifier.verify(collectedClientData, serverProperty);
 
         //spec| Step14
         //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
@@ -170,11 +170,11 @@ public class AuthenticationDataValidator {
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the attestation was obtained. If Token Binding was used on that TLS connection,
         //spec| also verify that C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
-        tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
+        tokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         //spec| Step16
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
-        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
+        rpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
 
         //spec| Step17
         //spec| Verify that the UP bit of the flags in authData is set.
@@ -213,8 +213,8 @@ public class AuthenticationDataValidator {
         //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
-        clientExtensionValidator.validate(clientExtensions);
-        authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
+        clientExtensionVerifier.verify(clientExtensions);
+        authenticatorExtensionVerifier.verify(authenticationExtensionsAuthenticatorOutputs);
 
         //spec| Step22
         //spec| Let hash be the result of computing a hash over the cData using SHA-256.

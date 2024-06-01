@@ -48,15 +48,15 @@ public class RegistrationDataValidator {
 
     // ~ Instance fields
     // ================================================================================================
-    private final ChallengeValidator challengeValidator = new ChallengeValidator();
-    private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
-    private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
-    private final ClientExtensionValidator clientExtensionValidator = new ClientExtensionValidator();
-    private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
+    private final ChallengeVerifier challengeVerifier = new ChallengeVerifier();
+    private final TokenBindingVerifier tokenBindingVerifier = new TokenBindingVerifier();
+    private final RpIdHashVerifier rpIdHashVerifier = new RpIdHashVerifier();
+    private final ClientExtensionVerifier clientExtensionVerifier = new ClientExtensionVerifier();
+    private final AuthenticatorExtensionVerifier authenticatorExtensionVerifier = new AuthenticatorExtensionVerifier();
 
     private final List<CustomRegistrationValidator> customRegistrationValidators;
 
-    private final AttestationValidator attestationValidator;
+    private final AttestationVerifier attestationVerifier;
 
     private OriginValidator originValidator = new OriginValidatorImpl();
 
@@ -74,7 +74,7 @@ public class RegistrationDataValidator {
         AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        this.attestationValidator = new AttestationValidator(
+        this.attestationVerifier = new AttestationVerifier(
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator);
@@ -148,7 +148,7 @@ public class RegistrationDataValidator {
 
         //spec| Step8
         //spec| Verify that the value of C.challenge equals the base64url encoding of options.challenge.
-        challengeValidator.validate(collectedClientData, serverProperty);
+        challengeVerifier.verify(collectedClientData, serverProperty);
 
         //spec| Step9
         //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
@@ -158,7 +158,7 @@ public class RegistrationDataValidator {
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
         //spec| C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
-        tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
+        tokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         //spec| Step10
         //spec| If C.topOrigin is present:
@@ -176,7 +176,7 @@ public class RegistrationDataValidator {
 
         //spec| Step13
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
-        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
+        rpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
 
         //spec| Step14, 15
         //spec| Verify that the UP bit of the flags in authData is set.
@@ -208,11 +208,11 @@ public class RegistrationDataValidator {
         //spec| i.e., those that were not specified as part of options.extensions.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
-        clientExtensionValidator.validate(clientExtensions);
-        authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
+        clientExtensionVerifier.verify(clientExtensions);
+        authenticatorExtensionVerifier.verify(authenticationExtensionsAuthenticatorOutputs);
 
         //spec| Step21-24, 28
-        attestationValidator.validate(registrationObject);
+        attestationVerifier.verify(registrationObject);
 
         //spec| Step25
         //spec| Verify that the credentialId is ≤ 1023 bytes. Credential IDs larger than this many bytes SHOULD cause the RP to fail this registration ceremony.

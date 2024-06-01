@@ -20,20 +20,20 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("ConstantConditions")
-class AuthenticatorExtensionValidatorTest {
+class AuthenticatorExtensionVerifierTest {
 
-    private final AuthenticatorExtensionValidator extensionValidator = new AuthenticatorExtensionValidator();
+    private final AuthenticatorExtensionVerifier extensionValidator = new AuthenticatorExtensionVerifier();
 
     @Test
     void test() {
         AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
         builder.set("test", true);
-        extensionValidator.validate(builder.build());
+        extensionValidator.verify(builder.build());
     }
 
     @Test
     void authenticatorOutputs_null_test() {
-        extensionValidator.validate(null);
+        extensionValidator.verify(null);
     }
 
 }

@@ -33,15 +33,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Test for ChallengeValidator
  */
 @SuppressWarnings("ConstantConditions")
-class ChallengeValidatorTest {
+class ChallengeVerifierTest {
 
     private final Origin origin = Origin.create("https://example.com");
     private final String rpId = "example.com";
 
-    private final ChallengeValidator target = new ChallengeValidator();
+    private final ChallengeVerifier target = new ChallengeVerifier();
 
     @Test
-    void validate_test1() {
+    void verify_test1() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
@@ -50,11 +50,11 @@ class ChallengeValidatorTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challengeB, null);
 
         //When
-        target.validate(collectedClientData, serverProperty);
+        target.verify(collectedClientData, serverProperty);
     }
 
     @Test
-    void validate_test_with_different_challenge() {
+    void verify_test_with_different_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
@@ -64,12 +64,12 @@ class ChallengeValidatorTest {
 
         //When
         assertThrows(BadChallengeException.class,
-                () -> target.validate(collectedClientData, serverProperty)
+                () -> target.verify(collectedClientData, serverProperty)
         );
     }
 
     @Test
-    void validate_test_without_saved_challenge() {
+    void verify_test_without_saved_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = null;
@@ -79,7 +79,7 @@ class ChallengeValidatorTest {
 
         //When
         assertThrows(MissingChallengeException.class,
-                () -> target.validate(collectedClientData, serverProperty)
+                () -> target.verify(collectedClientData, serverProperty)
         );
     }
 }
