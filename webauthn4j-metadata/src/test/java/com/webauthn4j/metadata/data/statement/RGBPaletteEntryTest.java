@@ -24,10 +24,10 @@ class RGBPaletteEntryTest {
 
     @Test
     void getter_test(){
-        RGBPaletteEntry target = new RGBPaletteEntry(255,127,0);
+        RGBPaletteEntry target = new RGBPaletteEntry(255,127,1);
         assertThat(target.getR()).isEqualTo(255);
         assertThat(target.getG()).isEqualTo(127);
-        assertThat(target.getB()).isEqualTo(0);
+        assertThat(target.getB()).isEqualTo(1);
     }
 
     @Test
@@ -35,8 +35,9 @@ class RGBPaletteEntryTest {
         RGBPaletteEntry instanceA = new RGBPaletteEntry(255,127,0);
         RGBPaletteEntry instanceB = new RGBPaletteEntry(255,127,0);
 
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
-        assertThat(instanceA).isEqualTo(instanceB);
+        assertThat(instanceA)
+                .hasSameHashCodeAs(instanceB)
+                .isEqualTo(instanceB);
     }
 
 }

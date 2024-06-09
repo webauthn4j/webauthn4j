@@ -18,7 +18,7 @@ package com.webauthn4j.appattest.verifier;
 
 import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.verifier.AssertionSignatureVerifier;
+import com.webauthn4j.verifier.internal.AssertionSignatureVerifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;

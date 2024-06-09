@@ -47,8 +47,9 @@ class VerificationMethodDescriptorTest {
         VerificationMethodDescriptor instanceA = createVerificationMethodDescriptor();
         VerificationMethodDescriptor instanceB = createVerificationMethodDescriptor();
 
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
-        assertThat(instanceA).isEqualTo(instanceB);
+        assertThat(instanceA)
+                .hasSameHashCodeAs(instanceB)
+                .isEqualTo(instanceB);
     }
 
     private VerificationMethodDescriptor createVerificationMethodDescriptor(){

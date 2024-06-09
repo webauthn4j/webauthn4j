@@ -30,8 +30,9 @@ class MetadataBLOBPayloadTest {
         MetadataBLOBPayload instanceA = new MetadataBLOBPayload("header", 1, LocalDate.parse("2020-01-01"), Collections.emptyList());
         MetadataBLOBPayload instanceB = new MetadataBLOBPayload("header", 1, LocalDate.parse("2020-01-01"), Collections.emptyList());
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
     }
 
 }

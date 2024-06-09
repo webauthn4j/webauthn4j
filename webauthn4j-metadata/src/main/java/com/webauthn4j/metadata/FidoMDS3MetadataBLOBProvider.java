@@ -19,6 +19,7 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.data.MetadataBLOB;
 import com.webauthn4j.metadata.data.MetadataBLOBFactory;
+import com.webauthn4j.metadata.exception.CertPathCheckException;
 import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.util.CertificateUtil;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,8 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
     private final HttpClient httpClient;
     private final Set<TrustAnchor> trustAnchors;
     private boolean revocationCheckEnabled = true;
+
+    private CertPathChecker certPathChecker = new DefaultCertPathChecker();
 
     public FidoMDS3MetadataBLOBProvider(@NotNull ObjectConverter objectConverter, @NotNull String blobEndpoint, @NotNull HttpClient httpClient, @NotNull Set<TrustAnchor> trustAnchors) {
         this.metadataBLOBFactory = new MetadataBLOBFactory(objectConverter);
@@ -78,22 +81,13 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
     private void validateCertPath(@NotNull MetadataBLOB metadataBLOB) {
         CertPath certPath = metadataBLOB.getHeader().getX5c();
+        try{
+            certPathChecker.check(new CertPathCheckContext(certPath, trustAnchors, revocationCheckEnabled));
+        }
+        catch (CertPathCheckException e){
+            throw new MDSException("MetadataBLOB certificate chain validation failed");
+        }
 
-        CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
-        PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
-        certPathParameters.setRevocationEnabled(revocationCheckEnabled);
-        if(revocationCheckEnabled){
-            PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker) certPathValidator.getRevocationChecker();
-            pkixRevocationChecker.setOptions(EnumSet.of(PKIXRevocationChecker.Option.PREFER_CRLS));
-            certPathParameters.addCertPathChecker(pkixRevocationChecker);
-        }
-        try {
-            certPathValidator.validate(certPath, certPathParameters);
-        } catch (InvalidAlgorithmParameterException e) {
-            throw new MDSException("invalid algorithm parameter", e);
-        } catch (CertPathValidatorException e) {
-            throw new MDSException("invalid cert path", e);
-        }
     }
 
     public boolean isRevocationCheckEnabled() {
@@ -102,5 +96,35 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
     public void setRevocationCheckEnabled(boolean revocationCheckEnabled) {
         this.revocationCheckEnabled = revocationCheckEnabled;
+    }
+
+    public @NotNull CertPathChecker getCertPathChecker() {
+        return certPathChecker;
+    }
+
+    public void setCertPathChecker(@NotNull CertPathChecker certPathChecker) {
+        this.certPathChecker = certPathChecker;
+    }
+
+    private class DefaultCertPathChecker implements CertPathChecker {
+
+        @Override
+        public void check(CertPathCheckContext context) throws MDSException {
+            CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
+            PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
+            certPathParameters.setRevocationEnabled(revocationCheckEnabled);
+            if(revocationCheckEnabled){
+                PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker) certPathValidator.getRevocationChecker();
+                pkixRevocationChecker.setOptions(EnumSet.of(PKIXRevocationChecker.Option.PREFER_CRLS));
+                certPathParameters.addCertPathChecker(pkixRevocationChecker);
+            }
+            try {
+                certPathValidator.validate(context.getCertPath(), certPathParameters);
+            } catch (InvalidAlgorithmParameterException e) {
+                throw new CertPathCheckException("invalid algorithm parameter", e);
+            } catch (CertPathValidatorException e) {
+                throw new CertPathCheckException("invalid cert path", e);
+            }
+        }
     }
 }

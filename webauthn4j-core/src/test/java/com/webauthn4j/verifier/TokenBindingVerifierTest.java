@@ -19,6 +19,7 @@ package com.webauthn4j.verifier;
 import com.webauthn4j.data.client.TokenBinding;
 import com.webauthn4j.data.client.TokenBindingStatus;
 import com.webauthn4j.verifier.exception.TokenBindingException;
+import com.webauthn4j.verifier.internal.TokenBindingVerifier;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,13 +27,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings("ConstantConditions")
 class TokenBindingVerifierTest {
 
-    private final TokenBindingVerifier target = new TokenBindingVerifier();
-
     @Test
     void verify_test() {
         byte[] bindingId = new byte[]{0x01, 0x23, 0x45};
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.PRESENT, bindingId);
-        target.verify(tokenBinding, bindingId);
+        TokenBindingVerifier.verify(tokenBinding, bindingId);
     }
 
     @Test
@@ -41,7 +40,7 @@ class TokenBindingVerifierTest {
         byte[] invalidBindingId = new byte[]{0x00, 0x00, 0x00};
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.PRESENT, bindingId);
         assertThrows(TokenBindingException.class,
-                () -> target.verify(tokenBinding, invalidBindingId)
+                () -> TokenBindingVerifier.verify(tokenBinding, invalidBindingId)
         );
     }
 
@@ -49,14 +48,14 @@ class TokenBindingVerifierTest {
     void verify_TokenBindingStatus_not_supported_test() {
         byte[] bindingId = null;
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.NOT_SUPPORTED, bindingId);
-        target.verify(tokenBinding, bindingId);
+        TokenBindingVerifier.verify(tokenBinding, bindingId);
     }
 
     @Test
     void verify_TokenBindingStatus_supported_test() {
         byte[] bindingId = null;
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.SUPPORTED, bindingId);
-        target.verify(tokenBinding, bindingId);
+        TokenBindingVerifier.verify(tokenBinding, bindingId);
     }
 
     @Test
@@ -64,8 +63,7 @@ class TokenBindingVerifierTest {
         byte[] bindingId = null;
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.create("unknown"), bindingId);
         assertThrows(TokenBindingException.class,
-                () -> target.verify(tokenBinding, bindingId)
+                () -> TokenBindingVerifier.verify(tokenBinding, bindingId)
         );
     }
-
 }

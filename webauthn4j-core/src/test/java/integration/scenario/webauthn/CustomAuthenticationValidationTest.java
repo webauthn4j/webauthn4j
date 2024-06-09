@@ -78,7 +78,7 @@ class CustomAuthenticationValidationTest {
                 null
         );
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getAuthenticatorResponse();
+        AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getResponse();
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
@@ -119,7 +119,7 @@ class CustomAuthenticationValidationTest {
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getResponse();
         AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }

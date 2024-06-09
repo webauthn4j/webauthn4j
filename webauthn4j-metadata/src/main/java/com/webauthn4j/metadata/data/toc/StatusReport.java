@@ -62,7 +62,7 @@ public class StatusReport {
 
     @Nullable
     @JsonProperty
-    private final String certificationPolicyVersion;;
+    private final String certificationPolicyVersion;
 
     @Nullable
     @JsonProperty

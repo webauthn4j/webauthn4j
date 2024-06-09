@@ -16,10 +16,7 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.junit.jupiter.api.Test;
-
-import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

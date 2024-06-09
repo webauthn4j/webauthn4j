@@ -75,7 +75,7 @@ class PublicKeyCredentialTest {
                 () -> assertThat(credential.getId()).isNotEmpty(),
                 () -> assertThat(credential.getRawId()).isNotEmpty(),
                 () -> assertThat(credential.getResponse()).isInstanceOf(AuthenticatorAttestationResponse.class),
-                () -> assertThat(credential.getAuthenticatorResponse()).isInstanceOf(AuthenticatorAttestationResponse.class),
+                () -> assertThat(credential.getResponse()).isInstanceOf(AuthenticatorAttestationResponse.class),
                 () -> assertThat(credential.getClientExtensionResults()).isNotNull()
         );
     }

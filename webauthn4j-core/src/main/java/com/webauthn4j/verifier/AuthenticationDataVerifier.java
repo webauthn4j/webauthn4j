@@ -29,20 +29,17 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.verifier.exception.*;
+import com.webauthn4j.verifier.exception.ConstraintViolationException;
+import com.webauthn4j.verifier.exception.InconsistentClientDataTypeException;
+import com.webauthn4j.verifier.internal.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class AuthenticationDataVerifier {
 
-    private final ChallengeVerifier challengeVerifier = new ChallengeVerifier();
-    private final TokenBindingVerifier tokenBindingVerifier = new TokenBindingVerifier();
-    private final RpIdHashVerifier rpIdHashVerifier = new RpIdHashVerifier();
     private final AssertionSignatureVerifier assertionSignatureVerifier = new AssertionSignatureVerifier();
     private final ClientExtensionVerifier clientExtensionVerifier = new ClientExtensionVerifier();
     private final AuthenticatorExtensionVerifier authenticatorExtensionVerifier = new AuthenticatorExtensionVerifier();
@@ -92,7 +89,7 @@ public class AuthenticationDataVerifier {
         //spec| If options.allowCredentials is not empty, verify that credential.id identifies one of the public key credentials listed in options.allowCredentials.
         byte[] credentialId = authenticationData.getCredentialId();
         List<byte[]> allowCredentials = authenticationParameters.getAllowCredentials();
-        verifyCredentialId(credentialId, allowCredentials);
+        CredentialIdVerifier.verify(credentialId, allowCredentials);
 
         //spec| Step6
         //spec| Identify the user being authenticated and let credentialRecord be the credential record for the credential:
@@ -133,7 +130,9 @@ public class AuthenticationDataVerifier {
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(authenticatorData);
 
-        verifyAuthenticatorData(authenticatorData);
+        if (authenticatorData.getAttestedCredentialData() != null) {
+            throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
+        }
 
         Authenticator authenticator = authenticationParameters.getAuthenticator();
 
@@ -150,14 +149,14 @@ public class AuthenticationDataVerifier {
 
         //spec| Step13
         //spec| Verify that the value of C.challenge equals the base64url encoding of options.challenge.
-        challengeVerifier.verify(collectedClientData, serverProperty);
+        ChallengeVerifier.verify(collectedClientData, serverProperty);
 
         //spec| Step14
         //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
         originVerifier.verify(authenticationObject);
 
-        // Verify cross origin, which is not defined in the spec
-        verifyClientDataCrossOrigin(collectedClientData);
+        // Verify cross origin. This step is not defined in the spec
+        CrossOriginFlagVerifier.verify(collectedClientData, crossOriginAllowed);
 
         //spec| Step15
         //spec| If C.topOrigin is present:
@@ -170,30 +169,23 @@ public class AuthenticationDataVerifier {
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the attestation was obtained. If Token Binding was used on that TLS connection,
         //spec| also verify that C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
-        tokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
+        TokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         //spec| Step16
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
-        rpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
+        RpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
 
-        //spec| Step17
+        //spec| Step17, 18
         //spec| Verify that the UP bit of the flags in authData is set.
-        if (authenticationParameters.isUserPresenceRequired() && !authenticatorData.isFlagUP()) {
-            throw new UserNotPresentException("Verifier is configured to check user present, but UP flag in authenticatorData is not set.");
-        }
-
-        //spec| Step18
         //spec| Determine whether user verification is required for this assertion.
         //spec| User verification SHOULD be required if, and only if, options.userVerification is set to required.
         //spec| If user verification was determined to be required, verify that the UV bit of the flags in authData is set.
         //spec| Otherwise, ignore the value of the UV flag.
-        if (authenticationParameters.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
-            throw new UserNotVerifiedException("Verifier is configured to check user verified, but UV flag in authenticatorData is not set.");
-        }
+        UPUVFlagsVerifier.verify(authenticatorData, authenticationParameters.isUserPresenceRequired(), authenticationParameters.isUserVerificationRequired());
 
         //spec| Step19
         //spec| If the BE bit of the flags in authData is not set, verify that the BS bit is not set.
-        verifyBEBSFlags(authenticatorData);
+        BEBSFlagsVerifier.verify(authenticatorData);
 
         //spec| Step20
         //spec| If the credential backup state is used as part of Relying Party business logic or policy,
@@ -203,7 +195,7 @@ public class AuthenticationDataVerifier {
         //spec| - If credentialRecord.backupEligible is not set, verify that currentBe is not set.
         //spec| - Apply Relying Party policy, if any.
         //      (The relying party policy should be implemented as a custom verifier)
-        verifyBEFlag(authenticator, authenticatorData);
+        BEFlagVerifier.verify(authenticator, authenticatorData);
 
         //spec| Step21
         //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
@@ -282,26 +274,7 @@ public class AuthenticationDataVerifier {
 
     }
 
-    static void verifyBEFlag(Authenticator authenticator, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
-        if(authenticator instanceof CoreCredentialRecord){
-            CoreCredentialRecord coreCredentialRecord = (CoreCredentialRecord) authenticator;
-            Boolean backEligibleRecordValue = coreCredentialRecord.isBackupEligible();
-            //noinspection StatementWithEmptyBody
-            if(backEligibleRecordValue == null){
-                //no-op
-            }
-            else if(backEligibleRecordValue) {
-                if(!authenticatorData.isFlagBE()){
-                    throw new BadBackupEligibleFlagException("Although credential record BE flag is set, current BE flag is not set");
-                }
-            }
-            else{
-                if(authenticatorData.isFlagBE()){
-                    throw new BadBackupEligibleFlagException("Although credential record BE flag is not set, current BE flag is set");
-                }
-            }
-        }
-    }
+
 
     static void updateRecord(Authenticator authenticator, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         authenticator.setCounter(authenticatorData.getSignCount());
@@ -317,31 +290,9 @@ public class AuthenticationDataVerifier {
         }
     }
 
-    void verifyCredentialId(byte[] credentialId, @Nullable List<byte[]> allowCredentials) {
-        // As allowCredentials are known data to client side(potential attacker),
-        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
-        if(allowCredentials != null && allowCredentials.stream().noneMatch(item -> Arrays.equals(item, credentialId))){
-            throw new NotAllowedCredentialIdException("credentialId not listed in allowCredentials is used.");
-        }
-    }
 
-    void verifyClientDataCrossOrigin(CollectedClientData collectedClientData) {
-        if (!crossOriginAllowed && Objects.equals(true, collectedClientData.getCrossOrigin())) {
-            throw new CrossOriginException("Cross-origin request is prohibited. Relax AuthenticationDataVerifier config if necessary.");
-        }
-    }
 
-    void verifyAuthenticatorData(@NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
-        if (authenticatorData.getAttestedCredentialData() != null) {
-            throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
-        }
-    }
 
-    void verifyBEBSFlags(AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
-        if(!authenticatorData.isFlagBE() && authenticatorData.isFlagBS()){
-            throw new IllegalBackupStateException("Backup state bit must not be set if backup eligibility bit is not set");
-        }
-    }
 
     public @NotNull CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
         return maliciousCounterValueHandler;

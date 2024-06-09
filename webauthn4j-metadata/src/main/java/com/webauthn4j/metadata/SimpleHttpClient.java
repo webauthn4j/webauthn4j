@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Tiny implementation of {@link HttpClient}. If you prefer more powerful one, implement {@link HttpClient} with
@@ -52,7 +53,7 @@ public class SimpleHttpClient implements HttpClient {
                     result = bis.read();
                 }
                 bis.close();
-                return buf.toString("UTF-8");
+                return buf.toString(StandardCharsets.UTF_8);
             }
             throw new MDSException("failed to fetch " + url);
         } catch (IOException e) {

@@ -26,6 +26,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
+import com.webauthn4j.verifier.internal.BeanAssertUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

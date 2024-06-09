@@ -32,7 +32,7 @@ class KeyStoreTrustAnchorRepositoryTest {
     @Test
     void find_return_all_trustAnchors_to_any_parameters_test() throws Exception {
         Path path = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/KeyStoreFileTrustAnchorsProviderTest/test.jks").toURI());
-        KeyStoreTrustAnchorRepository target = new KeyStoreTrustAnchorRepository(path, "password");
+        KeyStoreTrustAnchorRepository target = KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(path, "password");
         Set<TrustAnchor> trustAnchors;
         trustAnchors = target.find(new AAGUID(UUID.randomUUID()));
         assertThat(trustAnchors).hasSize(1);
