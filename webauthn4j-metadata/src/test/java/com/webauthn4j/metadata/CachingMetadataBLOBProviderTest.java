@@ -16,6 +16,7 @@ import java.util.Collections;
 
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("java:S5976")
 class CachingMetadataBLOBProviderTest {
 
     @Test

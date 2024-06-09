@@ -92,7 +92,7 @@ class CustomOriginVerifierTest {
                 extensions
         );
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
+        AuthenticatorAttestationResponse registrationRequest = credential.getResponse();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensionResults = credential.getClientExtensionResults();
         Set<String> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);

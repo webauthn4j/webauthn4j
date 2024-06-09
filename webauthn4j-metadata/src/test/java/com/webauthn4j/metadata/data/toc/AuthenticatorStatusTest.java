@@ -15,6 +15,7 @@
  */
 package com.webauthn4j.metadata.data.toc;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -61,7 +62,7 @@ class AuthenticatorStatusTest {
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"authenticator_status\":\"REVOKED\"}", TestDTO.class);
-        assertThat(dto.authenticator_status).isEqualTo(AuthenticatorStatus.REVOKED);
+        assertThat(dto.authenticatorStatus).isEqualTo(AuthenticatorStatus.REVOKED);
     }
 
     @Test
@@ -72,6 +73,7 @@ class AuthenticatorStatusTest {
     }
 
     static class TestDTO {
-        public AuthenticatorStatus authenticator_status;
+        @JsonProperty("authenticator_status")
+        public AuthenticatorStatus authenticatorStatus;
     }
 }
