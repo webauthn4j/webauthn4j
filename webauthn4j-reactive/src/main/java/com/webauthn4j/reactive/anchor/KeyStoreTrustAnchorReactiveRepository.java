@@ -1,0 +1,159 @@
+/*
+ * Copyright 2002-2018 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.webauthn4j.reactive.anchor;
+
+import com.webauthn4j.anchor.KeyStoreException;
+import com.webauthn4j.anchor.KeyStoreTrustAnchorRepository;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.CompletionStageUtil;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.channels.CompletionHandler;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.TrustAnchor;
+import java.security.cert.X509Certificate;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Future;
+
+/**
+ * Load {@link TrustAnchor}s from KeyStore. Loaded trust anchors are cached.
+ */
+public class KeyStoreTrustAnchorReactiveRepository implements TrustAnchorReactiveRepository {
+
+    // ~ Instance fields
+    // ================================================================================================
+
+    private final CompletableFuture<Set<TrustAnchor>> trustAnchors;
+
+    // ~ Constructors
+    // ========================================================================================================
+    public KeyStoreTrustAnchorReactiveRepository(KeyStore keyStore) {
+        AssertUtil.notNull(keyStore, "keyStore must not be null");
+        this.trustAnchors = CompletableFuture.completedFuture(loadTrustAnchors(keyStore));
+    }
+
+    // ~ Static Methods
+    // ========================================================================================================
+    public static CompletionStage<KeyStoreTrustAnchorReactiveRepository> createFromKeyStoreFilePath(Path keyStore, String password){
+        return loadKeyStore(keyStore, password).thenApply(KeyStoreTrustAnchorReactiveRepository::new);
+    }
+
+    // ~ Methods
+    // ========================================================================================================
+
+    @Override
+    public CompletionStage<Set<TrustAnchor>> find(AAGUID aaguid) {
+        return trustAnchors;
+    }
+
+    @Override
+    public CompletionStage<Set<TrustAnchor>> find(byte[] attestationCertificateKeyIdentifier) {
+        return trustAnchors;
+    }
+
+    private static @NotNull Set<TrustAnchor> loadTrustAnchors(KeyStore keyStore) {
+        try {
+            List<String> aliases = Collections.list(keyStore.aliases());
+            Set<TrustAnchor> trustAnchors = new HashSet<>();
+            for (String alias : aliases) {
+                X509Certificate certificate = (X509Certificate) keyStore.getCertificate(alias);
+                trustAnchors.add(new TrustAnchor(certificate, null));
+            }
+            return trustAnchors;
+        } catch (java.security.KeyStoreException e) {
+            throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
+        }
+    }
+
+    private static @NotNull CompletionStage<KeyStore> loadKeyStore(Path keyStore, String password){
+        AssertUtil.notNull(keyStore, "keyStore must not be null");
+        AssertUtil.notNull(password, "password must not be null");
+
+        return new FileLoader(keyStore).load().thenCompose((bytes)->{
+            try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
+                KeyStore keyStoreObject = CertificateUtil.createKeyStore();
+                keyStoreObject.load(inputStream, password.toCharArray());
+                return CompletableFuture.completedFuture(keyStoreObject);
+            } catch (IOException | NoSuchAlgorithmException | CertificateException e) {
+                throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
+            }
+        });
+    }
+
+    private static class FileLoader{
+
+        private final Path path;
+        private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        private final CompletableFuture<byte[]> completableFuture = new CompletableFuture<>();
+
+        private FileLoader(Path path){
+            this.path = path;
+        }
+
+        private CompletableFuture<byte[]> load(){
+            try(AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(path)){
+                read(asynchronousFileChannel);
+            } catch (IOException e){
+                throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
+            }
+            return completableFuture;
+        }
+
+        private void read(AsynchronousFileChannel asynchronousFileChannel){
+            int bufferSize = 1024;
+            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+            asynchronousFileChannel.read(buffer, bufferSize, buffer, new CompletionHandler<>() {
+                @Override
+                public void completed(Integer result, ByteBuffer attachment) {
+                    try {
+                        byteArrayOutputStream.write(attachment.array());
+                        if(result == bufferSize){
+                            read(asynchronousFileChannel);
+                        }
+                        else {
+                            completableFuture.complete(byteArrayOutputStream.toByteArray());
+                        }
+                    } catch (IOException e) {
+                        completableFuture.completeExceptionally(e);
+                    }
+                }
+
+                @Override
+                public void failed(Throwable exc, ByteBuffer attachment) {
+                    completableFuture.completeExceptionally(exc);
+                }
+            });
+        }
+    }
+}

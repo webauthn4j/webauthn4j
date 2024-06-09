@@ -19,6 +19,7 @@ package com.webauthn4j.test;
 import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.reactive.anchor.TrustAnchorReactiveRepository;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.RSAUtil;
@@ -56,6 +57,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 public class TestAttestationUtil {
 
@@ -112,6 +115,40 @@ public class TestAttestationUtil {
                 Set<TrustAnchor> set = new HashSet<>();
                 set.add(new TrustAnchor(load2tierTestRootCACertificate(), null));
                 return set;
+            }
+        };
+    }
+
+    public static TrustAnchorReactiveRepository createTrustAnchorReactiveRepositoryWith3tierTestRootCACertificate() {
+        return new TrustAnchorReactiveRepository() {
+
+            private final TrustAnchorRepository trustAnchorRepository = createTrustAnchorRepositoryWith3tierTestRootCACertificate();
+
+            @Override
+            public CompletionStage<Set<TrustAnchor>> find(AAGUID aaguid) {
+                return CompletableFuture.completedFuture(trustAnchorRepository.find(aaguid));
+            }
+
+            @Override
+            public CompletionStage<Set<TrustAnchor>> find(byte[] attestationCertificateKeyIdentifier) {
+                return CompletableFuture.completedFuture(trustAnchorRepository.find(attestationCertificateKeyIdentifier));
+            }
+        };
+    }
+
+    public static TrustAnchorReactiveRepository createTrustAnchorReactiveRepositoryWith2tierTestRootCACertificate() {
+        return new TrustAnchorReactiveRepository() {
+
+            private final TrustAnchorRepository trustAnchorRepository = createTrustAnchorRepositoryWith2tierTestRootCACertificate();
+
+            @Override
+            public CompletionStage<Set<TrustAnchor>> find(AAGUID aaguid) {
+                return CompletableFuture.completedFuture(trustAnchorRepository.find(aaguid));
+            }
+
+            @Override
+            public CompletionStage<Set<TrustAnchor>> find(byte[] attestationCertificateKeyIdentifier) {
+                return CompletableFuture.completedFuture(trustAnchorRepository.find(attestationCertificateKeyIdentifier));
             }
         };
     }
@@ -320,5 +357,6 @@ public class TestAttestationUtil {
             throw new UnexpectedCheckedException(e);
         }
     }
+
 
 }
