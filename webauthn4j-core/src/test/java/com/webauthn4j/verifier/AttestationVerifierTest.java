@@ -33,7 +33,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.when;
 class AttestationVerifierTest {
 
     @Test
-    void verifyAAGUID(@Mock(answer = Answers.RETURNS_DEEP_STUBS) AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+    void verifyAAGUID_throws_BadAaguidException_for_u2f(@Mock(answer = Answers.RETURNS_DEEP_STUBS) AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         AttestationVerifier attestationVerifier = new AttestationVerifier(
                 Collections.singletonList(new FIDOU2FAttestationStatementVerifier()),
                 new NullCertPathTrustworthinessVerifier(),
@@ -52,8 +52,6 @@ class AttestationVerifierTest {
         when(attestationObject.getFormat()).thenReturn(FIDOU2FAttestationStatement.FORMAT);
         when(authenticatorData.getAttestedCredentialData().getAaguid()).thenReturn(new AAGUID("fea37a71-08ce-479f-bf4b-472a93e2d17d"));
         when(attestationObject.getAuthenticatorData()).thenReturn(authenticatorData);
-        assertThrows(BadAaguidException.class,
-                () -> attestationVerifier.verifyAAGUID(attestationObject)
-        );
+        assertThatThrownBy(() -> attestationVerifier.verifyAAGUID(attestationObject)).isInstanceOf(BadAaguidException.class);
     }
 }

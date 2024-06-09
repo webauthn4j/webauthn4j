@@ -20,6 +20,7 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.exception.BadRpIdException;
+import com.webauthn4j.verifier.internal.RpIdHashVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -34,10 +35,8 @@ class RpIdHashVerifierTest {
 
     private final Origin origin = Origin.create("https://example.com");
 
-    private final RpIdHashVerifier target = new RpIdHashVerifier();
-
     @Test
-    void verifyRpIdHash_test() {
+    void verify_test() {
 
         String rpIdA = "example.com";
         String rpIdB = "example.com";
@@ -47,11 +46,11 @@ class RpIdHashVerifierTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpIdB, null, null);
 
         //When
-        target.verify(rpIdHashA, serverProperty);
+        RpIdHashVerifier.verify(rpIdHashA, serverProperty);
     }
 
     @Test
-    void verifyRpIdHash_test_with_different_rpIds() {
+    void verify_test_with_different_rpIds() {
 
         String rpIdA = "sub.example.com";
         String rpIdB = "example.com";
@@ -62,12 +61,12 @@ class RpIdHashVerifierTest {
 
         //When
         assertThrows(BadRpIdException.class,
-                () -> target.verify(rpIdHashA, serverProperty)
+                () -> RpIdHashVerifier.verify(rpIdHashA, serverProperty)
         );
     }
 
     @Test
-    void verifyRpIdHash_test_with_relyingParty_null() {
+    void verify_test_with_relyingParty_null() {
 
         String rpIdA = "example.com";
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
@@ -75,7 +74,7 @@ class RpIdHashVerifierTest {
 
         //When
         assertThrows(IllegalArgumentException.class,
-                () -> target.verify(rpIdHashA, null)
+                () -> RpIdHashVerifier.verify(rpIdHashA, null)
         );
     }
 

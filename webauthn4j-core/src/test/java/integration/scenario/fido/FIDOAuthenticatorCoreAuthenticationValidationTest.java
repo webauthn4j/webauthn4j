@@ -74,7 +74,7 @@ class FIDOAuthenticatorCoreAuthenticationValidationTest {
         );
 
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
+        AuthenticatorAssertionResponse authenticationRequest = credential.getResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
@@ -124,7 +124,7 @@ class FIDOAuthenticatorCoreAuthenticationValidationTest {
                 extensions
         );
 
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getResponse();
         AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
