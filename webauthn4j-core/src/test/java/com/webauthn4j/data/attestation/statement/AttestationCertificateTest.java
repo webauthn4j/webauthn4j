@@ -17,7 +17,7 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.test.TestAttestationUtil;
-import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.verifier.exception.CertificateException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

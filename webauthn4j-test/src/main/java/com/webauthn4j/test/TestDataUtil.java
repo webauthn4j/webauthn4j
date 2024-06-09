@@ -41,15 +41,11 @@ import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.metadata.data.statement.AlternativeDescriptions;
-import com.webauthn4j.metadata.data.statement.Version;
-import com.webauthn4j.metadata.data.toc.AuthenticatorStatus;
-import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
 import com.webauthn4j.util.*;
-import com.webauthn4j.validator.CoreRegistrationObject;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.verifier.CoreRegistrationObject;
+import com.webauthn4j.verifier.RegistrationObject;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;

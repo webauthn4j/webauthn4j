@@ -19,15 +19,15 @@ package com.webauthn4j.appattest;
 import com.webauthn4j.appattest.data.DCAttestationData;
 import com.webauthn4j.appattest.data.DCAttestationParameters;
 import com.webauthn4j.appattest.data.DCAttestationRequest;
-import com.webauthn4j.appattest.validator.DCAttestationDataValidator;
+import com.webauthn4j.appattest.validator.DCAttestationDataVerifier;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.CustomCoreRegistrationValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
-import com.webauthn4j.validator.exception.ValidationException;
+import com.webauthn4j.verifier.CustomCoreRegistrationVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.CertPathTrustworthinessVerifier;
+import com.webauthn4j.verifier.exception.ValidationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -38,17 +38,17 @@ public class DeviceCheckAttestationManager {
     // ================================================================================================
 
     private final AttestationObjectConverter attestationObjectConverter;
-    private final DCAttestationDataValidator dcAttestationDataValidator;
+    private final DCAttestationDataVerifier dcAttestationDataValidator;
 
     public DeviceCheckAttestationManager(
-            @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            @NotNull List<CustomCoreRegistrationValidator> customRegistrationValidators,
+            @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
+            @NotNull List<CustomCoreRegistrationVerifier> customRegistrationValidators,
             @NotNull ObjectConverter objectConverter) {
-        AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
+        AssertUtil.notNull(certPathTrustworthinessVerifier, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        dcAttestationDataValidator = new DCAttestationDataValidator(
-                certPathTrustworthinessValidator,
+        dcAttestationDataValidator = new DCAttestationDataVerifier(
+                certPathTrustworthinessVerifier,
                 customRegistrationValidators,
                 objectConverter);
         attestationObjectConverter = new AttestationObjectConverter(objectConverter);
@@ -80,11 +80,11 @@ public class DeviceCheckAttestationManager {
 
     @SuppressWarnings("squid:S1130")
     public @NotNull DCAttestationData validate(@NotNull DCAttestationData dcAttestationData, @NotNull DCAttestationParameters dcAttestationParameters) throws ValidationException {
-        getDCAttestationDataValidator().validate(dcAttestationData, dcAttestationParameters);
+        getDCAttestationDataValidator().verify(dcAttestationData, dcAttestationParameters);
         return dcAttestationData;
     }
 
-    public @NotNull DCAttestationDataValidator getDCAttestationDataValidator() {
+    public @NotNull DCAttestationDataVerifier getDCAttestationDataValidator() {
         return dcAttestationDataValidator;
     }
 }

@@ -8,7 +8,7 @@ import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

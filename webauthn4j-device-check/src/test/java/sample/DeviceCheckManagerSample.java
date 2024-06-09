@@ -27,25 +27,18 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.exception.ValidationException;
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier;
+import com.webauthn4j.verifier.exception.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.webauthn4j.test.TestAttestationUtil.loadCertificateFromResourcePath;
 
 @SuppressWarnings({"CaughtExceptionImmediatelyRethrown", "ConstantConditions"})
 public class DeviceCheckManagerSample {
@@ -55,7 +48,7 @@ public class DeviceCheckManagerSample {
 
     public DeviceCheckManagerSample() {
         TrustAnchorRepository trustAnchorRepository = getAppleAppAttestCertFileTrustAnchorsRepository();
-        deviceCheckManager = new DeviceCheckManager(new DefaultCertPathTrustworthinessValidator(trustAnchorRepository));
+        deviceCheckManager = new DeviceCheckManager(new DefaultCertPathTrustworthinessVerifier(trustAnchorRepository));
     }
 
     public void attestationValidationSample() {

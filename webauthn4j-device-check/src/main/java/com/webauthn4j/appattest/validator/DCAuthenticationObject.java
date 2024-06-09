@@ -20,7 +20,7 @@ import com.webauthn4j.appattest.authenticator.DCAppleDevice;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.CoreServerProperty;
-import com.webauthn4j.validator.CoreAuthenticationObject;
+import com.webauthn4j.verifier.CoreAuthenticationObject;
 import org.jetbrains.annotations.NotNull;
 
 public class DCAuthenticationObject extends CoreAuthenticationObject {

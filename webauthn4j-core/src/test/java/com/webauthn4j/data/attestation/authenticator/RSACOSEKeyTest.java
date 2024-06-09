@@ -23,7 +23,7 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.util.RSAUtil;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
 import java.security.KeyPair;

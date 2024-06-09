@@ -156,12 +156,12 @@ WebAuthn4Jは、Jacksonの `ObjectMapper` を `ObjectConverter` というクラ�
 
 === カスタムな検証ロジックの実装
 
-WebAuthn4Jでは、カスタムな検証ロジックを実装し、追加することが可能です。 登録時の検証にカスタムロジックを追加する場合は、 `CustomRegistrationValidator` を実装してください。 認証時の検証にカスタムロジックを追加する場合は、 `CustomAuthenticationValidator` を実装してください。
+WebAuthn4Jでは、カスタムな検証ロジックを実装し、追加することが可能です。 登録時の検証にカスタムロジックを追加する場合は、 `CustomRegistrationVerifier` を実装してください。 認証時の検証にカスタムロジックを追加する場合は、 `CustomAuthenticationVerifier` を実装してください。
 
 ==== カスタム検証ロジックの登録
 
-`CustomRegistrationValidator` と `CustomAuthenticationValidator` の実装は `WebAuthnManager` のコンストラクタの
-`customRegistrationValidators` パラメータおよび `customAuthenticationValidators` パラメータを通じて登録することが出来ます。
+`CustomRegistrationVerifier` と `CustomAuthenticationVerifier` の実装は `WebAuthnManager` のコンストラクタの
+`customRegistrationVerifiers` パラメータおよび `customAuthenticationVerifiers` パラメータを通じて登録することが出来ます。
 
 === クラス
 

@@ -17,7 +17,7 @@
 package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.UvmEntries;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatCode;

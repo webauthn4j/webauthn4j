@@ -2,28 +2,28 @@
 
 WebAuthn4J has a one main entry point class, `WebAuthnManager`.
 It delegates attestation statements validation to an implementation of
-`AttestationStatementValidator` and attestation statements trustworthiness validation to an implementation of
-`CertPathTrustworthinessValidator`.
+`AttestationStatementVerifier` and attestation statements trustworthiness validation to an implementation of
+`CertPathTrustworthinessVerifier`.
 
-Since most sites don't require strict attestation statement validation (https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAuthn Spec related topic] ), WebAuthn4J provides `WebAuthnManager.createNonStrictWebAuthnManager` factory method that returns an `WebAuthnManager` instance configured `AttestationStatementValidator` and
-`CertPathTrustworthinessValidator` not to validate attestation statements.
+Since most sites don't require strict attestation statement validation (https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAuthn Spec related topic] ), WebAuthn4J provides `WebAuthnManager.createNonStrictWebAuthnManager` factory method that returns an `WebAuthnManager` instance configured `AttestationStatementVerifier` and
+`CertPathTrustworthinessVerifier` not to validate attestation statements.
 
 If you are engaging an enterprise use case and strict authenticator verification is a requirement, Use the constructor of the `WebAuthnManager` class and inject validators.
 
 === Attestation statement validation
 
-Attestation statement validation is provided by the implementation of `AttestationStatementValidator` interface.
+Attestation statement validation is provided by the implementation of `AttestationStatementVerifier` interface.
 For each attestation statement format, corresponding validator classes are provided.
 Please specify its list at the first argument of the constructor of `WebAuthnManager` class.
 For example, if you would like to limit the supported format to `packed` only, add only
-`PackedAttestationStatementValidator` to the `List`, and if you would like to support `packed` and `tpm` format, make the `List` with `PackedAttestationStatementValidator` and `TPMAttestationStatementValidator`.
+`PackedAttestationStatementVerifier` to the `List`, and if you would like to support `packed` and `tpm` format, make the `List` with `PackedAttestationStatementVerifier` and `TPMAttestationStatementVerifier`.
 
 ==== Attestation statement trustworthiness validation
 
 Attestation statement trustworthiness validation has two patterns: certificate path validation, and self attestation.
-Certificate path validation is delegated via `CertPathTrustworthinessValidator` interface.
-WebAuthn4J provides `DefaultCertPathTrustworthinessValidator` as `CertPathTrustworthinessValidator` implementation.
-`DefaultCertPathTrustworthinessValidator` verifies trustworthiness by checking the attestation certificate chains to the root certificate provided as `TrustAnchor` via `TrustAnchorRepository` interface.
+Certificate path validation is delegated via `CertPathTrustworthinessVerifier` interface.
+WebAuthn4J provides `DefaultCertPathTrustworthinessVerifier` as `CertPathTrustworthinessVerifier` implementation.
+`DefaultCertPathTrustworthinessVerifier` verifies trustworthiness by checking the attestation certificate chains to the root certificate provided as `TrustAnchor` via `TrustAnchorRepository` interface.
 
 ==== Trust anchor resolution
 

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

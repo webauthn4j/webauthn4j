@@ -22,7 +22,6 @@ import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.RSAUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
@@ -183,7 +182,7 @@ public class TestAttestationUtil {
             try {
                 return new JcaX509CertificateConverter().getCertificate(certificateHolder);
             } catch (CertificateException e) {
-                throw new com.webauthn4j.validator.exception.CertificateException(e);
+                throw new com.webauthn4j.verifier.exception.CertificateException(e);
             }
         } catch (OperatorCreationException e) {
             throw new UnexpectedCheckedException(e);

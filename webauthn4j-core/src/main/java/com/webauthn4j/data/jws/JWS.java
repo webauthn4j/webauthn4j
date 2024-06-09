@@ -64,7 +64,7 @@ public class JWS<T> {
     }
 
     /**
-     * Validates signature.
+     * Verify signature.
      *
      * @return true if it pass validation
      */

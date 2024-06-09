@@ -37,7 +37,7 @@ import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticator;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.util.CollectionUtil;
-import com.webauthn4j.validator.exception.*;
+import com.webauthn4j.verifier.exception.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -107,7 +107,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         true
                 );
 
-        AuthenticationData response = target.validate(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters);
+        AuthenticationData response = target.verify(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters);
 
         assertAll(
                 () -> assertThat(response.getCollectedClientData()).isNotNull(),
@@ -164,7 +164,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 );
 
         assertThrows(InconsistentClientDataTypeException.class,
-                () -> target.validate(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters)
+                () -> target.verify(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters)
         );
     }
 
@@ -216,7 +216,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 );
 
         assertThrows(BadChallengeException.class,
-                () -> target.validate(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters)
+                () -> target.verify(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters)
         );
     }
 
@@ -268,7 +268,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 );
 
         assertThrows(BadOriginException.class,
-                () -> target.validate(authenticationRequest, authenticationParameters)
+                () -> target.verify(authenticationRequest, authenticationParameters)
         );
     }
 
@@ -319,7 +319,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         false
                 );
         assertThrows(BadRpIdException.class,
-                () -> target.validate(authenticationRequest, authenticationParameters)
+                () -> target.verify(authenticationRequest, authenticationParameters)
         );
     }
 
@@ -369,7 +369,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         true
                 );
         assertThrows(UserNotVerifiedException.class,
-                () -> target.validate(authenticationRequest, authenticationParameters)
+                () -> target.verify(authenticationRequest, authenticationParameters)
         );
     }
 
@@ -423,7 +423,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         true
                 );
         assertThrows(UserNotPresentException.class,
-                () -> target.validate(authenticationRequest, authenticationParameters)
+                () -> target.verify(authenticationRequest, authenticationParameters)
         );
     }
 
@@ -474,7 +474,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         true
                 );
         assertThrows(BadSignatureException.class,
-                () -> target.validate(authenticationRequest, authenticationParameters)
+                () -> target.verify(authenticationRequest, authenticationParameters)
         );
     }
 
@@ -526,7 +526,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         true
                 );
         assertThrows(MaliciousCounterValueException.class,
-                () -> target.validate(authenticationRequest, authenticationParameters)
+                () -> target.verify(authenticationRequest, authenticationParameters)
         );
     }
 

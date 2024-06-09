@@ -32,7 +32,7 @@ import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.webauthn.AttestationOption;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
-import com.webauthn4j.validator.exception.ValidationException;
+import com.webauthn4j.verifier.exception.ValidationException;
 
 import java.util.HashMap;
 import java.util.Map;

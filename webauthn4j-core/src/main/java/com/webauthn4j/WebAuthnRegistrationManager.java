@@ -31,21 +31,21 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.CustomRegistrationValidator;
-import com.webauthn4j.validator.RegistrationDataValidator;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.apple.NullAppleAnonymousAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.packed.NullPackedAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.tpm.NullTPMAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.u2f.NullFIDOU2FAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.exception.ValidationException;
+import com.webauthn4j.verifier.CustomRegistrationVerifier;
+import com.webauthn4j.verifier.RegistrationDataVerifier;
+import com.webauthn4j.verifier.attestation.statement.AttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.androidkey.NullAndroidKeyAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.apple.NullAppleAnonymousAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.none.NoneAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.packed.NullPackedAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.tpm.NullTPMAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.u2f.NullFIDOU2FAttestationStatementVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.CertPathTrustworthinessVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.NullCertPathTrustworthinessVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessVerifier;
+import com.webauthn4j.verifier.attestation.trustworthiness.self.SelfAttestationTrustworthinessVerifier;
+import com.webauthn4j.verifier.exception.ValidationException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,25 +66,25 @@ public class WebAuthnRegistrationManager {
     private final AuthenticatorTransportConverter authenticatorTransportConverter;
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
 
-    private final RegistrationDataValidator registrationDataValidator;
+    private final RegistrationDataVerifier registrationDataVerifier;
 
     public WebAuthnRegistrationManager(
-            @NotNull List<AttestationStatementValidator> attestationStatementValidators,
-            @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            @NotNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-            @NotNull List<CustomRegistrationValidator> customRegistrationValidators,
+            @NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
+            @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
+            @NotNull SelfAttestationTrustworthinessVerifier selfAttestationTrustworthinessVerifier,
+            @NotNull List<CustomRegistrationVerifier> customRegistrationVerifiers,
             @NotNull ObjectConverter objectConverter) {
-        AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
-        AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
-        AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
-        AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
+        AssertUtil.notNull(attestationStatementVerifiers, "attestationStatementVerifiers must not be null");
+        AssertUtil.notNull(certPathTrustworthinessVerifier, "certPathTrustworthinessVerifier must not be null");
+        AssertUtil.notNull(selfAttestationTrustworthinessVerifier, "selfAttestationTrustworthinessVerifier must not be null");
+        AssertUtil.notNull(customRegistrationVerifiers, "customRegistrationVerifiers must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        registrationDataValidator = new RegistrationDataValidator(
-                attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                selfAttestationTrustworthinessValidator,
-                customRegistrationValidators,
+        registrationDataVerifier = new RegistrationDataVerifier(
+                attestationStatementVerifiers,
+                certPathTrustworthinessVerifier,
+                selfAttestationTrustworthinessVerifier,
+                customRegistrationVerifiers,
                 objectConverter);
 
 
@@ -94,39 +94,39 @@ public class WebAuthnRegistrationManager {
         authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
     }
 
-    public WebAuthnRegistrationManager(@NotNull List<AttestationStatementValidator> attestationStatementValidators,
-                                       @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                                       @NotNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-                                       @NotNull List<CustomRegistrationValidator> customRegistrationValidators) {
+    public WebAuthnRegistrationManager(@NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
+                                       @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
+                                       @NotNull SelfAttestationTrustworthinessVerifier selfAttestationTrustworthinessVerifier,
+                                       @NotNull List<CustomRegistrationVerifier> customRegistrationVerifiers) {
         this(
-                attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                selfAttestationTrustworthinessValidator,
-                customRegistrationValidators,
+                attestationStatementVerifiers,
+                certPathTrustworthinessVerifier,
+                selfAttestationTrustworthinessVerifier,
+                customRegistrationVerifiers,
                 new ObjectConverter()
         );
     }
 
-    public WebAuthnRegistrationManager(@NotNull List<AttestationStatementValidator> attestationStatementValidators,
-                                       @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                                       @NotNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+    public WebAuthnRegistrationManager(@NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
+                                       @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
+                                       @NotNull SelfAttestationTrustworthinessVerifier selfAttestationTrustworthinessVerifier,
                                        @NotNull ObjectConverter objectConverter) {
         this(
-                attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                selfAttestationTrustworthinessValidator,
+                attestationStatementVerifiers,
+                certPathTrustworthinessVerifier,
+                selfAttestationTrustworthinessVerifier,
                 Collections.emptyList(),
                 objectConverter
         );
     }
 
-    public WebAuthnRegistrationManager(@NotNull List<AttestationStatementValidator> attestationStatementValidators,
-                                       @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                                       @NotNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator) {
+    public WebAuthnRegistrationManager(@NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
+                                       @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
+                                       @NotNull SelfAttestationTrustworthinessVerifier selfAttestationTrustworthinessVerifier) {
         this(
-                attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                selfAttestationTrustworthinessValidator,
+                attestationStatementVerifiers,
+                certPathTrustworthinessVerifier,
+                selfAttestationTrustworthinessVerifier,
                 Collections.emptyList()
         );
     }
@@ -154,16 +154,16 @@ public class WebAuthnRegistrationManager {
     public static @NotNull WebAuthnRegistrationManager createNonStrictWebAuthnRegistrationManager(@NotNull ObjectConverter objectConverter) {
         return new WebAuthnRegistrationManager(
                 Arrays.asList(
-                        new NoneAttestationStatementValidator(),
-                        new NullFIDOU2FAttestationStatementValidator(),
-                        new NullPackedAttestationStatementValidator(),
-                        new NullTPMAttestationStatementValidator(),
-                        new NullAndroidKeyAttestationStatementValidator(),
-                        new NullAndroidSafetyNetAttestationStatementValidator(),
-                        new NullAppleAnonymousAttestationStatementValidator()
+                        new NoneAttestationStatementVerifier(),
+                        new NullFIDOU2FAttestationStatementVerifier(),
+                        new NullPackedAttestationStatementVerifier(),
+                        new NullTPMAttestationStatementVerifier(),
+                        new NullAndroidKeyAttestationStatementVerifier(),
+                        new NullAndroidSafetyNetAttestationStatementVerifier(),
+                        new NullAppleAnonymousAttestationStatementVerifier()
                 ),
-                new NullCertPathTrustworthinessValidator(),
-                new NullSelfAttestationTrustworthinessValidator(),
+                new NullCertPathTrustworthinessVerifier(),
+                new NullSelfAttestationTrustworthinessVerifier(),
                 objectConverter
         );
     }
@@ -198,20 +198,20 @@ public class WebAuthnRegistrationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull RegistrationData validate(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
+    public @NotNull RegistrationData verify(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
         RegistrationData registrationData = parse(registrationRequest);
-        return validate(registrationData, registrationParameters);
+        return verify(registrationData, registrationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull RegistrationData validate(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws ValidationException {
-        logger.trace("Validate: {}, {}", registrationData, registrationParameters);
-        registrationDataValidator.validate(registrationData, registrationParameters);
+    public @NotNull RegistrationData verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws ValidationException {
+        logger.trace("Verify: {}, {}", registrationData, registrationParameters);
+        registrationDataVerifier.verify(registrationData, registrationParameters);
         return registrationData;
     }
 
-    public @NotNull RegistrationDataValidator getRegistrationDataValidator() {
-        return registrationDataValidator;
+    public @NotNull RegistrationDataVerifier getRegistrationDataVerifier() {
+        return registrationDataVerifier;
     }
 
 }

@@ -18,7 +18,7 @@ package test;
 
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.verifier.exception.ConstraintViolationException;
 
 public class TestExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<Boolean> implements RegistrationExtensionAuthenticatorOutput {
 

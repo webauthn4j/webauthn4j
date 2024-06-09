@@ -20,7 +20,7 @@ import com.webauthn4j.appattest.data.DCAssertion;
 import com.webauthn4j.appattest.data.DCAssertionData;
 import com.webauthn4j.appattest.data.DCAssertionParameters;
 import com.webauthn4j.appattest.data.DCAssertionRequest;
-import com.webauthn4j.appattest.validator.DCAssertionDataValidator;
+import com.webauthn4j.appattest.validator.DCAssertionDataVerifier;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
@@ -28,8 +28,8 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.CustomCoreAuthenticationValidator;
-import com.webauthn4j.validator.exception.ValidationException;
+import com.webauthn4j.verifier.CustomCoreAuthenticationVerifier;
+import com.webauthn4j.verifier.exception.ValidationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -42,19 +42,19 @@ public class DeviceCheckAssertionManager {
 
     private final AuthenticatorDataConverter authenticatorDataConverter;
 
-    private final DCAssertionDataValidator dcAssertionDataValidator;
+    private final DCAssertionDataVerifier dcAssertionDataValidator;
     private final CborConverter cborConverter;
 
-    public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators, @NotNull ObjectConverter objectConverter) {
+    public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationVerifier> customAuthenticationValidators, @NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        dcAssertionDataValidator = new DCAssertionDataValidator(customAuthenticationValidators);
+        dcAssertionDataValidator = new DCAssertionDataVerifier(customAuthenticationValidators);
         authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
         cborConverter = objectConverter.getCborConverter();
     }
 
-    public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
+    public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationVerifier> customAuthenticationValidators) {
         this(customAuthenticationValidators, new ObjectConverter());
     }
 
@@ -91,11 +91,11 @@ public class DeviceCheckAssertionManager {
 
     @SuppressWarnings("squid:S1130")
     public @NotNull DCAssertionData validate(@NotNull DCAssertionData dcAssertionData, @NotNull DCAssertionParameters dcAssertionParameters) throws ValidationException {
-        getDCAssertionDataValidator().validate(dcAssertionData, dcAssertionParameters);
+        getDCAssertionDataValidator().verify(dcAssertionData, dcAssertionParameters);
         return dcAssertionData;
     }
 
-    public @NotNull DCAssertionDataValidator getDCAssertionDataValidator() {
+    public @NotNull DCAssertionDataVerifier getDCAssertionDataValidator() {
         return dcAssertionDataValidator;
     }
 

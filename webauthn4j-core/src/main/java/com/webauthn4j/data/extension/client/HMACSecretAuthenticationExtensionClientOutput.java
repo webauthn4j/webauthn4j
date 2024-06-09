@@ -18,7 +18,7 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.jetbrains.annotations.NotNull;
 
 public class HMACSecretAuthenticationExtensionClientOutput extends SingleValueExtensionOutputBase<HMACGetSecretOutput> implements AuthenticationExtensionClientOutput {

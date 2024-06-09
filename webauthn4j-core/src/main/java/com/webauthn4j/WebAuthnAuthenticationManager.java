@@ -30,9 +30,9 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.AuthenticationDataValidator;
-import com.webauthn4j.validator.CustomAuthenticationValidator;
-import com.webauthn4j.validator.exception.ValidationException;
+import com.webauthn4j.verifier.AuthenticationDataVerifier;
+import com.webauthn4j.verifier.CustomAuthenticationVerifier;
+import com.webauthn4j.verifier.exception.ValidationException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,15 +50,15 @@ public class WebAuthnAuthenticationManager {
     private final AuthenticatorDataConverter authenticatorDataConverter;
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
 
-    private final AuthenticationDataValidator authenticationDataValidator;
+    private final AuthenticationDataVerifier authenticationDataVerifier;
 
     public WebAuthnAuthenticationManager(
-            @NotNull List<CustomAuthenticationValidator> customAuthenticationValidators,
+            @NotNull List<CustomAuthenticationVerifier> customAuthenticationVerifiers,
             @NotNull ObjectConverter objectConverter) {
-        AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
+        AssertUtil.notNull(customAuthenticationVerifiers, "customAuthenticationVerifiers must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        authenticationDataValidator = new AuthenticationDataValidator(customAuthenticationValidators);
+        authenticationDataVerifier = new AuthenticationDataVerifier(customAuthenticationVerifiers);
 
         collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
         authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
@@ -66,8 +66,8 @@ public class WebAuthnAuthenticationManager {
     }
 
     public WebAuthnAuthenticationManager(
-            @NotNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
-        this(customAuthenticationValidators, new ObjectConverter());
+            @NotNull List<CustomAuthenticationVerifier> customAuthenticationVerifiers) {
+        this(customAuthenticationVerifiers, new ObjectConverter());
     }
 
     public WebAuthnAuthenticationManager() {
@@ -106,24 +106,24 @@ public class WebAuthnAuthenticationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull AuthenticationData validate(
+    public @NotNull AuthenticationData verify(
             @NotNull AuthenticationRequest authenticationRequest,
             @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
         AuthenticationData authenticationData = parse(authenticationRequest);
-        validate(authenticationData, authenticationParameters);
+        verify(authenticationData, authenticationParameters);
         return authenticationData;
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull AuthenticationData validate(
+    public @NotNull AuthenticationData verify(
             @NotNull AuthenticationData authenticationData,
             @NotNull AuthenticationParameters authenticationParameters) throws ValidationException {
-        logger.trace("Validate: {}, {}", authenticationData, authenticationParameters);
-        authenticationDataValidator.validate(authenticationData, authenticationParameters);
+        logger.trace("Verify: {}, {}", authenticationData, authenticationParameters);
+        authenticationDataVerifier.verify(authenticationData, authenticationParameters);
         return authenticationData;
     }
 
-    public @NotNull AuthenticationDataValidator getAuthenticationDataValidator() {
-        return authenticationDataValidator;
+    public @NotNull AuthenticationDataVerifier getAuthenticationDataVerifier() {
+        return authenticationDataVerifier;
     }
 }
