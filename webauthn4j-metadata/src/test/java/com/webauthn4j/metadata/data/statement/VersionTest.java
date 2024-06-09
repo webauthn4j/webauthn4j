@@ -24,15 +24,18 @@ class VersionTest {
 
     @Test
     void constructor_test(){
-        Version version = new Version(1, 0);
+        Version version = new Version(1, 2);
         assertThat(version.getMajor()).isEqualTo(1);
-        assertThat(version.getMinor()).isEqualTo(0);
+        assertThat(version.getMinor()).isEqualTo(2);
     }
 
     @Test
     void equals_hashCode_test(){
-        assertThat(new Version(1, 0)).isEqualTo(new Version(1, 0));
-        assertThat(new Version(1, 0)).hasSameHashCodeAs(new Version(1, 0));
+        Version instanceA = new Version(1, 2);
+        Version instanceB = new Version(1, 2);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
     }
 
 }

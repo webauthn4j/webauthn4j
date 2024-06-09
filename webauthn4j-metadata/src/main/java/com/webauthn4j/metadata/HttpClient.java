@@ -19,11 +19,33 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.metadata.exception.MDSException;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
+import java.util.Objects;
+
 /**
  * HTTP Client for FIDO MetadataItemImpl Service
  */
 public interface HttpClient {
 
     @NotNull String fetch(@NotNull String uri) throws MDSException;
+
+    class Response{
+
+        private final int statusCode;
+        private final InputStream body;
+
+        public Response(int statusCode, InputStream body) {
+            this.statusCode = statusCode;
+            this.body = body;
+        }
+
+        public int getStatusCode() {
+            return statusCode;
+        }
+
+        public InputStream getBody() {
+            return body;
+        }
+    }
 
 }

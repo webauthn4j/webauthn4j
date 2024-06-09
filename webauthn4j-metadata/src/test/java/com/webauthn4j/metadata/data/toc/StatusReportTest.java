@@ -44,8 +44,9 @@ class StatusReportTest {
         StatusReport instanceA = createStatusReport();
         StatusReport instanceB = createStatusReport();
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
     }
 
     private StatusReport createStatusReport(){

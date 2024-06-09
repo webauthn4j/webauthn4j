@@ -53,7 +53,7 @@ class AAIDTest {
 
     @Test
     void toString_test() {
-        assertThat(new AAID("ABCD#1234").toString()).isEqualTo("ABCD#1234");
+        assertThat(new AAID("ABCD#1234").toString()).hasToString("ABCD#1234");
     }
 
     @Test

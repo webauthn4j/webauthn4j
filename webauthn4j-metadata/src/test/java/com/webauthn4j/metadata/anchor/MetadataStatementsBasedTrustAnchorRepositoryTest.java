@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MetadataStatementsBasedTrustAnchorRepositoryTest {
 
     @Test
-    public void find_by_attestationCertificateKeyIdentifier_test(){
+    void find_by_attestationCertificateKeyIdentifier_test(){
         Path jsonFilePath = new File("src/test/resources/com/webauthn4j/metadata/JsonMetadataItem_u2f.json").toPath();
         MetadataStatementsBasedTrustAnchorRepository repository = new MetadataStatementsBasedTrustAnchorRepository(new ObjectConverter(), jsonFilePath);
         Set<TrustAnchor> trustAnchors = repository.find(HexUtil.decode("7c0903708b87115b0b422def3138c3c864e44573"));
@@ -39,7 +39,7 @@ class MetadataStatementsBasedTrustAnchorRepositoryTest {
     }
 
     @Test
-    public void find_by_aaguid_test(){
+    void find_by_aaguid_test(){
         Path jsonFilePath = new File("src/test/resources/com/webauthn4j/metadata/JsonMetadataItem_fido2.json").toPath();
         MetadataStatementsBasedTrustAnchorRepository repository = new MetadataStatementsBasedTrustAnchorRepository(new ObjectConverter(), jsonFilePath);
         Set<TrustAnchor> trustAnchors = repository.find(new AAGUID("0132d110-bf4e-4208-a403-ab4f5f12efe5"));

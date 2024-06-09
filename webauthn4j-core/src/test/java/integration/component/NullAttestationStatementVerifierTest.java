@@ -69,7 +69,7 @@ class NullAttestationStatementVerifierTest {
                 AttestationConveyancePreference.DIRECT,
                 extensions
         );
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getResponse();
         Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         RegistrationRequest webAuthnRegistrationRequest =
@@ -111,7 +111,7 @@ class NullAttestationStatementVerifierTest {
                 extensions
         );
 
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getResponse();
         Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         RegistrationRequest webAuthnRegistrationRequest =
