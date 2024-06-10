@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.appattest.validator;
+package com.webauthn4j.appattest.verifier;
 
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;

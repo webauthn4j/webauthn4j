@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.appattest.validator.attestation.statement.appleappattest;
+package com.webauthn4j.appattest.verifier.attestation.statement.appleappattest;
 
-import com.webauthn4j.appattest.validator.DCRegistrationObject;
+import com.webauthn4j.appattest.verifier.DCRegistrationObject;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.verifier.RegistrationObject;
 import org.junit.jupiter.api.Test;

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.appattest.data.attestation.statement;
 
-import com.webauthn4j.appattest.validator.DCRegistrationObject;
+import com.webauthn4j.appattest.verifier.DCRegistrationObject;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;

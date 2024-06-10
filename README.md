@@ -93,7 +93,7 @@ git clone https://github.com/webauthn4j/webauthn4j
 
 Parse and Validation on WebAuthn registration
 
-If your would like to validate Apple App Attest, please see the reference.
+If your would like to verify Apple App Attest, please see the reference.
 
 ```java 
 // Client properties
@@ -124,7 +124,7 @@ try {
     throw e;
 }
 try {
-    webAuthnManager.validate(registrationData, registrationParameters);
+    webAuthnManager.verify(registrationData, registrationParameters);
 } catch (ValidationException e) {
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
     throw e;
@@ -191,7 +191,7 @@ try {
     throw e;
 }
 try {
-    webAuthnManager.validate(authenticationData, authenticationParameters);
+    webAuthnManager.verify(authenticationData, authenticationParameters);
 } catch (ValidationException e) {
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
     throw e;

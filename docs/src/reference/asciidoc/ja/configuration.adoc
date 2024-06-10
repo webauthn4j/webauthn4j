@@ -14,7 +14,7 @@ https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAu
 
 === 構成証明ステートメントの検証
 
-構成証明ステートメントの検証は、 `AttestationStatementVerifier` インタフェースの実装クラスが提供します。 構成照明ステートメント毎に、対応する実装クラスが提供されていますので、必要なValidatorからなるListを
+構成証明ステートメントの検証は、 `AttestationStatementVerifier` インタフェースの実装クラスが提供します。 構成照明ステートメント毎に、対応する実装クラスが提供されていますので、必要なVerifierからなるListを
 `WebAuthnManager` クラスのコンストラクタに指定して下さい。 例えば、 `packed` のみをサポートする場合は、 `PackedAttestationStatementVerifier` を唯一の要素とするListとし、 例えば、 `packed`, `tpm` をサポートする場合は、 `PackedAttestationStatementVerifier` と `TPMAttestationStatementVerifier`
 からなるListを指定して下さい。
 

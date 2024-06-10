@@ -20,8 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
 import com.webauthn4j.appattest.data.*;
-import com.webauthn4j.appattest.validator.DCAssertionDataVerifier;
-import com.webauthn4j.appattest.validator.DCAttestationDataVerifier;
+import com.webauthn4j.appattest.verifier.DCAssertionDataVerifier;
+import com.webauthn4j.appattest.verifier.DCAttestationDataVerifier;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.verifier.CustomCoreAuthenticationVerifier;
@@ -148,12 +148,12 @@ public class DeviceCheckManager {
 
     @SuppressWarnings("squid:S1130")
     public @NotNull DCAssertionData validate(@NotNull DCAssertionRequest dcAssertionRequest, @NotNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, ValidationException {
-        return this.deviceCheckAssertionManager.validate(dcAssertionRequest, dcAssertionParameters);
+        return this.deviceCheckAssertionManager.verify(dcAssertionRequest, dcAssertionParameters);
     }
 
     @SuppressWarnings("squid:S1130")
     public @NotNull DCAssertionData validate(@NotNull DCAssertionData dcAssertionData, @NotNull DCAssertionParameters dcAssertionParameters) throws ValidationException {
-        return this.deviceCheckAssertionManager.validate(dcAssertionData, dcAssertionParameters);
+        return this.deviceCheckAssertionManager.verify(dcAssertionData, dcAssertionParameters);
     }
 
     public @NotNull DCAttestationDataVerifier getAttestationDataValidator() {
