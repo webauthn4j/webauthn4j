@@ -111,9 +111,9 @@ FIDO CTAP2セキュリティキーにとって、WebAuthnは一つの応用例�
 
 ==== FIDO CTAP2セキュリティキーを用いた独自アプリケーションでの登録、認証のフロー
 
-FIDO CTAP2セキュリティキーを独自アプリケーションで認証に使用する場合、セキュリティキーを登録するために、 アプリからFIDO CTAP2セキュリティキーの https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] メソッドを呼び出し、公開鍵やデバイスの構成情報を 含むデータ（構成証明、Attestation）を取得し保存します。 取得されたAttestationは、セキュリティキーがアプリとして受け入れ可能なキーか判定するために検証が必要です。 WebAuthn4Jでは、 `CoreRegistrationValidator` クラスを用いることで、取得されたAttestationを検証可能です。
+FIDO CTAP2セキュリティキーを独自アプリケーションで認証に使用する場合、セキュリティキーを登録するために、 アプリからFIDO CTAP2セキュリティキーの https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] メソッドを呼び出し、公開鍵やデバイスの構成情報を 含むデータ（構成証明、Attestation）を取得し保存します。 取得されたAttestationは、セキュリティキーがアプリとして受け入れ可能なキーか判定するために検証が必要です。 WebAuthn4Jでは、 `CoreRegistrationVerifier` クラスを用いることで、取得されたAttestationを検証可能です。
 
-認証時には、同様にアプリからFIDO CTAP2セキュリティキーの https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] メソッドを呼び出し、認証時にサーバーに送信される署名を含んだデータ（アサーション、Assertion）を取得します。 取得されたAssertionを検証することで、アプリは認証に用いられたセキュリティキーが、登録時に用いられたセキュリティキーと同一であることを確認し、正当なアクセスか判定することが可能となります。WebAuthn4Jでは、 `CoreAuthenticationValidator` クラスを用いることで、取得されたAssertionを検証可能です。
+認証時には、同様にアプリからFIDO CTAP2セキュリティキーの https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] メソッドを呼び出し、認証時にサーバーに送信される署名を含んだデータ（アサーション、Assertion）を取得します。 取得されたAssertionを検証することで、アプリは認証に用いられたセキュリティキーが、登録時に用いられたセキュリティキーと同一であることを確認し、正当なアクセスか判定することが可能となります。WebAuthn4Jでは、 `CoreAuthenticationVerifier` クラスを用いることで、取得されたAssertionを検証可能です。
 
 ==== アプリケーション固有のクライアントデータの真正性の担保、検証
 
@@ -175,7 +175,7 @@ WebAuthn4Jでは、カスタムな検証ロジックを実装し、追加する�
 
 ==== TrustAnchorsResolver
 
-`TrustAnchorsResolver` インタフェースは `TrustAnchorCertPathTrustworthinessValidator` で構成証明ステートメントの信頼性の 検証を行う際に信頼するルート証明書のセットを探索するために使用されます。
+`TrustAnchorsResolver` インタフェースは `TrustAnchorCertPathTrustworthinessVerifier` で構成証明ステートメントの信頼性の 検証を行う際に信頼するルート証明書のセットを探索するために使用されます。
 
 ==== TrustAnchorsProvider
 

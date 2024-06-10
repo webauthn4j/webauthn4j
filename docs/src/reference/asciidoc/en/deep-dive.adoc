@@ -124,18 +124,18 @@ This section describes how to use WebAuthn4J for attestation and assertion valid
 
 If you use FIDO CTAP2 security key for authentication in your own application, you need to register the security key first.
 Call the https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] method of the security key to retrieve the "Attestation" data, which contains public key and device configuration and save it.
-The obtained attestation data need to be validated to determine if the security key is acceptable for the application.
-WebAuthn4J can validate the attestation with `CoreRegistrationValidator` class.
+The obtained attestation data need to be verified to determine if the security key is acceptable for the application.
+WebAuthn4J can verify the attestation with `CoreRegistrationVerifier` class.
 For authentication, the application need to call the  https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] method of the security key to retrieve the "assertion" data, which contains signature.
 By validating the retrieved assertion, the application can determine whether the security key used for authentication is the same as the one used for registration, and can determine whether the access is legitimate.
-WebAuthn4J can validate the assertion with `CoreAuthenticationValidator` class.
+WebAuthn4J can verify the assertion with `CoreAuthenticationVerifier` class.
 
-==== How to validate application specific client data
+==== How to verify application specific client data
 
-Implementing the above flow will provide authentication feature, but if the entity that calls the FIDO CTAP2 security key (client) and the entity that validates the attestation and the assertion are separated, in some cases, an application specific client data is needed to be validated at the server at registration and authentication.
+Implementing the above flow will provide authentication feature, but if the entity that calls the FIDO CTAP2 security key (client) and the entity that verifies the attestation and the assertion are separated, in some cases, an application specific client data is needed to be verified at the server at registration and authentication.
 The client data itself can be sent together with the attestation and assertion, but in order to protect the client data from MITM attacks, it need to be signed and protected.
 In FIDO CTAP2 specification, there is a parameter named `clientDataHash` that is common to https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] method used at registration and https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] method used at authentication.
-Since the security key generates a signature from data that contains `clientDataHash`, an application can validate its specific client data by setting `clientDataHash` to the hash of the client data and validating the signature.
+Since the security key generates a signature from data that contains `clientDataHash`, an application can verify its specific client data by setting `clientDataHash` to the hash of the client data and validating the signature.
 
 === Project Modules
 
@@ -204,7 +204,7 @@ If you want to use WebAuthn4J’s serializer and deserializer outside of WebAuth
 
 ==== TrustAnchorsResolver
 
-`TrustAnchorsResolver` interface is used by `TrustAnchorCertPathTrustworthinessValidator` to explore root certificates in the verification of the authenticity of the attestation statements.
+`TrustAnchorsResolver` interface is used by `TrustAnchorCertPathTrustworthinessVerifier` to explore root certificates in the verification of the authenticity of the attestation statements.
 
 ==== TrustAnchorsProvider
 
