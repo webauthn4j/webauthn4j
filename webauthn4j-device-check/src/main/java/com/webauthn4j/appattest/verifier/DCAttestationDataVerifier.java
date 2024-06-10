@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.appattest.validator;
+package com.webauthn4j.appattest.verifier;
 
 import com.webauthn4j.appattest.data.DCAttestationData;
-import com.webauthn4j.appattest.validator.attestation.statement.appleappattest.AppleAppAttestAttestationStatementVerifier;
+import com.webauthn4j.appattest.verifier.attestation.statement.appleappattest.AppleAppAttestAttestationStatementVerifier;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.CoreRegistrationData;
 import com.webauthn4j.data.CoreRegistrationParameters;

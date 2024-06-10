@@ -156,6 +156,9 @@ public class WebAuthnManager {
         return this.webAuthnRegistrationManager.verify(registrationRequest, registrationParameters);
     }
 
+    /**
+     * @deprecated renamed to 'verify`
+     */
     @Deprecated
     public @NotNull RegistrationData validate(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
         return verify(registrationRequest, registrationParameters);
@@ -167,6 +170,9 @@ public class WebAuthnManager {
         return this.webAuthnRegistrationManager.verify(registrationData, registrationParameters);
     }
 
+    /**
+     * @deprecated renamed to 'verify`
+     */
     @Deprecated
     public @NotNull RegistrationData validate(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws ValidationException {
         return verify(registrationData, registrationParameters);
@@ -182,6 +188,9 @@ public class WebAuthnManager {
         return this.webAuthnAuthenticationManager.verify(authenticationRequest, authenticationParameters);
     }
 
+    /**
+     * @deprecated renamed to 'verify`
+     */
     @Deprecated
     public @NotNull AuthenticationData validate(@NotNull AuthenticationRequest authenticationRequest, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
         return verify(authenticationRequest, authenticationParameters);
@@ -192,6 +201,9 @@ public class WebAuthnManager {
         return this.webAuthnAuthenticationManager.verify(authenticationData, authenticationParameters);
     }
 
+    /**
+     * @deprecated renamed to 'verify`
+     */
     @Deprecated
     public @NotNull AuthenticationData validate(@NotNull AuthenticationData authenticationData, @NotNull AuthenticationParameters authenticationParameters) throws ValidationException {
         return verify(authenticationData, authenticationParameters);

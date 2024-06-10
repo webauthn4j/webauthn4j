@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
 import com.webauthn4j.appattest.server.DCServerProperty;
-import com.webauthn4j.appattest.validator.DCRegistrationObject;
+import com.webauthn4j.appattest.verifier.DCRegistrationObject;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.converter.AttestationObjectConverter;

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.appattest.validator.attestation.statement.appleappattest;
+package com.webauthn4j.appattest.verifier.attestation.statement.appleappattest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
-import com.webauthn4j.appattest.validator.DCRegistrationObject;
+import com.webauthn4j.appattest.verifier.DCRegistrationObject;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;

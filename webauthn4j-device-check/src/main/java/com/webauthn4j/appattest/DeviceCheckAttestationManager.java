@@ -19,7 +19,7 @@ package com.webauthn4j.appattest;
 import com.webauthn4j.appattest.data.DCAttestationData;
 import com.webauthn4j.appattest.data.DCAttestationParameters;
 import com.webauthn4j.appattest.data.DCAttestationRequest;
-import com.webauthn4j.appattest.validator.DCAttestationDataVerifier;
+import com.webauthn4j.appattest.verifier.DCAttestationDataVerifier;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;

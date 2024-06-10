@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.appattest.validator.attestation.statement.appleappattest;
+package com.webauthn4j.appattest.verifier.attestation.statement.appleappattest;
 
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
