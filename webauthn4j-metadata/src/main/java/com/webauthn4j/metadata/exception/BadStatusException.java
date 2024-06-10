@@ -16,13 +16,13 @@
 
 package com.webauthn4j.metadata.exception;
 
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Thrown if bad status is reported
  */
-public class BadStatusException extends ValidationException {
+public class BadStatusException extends VerificationException {
     public BadStatusException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

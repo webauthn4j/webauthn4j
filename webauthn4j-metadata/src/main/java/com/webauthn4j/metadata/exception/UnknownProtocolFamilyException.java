@@ -16,10 +16,10 @@
 
 package com.webauthn4j.metadata.exception;
 
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.Nullable;
 
-public class UnknownProtocolFamilyException extends ValidationException {
+public class UnknownProtocolFamilyException extends VerificationException {
     public UnknownProtocolFamilyException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

@@ -28,7 +28,7 @@ import com.webauthn4j.verifier.CustomCoreAuthenticationVerifier;
 import com.webauthn4j.verifier.CustomCoreRegistrationVerifier;
 import com.webauthn4j.verifier.attestation.trustworthiness.certpath.CertPathTrustworthinessVerifier;
 import com.webauthn4j.verifier.attestation.trustworthiness.certpath.NullCertPathTrustworthinessVerifier;
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -132,12 +132,12 @@ public class DeviceCheckManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull DCAttestationData validate(@NotNull DCAttestationRequest dcAttestationRequest, @NotNull DCAttestationParameters dcAttestationParameters) throws DataConversionException, ValidationException {
+    public @NotNull DCAttestationData validate(@NotNull DCAttestationRequest dcAttestationRequest, @NotNull DCAttestationParameters dcAttestationParameters) throws DataConversionException, VerificationException {
         return this.deviceCheckAttestationManager.validate(dcAttestationRequest, dcAttestationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull DCAttestationData validate(@NotNull DCAttestationData dcAttestationData, @NotNull DCAttestationParameters dcAttestationParameters) throws ValidationException {
+    public @NotNull DCAttestationData validate(@NotNull DCAttestationData dcAttestationData, @NotNull DCAttestationParameters dcAttestationParameters) throws VerificationException {
         return this.deviceCheckAttestationManager.validate(dcAttestationData, dcAttestationParameters);
     }
 
@@ -147,12 +147,12 @@ public class DeviceCheckManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull DCAssertionData validate(@NotNull DCAssertionRequest dcAssertionRequest, @NotNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, ValidationException {
+    public @NotNull DCAssertionData validate(@NotNull DCAssertionRequest dcAssertionRequest, @NotNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, VerificationException {
         return this.deviceCheckAssertionManager.verify(dcAssertionRequest, dcAssertionParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull DCAssertionData validate(@NotNull DCAssertionData dcAssertionData, @NotNull DCAssertionParameters dcAssertionParameters) throws ValidationException {
+    public @NotNull DCAssertionData validate(@NotNull DCAssertionData dcAssertionData, @NotNull DCAssertionParameters dcAssertionParameters) throws VerificationException {
         return this.deviceCheckAssertionManager.verify(dcAssertionData, dcAssertionParameters);
     }
 

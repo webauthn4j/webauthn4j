@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if the public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData
  */
 @SuppressWarnings("squid:S110")
-public class PublicKeyMismatchException extends ValidationException {
+public class PublicKeyMismatchException extends VerificationException {
     public PublicKeyMismatchException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

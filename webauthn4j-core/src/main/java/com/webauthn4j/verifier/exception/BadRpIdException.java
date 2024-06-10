@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if bad rpId is specified
  */
 @SuppressWarnings("squid:S110")
-public class BadRpIdException extends ValidationException {
+public class BadRpIdException extends VerificationException {
     public BadRpIdException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

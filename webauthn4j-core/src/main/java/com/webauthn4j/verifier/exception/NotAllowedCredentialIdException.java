@@ -18,7 +18,7 @@ package com.webauthn4j.verifier.exception;
 
 import org.jetbrains.annotations.Nullable;
 
-public class NotAllowedCredentialIdException extends ValidationException {
+public class NotAllowedCredentialIdException extends VerificationException {
 
     public NotAllowedCredentialIdException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);

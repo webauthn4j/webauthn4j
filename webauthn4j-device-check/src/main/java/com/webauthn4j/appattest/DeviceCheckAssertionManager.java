@@ -29,7 +29,7 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.CustomCoreAuthenticationVerifier;
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -84,7 +84,7 @@ public class DeviceCheckAssertionManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull DCAssertionData verify(@NotNull DCAssertionRequest dcAssertionRequest, @NotNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, ValidationException {
+    public @NotNull DCAssertionData verify(@NotNull DCAssertionRequest dcAssertionRequest, @NotNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, VerificationException {
         DCAssertionData dcAssertionData = parse(dcAssertionRequest);
         return verify(dcAssertionData, dcAssertionParameters);
     }
@@ -93,12 +93,12 @@ public class DeviceCheckAssertionManager {
      * @deprecated renamed to `verify`
      */
     @Deprecated
-    public @NotNull DCAssertionData validate(@NotNull DCAssertionRequest dcAssertionRequest, @NotNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, ValidationException {
+    public @NotNull DCAssertionData validate(@NotNull DCAssertionRequest dcAssertionRequest, @NotNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, VerificationException {
         return verify(dcAssertionRequest, dcAssertionParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull DCAssertionData verify(@NotNull DCAssertionData dcAssertionData, @NotNull DCAssertionParameters dcAssertionParameters) throws ValidationException {
+    public @NotNull DCAssertionData verify(@NotNull DCAssertionData dcAssertionData, @NotNull DCAssertionParameters dcAssertionParameters) throws VerificationException {
         getDCAssertionDataValidator().verify(dcAssertionData, dcAssertionParameters);
         return dcAssertionData;
     }
@@ -108,7 +108,7 @@ public class DeviceCheckAssertionManager {
      * @deprecated renamed to `verify`
      */
     @Deprecated
-    public @NotNull DCAssertionData validate(@NotNull DCAssertionData dcAssertionData, @NotNull DCAssertionParameters dcAssertionParameters) throws ValidationException {
+    public @NotNull DCAssertionData validate(@NotNull DCAssertionData dcAssertionData, @NotNull DCAssertionParameters dcAssertionParameters) throws VerificationException {
         return verify(dcAssertionData, dcAssertionParameters);
     }
 

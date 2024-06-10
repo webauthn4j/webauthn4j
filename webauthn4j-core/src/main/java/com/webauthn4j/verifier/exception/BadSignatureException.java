@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if bad signature is specified
  */
 @SuppressWarnings("squid:S110")
-public class BadSignatureException extends ValidationException {
+public class BadSignatureException extends VerificationException {
     public BadSignatureException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

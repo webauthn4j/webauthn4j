@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if self attestation is specified while prohibited
  */
 @SuppressWarnings("squid:S110")
-public class SelfAttestationProhibitedException extends ValidationException {
+public class SelfAttestationProhibitedException extends VerificationException {
     public SelfAttestationProhibitedException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

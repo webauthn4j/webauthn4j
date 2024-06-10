@@ -27,7 +27,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.CustomCoreRegistrationVerifier;
 import com.webauthn4j.verifier.attestation.trustworthiness.certpath.CertPathTrustworthinessVerifier;
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -73,13 +73,13 @@ public class DeviceCheckAttestationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull DCAttestationData validate(@NotNull DCAttestationRequest dcAttestationRequest, @NotNull DCAttestationParameters dcAttestationParameters) throws DataConversionException, ValidationException {
+    public @NotNull DCAttestationData validate(@NotNull DCAttestationRequest dcAttestationRequest, @NotNull DCAttestationParameters dcAttestationParameters) throws DataConversionException, VerificationException {
         DCAttestationData dcAttestationData = parse(dcAttestationRequest);
         return validate(dcAttestationData, dcAttestationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull DCAttestationData validate(@NotNull DCAttestationData dcAttestationData, @NotNull DCAttestationParameters dcAttestationParameters) throws ValidationException {
+    public @NotNull DCAttestationData validate(@NotNull DCAttestationData dcAttestationData, @NotNull DCAttestationParameters dcAttestationParameters) throws VerificationException {
         getDCAttestationDataValidator().verify(dcAttestationData, dcAttestationParameters);
         return dcAttestationData;
     }

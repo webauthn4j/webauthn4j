@@ -18,7 +18,7 @@ package com.webauthn4j.verifier.exception;
 
 import org.jetbrains.annotations.Nullable;
 
-public class NotAllowedAlgorithmException extends ValidationException {
+public class NotAllowedAlgorithmException extends VerificationException {
 
     public NotAllowedAlgorithmException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);

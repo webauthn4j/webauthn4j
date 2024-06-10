@@ -28,7 +28,7 @@ import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier;
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +75,7 @@ public class DeviceCheckManagerSample {
         }
         try {
             deviceCheckManager.validate(dcAttestationData, dcAttestationParameters);
-        } catch (ValidationException e) {
+        } catch (VerificationException e) {
             // If you would like to handle Apple App Attest data validation error, please catch ValidationException
             throw e;
         }
@@ -127,7 +127,7 @@ public class DeviceCheckManagerSample {
         }
         try {
             deviceCheckManager.validate(dcAssertionData, dcAssertionParameters);
-        } catch (ValidationException e) {
+        } catch (VerificationException e) {
             // If you would like to handle Apple App Attest data validation error, please catch ValidationException
             throw e;
         }

@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if user is to be verified but not verified
  */
 @SuppressWarnings("squid:S110")
-public class UserNotVerifiedException extends ValidationException {
+public class UserNotVerifiedException extends VerificationException {
 
     public UserNotVerifiedException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);

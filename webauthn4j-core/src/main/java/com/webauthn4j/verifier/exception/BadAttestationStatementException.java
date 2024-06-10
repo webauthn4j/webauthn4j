@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if bad attestation statement is specified
  */
 @SuppressWarnings("squid:S110")
-public class BadAttestationStatementException extends ValidationException {
+public class BadAttestationStatementException extends VerificationException {
     public BadAttestationStatementException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

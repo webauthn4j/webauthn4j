@@ -35,7 +35,7 @@ import com.webauthn4j.verifier.attestation.trustworthiness.certpath.CertPathTrus
 import com.webauthn4j.verifier.attestation.trustworthiness.certpath.NullCertPathTrustworthinessVerifier;
 import com.webauthn4j.verifier.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessVerifier;
 import com.webauthn4j.verifier.attestation.trustworthiness.self.SelfAttestationTrustworthinessVerifier;
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -152,7 +152,7 @@ public class WebAuthnManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull RegistrationData verify(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
+    public @NotNull RegistrationData verify(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {
         return this.webAuthnRegistrationManager.verify(registrationRequest, registrationParameters);
     }
 
@@ -160,13 +160,13 @@ public class WebAuthnManager {
      * @deprecated renamed to 'verify`
      */
     @Deprecated
-    public @NotNull RegistrationData validate(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
+    public @NotNull RegistrationData validate(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {
         return verify(registrationRequest, registrationParameters);
     }
 
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull RegistrationData verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws ValidationException {
+    public @NotNull RegistrationData verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws VerificationException {
         return this.webAuthnRegistrationManager.verify(registrationData, registrationParameters);
     }
 
@@ -174,7 +174,7 @@ public class WebAuthnManager {
      * @deprecated renamed to 'verify`
      */
     @Deprecated
-    public @NotNull RegistrationData validate(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws ValidationException {
+    public @NotNull RegistrationData validate(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws VerificationException {
         return verify(registrationData, registrationParameters);
     }
 
@@ -184,7 +184,7 @@ public class WebAuthnManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull AuthenticationData verify(@NotNull AuthenticationRequest authenticationRequest, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
+    public @NotNull AuthenticationData verify(@NotNull AuthenticationRequest authenticationRequest, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
         return this.webAuthnAuthenticationManager.verify(authenticationRequest, authenticationParameters);
     }
 
@@ -192,12 +192,12 @@ public class WebAuthnManager {
      * @deprecated renamed to 'verify`
      */
     @Deprecated
-    public @NotNull AuthenticationData validate(@NotNull AuthenticationRequest authenticationRequest, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
+    public @NotNull AuthenticationData validate(@NotNull AuthenticationRequest authenticationRequest, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
         return verify(authenticationRequest, authenticationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull AuthenticationData verify(@NotNull AuthenticationData authenticationData, @NotNull AuthenticationParameters authenticationParameters) throws ValidationException {
+    public @NotNull AuthenticationData verify(@NotNull AuthenticationData authenticationData, @NotNull AuthenticationParameters authenticationParameters) throws VerificationException {
         return this.webAuthnAuthenticationManager.verify(authenticationData, authenticationParameters);
     }
 
@@ -205,7 +205,7 @@ public class WebAuthnManager {
      * @deprecated renamed to 'verify`
      */
     @Deprecated
-    public @NotNull AuthenticationData validate(@NotNull AuthenticationData authenticationData, @NotNull AuthenticationParameters authenticationParameters) throws ValidationException {
+    public @NotNull AuthenticationData validate(@NotNull AuthenticationData authenticationData, @NotNull AuthenticationParameters authenticationParameters) throws VerificationException {
         return verify(authenticationData, authenticationParameters);
     }
 

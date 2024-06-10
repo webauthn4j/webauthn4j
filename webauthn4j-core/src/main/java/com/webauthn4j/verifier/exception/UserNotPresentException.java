@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if user is to be present but not present
  */
 @SuppressWarnings("squid:S110")
-public class UserNotPresentException extends ValidationException {
+public class UserNotPresentException extends VerificationException {
 
     public UserNotPresentException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if bad challenge is detected
  */
 @SuppressWarnings("squid:S110")
-public class BadChallengeException extends ValidationException {
+public class BadChallengeException extends VerificationException {
 
     public BadChallengeException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);

@@ -20,7 +20,7 @@ WebAuthn認証は、事前に認証デバイスで生成した公開鍵をサー
 - `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側でWebAuthn JS APIを実行する際に パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
 - `tokenBindingId` はToken bindingを利用する場合のパラメータです。利用しない場合は `null` を指定してください。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `CredentialRecord` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。永続化方法について詳しくは、 <<./deep-dive.adoc#CredentialRecordのシリアライズデシリアライズ,CredentialRecordのシリアライズ、デシリアライズ>> を参照して下さい。
+検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `CredentialRecord` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。永続化方法について詳しくは、 <<./deep-dive.adoc#CredentialRecordのシリアライズデシリアライズ,CredentialRecordのシリアライズ、デシリアライズ>> を参照して下さい。
 
 [source,java]
 ----
@@ -79,7 +79,7 @@ save(credentialRecord); // please persist credentialRecord in your manner
 
 `authenticator` には、登録時に永続化した `CredentialRecord` を指定してください。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証後は、 `CredentialRecord` に紐づけたcounterおよび、uvInitialized、backedUpの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
+検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。 検証後は、 `CredentialRecord` に紐づけたcounterおよび、uvInitialized、backedUpの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
 https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 
 [source,java]
@@ -187,7 +187,7 @@ Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)と�
 - `cfBundleIdentifier` にはiOSアプリ開発時のbundle identifierを指定してください。 詳しくは https://developer.apple.com/documentation/devicecheck/validating_apps_that_connect_to_your_server[Apple Apple Attestのサーバサイド検証手順] を参照して下さい。
 - `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、iOS側でApp Attest APIを実行する際に パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `DCAppleDevice` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。
+検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `DCAppleDevice` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。
 
 ===== 商用環境か？開発環境か？
 
@@ -242,7 +242,7 @@ save(dcAppleDevice); // please persist authenticator in your manner
 
 `DCAppleDevice` には、登録時に永続化した `DCAppleDevice` を指定してください。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証後は、 `DCAppleDevice` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
+検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。 検証後は、 `DCAppleDevice` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
 https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 
 [source,java]

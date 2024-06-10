@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if no trust anchor chained to the attestation certificate is found
  */
 @SuppressWarnings("squid:S110")
-public class TrustAnchorNotFoundException extends ValidationException {
+public class TrustAnchorNotFoundException extends VerificationException {
     public TrustAnchorNotFoundException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

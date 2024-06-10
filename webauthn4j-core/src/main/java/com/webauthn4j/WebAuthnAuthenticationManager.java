@@ -32,7 +32,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.AuthenticationDataVerifier;
 import com.webauthn4j.verifier.CustomAuthenticationVerifier;
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,7 +108,7 @@ public class WebAuthnAuthenticationManager {
     @SuppressWarnings("squid:S1130")
     public @NotNull AuthenticationData verify(
             @NotNull AuthenticationRequest authenticationRequest,
-            @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
+            @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
         AuthenticationData authenticationData = parse(authenticationRequest);
         verify(authenticationData, authenticationParameters);
         return authenticationData;
@@ -117,7 +117,7 @@ public class WebAuthnAuthenticationManager {
     @SuppressWarnings("squid:S1130")
     public @NotNull AuthenticationData verify(
             @NotNull AuthenticationData authenticationData,
-            @NotNull AuthenticationParameters authenticationParameters) throws ValidationException {
+            @NotNull AuthenticationParameters authenticationParameters) throws VerificationException {
         logger.trace("Verify: {}, {}", authenticationData, authenticationParameters);
         authenticationDataVerifier.verify(authenticationData, authenticationParameters);
         return authenticationData;

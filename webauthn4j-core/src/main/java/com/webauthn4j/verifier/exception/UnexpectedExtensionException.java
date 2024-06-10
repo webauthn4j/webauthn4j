@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if unexpected extension is contained
  */
 @SuppressWarnings("squid:S110")
-public class UnexpectedExtensionException extends ValidationException {
+public class UnexpectedExtensionException extends VerificationException {
     public UnexpectedExtensionException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

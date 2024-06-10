@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if certificate problems happen
  */
 @SuppressWarnings("squid:S110")
-public class CertificateException extends ValidationException {
+public class CertificateException extends VerificationException {
     public CertificateException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

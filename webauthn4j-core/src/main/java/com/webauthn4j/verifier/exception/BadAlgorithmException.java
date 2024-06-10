@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if bad algorithm is specified
  */
 @SuppressWarnings("squid:S110")
-public class BadAlgorithmException extends ValidationException {
+public class BadAlgorithmException extends VerificationException {
     public BadAlgorithmException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
