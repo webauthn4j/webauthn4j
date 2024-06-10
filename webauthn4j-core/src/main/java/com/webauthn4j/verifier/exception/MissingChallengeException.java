@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if challenge doesn't exist in the session
  */
 @SuppressWarnings("squid:S110")
-public class MissingChallengeException extends ValidationException {
+public class MissingChallengeException extends VerificationException {
     public MissingChallengeException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

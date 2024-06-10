@@ -20,18 +20,18 @@ import com.webauthn4j.util.exception.WebAuthnException;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * An abstract exception for validation violation
+ * An abstract exception for verification violation
  */
-public abstract class ValidationException extends WebAuthnException {
-    protected ValidationException(@Nullable String message, @Nullable Throwable cause) {
+public abstract class VerificationException extends WebAuthnException {
+    protected VerificationException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    protected ValidationException(@Nullable String message) {
+    protected VerificationException(@Nullable String message) {
         super(message);
     }
 
-    protected ValidationException(@Nullable Throwable cause) {
+    protected VerificationException(@Nullable Throwable cause) {
         super(cause);
     }
 }

@@ -185,7 +185,7 @@ WebAuthn4Jでは、カスタムな検証ロジックを実装し、追加する�
 
 ==== 例外クラス
 
-データの変換に失敗した場合、 `DataConversionException` のサブクラスがスローされます。 データの検証に失敗した場合、 `ValidationException` のサブクラスがスローされます。
+データの変換に失敗した場合、 `DataConversionException` のサブクラスがスローされます。 データの検証に失敗した場合、 `VerificationException` のサブクラスがスローされます。
 
 === ログ
 

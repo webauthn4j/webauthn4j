@@ -24,7 +24,7 @@ import com.webauthn4j.data.*;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +76,7 @@ public class WebAuthnManagerSample {
         }
         try {
             webAuthnManager.verify(registrationData, registrationParameters);
-        } catch (ValidationException e) {
+        } catch (VerificationException e) {
             // If you would like to handle WebAuthn data validation error, please catch ValidationException
             throw e;
         }
@@ -143,7 +143,7 @@ public class WebAuthnManagerSample {
         }
         try {
             webAuthnManager.verify(authenticationData, authenticationParameters);
-        } catch (ValidationException e) {
+        } catch (VerificationException e) {
             // If you would like to handle WebAuthn data validation error, please catch ValidationException
             throw e;
         }

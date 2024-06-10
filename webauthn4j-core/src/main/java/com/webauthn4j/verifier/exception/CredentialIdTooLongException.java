@@ -2,7 +2,7 @@ package com.webauthn4j.verifier.exception;
 
 import org.jetbrains.annotations.Nullable;
 
-public class CredentialIdTooLongException extends ValidationException{
+public class CredentialIdTooLongException extends VerificationException {
 
     public CredentialIdTooLongException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);

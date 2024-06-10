@@ -34,7 +34,7 @@ It is the application's responsibility for retaining the issued Challenge.
 - `tokenBindingId` is a parameter for Token binding.
 If you do not want to use it please specify `null`.
 
-If validation fails, an exception inheriting `ValidationException` is thrown.
+If validation fails, an exception inheriting `VerificationException` is thrown.
 If validation succeeds, please create an `CredentialRecord` instance from the returned value and persist it to the database or something in your application manner.
 The instance is required at the time of authentication.
 For more details about `CredentialRecord` serialization, please refer <<./deep-dive.adoc#CredentialRecord-serialization-and-deserialization,CredentialRecord serialization and deserialization>>.
@@ -217,7 +217,7 @@ https://developer.apple.com/documentation/devicecheck/validating_apps_that_conne
 By issuing the random byte sequence `challenge` on server side, signing it with App Attest API, and verifying the signature on server side, users are protected from the replay attack.
 It is the application's responsibility for retaining the issued Challenge.
 
-If validation fails, an exception inheriting `ValidationException` is thrown.
+If validation fails, an exception inheriting `VerificationException` is thrown.
 If validation succeeds, please create an `DCAppleDevice` instance from the returned value and persist it to the database or something in your application manner.
 The instance is required at the time of authentication.
 

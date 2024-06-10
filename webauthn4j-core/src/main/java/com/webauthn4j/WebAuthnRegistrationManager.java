@@ -45,7 +45,7 @@ import com.webauthn4j.verifier.attestation.trustworthiness.certpath.CertPathTrus
 import com.webauthn4j.verifier.attestation.trustworthiness.certpath.NullCertPathTrustworthinessVerifier;
 import com.webauthn4j.verifier.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessVerifier;
 import com.webauthn4j.verifier.attestation.trustworthiness.self.SelfAttestationTrustworthinessVerifier;
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -198,13 +198,13 @@ public class WebAuthnRegistrationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull RegistrationData verify(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
+    public @NotNull RegistrationData verify(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {
         RegistrationData registrationData = parse(registrationRequest);
         return verify(registrationData, registrationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NotNull RegistrationData verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws ValidationException {
+    public @NotNull RegistrationData verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws VerificationException {
         logger.trace("Verify: {}, {}", registrationData, registrationParameters);
         registrationDataVerifier.verify(registrationData, registrationParameters);
         return registrationData;

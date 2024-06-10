@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if the counter value is lower than expected value
  */
 @SuppressWarnings("squid:S110")
-public class MaliciousCounterValueException extends ValidationException {
+public class MaliciousCounterValueException extends VerificationException {
     public MaliciousCounterValueException(@Nullable String message) {
         super(message);
     }

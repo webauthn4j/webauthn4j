@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if tokenBinding error happen
  */
 @SuppressWarnings("squid:S110")
-public class TokenBindingException extends ValidationException {
+public class TokenBindingException extends VerificationException {
 
     public TokenBindingException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);

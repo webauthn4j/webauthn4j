@@ -32,7 +32,7 @@ import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.webauthn.AttestationOption;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
-import com.webauthn4j.verifier.exception.ValidationException;
+import com.webauthn4j.verifier.exception.VerificationException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -181,7 +181,7 @@ public class ClientPlatform {
                     ),
                     clientExtensions
             );
-        } catch (ValidationException e) {
+        } catch (VerificationException e) {
             noAuthenticatorSuccessException.addSuppressed(e);
         }
         throw noAuthenticatorSuccessException;

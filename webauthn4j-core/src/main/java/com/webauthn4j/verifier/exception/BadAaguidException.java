@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if bad aaguid is detected
  */
 @SuppressWarnings("squid:S110")
-public class BadAaguidException extends ValidationException {
+public class BadAaguidException extends VerificationException {
     public BadAaguidException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

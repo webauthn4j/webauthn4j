@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if the value violates constraints
  */
 @SuppressWarnings("squid:S110")
-public class ConstraintViolationException extends ValidationException {
+public class ConstraintViolationException extends VerificationException {
 
     public ConstraintViolationException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);

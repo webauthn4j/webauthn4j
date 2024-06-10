@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if bad origin is specified
  */
 @SuppressWarnings("squid:S110")
-public class BadOriginException extends ValidationException {
+public class BadOriginException extends VerificationException {
     public BadOriginException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

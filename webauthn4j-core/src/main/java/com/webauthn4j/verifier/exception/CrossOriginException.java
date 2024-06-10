@@ -18,7 +18,7 @@ package com.webauthn4j.verifier.exception;
 
 import org.jetbrains.annotations.Nullable;
 
-public class CrossOriginException extends ValidationException {
+public class CrossOriginException extends VerificationException {
     public CrossOriginException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }

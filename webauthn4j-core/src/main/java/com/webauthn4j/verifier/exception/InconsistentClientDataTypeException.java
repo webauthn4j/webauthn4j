@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Thrown if inconsistent type is specified for client data
  */
 @SuppressWarnings("squid:S110")
-public class InconsistentClientDataTypeException extends ValidationException {
+public class InconsistentClientDataTypeException extends VerificationException {
     public InconsistentClientDataTypeException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
