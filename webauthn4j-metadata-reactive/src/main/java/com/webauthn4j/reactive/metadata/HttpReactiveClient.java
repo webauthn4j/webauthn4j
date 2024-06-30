@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include "webauthn4j-reactive"
-include 'webauthn4j-metadata'
-include 'webauthn4j-metadata-reactive'
-include "webauthn4j-device-check"
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.reactive.metadata;
 
-rootProject.name = 'webauthn4j'
+import com.webauthn4j.metadata.exception.MDSException;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.InputStream;
+import java.util.concurrent.CompletionStage;
+
+/**
+ * HTTP Client for FIDO MetadataItemImpl Service
+ */
+public interface HttpReactiveClient {
+
+    @NotNull
+    CompletionStage<InputStream> fetch(@NotNull String uri) throws MDSException;
+
+}

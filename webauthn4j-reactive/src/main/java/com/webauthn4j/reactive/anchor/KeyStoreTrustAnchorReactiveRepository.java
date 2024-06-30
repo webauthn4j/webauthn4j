@@ -19,6 +19,7 @@ package com.webauthn4j.reactive.anchor;
 import com.webauthn4j.anchor.KeyStoreException;
 import com.webauthn4j.anchor.KeyStoreTrustAnchorRepository;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.reactive.util.internal.FileUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.CompletionStageUtil;
@@ -100,7 +101,7 @@ public class KeyStoreTrustAnchorReactiveRepository implements TrustAnchorReactiv
         AssertUtil.notNull(keyStore, "keyStore must not be null");
         AssertUtil.notNull(password, "password must not be null");
 
-        return new FileLoader(keyStore).load().thenCompose((bytes)->{
+        return FileUtil.load(keyStore).thenCompose((bytes)->{
             try (InputStream inputStream = new ByteArrayInputStream(bytes)) {
                 KeyStore keyStoreObject = CertificateUtil.createKeyStore();
                 keyStoreObject.load(inputStream, password.toCharArray());
@@ -111,49 +112,4 @@ public class KeyStoreTrustAnchorReactiveRepository implements TrustAnchorReactiv
         });
     }
 
-    private static class FileLoader{
-
-        private final Path path;
-        private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        private final CompletableFuture<byte[]> completableFuture = new CompletableFuture<>();
-
-        private FileLoader(Path path){
-            this.path = path;
-        }
-
-        private CompletableFuture<byte[]> load(){
-            try(AsynchronousFileChannel asynchronousFileChannel = AsynchronousFileChannel.open(path)){
-                read(asynchronousFileChannel);
-            } catch (IOException e){
-                throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
-            }
-            return completableFuture;
-        }
-
-        private void read(AsynchronousFileChannel asynchronousFileChannel){
-            int bufferSize = 1024;
-            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
-            asynchronousFileChannel.read(buffer, bufferSize, buffer, new CompletionHandler<>() {
-                @Override
-                public void completed(Integer result, ByteBuffer attachment) {
-                    try {
-                        byteArrayOutputStream.write(attachment.array());
-                        if(result == bufferSize){
-                            read(asynchronousFileChannel);
-                        }
-                        else {
-                            completableFuture.complete(byteArrayOutputStream.toByteArray());
-                        }
-                    } catch (IOException e) {
-                        completableFuture.completeExceptionally(e);
-                    }
-                }
-
-                @Override
-                public void failed(Throwable exc, ByteBuffer attachment) {
-                    completableFuture.completeExceptionally(exc);
-                }
-            });
-        }
-    }
 }

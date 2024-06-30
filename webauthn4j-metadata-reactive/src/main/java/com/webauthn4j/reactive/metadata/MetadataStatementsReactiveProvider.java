@@ -1,11 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2002-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include "webauthn4j-reactive"
-include 'webauthn4j-metadata'
-include 'webauthn4j-metadata-reactive'
-include "webauthn4j-device-check"
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.reactive.metadata;
 
-rootProject.name = 'webauthn4j'
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+public interface MetadataStatementsReactiveProvider {
+
+    CompletableFuture<List<MetadataStatement>> provide();
+}
