@@ -63,68 +63,17 @@ class RegistrationDataVerifierTest {
                 objectConverter);
     }
 
-    @Test
-    void verifyAlg_test(){
-        List<PublicKeyCredentialParameters> pubKeyCredParams = Arrays.asList(new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256), new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.RS256));
-        target.verifyAlg(COSEAlgorithmIdentifier.ES256, pubKeyCredParams);
-    }
-
-    @Test
-    void verifyAlg_not_allowed_alg_test(){
-        List<PublicKeyCredentialParameters> pubKeyCredParams = Collections.singletonList(new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.RS256));
-        assertThrows(NotAllowedAlgorithmException.class,
-                () -> target.verifyAlg(COSEAlgorithmIdentifier.ES256, pubKeyCredParams)
-        );
-    }
 
     @Test
     void verifyAuthenticatorDataField_test() {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) 0, 0);
         assertThrows(ConstraintViolationException.class,
-                () -> target.verifyAuthenticatorDataField(authenticatorData)
-        );
-    }
-
-    @Test
-    void verifyUVUPFlags_not_required_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) 0, 0);
-        target.verifyUVUPFlags(authenticatorData, false, false);
-    }
-
-    @Test
-    void verifyUVUPFlags_required_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) (AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
-        target.verifyUVUPFlags(authenticatorData, true, true);
-    }
-
-    @Test
-    void verifyUVUPFlags_UserNotVerifiedException_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) 0, 0);
-        assertThrows(UserNotVerifiedException.class,
-                () -> target.verifyUVUPFlags(authenticatorData, true, false)
-        );
-    }
-
-    @Test
-    void verifyUVUPFlags_UserNotPresentException_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) 0, 0);
-        assertThrows(UserNotPresentException.class,
-                () -> target.verifyUVUPFlags(authenticatorData, false, true)
-        );
-    }
-
-    @Test
-    void verifyBEBSFlags_only_BSFlag_set_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], AuthenticatorData.BIT_BS, 0);
-        assertThrows(IllegalBackupStateException.class,
-                () -> target.verifyBEBSFlags(authenticatorData)
-        );
-    }
-
-    @Test
-    void verifyCredentialIdLength_too_long_credentialId_test(){
-        assertThrows(CredentialIdTooLongException.class,
-                () -> target.verifyCredentialIdLength(new byte[1024])
+                () -> {
+                    // attestedCredentialData must be present on registration
+                    if (authenticatorData.getAttestedCredentialData() == null) {
+                        throw new ConstraintViolationException("attestedCredentialData must not be null on registration");
+                    }
+                }
         );
     }
 

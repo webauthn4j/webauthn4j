@@ -35,6 +35,8 @@ import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import com.webauthn4j.verifier.exception.NotAllowedAlgorithmException;
 import com.webauthn4j.verifier.exception.UserNotPresentException;
 import com.webauthn4j.verifier.exception.UserNotVerifiedException;
+import com.webauthn4j.verifier.internal.BeanAssertUtil;
+import com.webauthn4j.verifier.internal.RpIdHashVerifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -44,7 +46,6 @@ public class CoreRegistrationDataVerifier {
     // ~ Instance fields
     // ================================================================================================
 
-    private final RpIdHashVerifier rpIdHashVerifier = new RpIdHashVerifier();
     private final AuthenticatorExtensionVerifier authenticatorExtensionVerifier = new AuthenticatorExtensionVerifier();
     private final AttestationVerifier attestationVerifier;
     private final List<CustomCoreRegistrationVerifier> customRegistrationVerifiers;
@@ -154,7 +155,7 @@ public class CoreRegistrationDataVerifier {
 
         //spec| Step13
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
-        rpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
+        RpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
 
         //spec| Step14, 15
         //spec| Verify that the User Present bit of the flags in authData is set.

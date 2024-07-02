@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Load {@link TrustAnchor}s from KeyStore. Loaded trust anchors are cached.
@@ -52,8 +53,19 @@ public class KeyStoreTrustAnchorRepository implements TrustAnchorRepository{
         this.trustAnchors = loadTrustAnchors(keyStore);
     }
 
+    /**
+     * @deprecated use KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(Path, String) instead
+     */
+    @Deprecated
     public KeyStoreTrustAnchorRepository(Path keyStore, String password) {
         this(loadKeyStore(keyStore, password));
+    }
+
+    // ~ Static Methods
+    // ========================================================================================================
+    public static KeyStoreTrustAnchorRepository createFromKeyStoreFilePath(Path keyStore, String password){
+        KeyStore keyStoreObj = loadKeyStore(keyStore, password);
+        return new KeyStoreTrustAnchorRepository(keyStoreObj);
     }
 
     // ~ Methods

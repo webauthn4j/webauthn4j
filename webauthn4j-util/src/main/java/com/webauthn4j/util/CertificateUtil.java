@@ -80,6 +80,14 @@ public class CertificateUtil {
         }
     }
 
+    public static @NotNull CertificateFactory createCertificateFactory() {
+        try {
+            return CertificateFactory.getInstance("X.509");
+        } catch (CertificateException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
     public static @NotNull <C extends X509Certificate> Set<TrustAnchor> generateTrustAnchors(@NotNull List<C> certificates) {
         return certificates.stream().map(certificate -> new TrustAnchor(certificate, null)).collect(Collectors.toSet());
     }
