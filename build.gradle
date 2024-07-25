@@ -19,7 +19,7 @@ buildscript {
     ext {
         // Gradle plugins
         sonarqubeVersion = "5.1.0.4882"
-        asciidoctorGradleVersion = "4.0.2"
+        asciidoctorGradleVersion = "4.0.3"
 
         // Define implementation dependency versions independently
         jacksonVersion = "2.17.2"
