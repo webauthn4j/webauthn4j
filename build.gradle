@@ -24,7 +24,7 @@ buildscript {
         // Define implementation dependency versions independently
         jacksonVersion = "2.17.2"
         kerbyVersion = "2.0.3"
-        slf4jVersion = "2.0.13"
+        slf4jVersion = "2.0.14"
         bouncyCastleVersion = "1.70"
         jetbrainsAnnotationsVersion = "24.1.0"
 
