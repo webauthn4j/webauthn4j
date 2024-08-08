@@ -36,7 +36,7 @@ WARNING: FIDO Metadata Statement関連の機能を提供する `webauthn4j-metad
 
 FIDO Allianceでは、FIDO Metadata Serviceという、認証デバイスのメタデータを配信するサービスを提供しています。
 `webauthn4j-metadata` モジュールでは、`TrustAnchorRepository` の実装として `MetadataBLOBBasedTrustAnchorRepository` を提供しています。
-`MetadataBLOBBasedTrustAnchorRepository` は `FidoMDS3MetadataBLOBProvider` と組み合わせることで
+`MetadataBLOBBasedTrustAnchorRepository` は `FidoMDS3MetadataBLOBAsyncProvider` と組み合わせることで
 FIDO Metadata Serviceの公開する情報に基づいてトラストアンカーを構築することが可能です。
 
 === WebAuthn4Jが提供しない機能

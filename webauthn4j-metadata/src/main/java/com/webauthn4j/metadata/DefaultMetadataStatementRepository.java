@@ -16,9 +16,9 @@
 
 package com.webauthn4j.metadata;
 
-import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import com.webauthn4j.metadata.util.internal.MetadataStatementUtil;
 import com.webauthn4j.util.HexUtil;
 
 import java.util.Arrays;
@@ -38,7 +38,7 @@ public class DefaultMetadataStatementRepository implements MetadataStatementRepo
     public Set<MetadataStatement> find(AAGUID aaguid) {
         return metadataStatementsProvider.provide().stream()
                 .filter(entry -> Objects.equals(entry.getAaguid(), aaguid))
-                .filter(this::checkSurrogateMetadataStatementAttestationRootCertificate)
+                .filter(MetadataStatementUtil::checkSurrogateMetadataStatementAttestationRootCertificate)
                 .collect(Collectors.toSet());
     }
 
@@ -51,16 +51,7 @@ public class DefaultMetadataStatementRepository implements MetadataStatementRepo
                     }
                     return entry.getAttestationCertificateKeyIdentifiers().stream().anyMatch(identifier -> Arrays.equals(HexUtil.decode(identifier), attestationCertificateKeyIdentifier));
                 })
-                .filter(this::checkSurrogateMetadataStatementAttestationRootCertificate)
+                .filter(MetadataStatementUtil::checkSurrogateMetadataStatementAttestationRootCertificate)
                 .collect(Collectors.toSet());
-    }
-
-    private boolean checkSurrogateMetadataStatementAttestationRootCertificate(MetadataStatement metadataStatement) {
-        boolean isSurrogate = metadataStatement != null && metadataStatement.getAttestationTypes().stream().allMatch(type -> type.equals(AuthenticatorAttestationType.BASIC_SURROGATE));
-
-        if (isSurrogate) {
-            return metadataStatement.getAttestationRootCertificates().isEmpty();
-        }
-        return true;
     }
 }

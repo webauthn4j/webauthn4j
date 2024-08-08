@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.jws.JWAIdentifier;
 import com.webauthn4j.metadata.data.MetadataBLOB;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -41,6 +42,11 @@ class LocalFileMetadataBLOBProviderTest {
         LocalFileMetadataBLOBProvider target = new LocalFileMetadataBLOBProvider(new ObjectConverter(), dstPath);
         MetadataBLOB metadataBLOB = target.provide();
         assertThat(metadataBLOB).isNotNull();
+        assertThat(metadataBLOB.getHeader().getAlg()).isEqualTo(JWAIdentifier.RS256);
+        assertThat(metadataBLOB.getHeader().getX5c()).isNotNull();
+        assertThat(metadataBLOB.getSignature()).isNotNull();
+        assertThat(metadataBLOB.getPayload()).isNotNull();
+        assertThat(metadataBLOB.getPayload().getNo()).isEqualTo(9);
     }
 
 }

@@ -35,7 +35,9 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.attestation.statement.AttestationStatementVerifier;
 import com.webauthn4j.verifier.attestation.trustworthiness.certpath.CertPathTrustworthinessVerifier;
 import com.webauthn4j.verifier.attestation.trustworthiness.self.SelfAttestationTrustworthinessVerifier;
-import com.webauthn4j.verifier.exception.*;
+import com.webauthn4j.verifier.exception.ConstraintViolationException;
+import com.webauthn4j.verifier.exception.InconsistentClientDataTypeException;
+import com.webauthn4j.verifier.internal.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -48,9 +50,6 @@ public class RegistrationDataVerifier {
 
     // ~ Instance fields
     // ================================================================================================
-    private final ChallengeVerifier challengeVerifier = new ChallengeVerifier();
-    private final TokenBindingVerifier tokenBindingVerifier = new TokenBindingVerifier();
-    private final RpIdHashVerifier rpIdHashVerifier = new RpIdHashVerifier();
     private final ClientExtensionVerifier clientExtensionVerifier = new ClientExtensionVerifier();
     private final AuthenticatorExtensionVerifier authenticatorExtensionVerifier = new AuthenticatorExtensionVerifier();
 
@@ -124,7 +123,10 @@ public class RegistrationDataVerifier {
 
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = registrationData.getClientExtensions();
 
-        verifyAuthenticatorDataField(attestationObject.getAuthenticatorData());
+        // attestedCredentialData must be present on registration
+        if (attestationObject.getAuthenticatorData().getAttestedCredentialData() == null) {
+            throw new ConstraintViolationException("attestedCredentialData must not be null on registration");
+        }
 
         ServerProperty serverProperty = registrationParameters.getServerProperty();
 
@@ -148,7 +150,7 @@ public class RegistrationDataVerifier {
 
         //spec| Step8
         //spec| Verify that the value of C.challenge equals the base64url encoding of options.challenge.
-        challengeVerifier.verify(collectedClientData, serverProperty);
+        ChallengeVerifier.verify(collectedClientData, serverProperty);
 
         //spec| Step9
         //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
@@ -158,7 +160,7 @@ public class RegistrationDataVerifier {
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
         //spec| C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
-        tokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
+        TokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         //spec| Step10
         //spec| If C.topOrigin is present:
@@ -176,16 +178,16 @@ public class RegistrationDataVerifier {
 
         //spec| Step13
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
-        rpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
+        RpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
 
         //spec| Step14, 15
         //spec| Verify that the UP bit of the flags in authData is set.
         //spec| If the Relying Party requires user verification for this registration, verify that the UV bit of the flags in authData is set.
-        verifyUVUPFlags(authenticatorData, registrationParameters.isUserVerificationRequired(), registrationParameters.isUserPresenceRequired());
+        UPUVFlagsVerifier.verify(authenticatorData, registrationParameters.isUserPresenceRequired(), registrationParameters.isUserVerificationRequired());
 
         //spec| Step16
         //spec| If the BE bit of the flags in authData is not set, verify that the BS bit is not set.
-        verifyBEBSFlags(authenticatorData);
+        BEBSFlagsVerifier.verify(authenticatorData);
 
         //spec| Step17
         //spec| If the Relying Party uses the credential’s backup eligibility to inform its user experience flows and/or policies, evaluate the BE bit of the flags in authData.
@@ -200,7 +202,7 @@ public class RegistrationDataVerifier {
         //spec| Verify that the "alg" parameter in the credential public key in authData matches the alg attribute of one of the items in options.pubKeyCredParams.
         COSEAlgorithmIdentifier alg = authenticatorData.getAttestedCredentialData().getCOSEKey().getAlgorithm();
         List<PublicKeyCredentialParameters> pubKeyCredParams = registrationParameters.getPubKeyCredParams();
-        verifyAlg(alg, pubKeyCredParams);
+        COSEAlgorithmIdentifierVerifier.verify(alg, pubKeyCredParams);
 
         //spec| Step20
         //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator extension outputs in the extensions in authData are as expected,
@@ -216,7 +218,7 @@ public class RegistrationDataVerifier {
 
         //spec| Step25
         //spec| Verify that the credentialId is ≤ 1023 bytes. Credential IDs larger than this many bytes SHOULD cause the RP to fail this registration ceremony.
-        verifyCredentialIdLength(attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId());
+        CredentialIdLengthVerifier.verify(attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(), maxCredentialIdLength);
 
         //spec| Step26
         //spec| Verify that the credentialId is not yet registered for any user. If the credentialId is already known then the Relying Party SHOULD fail this registration ceremony.
@@ -257,46 +259,6 @@ public class RegistrationDataVerifier {
         // verify with custom logic
         for (CustomRegistrationVerifier customRegistrationVerifier : customRegistrationVerifiers) {
             customRegistrationVerifier.verify(registrationObject);
-        }
-    }
-
-    void verifyAlg(COSEAlgorithmIdentifier alg, List<PublicKeyCredentialParameters> pubKeyCredParams) {
-        if(pubKeyCredParams != null && pubKeyCredParams.stream().noneMatch(item -> item.getAlg().equals(alg))){
-            throw new NotAllowedAlgorithmException("alg not listed in options.pubKeyCredParams is used.");
-        }
-    }
-
-    void verifyAuthenticatorDataField(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
-        // attestedCredentialData must be present on registration
-        if (authenticatorData.getAttestedCredentialData() == null) {
-            throw new ConstraintViolationException("attestedCredentialData must not be null on registration");
-        }
-    }
-
-    void verifyUVUPFlags(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
-        //spec| Step14
-        //spec| Verify that the User Present bit of the flags in authData is set.
-        //      Administrator can allow UP=false condition
-        if (isUserPresenceRequired && !authenticatorData.isFlagUP()) {
-            throw new UserNotPresentException("Verifier is configured to check user present, but UP flag in authenticatorData is not set.");
-        }
-
-        //spec| Step15
-        //spec| If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
-        if (isUserVerificationRequired && !authenticatorData.isFlagUV()) {
-            throw new UserNotVerifiedException("Verifier is configured to check user verified, but UV flag in authenticatorData is not set.");
-        }
-    }
-
-    void verifyBEBSFlags(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
-        if(!authenticatorData.isFlagBE() && authenticatorData.isFlagBS()){
-            throw new IllegalBackupStateException("Backup state bit must not be set if backup eligibility bit is not set");
-        }
-    }
-
-    void verifyCredentialIdLength(byte[] credentialId) {
-        if(maxCredentialIdLength >= 0 && credentialId.length > maxCredentialIdLength){
-            throw new CredentialIdTooLongException(String.format("credentialId exceeds maxCredentialIdSize(%d bytes)", maxCredentialIdLength));
         }
     }
 

@@ -27,7 +27,9 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.*;
+import com.webauthn4j.data.AuthenticatorAttestationResponse;
+import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.PublicKeyCredential;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -189,12 +191,12 @@ public class TestDataUtil {
     }
 
     public static RegistrationObject createRegistrationObject(PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential) {
-        AuthenticatorAttestationResponse registrationRequest = publicKeyCredential.getAuthenticatorResponse();
-        byte[] attestationObjectBytes = publicKeyCredential.getAuthenticatorResponse().getAttestationObject();
+        AuthenticatorAttestationResponse registrationRequest = publicKeyCredential.getResponse();
+        byte[] attestationObjectBytes = publicKeyCredential.getResponse().getAttestationObject();
 
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(registrationRequest.getClientDataJSON());
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensionResults = publicKeyCredential.getClientExtensionResults();
-        Set<AuthenticatorTransport> transports = publicKeyCredential.getAuthenticatorResponse().getTransports();
+        Set<AuthenticatorTransport> transports = publicKeyCredential.getResponse().getTransports();
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         return new RegistrationObject(
                 attestationObject,

@@ -28,6 +28,7 @@ class MetadataStatementTest {
 
     private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
+    @SuppressWarnings("java:S5961")
     @Test
     void test(){
         MetadataStatement metadataStatement = createMetadataStatement();
