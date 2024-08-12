@@ -42,7 +42,7 @@ WebAuthn4JはSLF4JとJackson、Apache Kerbyにのみ依存しており、非常�
 
 ==== 言語
 
-- Java8以降
+- Java11以降
 
 === 動作環境
 

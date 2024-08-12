@@ -43,7 +43,7 @@ NOTE: Since FIDO2 Test Tools runs the test via the REST API of FIDO2 Transport B
 
 ==== Language & Framework
 
-- Java8 or later
+- Java11 or later
 
 ==== Environment
 
