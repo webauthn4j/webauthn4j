@@ -80,7 +80,7 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
     public String toString() {
         return "PublicKeyCredentialRpEntity(" +
                 "id=" + id+
-                "name=" + getName() +
+                ", name=" + getName() +
                 ')';
     }
 }
