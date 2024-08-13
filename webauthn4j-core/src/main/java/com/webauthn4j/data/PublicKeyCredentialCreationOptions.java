@@ -49,6 +49,7 @@ public class PublicKeyCredentialCreationOptions {
     private final Long timeout;
     private final List<PublicKeyCredentialDescriptor> excludeCredentials;
     private final AuthenticatorSelectionCriteria authenticatorSelection;
+    private final List<PublicKeyCredentialHints> hints;
     private final AttestationConveyancePreference attestation;
     private final AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions;
 
@@ -62,6 +63,7 @@ public class PublicKeyCredentialCreationOptions {
             @Nullable @JsonProperty("timeout") Long timeout,
             @Nullable @JsonProperty("excludeCredentials") List<PublicKeyCredentialDescriptor> excludeCredentials,
             @Nullable @JsonProperty("authenticatorSelection") AuthenticatorSelectionCriteria authenticatorSelection,
+            @Nullable @JsonProperty("hints") List<PublicKeyCredentialHints> hints,
             @Nullable @JsonProperty("attestation") AttestationConveyancePreference attestation,
             @Nullable @JsonProperty("extensions") AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
         AssertUtil.notNull(rp, "rp must not be null");
@@ -75,8 +77,23 @@ public class PublicKeyCredentialCreationOptions {
         this.timeout = timeout;
         this.excludeCredentials = CollectionUtil.unmodifiableList(excludeCredentials);
         this.authenticatorSelection = authenticatorSelection;
+        this.hints = hints;
         this.attestation = attestation;
         this.extensions = extensions;
+    }
+
+    @SuppressWarnings("squid:S00107")
+    public PublicKeyCredentialCreationOptions(
+            @NotNull @JsonProperty("rp") PublicKeyCredentialRpEntity rp,
+            @NotNull @JsonProperty("user") PublicKeyCredentialUserEntity user,
+            @NotNull @JsonProperty("challenge") Challenge challenge,
+            @NotNull @JsonProperty("pubKeyCredParams") List<PublicKeyCredentialParameters> pubKeyCredParams,
+            @Nullable @JsonProperty("timeout") Long timeout,
+            @Nullable @JsonProperty("excludeCredentials") List<PublicKeyCredentialDescriptor> excludeCredentials,
+            @Nullable @JsonProperty("authenticatorSelection") AuthenticatorSelectionCriteria authenticatorSelection,
+            @Nullable @JsonProperty("attestation") AttestationConveyancePreference attestation,
+            @Nullable @JsonProperty("extensions") AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
+        this(rp, user, challenge, pubKeyCredParams, timeout, excludeCredentials, authenticatorSelection, null, attestation, extensions);
     }
 
     public PublicKeyCredentialCreationOptions(
@@ -84,7 +101,7 @@ public class PublicKeyCredentialCreationOptions {
             @NotNull PublicKeyCredentialUserEntity user,
             @NotNull Challenge challenge,
             @NotNull List<PublicKeyCredentialParameters> pubKeyCredParams) {
-        this(rp, user, challenge, pubKeyCredParams, null, Collections.emptyList(), null, null, null);
+        this(rp, user, challenge, pubKeyCredParams, null, Collections.emptyList(), null, null, null, null);
     }
 
     public @NotNull PublicKeyCredentialRpEntity getRp() {
@@ -115,6 +132,10 @@ public class PublicKeyCredentialCreationOptions {
         return authenticatorSelection;
     }
 
+    public @Nullable List<PublicKeyCredentialHints> getHints() {
+        return hints;
+    }
+
     public @Nullable AttestationConveyancePreference getAttestation() {
         return attestation;
     }
@@ -128,13 +149,12 @@ public class PublicKeyCredentialCreationOptions {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredentialCreationOptions that = (PublicKeyCredentialCreationOptions) o;
-        return Objects.equals(rp, that.rp) && Objects.equals(user, that.user) && Objects.equals(challenge, that.challenge) && Objects.equals(pubKeyCredParams, that.pubKeyCredParams) && Objects.equals(timeout, that.timeout) && Objects.equals(excludeCredentials, that.excludeCredentials) && Objects.equals(authenticatorSelection, that.authenticatorSelection) && Objects.equals(attestation, that.attestation) && Objects.equals(extensions, that.extensions);
+        return Objects.equals(rp, that.rp) && Objects.equals(user, that.user) && Objects.equals(challenge, that.challenge) && Objects.equals(pubKeyCredParams, that.pubKeyCredParams) && Objects.equals(timeout, that.timeout) && Objects.equals(excludeCredentials, that.excludeCredentials) && Objects.equals(authenticatorSelection, that.authenticatorSelection) && Objects.equals(hints, that.hints) && Objects.equals(attestation, that.attestation) && Objects.equals(extensions, that.extensions);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(rp, user, challenge, pubKeyCredParams, timeout, excludeCredentials, authenticatorSelection, attestation, extensions);
+        return Objects.hash(rp, user, challenge, pubKeyCredParams, timeout, excludeCredentials, authenticatorSelection, hints, attestation, extensions);
     }
 
     @Override
@@ -147,6 +167,7 @@ public class PublicKeyCredentialCreationOptions {
                 ", timeout=" + timeout +
                 ", excludeCredentials=" + excludeCredentials +
                 ", authenticatorSelection=" + authenticatorSelection +
+                ", hints=" + hints +
                 ", attestation=" + attestation +
                 ", extensions=" + extensions +
                 ')';
