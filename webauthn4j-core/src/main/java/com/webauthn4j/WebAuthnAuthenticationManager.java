@@ -16,14 +16,13 @@
 
 package com.webauthn4j;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.AuthenticationData;
-import com.webauthn4j.data.AuthenticationParameters;
-import com.webauthn4j.data.AuthenticationRequest;
+import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
@@ -40,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("java:S6539")
 public class WebAuthnAuthenticationManager {
 
     // ~ Instance fields
@@ -52,17 +52,21 @@ public class WebAuthnAuthenticationManager {
 
     private final AuthenticationDataVerifier authenticationDataVerifier;
 
+    private final ObjectConverter objectConverter;
+
     public WebAuthnAuthenticationManager(
             @NotNull List<CustomAuthenticationVerifier> customAuthenticationVerifiers,
             @NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationVerifiers, "customAuthenticationVerifiers must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        authenticationDataVerifier = new AuthenticationDataVerifier(customAuthenticationVerifiers);
+        this.authenticationDataVerifier = new AuthenticationDataVerifier(customAuthenticationVerifiers);
 
-        collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
-        authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
-        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+        this.collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+
+        this.objectConverter = objectConverter;
     }
 
     public WebAuthnAuthenticationManager(
@@ -72,6 +76,11 @@ public class WebAuthnAuthenticationManager {
 
     public WebAuthnAuthenticationManager() {
         this(Collections.emptyList(), new ObjectConverter());
+    }
+
+
+    public PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> parse(String authenticationResponseJSON) {
+        return objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<>() {});
     }
 
     @SuppressWarnings("squid:S1130")
@@ -103,6 +112,46 @@ public class WebAuthnAuthenticationManager {
                 signature
         );
 
+    }
+
+    public @NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> verify(
+            @NotNull String authenticationResponseJSON,
+            @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = parse(authenticationResponseJSON);
+        verify(publicKeyCredential, authenticationParameters);
+        return publicKeyCredential;
+    }
+
+    @SuppressWarnings("java:S2583")
+    public @NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> verify(
+            @NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential,
+            @NotNull AuthenticationParameters authenticationParameters) throws VerificationException {
+
+        byte[] credentialId = publicKeyCredential.getRawId();
+        byte[] userHandle = publicKeyCredential.getResponse().getUserHandle();
+
+        byte[] clientDataBytes = publicKeyCredential.getResponse().getClientDataJSON();
+        CollectedClientData collectedClientData = clientDataBytes == null ? null : collectedClientDataConverter.convert(clientDataBytes);
+
+        byte[] authenticatorDataBytes = publicKeyCredential.getResponse().getAuthenticatorData();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataBytes == null ? null : authenticatorDataConverter.convert(authenticatorDataBytes);
+
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = publicKeyCredential.getClientExtensionResults();
+
+        byte[] signature = publicKeyCredential.getResponse().getSignature();
+
+        AuthenticationData authenticationData = new AuthenticationData(
+                credentialId,
+                userHandle,
+                authenticatorData,
+                authenticatorDataBytes,
+                collectedClientData,
+                clientDataBytes,
+                clientExtensions,
+                signature
+        );
+        authenticationDataVerifier.verify(authenticationData, authenticationParameters);
+        return publicKeyCredential;
     }
 
     @SuppressWarnings("squid:S1130")
