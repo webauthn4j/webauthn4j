@@ -21,9 +21,11 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.ByteArrayBase64ConverterModule;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.UncheckedIOException;
@@ -75,7 +77,37 @@ class JsonConverterTest {
         );
     }
 
-    static class readValue {
+    @Test
+    void byteArray_serialization_test() {
+        ByteArrayContainer container = new ByteArrayContainer(new byte[]{(byte) 0xFF, (byte) 0xFD, (byte) 0xFE, (byte) 0xFC});
+        String serialized = jsonConverter.writeValueAsString(container);
+        assertThat(serialized).isEqualTo("{\"value\":\"__3-_A\"}");
+    }
+
+    @Test
+    void custom_serialization_module_can_override_default_serializer_test() {
+        ObjectConverter objectConverter = new ObjectConverter();
+        JsonConverter customJsonConverter = objectConverter.getJsonConverter();
+        customJsonConverter.registerModule(new ByteArrayBase64ConverterModule());
+        ByteArrayContainer container = new ByteArrayContainer(new byte[]{(byte) 0xFF, (byte) 0xFD, (byte) 0xFE, (byte) 0xFC});
+        String serialized = customJsonConverter.writeValueAsString(container);
+        assertThat(serialized).isEqualTo("{\"value\":\"//3+/A\"}");
+    }
+
+    static class ByteArrayContainer {
+        public byte[] value;
+
+        public ByteArrayContainer(byte[] value) {
+            this.value = value;
+        }
+
+        public byte[] getValue() {
+            return value;
+        }
+    }
+
+    @Nested
+    class readValue {
         @Test
         void test() {
             ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", ConverterTestDto.class);
@@ -124,36 +156,35 @@ class JsonConverterTest {
                     jsonConverter.readValue("{value:\"dummy\"}", typeReference)
             );
         }
+    }
 
-        static class NonNullDto {
-            private final String value;
+    static class NonNullDto {
+        private final String value;
 
-            @JsonCreator
-            public NonNullDto(@NotNull @JsonProperty("value") String value) {
-                AssertUtil.notNull(value, "value must not be null");
-                this.value = value;
-            }
-
-            @JsonGetter
-            public String getValue() {
-                return value;
-            }
+        @JsonCreator
+        public NonNullDto(@NotNull @JsonProperty("value") String value) {
+            AssertUtil.notNull(value, "value must not be null");
+            this.value = value;
         }
 
-        static class IntegerDto {
-            private final Integer value;
+        @JsonGetter
+        public String getValue() {
+            return value;
+        }
+    }
 
-            @JsonCreator
-            public IntegerDto(@NotNull @JsonProperty("value") Integer value) {
-                AssertUtil.notNull(value, "value must not be null");
-                this.value = value;
-            }
+    static class IntegerDto {
+        private final Integer value;
 
-            @JsonGetter
-            public Integer getValue() {
-                return value;
-            }
+        @JsonCreator
+        public IntegerDto(@NotNull @JsonProperty("value") Integer value) {
+            AssertUtil.notNull(value, "value must not be null");
+            this.value = value;
         }
 
+        @JsonGetter
+        public Integer getValue() {
+            return value;
+        }
     }
 }

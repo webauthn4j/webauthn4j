@@ -19,6 +19,7 @@ package com.webauthn4j.converter.util;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
@@ -46,6 +47,10 @@ public class JsonConverter {
         AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
 
         this.jsonMapper = jsonMapper;
+    }
+
+    public void registerModule(Module module){
+        this.jsonMapper.registerModule(module);
     }
 
     public <T> @Nullable T readValue(@NotNull String src, @NotNull Class<T> valueType) {
