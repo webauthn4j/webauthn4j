@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
@@ -47,6 +48,10 @@ public class CborConverter {
         AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
         this.cborMapper = cborMapper;
+    }
+
+    public void registerModule(Module module){
+        this.cborMapper.registerModule(module);
     }
 
     public @Nullable <T> T readValue(@NotNull byte[] src, @NotNull Class<T> valueType) {

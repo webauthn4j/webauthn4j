@@ -19,9 +19,8 @@ package com.webauthn4j.data.attestation.statement;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
-
-import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -56,14 +55,14 @@ class TPMISTAttestTest {
     @Test
     void fromString_test() {
         byte[] source = new byte[]{(byte) 0x80, (byte) 0x17};
-        TestDTO dto = jsonConverter.readValue("{\"tpmi_st_attest\":\"" + Base64.getEncoder().encodeToString(source) + "\"}", TestDTO.class);
+        TestDTO dto = jsonConverter.readValue("{\"tpmi_st_attest\":\"" + Base64UrlUtil.encodeToString(source) + "\"}", TestDTO.class);
         assertThat(dto.tpmi_st_attest).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
         byte[] source = new byte[]{(byte) 0xff, (byte) 0xaa};
-        String sourceString = "{\"tpmi_st_attest\":\"" + Base64.getEncoder().encodeToString(source) + "\"}";
+        String sourceString = "{\"tpmi_st_attest\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
         assertThrows(DataConversionException.class,
                 () -> jsonConverter.readValue(sourceString, TestDTO.class)
         );
