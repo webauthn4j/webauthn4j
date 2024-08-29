@@ -16,16 +16,14 @@
 
 package com.webauthn4j;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorTransportConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.AuthenticatorTransport;
-import com.webauthn4j.data.RegistrationData;
-import com.webauthn4j.data.RegistrationParameters;
-import com.webauthn4j.data.RegistrationRequest;
+import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
@@ -55,6 +53,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("java:S6539")
 public class WebAuthnRegistrationManager {
 
     // ~ Instance fields
@@ -68,6 +67,8 @@ public class WebAuthnRegistrationManager {
 
     private final RegistrationDataVerifier registrationDataVerifier;
 
+    private final ObjectConverter objectConverter;
+
     public WebAuthnRegistrationManager(
             @NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
             @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
@@ -80,7 +81,7 @@ public class WebAuthnRegistrationManager {
         AssertUtil.notNull(customRegistrationVerifiers, "customRegistrationVerifiers must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        registrationDataVerifier = new RegistrationDataVerifier(
+        this.registrationDataVerifier = new RegistrationDataVerifier(
                 attestationStatementVerifiers,
                 certPathTrustworthinessVerifier,
                 selfAttestationTrustworthinessVerifier,
@@ -88,10 +89,11 @@ public class WebAuthnRegistrationManager {
                 objectConverter);
 
 
-        collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
-        attestationObjectConverter = new AttestationObjectConverter(objectConverter);
-        authenticatorTransportConverter = new AuthenticatorTransportConverter();
-        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+        this.collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
+        this.attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+        this.authenticatorTransportConverter = new AuthenticatorTransportConverter();
+        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+        this.objectConverter = objectConverter;
     }
 
     public WebAuthnRegistrationManager(@NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
@@ -168,6 +170,10 @@ public class WebAuthnRegistrationManager {
         );
     }
 
+    public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> parse(String registrationResponseJSON) {
+        return objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<>() {});
+    }
+
     @SuppressWarnings("squid:S1130")
     public @NotNull RegistrationData parse(@NotNull RegistrationRequest registrationRequest) throws DataConversionException {
         AssertUtil.notNull(registrationRequest, "registrationRequest must not be null");
@@ -196,6 +202,32 @@ public class WebAuthnRegistrationManager {
         );
 
     }
+
+    public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> verify(String registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) {
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = parse(registrationResponseJSON);
+        return verify(publicKeyCredential, registrationParameters);
+    }
+
+    @SuppressWarnings("java:S2583")
+    public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> verify(@NotNull PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> registrationResponse, @NotNull RegistrationParameters registrationParameters) {
+
+        byte[] attestationObjectBytes = registrationResponse.getResponse().getAttestationObject();
+        AttestationObject attestationObject = attestationObjectBytes == null ? null : attestationObjectConverter.convert(attestationObjectBytes);
+        byte[] clientDataBytes = registrationResponse.getResponse().getClientDataJSON();
+        CollectedClientData collectedClientData = clientDataBytes == null ? null : collectedClientDataConverter.convert(clientDataBytes);
+
+        RegistrationData registrationData = new RegistrationData(
+                attestationObject,
+                attestationObjectBytes,
+                collectedClientData,
+                clientDataBytes,
+                registrationResponse.getClientExtensionResults(),
+                registrationResponse.getResponse().getTransports()
+        );
+        verify(registrationData, registrationParameters);
+        return registrationResponse;
+    }
+
 
     @SuppressWarnings("squid:S1130")
     public @NotNull RegistrationData verify(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {

@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AttestedCredentialDataConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
@@ -56,9 +58,10 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         this(clientDataJSON, attestationObject, Collections.emptySet());
     }
 
-    public AuthenticatorAttestationResponse(@NotNull byte[] clientDataJSON,
-                                            @NotNull byte[] attestationObject,
-                                            @Nullable Set<AuthenticatorTransport> transports) {
+    @JsonCreator
+    public AuthenticatorAttestationResponse(@NotNull @JsonProperty("clientDataJSON") byte[] clientDataJSON,
+                                            @NotNull @JsonProperty("attestationObject") byte[] attestationObject,
+                                            @Nullable @JsonProperty("transports") Set<AuthenticatorTransport> transports) {
         super(clientDataJSON);
         AssertUtil.notNull(attestationObject, "attestationObject must not be null");
 

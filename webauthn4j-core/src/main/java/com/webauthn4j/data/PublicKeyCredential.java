@@ -16,7 +16,9 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.ArrayUtil;
@@ -54,11 +56,12 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
         this(credentialId, response, null, clientExtensionResults);
     }
 
+    @JsonCreator
     public PublicKeyCredential(
-            @Nullable byte[] credentialId,
-            @Nullable R response,
-            @Nullable AuthenticatorAttachment authenticatorAttachment,
-            @Nullable AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
+            @Nullable @JsonProperty("credentialId") byte[] credentialId,
+            @Nullable @JsonProperty("response") R response,
+            @Nullable @JsonProperty("authenticatorAttachment") AuthenticatorAttachment authenticatorAttachment,
+            @Nullable @JsonProperty("clientExtensionResults") AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
         this.id = credentialId == null ? null : Base64UrlUtil.encodeToString(credentialId);
         this.rawId = credentialId;
         this.response = response;

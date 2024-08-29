@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
@@ -41,12 +43,12 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
 
     // ~ Constructor
     // ========================================================================================================
-
+    @JsonCreator
     public AuthenticatorAssertionResponse(
-            @NotNull byte[] clientDataJSON,
-            @NotNull byte[] authenticatorData,
-            @NotNull byte[] signature,
-            @Nullable byte[] userHandle) {
+            @NotNull @JsonProperty("clientDataJSON") byte[] clientDataJSON,
+            @NotNull @JsonProperty("authenticatorData") byte[] authenticatorData,
+            @NotNull @JsonProperty("signature") byte[] signature,
+            @Nullable @JsonProperty("userHandle") byte[] userHandle) {
         super(clientDataJSON);
         AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
         AssertUtil.notNull(signature, "signature must not be null");
