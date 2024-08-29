@@ -20,6 +20,8 @@ import com.webauthn4j.async.verifier.attestation.trustworthiness.self.SelfAttest
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 
@@ -130,10 +132,17 @@ public class WebAuthnAsyncManager {
         );
     }
 
+    public @NotNull CompletionStage<RegistrationData> parseRegistrationResponseJSON(@NotNull String registrationResponseJSON){
+        return this.webAuthnRegistrationAsyncManager.parse(registrationResponseJSON);
+    }
 
     @SuppressWarnings("squid:S1130")
     public @NotNull CompletionStage<RegistrationData> parse(@NotNull RegistrationRequest registrationRequest) throws DataConversionException {
         return this.webAuthnRegistrationAsyncManager.parse(registrationRequest);
+    }
+
+    public @NotNull CompletionStage<RegistrationData> verifyRegistrationResponseJSON(@NotNull String registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {
+        return this.webAuthnRegistrationAsyncManager.verify(registrationResponseJSON, registrationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
@@ -141,15 +150,22 @@ public class WebAuthnAsyncManager {
         return this.webAuthnRegistrationAsyncManager.verify(registrationRequest, registrationParameters);
     }
 
-
     @SuppressWarnings("squid:S1130")
     public @NotNull CompletionStage<RegistrationData> verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws VerificationException {
         return this.webAuthnRegistrationAsyncManager.verify(registrationData, registrationParameters);
     }
 
+    public @NotNull CompletionStage<AuthenticationData> parseAuthenticationResponseJSON(@NotNull String authenticationResponseJSON) throws DataConversionException {
+        return this.webAuthnAuthenticationAsyncManager.parse(authenticationResponseJSON);
+    }
+
     @SuppressWarnings("squid:S1130")
     public @NotNull CompletionStage<AuthenticationData> parse(@NotNull AuthenticationRequest authenticationRequest) throws DataConversionException {
         return this.webAuthnAuthenticationAsyncManager.parse(authenticationRequest);
+    }
+
+    public @NotNull CompletionStage<AuthenticationData> verifyAuthenticationResponseJSON(@NotNull String authenticationResponseJSON, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
+        return this.webAuthnAuthenticationAsyncManager.verify(authenticationResponseJSON, authenticationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
