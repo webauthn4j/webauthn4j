@@ -86,8 +86,8 @@ class AuthenticationResponseJSONVerificationTest {
                 );
 
         assertThatCode(()->target.parseAuthenticationResponseJSON(authenticationResponseJSON)).doesNotThrowAnyException();
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = target.parseAuthenticationResponseJSON(authenticationResponseJSON);
-        assertThatCode(()->target.verifyPublicKeyCredential(publicKeyCredential, authenticationParameters)).doesNotThrowAnyException();
+        AuthenticationData authenticationData = target.parseAuthenticationResponseJSON(authenticationResponseJSON);
+        assertThatCode(()->target.verify(authenticationData, authenticationParameters)).doesNotThrowAnyException();
     }
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {

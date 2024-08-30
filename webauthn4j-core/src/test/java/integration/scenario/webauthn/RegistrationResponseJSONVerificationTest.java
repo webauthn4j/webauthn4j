@@ -107,14 +107,11 @@ class RegistrationResponseJSONVerificationTest {
                 false
         );
 
-        //parseRegistrationResponseJSON
         assertThatCode(()->target.parseRegistrationResponseJSON(registrationResponseJSON)).doesNotThrowAnyException();
 
-        //verifyPublicKeyCredential
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = target.parseRegistrationResponseJSON(registrationResponseJSON);
-        assertThatCode(()->target.verifyPublicKeyCredential(publicKeyCredential, registrationParameters)).doesNotThrowAnyException();
+        RegistrationData registrationData = target.parseRegistrationResponseJSON(registrationResponseJSON);
+        assertThatCode(()->target.verify(registrationData, registrationParameters)).doesNotThrowAnyException();
 
-        //verifyRegistrationResponseJSON
         assertThatCode(()->target.verifyRegistrationResponseJSON(registrationResponseJSON, registrationParameters)).doesNotThrowAnyException();
     }
 }
