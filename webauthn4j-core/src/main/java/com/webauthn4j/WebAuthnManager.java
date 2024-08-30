@@ -19,8 +19,6 @@ package com.webauthn4j;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.verifier.AuthenticationDataVerifier;
 import com.webauthn4j.verifier.CustomAuthenticationVerifier;
 import com.webauthn4j.verifier.CustomRegistrationVerifier;
@@ -148,7 +146,7 @@ public class WebAuthnManager {
         );
     }
 
-    public @NotNull PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> parseRegistrationResponseJSON(@NotNull String registrationResponseJSON){
+    public @NotNull RegistrationData parseRegistrationResponseJSON(@NotNull String registrationResponseJSON){
         return this.webAuthnRegistrationManager.parse(registrationResponseJSON);
     }
 
@@ -157,7 +155,7 @@ public class WebAuthnManager {
         return this.webAuthnRegistrationManager.parse(registrationRequest);
     }
 
-    public @NotNull PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> verifyRegistrationResponseJSON(@NotNull String registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {
+    public @NotNull RegistrationData verifyRegistrationResponseJSON(@NotNull String registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {
         return this.webAuthnRegistrationManager.verify(registrationResponseJSON, registrationParameters);
     }
 
@@ -174,10 +172,6 @@ public class WebAuthnManager {
         return verify(registrationRequest, registrationParameters);
     }
 
-    public @NotNull PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> verifyPublicKeyCredential(@NotNull PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential, @NotNull RegistrationParameters registrationParameters) throws VerificationException {
-        return this.webAuthnRegistrationManager.verify(publicKeyCredential, registrationParameters);
-    }
-
     @SuppressWarnings("squid:S1130")
     public @NotNull RegistrationData verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws VerificationException {
         return this.webAuthnRegistrationManager.verify(registrationData, registrationParameters);
@@ -191,7 +185,7 @@ public class WebAuthnManager {
         return verify(registrationData, registrationParameters);
     }
 
-    public @NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> parseAuthenticationResponseJSON(@NotNull String authenticationResponseJSON) throws DataConversionException {
+    public @NotNull AuthenticationData parseAuthenticationResponseJSON(@NotNull String authenticationResponseJSON) throws DataConversionException {
         return this.webAuthnAuthenticationManager.parse(authenticationResponseJSON);
     }
 
@@ -200,17 +194,13 @@ public class WebAuthnManager {
         return this.webAuthnAuthenticationManager.parse(authenticationRequest);
     }
 
-    public @NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> verifyAuthenticationResponseJSON(@NotNull String authenticationResponseJSON, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
+    public @NotNull AuthenticationData verifyAuthenticationResponseJSON(@NotNull String authenticationResponseJSON, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
         return this.webAuthnAuthenticationManager.verify(authenticationResponseJSON, authenticationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
     public @NotNull AuthenticationData verify(@NotNull AuthenticationRequest authenticationRequest, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
         return this.webAuthnAuthenticationManager.verify(authenticationRequest, authenticationParameters);
-    }
-
-    public @NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> verifyPublicKeyCredential(@NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
-        return this.webAuthnAuthenticationManager.verify(publicKeyCredential, authenticationParameters);
     }
 
     /**

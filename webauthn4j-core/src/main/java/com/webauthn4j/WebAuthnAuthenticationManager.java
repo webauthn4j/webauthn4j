@@ -79,11 +79,36 @@ public class WebAuthnAuthenticationManager {
     }
 
 
-    public PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> parse(String authenticationResponseJSON) {
-        return objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<>() {});
+    @SuppressWarnings("java:S2583")
+    public AuthenticationData parse(String authenticationResponseJSON) {
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<>() {});
+
+        byte[] credentialId = publicKeyCredential.getRawId();
+        byte[] userHandle = publicKeyCredential.getResponse().getUserHandle();
+
+        byte[] clientDataBytes = publicKeyCredential.getResponse().getClientDataJSON();
+        CollectedClientData collectedClientData = clientDataBytes == null ? null : collectedClientDataConverter.convert(clientDataBytes);
+
+        byte[] authenticatorDataBytes = publicKeyCredential.getResponse().getAuthenticatorData();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataBytes == null ? null : authenticatorDataConverter.convert(authenticatorDataBytes);
+
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = publicKeyCredential.getClientExtensionResults();
+
+        byte[] signature = publicKeyCredential.getResponse().getSignature();
+
+        return new AuthenticationData(
+                credentialId,
+                userHandle,
+                authenticatorData,
+                authenticatorDataBytes,
+                collectedClientData,
+                clientDataBytes,
+                clientExtensions,
+                signature
+        );
     }
 
-    @SuppressWarnings("squid:S1130")
+    @SuppressWarnings({"squid:S1130", "java:S2583"})
     public @NotNull AuthenticationData parse(@NotNull AuthenticationRequest authenticationRequest) throws DataConversionException {
         AssertUtil.notNull(authenticationRequest, "authenticationRequest must not be null");
 
@@ -114,44 +139,11 @@ public class WebAuthnAuthenticationManager {
 
     }
 
-    public @NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> verify(
+    public @NotNull AuthenticationData verify(
             @NotNull String authenticationResponseJSON,
             @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = parse(authenticationResponseJSON);
-        verify(publicKeyCredential, authenticationParameters);
-        return publicKeyCredential;
-    }
-
-    @SuppressWarnings("java:S2583")
-    public @NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> verify(
-            @NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential,
-            @NotNull AuthenticationParameters authenticationParameters) throws VerificationException {
-
-        byte[] credentialId = publicKeyCredential.getRawId();
-        byte[] userHandle = publicKeyCredential.getResponse().getUserHandle();
-
-        byte[] clientDataBytes = publicKeyCredential.getResponse().getClientDataJSON();
-        CollectedClientData collectedClientData = clientDataBytes == null ? null : collectedClientDataConverter.convert(clientDataBytes);
-
-        byte[] authenticatorDataBytes = publicKeyCredential.getResponse().getAuthenticatorData();
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataBytes == null ? null : authenticatorDataConverter.convert(authenticatorDataBytes);
-
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = publicKeyCredential.getClientExtensionResults();
-
-        byte[] signature = publicKeyCredential.getResponse().getSignature();
-
-        AuthenticationData authenticationData = new AuthenticationData(
-                credentialId,
-                userHandle,
-                authenticatorData,
-                authenticatorDataBytes,
-                collectedClientData,
-                clientDataBytes,
-                clientExtensions,
-                signature
-        );
-        authenticationDataVerifier.verify(authenticationData, authenticationParameters);
-        return publicKeyCredential;
+        AuthenticationData authenticationData = parse(authenticationResponseJSON);
+        return verify(authenticationData, authenticationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
