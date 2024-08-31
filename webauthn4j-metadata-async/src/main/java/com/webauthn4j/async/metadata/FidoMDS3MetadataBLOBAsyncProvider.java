@@ -201,7 +201,7 @@ public class FidoMDS3MetadataBLOBAsyncProvider extends CachingMetadataBLOBAsyncP
                 URL url = new URL(crlDistributionPoint);
                 if(url.getProtocol().equals("http") || url.getProtocol().equals("https")) {
                     return httpClient.fetch(crlDistributionPoint).thenApply( response -> {
-                        if(response.getStatusCode() >= 300){
+                        if(response.getStatusCode() >= 400){
                             throw new CertPathCheckException(String.format("Failed to fetch CRL. HTTP Status code: %d", response.getStatusCode()));
                         }
                         CertificateFactory certificateFactory = CertificateUtil.createCertificateFactory();
