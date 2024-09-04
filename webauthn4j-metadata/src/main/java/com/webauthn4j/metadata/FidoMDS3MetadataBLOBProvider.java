@@ -35,7 +35,7 @@ import java.util.Set;
  */
 public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
-    private static final String DEFAULT_BLOB_ENDPOINT = "https://mds.fidoalliance.org/";
+    public static final String DEFAULT_BLOB_ENDPOINT = "https://mds.fidoalliance.org/";
 
     private final MetadataBLOBFactory metadataBLOBFactory;
     private final String blobEndpoint;
@@ -57,7 +57,7 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
     }
 
     public FidoMDS3MetadataBLOBProvider(@NotNull ObjectConverter objectConverter, @NotNull String blobEndpoint, @NotNull X509Certificate trustAnchorCertificate) {
-        this(objectConverter, blobEndpoint, new SimpleHttpClient(), Collections.singleton(new TrustAnchor(trustAnchorCertificate, null)));
+        this(objectConverter, blobEndpoint, Collections.singleton(new TrustAnchor(trustAnchorCertificate, null)));
     }
 
     public FidoMDS3MetadataBLOBProvider(@NotNull ObjectConverter objectConverter, @NotNull Set<TrustAnchor> trustAnchors) {
@@ -65,7 +65,7 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
     }
 
     public FidoMDS3MetadataBLOBProvider(@NotNull ObjectConverter objectConverter, @NotNull X509Certificate trustAnchorCertificate) {
-        this(objectConverter, DEFAULT_BLOB_ENDPOINT, Collections.singleton(new TrustAnchor(trustAnchorCertificate, null)));
+        this(objectConverter, Collections.singleton(new TrustAnchor(trustAnchorCertificate, null)));
     }
 
     @Override
@@ -85,7 +85,7 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
             certPathChecker.check(new CertPathCheckContext(certPath, trustAnchors, revocationCheckEnabled));
         }
         catch (CertPathCheckException e){
-            throw new MDSException("MetadataBLOB certificate chain validation failed");
+            throw new MDSException("MetadataBLOB certificate chain validation failed", e);
         }
 
     }
