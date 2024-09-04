@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -47,6 +48,14 @@ class ServerPropertyTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new ServerProperty(webApp1Origin, null, null, null)
         );
+    }
+
+    @Test
+    void constructor_without_tokenBindingId() {
+        Challenge challenge = new DefaultChallenge();
+        //When
+        assertThatCode(() -> new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin)), rpId, challenge)).doesNotThrowAnyException();
+        assertThatCode(() -> new ServerProperty(webApp1Origin, rpId, challenge)).doesNotThrowAnyException();
     }
 
     @Test
