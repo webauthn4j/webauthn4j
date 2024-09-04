@@ -96,11 +96,14 @@ Parse and Validation on WebAuthn registration
 If your would like to verify Apple App Attest, please see the reference.
 
 ```java 
-// Client properties
-byte[] attestationObject = null /* set attestationObject */;
-byte[] clientDataJSON = null /* set clientDataJSON */;
-String clientExtensionJSON = null;  /* set clientExtensionJSON */
-Set<String> transports = null /* set transports */;
+String registrationResponseJSON = "<registrationResponseJSON>"; /* set registrationResponseJSON received from frontend */
+RegistrationData registrationData;
+try {
+    registrationData = webAuthnManager.parseRegistrationResponseJSON(registrationResponseJSON);
+} catch (DataConversionException e) {
+    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
+    throw e;
+}
 
 // Server properties
 Origin origin = null /* set origin */;
@@ -114,19 +117,11 @@ List<PublicKeyCredentialParameters> pubKeyCredParams = null;
 boolean userVerificationRequired = false;
 boolean userPresenceRequired = true;
 
-RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
 RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, pubKeyCredParams, userVerificationRequired, userPresenceRequired);
-RegistrationData registrationData;
-try {
-    registrationData = webAuthnManager.parse(registrationRequest);
-} catch (DataConversionException e) {
-    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
-    throw e;
-}
 try {
     webAuthnManager.verify(registrationData, registrationParameters);
-} catch (ValidationException e) {
-    // If you would like to handle WebAuthn data validation error, please catch ValidationException
+} catch (VerificationException e) {
+    // If you would like to handle WebAuthn data verification error, please catch VerificationException
     throw e;
 }
 
@@ -143,13 +138,15 @@ save(credentialRecord); // please persist credentialRecord in your manner
 
 Parse and Validation on authentication
 ```java 
-// Client properties
-byte[] credentialId = null /* set credentialId */;
-byte[] userHandle = null /* set userHandle */;
-byte[] authenticatorData = null /* set authenticatorData */;
-byte[] clientDataJSON = null /* set clientDataJSON */;
-String clientExtensionJSON = null /* set clientExtensionJSON */;
-byte[] signature = null /* set signature */;
+String authenticationResponseJSON = "<authenticationResponseJSON>"; /* set authenticationResponseJSON received from frontend */
+
+AuthenticationData authenticationData;
+try {
+    authenticationData = webAuthnManager.parseAuthenticationResponseJSON(authenticationResponseJSON);
+} catch (DataConversionException e) {
+    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
+    throw e;
+}
 
 // Server properties
 Origin origin = null /* set origin */;
@@ -163,17 +160,7 @@ List<byte[]> allowCredentials = null;
 boolean userVerificationRequired = true;
 boolean userPresenceRequired = true;
 
-CredentialRecord credentialRecord = load(credentialId); // please load authenticator object persisted in the registration process in your manner
-
-AuthenticationRequest authenticationRequest =
-        new AuthenticationRequest(
-                credentialId,
-                userHandle,
-                authenticatorData,
-                clientDataJSON,
-                clientExtensionJSON,
-                signature
-        );
+CredentialRecord credentialRecord = load(authenticationData.getCredentialId()); // please load authenticator object persisted in the registration process in your manner
 AuthenticationParameters authenticationParameters =
         new AuthenticationParameters(
                 serverProperty,
@@ -183,24 +170,14 @@ AuthenticationParameters authenticationParameters =
                 userPresenceRequired
         );
 
-AuthenticationData authenticationData;
-try {
-    authenticationData = webAuthnManager.parse(authenticationRequest);
-} catch (DataConversionException e) {
-    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
-    throw e;
-}
 try {
     webAuthnManager.verify(authenticationData, authenticationParameters);
-} catch (ValidationException e) {
+} catch (VerificationException e) {
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
     throw e;
 }
 // please update the counter of the authenticator record
-updateCounter(
-        authenticationData.getCredentialId(),
-        authenticationData.getAuthenticatorData().getSignCount()
-);
+updateCounter(authenticationData.getCredentialId(), authenticationData.getAuthenticatorData().getSignCount());
 ```
 
 ## Sample application
