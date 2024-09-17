@@ -20,8 +20,6 @@ import com.webauthn4j.async.verifier.attestation.trustworthiness.self.SelfAttest
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 
