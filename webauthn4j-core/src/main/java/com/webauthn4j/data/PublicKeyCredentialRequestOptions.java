@@ -46,6 +46,7 @@ public class PublicKeyCredentialRequestOptions {
     private final String rpId;
     private final List<PublicKeyCredentialDescriptor> allowCredentials;
     private final UserVerificationRequirement userVerification;
+    private final List<PublicKeyCredentialHints> hints;
     private final AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions;
 
     @JsonCreator
@@ -54,6 +55,7 @@ public class PublicKeyCredentialRequestOptions {
                                              @Nullable @JsonProperty("rpId") String rpId,
                                              @Nullable @JsonProperty("allowCredentials") List<PublicKeyCredentialDescriptor> allowCredentials,
                                              @Nullable @JsonProperty("userVerification") UserVerificationRequirement userVerification,
+                                             @Nullable @JsonProperty("hints") List<PublicKeyCredentialHints> hints,
                                              @Nullable @JsonProperty("extensions") AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
         AssertUtil.notNull(challenge, "challenge must not be null");
         this.challenge = challenge;
@@ -61,7 +63,17 @@ public class PublicKeyCredentialRequestOptions {
         this.rpId = rpId;
         this.allowCredentials = CollectionUtil.unmodifiableList(allowCredentials);
         this.userVerification = userVerification;
+        this.hints = CollectionUtil.unmodifiableList(hints);
         this.extensions = extensions;
+    }
+
+    public PublicKeyCredentialRequestOptions(@NotNull @JsonProperty("challenge") Challenge challenge,
+                                             @Nullable @JsonProperty("timeout") Long timeout,
+                                             @Nullable @JsonProperty("rpId") String rpId,
+                                             @Nullable @JsonProperty("allowCredentials") List<PublicKeyCredentialDescriptor> allowCredentials,
+                                             @Nullable @JsonProperty("userVerification") UserVerificationRequirement userVerification,
+                                             @Nullable @JsonProperty("extensions") AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
+        this(challenge, timeout, rpId, allowCredentials, userVerification, null, extensions);
     }
 
     public @NotNull Challenge getChallenge() {
@@ -84,6 +96,10 @@ public class PublicKeyCredentialRequestOptions {
         return userVerification;
     }
 
+    public @Nullable List<PublicKeyCredentialHints> getHints() {
+        return hints;
+    }
+
     public @Nullable AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> getExtensions() {
         return extensions;
     }
@@ -93,12 +109,12 @@ public class PublicKeyCredentialRequestOptions {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredentialRequestOptions that = (PublicKeyCredentialRequestOptions) o;
-        return Objects.equals(challenge, that.challenge) && Objects.equals(timeout, that.timeout) && Objects.equals(rpId, that.rpId) && Objects.equals(allowCredentials, that.allowCredentials) && Objects.equals(userVerification, that.userVerification) && Objects.equals(extensions, that.extensions);
+        return Objects.equals(challenge, that.challenge) && Objects.equals(timeout, that.timeout) && Objects.equals(rpId, that.rpId) && Objects.equals(allowCredentials, that.allowCredentials) && Objects.equals(userVerification, that.userVerification) && Objects.equals(hints, that.hints) && Objects.equals(extensions, that.extensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(challenge, timeout, rpId, allowCredentials, userVerification, extensions);
+        return Objects.hash(challenge, timeout, rpId, allowCredentials, userVerification, hints, extensions);
     }
 
     @Override
@@ -109,6 +125,7 @@ public class PublicKeyCredentialRequestOptions {
                 ", rpId=" + rpId +
                 ", allowCredentials=" + allowCredentials +
                 ", userVerification=" + userVerification +
+                ", hints=" + hints +
                 ", extensions=" + extensions +
                 ')';
     }
