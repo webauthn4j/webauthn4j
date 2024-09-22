@@ -38,6 +38,12 @@ dependencies {
 
 }
 
+tasks.named('jar') {
+    manifest {
+        attributes('Automatic-Module-Name': 'com.webauthn4j.util')
+    }
+}
+
 sonarqube {
     skipProject = true
 }
