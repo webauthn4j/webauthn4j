@@ -126,23 +126,31 @@ FIDO CTAP2セキュリティキーを独自アプリケーションで認証に�
 
 WebAuthn4Jは、以下の4つのModuleから構成されます。
 
-==== Core webauthn4j-core.jar
+==== Core: webauthn4j-core.jar
 
 WebAuthn Attestation/Assertionの検証機能およびコア機能を提供します。
 
-==== Core webauthn4j-device-check.jar
+==== Metadata: webauthn4j-metadata.jar
+
+FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能を提供します。
+
+==== Core-Async: webauthn4j-core-async.jar
+
+WebAuthn Attestation/Assertionの検証機能およびコア機能の非同期版を提供します。現時点では、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
+
+==== Metadata-Async: webauthn4j-metadata-async.jar
+
+FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能の非同期バージョンを提供します。 現時点では、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
+
+==== Device-Check: webauthn4j-device-check.jar
 
 Apple App Attest Attestation/Assertionの検証機能を提供します。
 
-==== Metadata webauthn4j-metadata.jar
-
-FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能を提供します。 依拠しているFIDO Metadata Statements仕様がドラフトの為、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
-
-==== Test webauthn4j-test.jar
+==== Test: webauthn4j-test.jar
 
 WebAuthn4Jのテストを行うための内部ライブラリです。含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに 破壊的変更が入る場合があります。
 
-==== Util webauthn4j-util.jar
+==== Util: webauthn4j-util.jar
 
 WebAuthn4Jライブラリで使用されるユーティリティクラスをまとめたライブラリです。
 
