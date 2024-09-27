@@ -30,8 +30,8 @@ buildscript {
 
         // for test library dependencies
         mockitoVersion = "5.13.0"
-        springBootVersion = "2.7.18"
-        logbackVersion = "1.5.7"
+        springBootBomVersion = "3.3.4"
+        logbackVersion = "1.5.8"
     }
 
     repositories {
@@ -115,7 +115,7 @@ subprojects {
             implementation("org.bouncycastle:bcpkix-jdk15on:$bouncyCastleVersion")
         }
 
-        testImplementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        testImplementation platform("org.springframework.boot:spring-boot-dependencies:${springBootBomVersion}")
     }
 
     java {

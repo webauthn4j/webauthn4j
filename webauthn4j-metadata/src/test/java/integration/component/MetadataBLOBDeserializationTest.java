@@ -19,10 +19,8 @@ package integration.component;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.metadata.data.MetadataBLOBPayload;
+import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,22 +35,21 @@ class MetadataBLOBDeserializationTest {
 
     @Test
     void test_with_mds3_metadata_as_of_202111(){
-        JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlobAsString("/integration/component/blob.jwt"), MetadataBLOBPayload.class);
+        JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlobAsString("integration/component/blob.jwt"), MetadataBLOBPayload.class);
         assertThat(metadataBLOB).isNotNull();
     }
 
     @Test
     void test_with_test_data(){
-        JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlobAsString("/integration/component/test-blob.jwt"), MetadataBLOBPayload.class);
+        JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlobAsString("integration/component/test-blob.jwt"), MetadataBLOBPayload.class);
         assertThat(metadataBLOB).isNotNull();
     }
 
-    private String loadBlobAsString(String resourcePath){
-        Resource blobResource = new DefaultResourceLoader().getResource(resourcePath);
-        try {
-            InputStream inputStream = blobResource.getInputStream();
-            return StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-        } catch (IOException e) {
+    private String loadBlobAsString(String classPath){
+        try(InputStream inputStream = MetadataBLOBDeserializationTest.class.getClassLoader().getResourceAsStream(classPath)){
+            byte[] data = inputStream.readAllBytes();
+            return new String(data, StandardCharsets.UTF_8);
+        }catch (IOException e){
             throw new UncheckedIOException(e);
         }
     }

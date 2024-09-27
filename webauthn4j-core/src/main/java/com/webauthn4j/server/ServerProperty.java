@@ -68,6 +68,24 @@ public class ServerProperty extends CoreServerProperty {
         this.tokenBindingId = tokenBindingId;
     }
 
+    /**
+     * @param origin         origin
+     * @param rpId           rpId
+     * @param challenge      challenge
+     */
+    public ServerProperty(@NotNull Origin origin, @NotNull String rpId, @Nullable Challenge challenge) {
+        this(origin, rpId, challenge, null);
+    }
+
+    /**
+     * @param origins        origins
+     * @param rpId           rpId
+     * @param challenge      challenge
+     */
+    public ServerProperty(@NotNull Set<Origin> origins, @NotNull String rpId, @Nullable Challenge challenge) {
+        this(origins, rpId, challenge, null);
+    }
+
     // ~ Methods
     // ========================================================================================================
 

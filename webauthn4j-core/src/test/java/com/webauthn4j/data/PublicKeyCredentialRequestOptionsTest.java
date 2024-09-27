@@ -19,6 +19,7 @@ package com.webauthn4j.data;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.CollectionUtil;
+import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -49,6 +50,7 @@ class PublicKeyCredentialRequestOptionsTest {
                 rpId,
                 allowCredentials,
                 UserVerificationRequirement.DISCOURAGED,
+                Collections.singletonList(PublicKeyCredentialHints.HYBRID),
                 null
         );
 
@@ -58,9 +60,36 @@ class PublicKeyCredentialRequestOptionsTest {
                 () -> assertThat(credentialRequestOptions.getRpId()).isEqualTo(rpId),
                 () -> assertThat(credentialRequestOptions.getAllowCredentials()).isEqualTo(allowCredentials),
                 () -> assertThat(credentialRequestOptions.getUserVerification()).isEqualTo(UserVerificationRequirement.DISCOURAGED),
+                () -> assertThat(credentialRequestOptions.getHints()).containsExactly(PublicKeyCredentialHints.HYBRID),
                 () -> assertThat(credentialRequestOptions.getExtensions()).isNull()
         );
     }
+
+    @Test
+    void toString_test(){
+        String rpId = "example.com";
+        long timeout = 0;
+        Challenge challenge = new DefaultChallenge(HexUtil.decode("F23EA2BB2171405F8E13D60358B2D683"));
+        byte[] credentialId = new byte[32];
+        List<PublicKeyCredentialDescriptor> allowCredentials = Collections.singletonList(
+                new PublicKeyCredentialDescriptor(
+                        PublicKeyCredentialType.PUBLIC_KEY,
+                        credentialId,
+                        CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                )
+        );
+        PublicKeyCredentialRequestOptions target = new PublicKeyCredentialRequestOptions(
+                challenge,
+                timeout,
+                rpId,
+                allowCredentials,
+                UserVerificationRequirement.REQUIRED,
+                Collections.singletonList(PublicKeyCredentialHints.CLIENT_DEVICE),
+                null
+        );
+        assertThat(target).hasToString("PublicKeyCredentialRequestOptions(challenge=F23EA2BB2171405F8E13D60358B2D683, timeout=0, rpId=example.com, allowCredentials=[PublicKeyCredentialDescriptor(type=public-key, id=0000000000000000000000000000000000000000000000000000000000000000, transports=[usb, nfc, ble])], userVerification=required, hints=[client-device], extensions=null)");
+    }
+
 
     @Test
     void equals_hashCode_test() {
@@ -82,6 +111,7 @@ class PublicKeyCredentialRequestOptionsTest {
                 rpId,
                 allowCredentials,
                 UserVerificationRequirement.DISCOURAGED,
+                Collections.singletonList(PublicKeyCredentialHints.CLIENT_DEVICE),
                 null
         );
         PublicKeyCredentialRequestOptions instanceB = new PublicKeyCredentialRequestOptions(
@@ -90,6 +120,7 @@ class PublicKeyCredentialRequestOptionsTest {
                 rpId,
                 allowCredentials,
                 UserVerificationRequirement.DISCOURAGED,
+                Collections.singletonList(PublicKeyCredentialHints.CLIENT_DEVICE),
                 null
         );
 

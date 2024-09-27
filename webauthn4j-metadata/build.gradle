@@ -30,8 +30,6 @@ dependencies {
     //Test
     testImplementation project(':webauthn4j-test')
 
-    testImplementation("org.springframework:spring-core")
-
     testImplementation('ch.qos.logback:logback-classic')
     testImplementation('org.projectlombok:lombok')
     testImplementation('org.mockito:mockito-core')
