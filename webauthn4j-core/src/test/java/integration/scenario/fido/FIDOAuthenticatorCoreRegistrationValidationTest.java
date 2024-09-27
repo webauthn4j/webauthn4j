@@ -103,7 +103,7 @@ class FIDOAuthenticatorCoreRegistrationValidationTest {
         );
 
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
+        AuthenticatorAttestationResponse registrationRequest = credential.getResponse();
         AttestationObject attestationObject = attestationObjectConverter.convert(registrationRequest.getAttestationObject());
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);

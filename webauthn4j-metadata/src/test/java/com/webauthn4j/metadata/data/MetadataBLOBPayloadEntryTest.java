@@ -18,6 +18,9 @@ package com.webauthn4j.metadata.data;
 
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.metadata.data.statement.AuthenticatorGetInfo;
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import com.webauthn4j.metadata.data.statement.VerificationMethodDescriptor;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,6 +29,7 @@ class MetadataBLOBPayloadEntryTest {
 
     private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
+    @SuppressWarnings({"java:S5976", "java:S5961"})
     @Test
     void test(){
         MetadataBLOBPayloadEntry metadataBLOBPayloadEntry = createMetadataBLOBPayloadEntry();
@@ -34,6 +38,63 @@ class MetadataBLOBPayloadEntryTest {
         assertThat(metadataBLOBPayloadEntry.getAaguid()).isNotNull();
         assertThat(metadataBLOBPayloadEntry.getAttestationCertificateKeyIdentifiers()).isNull();
         assertThat(metadataBLOBPayloadEntry.getMetadataStatement()).isNotNull();
+
+        MetadataStatement metadataStatement = metadataBLOBPayloadEntry.getMetadataStatement();
+        assertThat(metadataStatement.getLegalHeader()).isNotNull();
+        assertThat(metadataStatement.getAaid()).isNull();
+        assertThat(metadataStatement.getAaguid()).isNotNull();
+        assertThat(metadataStatement.getAttestationCertificateKeyIdentifiers()).isNull();
+        assertThat(metadataStatement.getDescription()).isNotNull();
+        assertThat(metadataStatement.getAlternativeDescriptions()).isNotNull();
+        assertThat(metadataStatement.getAuthenticatorVersion()).isNotNull();
+        assertThat(metadataStatement.getProtocolFamily()).isNotNull();
+        assertThat(metadataStatement.getSchema()).isNotNull();
+        assertThat(metadataStatement.getUpv()).isNotNull();
+        assertThat(metadataStatement.getAuthenticationAlgorithms()).isNotNull();
+        assertThat(metadataStatement.getPublicKeyAlgAndEncodings()).isNotNull();
+        assertThat(metadataStatement.getAttestationTypes()).isNotNull();
+        assertThat(metadataStatement.getUserVerificationDetails()).isNotNull();
+
+        VerificationMethodDescriptor verificationMethodDescriptor = metadataStatement.getUserVerificationDetails().get(0).get(0);
+        assertThat(verificationMethodDescriptor.getUserVerificationMethod()).isNotNull();
+        assertThat(verificationMethodDescriptor.getBaDesc()).isNull();
+        assertThat(verificationMethodDescriptor.getCaDesc()).isNull();
+        assertThat(verificationMethodDescriptor.getPaDesc()).isNull();
+
+
+        assertThat(metadataStatement.getKeyProtection()).isNotNull();
+        assertThat(metadataStatement.getKeyRestricted()).isNull();
+        assertThat(metadataStatement.getFreshUserVerificationRequired()).isNull();
+        assertThat(metadataStatement.getMatcherProtection()).isNotNull();
+        assertThat(metadataStatement.getCryptoStrength()).isNotNull();
+        assertThat(metadataStatement.getAttachmentHint()).isNotNull();
+        assertThat(metadataStatement.getTcDisplay()).isNotNull();
+        assertThat(metadataStatement.getTcDisplayContentType()).isNull();
+        assertThat(metadataStatement.getTcDisplayPNGCharacteristics()).isNull();
+        assertThat(metadataStatement.getAttestationRootCertificates()).isNotNull();
+        assertThat(metadataStatement.getEcdaaTrustAnchors()).isNull();
+        assertThat(metadataStatement.getIcon()).isNotNull();
+        assertThat(metadataStatement.getSupportedExtensions()).isNotNull();
+        assertThat(metadataStatement.getAuthenticatorGetInfo()).isNotNull();
+
+        AuthenticatorGetInfo authenticatorGetInfo = metadataStatement.getAuthenticatorGetInfo();
+        assertThat(authenticatorGetInfo.getVersions()).isNotNull();
+        assertThat(authenticatorGetInfo.getExtensions()).isNotNull();
+        assertThat(authenticatorGetInfo.getAaguid()).isNotNull();
+        assertThat(authenticatorGetInfo.getOptions()).isNotNull();
+
+        AuthenticatorGetInfo.Options options = authenticatorGetInfo.getOptions();
+        assertThat(options.getPlat()).isNotNull();
+        assertThat(options.getRk()).isNotNull();
+        assertThat(options.getClientPIN()).isNotNull();
+        assertThat(options.getUp()).isNotNull();
+        assertThat(options.getUv()).isNotNull();
+        assertThat(options.getUvToken()).isNotNull();
+        assertThat(options.getConfig()).isNotNull();
+
+        assertThat(authenticatorGetInfo.getMaxMsgSize()).isNotNull();
+        assertThat(authenticatorGetInfo.getPinUvAuthProtocols()).isNotNull();
+
         assertThat(metadataBLOBPayloadEntry.getBiometricStatusReports()).isNull();
         assertThat(metadataBLOBPayloadEntry.getStatusReports()).isNotEmpty();
         assertThat(metadataBLOBPayloadEntry.getTimeOfLastStatusChange()).isEqualTo("2019-01-04");
@@ -46,8 +107,9 @@ class MetadataBLOBPayloadEntryTest {
         MetadataBLOBPayloadEntry instanceA = createMetadataBLOBPayloadEntry();
         MetadataBLOBPayloadEntry instanceB = createMetadataBLOBPayloadEntry();
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
     }
 
 

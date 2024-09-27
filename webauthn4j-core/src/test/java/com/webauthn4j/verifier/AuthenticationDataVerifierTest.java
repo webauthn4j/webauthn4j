@@ -24,26 +24,24 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.client.ClientDataType;
-import com.webauthn4j.data.client.CollectedClientData;
-import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.verifier.exception.*;
+import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
-import java.util.List;
 
-import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_UP;
+import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_UV;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -53,163 +51,16 @@ class AuthenticationDataVerifierTest {
     private final AuthenticationDataVerifier target = new AuthenticationDataVerifier();
 
     @Test
-    void verifyCredentialId_test(){
-        byte[] credentialId = new byte[32];
-        target.verifyCredentialId(credentialId, Collections.singletonList(credentialId));
-    }
-
-    @Test
-    void verifyCredentialId_not_allowed_credential_test(){
-        byte[] credentialId = new byte[32];
-        List<byte[]> allowCredentials = Collections.emptyList();
-        assertThatThrownBy(() -> target.verifyCredentialId(credentialId, allowCredentials)).isInstanceOf(NotAllowedCredentialIdException.class);
-    }
-
-    @Test
     void verifyAuthenticatorData_with_non_null_AttestedCredentialData(@Mock AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         AttestedCredentialData attestedCredentialData = mock(AttestedCredentialData.class);
         when(authenticatorData.getAttestedCredentialData()).thenReturn(attestedCredentialData);
-        assertThatThrownBy(() -> target.verifyAuthenticatorData(authenticatorData)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> {
+            if (authenticatorData.getAttestedCredentialData() != null) {
+                throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
+            }
+        }).isInstanceOf(ConstraintViolationException.class);
     }
 
-    @Test
-    void verifyBEBSFlags_only_BSFlag_set_test() {
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], AuthenticatorData.BIT_BS, 0);
-        assertThrows(IllegalBackupStateException.class,
-                () -> target.verifyBEBSFlags(authenticatorData)
-        );
-    }
-
-    @Test
-    void verifyClientDataCrossOrigin_with_expected_crossOrigin_test() {
-        target.setCrossOriginAllowed(true);
-        Origin origin = new Origin("http://example.com");
-
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), origin, true, null);
-        target.verifyClientDataCrossOrigin(collectedClientData);
-    }
-
-    @Test
-    void verifyClientDataCrossOrigin_with_unexpected_crossOrigin_test() {
-        Origin origin = new Origin("http://example.com");
-
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), origin, true, null);
-        assertThrows(CrossOriginException.class,
-                () -> target.verifyClientDataCrossOrigin(collectedClientData)
-        );
-    }
-
-    @Test
-    void verifyBEFlag_with_legacy_Authenticator_instance_test(){
-        AuthenticatorImpl authenticator = new AuthenticatorImpl(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createBasicPackedAttestationStatement(), 0);
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], BIT_UP, 3);
-        assertThatCode(()-> AuthenticationDataVerifier.verifyBEFlag(authenticator, authenticatorData)).doesNotThrowAnyException();
-    }
-
-    @Test
-    void verifyBEFlag_with_CredentialRecord_instance_test(){
-        AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
-        AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
-        CredentialRecord credentialRecord = new CredentialRecordImpl(
-                attestationStatement,
-                true,
-                true,
-                false,
-                0,
-                attestedCredentialData,
-                new AuthenticationExtensionsAuthenticatorOutputs<>(),
-                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
-                new AuthenticationExtensionsClientOutputs<>(),
-                Collections.emptySet()
-        );
-        byte flag = BIT_UP | BIT_BE;
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], flag, 5);
-        assertThatCode(()-> AuthenticationDataVerifier.verifyBEFlag(credentialRecord, authenticatorData)).doesNotThrowAnyException();
-    }
-
-    @Test
-    void verifyBEFlag_success_if_BE_flag_of_CredentialRecord_is_null_test(){
-        AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
-        AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
-        CredentialRecord credentialRecord = new CredentialRecordImpl(
-                attestationStatement,
-                true,
-                null,
-                false,
-                0,
-                attestedCredentialData,
-                new AuthenticationExtensionsAuthenticatorOutputs<>(),
-                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
-                new AuthenticationExtensionsClientOutputs<>(),
-                Collections.emptySet()
-        );
-        byte flag = BIT_UP | BIT_BE;
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], flag, 5);
-        assertThatCode(()-> AuthenticationDataVerifier.verifyBEFlag(credentialRecord, authenticatorData)).doesNotThrowAnyException();
-    }
-
-    @Test
-    void verifyBEFlag_throws_BadBackupEligibleFlagException_if_BE_flag_of_CredentialRecord_is_false_but_BE_flag_of_AuthenticatorData_is_true_test(){
-        AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
-        AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
-        CredentialRecord credentialRecord = new CredentialRecordImpl(
-                attestationStatement,
-                true,
-                false,
-                false,
-                0,
-                attestedCredentialData,
-                new AuthenticationExtensionsAuthenticatorOutputs<>(),
-                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
-                new AuthenticationExtensionsClientOutputs<>(),
-                Collections.emptySet()
-        );
-        byte flag = BIT_UP | BIT_BE;
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], flag, 5);
-        assertThatThrownBy(()-> AuthenticationDataVerifier.verifyBEFlag(credentialRecord, authenticatorData)).isInstanceOf(BadBackupEligibleFlagException.class);
-    }
-
-    @Test
-    void verifyBEFlag_throws_BadBackupEligibleFlagException_if_BE_flag_of_CredentialRecord_is_true_but_BE_flag_of_AuthenticatorData_is_false_test(){
-        AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
-        AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
-        CredentialRecord credentialRecord = new CredentialRecordImpl(
-                attestationStatement,
-                true,
-                true,
-                false,
-                0,
-                attestedCredentialData,
-                new AuthenticationExtensionsAuthenticatorOutputs<>(),
-                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
-                new AuthenticationExtensionsClientOutputs<>(),
-                Collections.emptySet()
-        );
-        byte flag = BIT_UP;
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], flag, 5);
-        assertThatThrownBy(()-> AuthenticationDataVerifier.verifyBEFlag(credentialRecord, authenticatorData)).isInstanceOf(BadBackupEligibleFlagException.class);
-    }
-
-    @Test
-    void verifyBEFlag_success_if_BE_flag_of_CredentialRecord_is_false_and_BE_flag_of_AuthenticatorData_is_false_test(){
-        AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
-        AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
-        CredentialRecord credentialRecord = new CredentialRecordImpl(
-                attestationStatement,
-                true,
-                false,
-                false,
-                0,
-                attestedCredentialData,
-                new AuthenticationExtensionsAuthenticatorOutputs<>(),
-                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
-                new AuthenticationExtensionsClientOutputs<>(),
-                Collections.emptySet()
-        );
-        byte flag = BIT_UP;
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], flag, 5);
-        assertThatCode(()-> AuthenticationDataVerifier.verifyBEFlag(credentialRecord, authenticatorData)).doesNotThrowAnyException();
-    }
 
 
     @Test

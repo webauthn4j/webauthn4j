@@ -141,26 +141,34 @@ Since the security key generates a signature from data that contains `clientData
 
 WebAuthn4J consists of the following four modules.
 
-==== Core webauthn4j-core.jar
+==== Core: webauthn4j-core.jar
 
 Provides core features for WebAuthn attestation and assertion verification.
 
-==== Core webauthn4j-device-check.jar
+==== Metadata: webauthn4j-metadata.jar
+
+Provides additional features regarding FIDO Metadata Service.
+
+==== Core-Async: webauthn4j-core-async.jar
+
+Provides async variant of core features for WebAuthn attestation and assertion verification.
+Since this module is in experimental status, the included classes don't follow semantic versioning and the design may change even though it is public.
+
+==== Metadata-Async: webauthn4j-metadata-async.jar
+
+Provides async variant of additional features regarding FIDO Metadata Service.
+Since this module is in experimental status, the included classes don't follow semantic versioning and the design may change even though it is public.
+
+==== Device-Check: webauthn4j-device-check.jar
 
 Provides core features for Apple App Attest attestation and assertion verification.
 
-==== Metadata webauthn4j-metadata.jar
-
-Provides additional features regarding FIDO Metadata Service.
-As FIDO Metadata Statement specification is still draft, it is in experimental status.
-The included classes don't follow semantic versioning and the design may be changed even though it is public.
-
-==== Test webauthn4j-test.jar
+==== Test: webauthn4j-test.jar
 
 Internal library for WebAuthn4J testing.
 The included classes don't follow semantic versioning and the design may be changed even though it is public.
 
-==== Util webauthn4j-util.jar
+==== Util: webauthn4j-util.jar
 
 Contains utility classes used in WebAuthn4J library.
 

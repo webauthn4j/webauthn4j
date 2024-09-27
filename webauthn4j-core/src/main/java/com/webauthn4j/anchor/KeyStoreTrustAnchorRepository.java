@@ -52,8 +52,19 @@ public class KeyStoreTrustAnchorRepository implements TrustAnchorRepository{
         this.trustAnchors = loadTrustAnchors(keyStore);
     }
 
+    /**
+     * @deprecated use KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(Path, String) instead
+     */
+    @Deprecated(forRemoval = true)
     public KeyStoreTrustAnchorRepository(Path keyStore, String password) {
         this(loadKeyStore(keyStore, password));
+    }
+
+    // ~ Static Methods
+    // ========================================================================================================
+    public static KeyStoreTrustAnchorRepository createFromKeyStoreFilePath(Path keyStore, String password){
+        KeyStore keyStoreObj = loadKeyStore(keyStore, password);
+        return new KeyStoreTrustAnchorRepository(keyStoreObj);
     }
 
     // ~ Methods

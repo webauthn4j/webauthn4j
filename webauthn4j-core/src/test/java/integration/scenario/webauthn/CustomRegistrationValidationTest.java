@@ -81,7 +81,7 @@ class CustomRegistrationValidationTest {
         );
 
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        AuthenticatorAttestationResponse authenticatorAttestationResponse = credential.getAuthenticatorResponse();
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = credential.getResponse();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());

@@ -114,7 +114,7 @@ public class MetadataStatement {
     @Nullable
     private final AuthenticatorGetInfo authenticatorGetInfo;
 
-
+    @SuppressWarnings("java:S107")
     public MetadataStatement(
             @JsonProperty("legalHeader") @Nullable String legalHeader,
             @JsonProperty("aaid") @Nullable AAID aaid,

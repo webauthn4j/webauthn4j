@@ -39,7 +39,7 @@ WARNING: `webauthn4j-metadata` module, which provides FIDO Metadata Statement ha
 
 FIDO Alliance offers FIDO Metadata Service, which provides metadata of authenticators.
 `webauthn4j-metadata` module provides a `MetadataBLOBBasedTrustAnchorRepository` as a `TrustAnchorRepository` implementation.
-`MetadataBLOBBasedTrustAnchorRepository` can provide trust anchors based on the information published by FIDO Metadata Service when it is used in combination with `FidoMDS3MetadataBLOBProvider`.
+`MetadataBLOBBasedTrustAnchorRepository` can provide trust anchors based on the information published by FIDO Metadata Service when it is used in combination with `FidoMDS3MetadataBLOBAsyncProvider`.
 
 === What WebAuthn4J doesn't offer
 

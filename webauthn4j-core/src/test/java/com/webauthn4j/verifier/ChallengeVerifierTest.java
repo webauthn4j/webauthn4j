@@ -24,6 +24,7 @@ import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.verifier.exception.BadChallengeException;
 import com.webauthn4j.verifier.exception.MissingChallengeException;
+import com.webauthn4j.verifier.internal.ChallengeVerifier;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -38,7 +39,6 @@ class ChallengeVerifierTest {
     private final Origin origin = Origin.create("https://example.com");
     private final String rpId = "example.com";
 
-    private final ChallengeVerifier target = new ChallengeVerifier();
 
     @Test
     void verify_test1() {
@@ -50,7 +50,7 @@ class ChallengeVerifierTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challengeB, null);
 
         //When
-        target.verify(collectedClientData, serverProperty);
+        ChallengeVerifier.verify(collectedClientData, serverProperty);
     }
 
     @Test
@@ -64,7 +64,7 @@ class ChallengeVerifierTest {
 
         //When
         assertThrows(BadChallengeException.class,
-                () -> target.verify(collectedClientData, serverProperty)
+                () -> ChallengeVerifier.verify(collectedClientData, serverProperty)
         );
     }
 
@@ -79,7 +79,7 @@ class ChallengeVerifierTest {
 
         //When
         assertThrows(MissingChallengeException.class,
-                () -> target.verify(collectedClientData, serverProperty)
+                () -> ChallengeVerifier.verify(collectedClientData, serverProperty)
         );
     }
 }

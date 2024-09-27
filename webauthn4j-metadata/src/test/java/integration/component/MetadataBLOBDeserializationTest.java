@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MetadataBLOBDeserializationTest {
+class MetadataBLOBDeserializationTest {
 
     private final JWSFactory jwsFactory = new JWSFactory();
 

@@ -39,8 +39,3 @@ dependencies {
     testCompileOnly("org.jetbrains:annotations")
 
 }
-
-
-sonarqube {
-    skipProject = true
-}

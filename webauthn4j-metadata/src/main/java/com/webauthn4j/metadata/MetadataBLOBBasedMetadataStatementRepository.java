@@ -16,13 +16,12 @@
 
 package com.webauthn4j.metadata;
 
-import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.data.MetadataBLOBPayloadEntry;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
-import com.webauthn4j.metadata.data.toc.StatusReport;
+import com.webauthn4j.metadata.util.internal.MetadataBLOBUtil;
+import com.webauthn4j.metadata.util.internal.MetadataStatementUtil;
 import com.webauthn4j.util.HexUtil;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,9 +45,9 @@ public class MetadataBLOBBasedMetadataStatementRepository implements MetadataSta
         return metadataBLOBProviders.stream()
                 .flatMap(provider -> provider.provide().getPayload().getEntries().stream())
                 .filter(entry -> Objects.equals(entry.getAaguid(), aaguid))
-                .filter(this::checkMetadataBLOBPayloadEntry)
+                .filter(entry -> MetadataBLOBUtil.checkMetadataBLOBPayloadEntry(entry, notFidoCertifiedAllowed, selfAssertionSubmittedAllowed))
                 .map(MetadataBLOBPayloadEntry::getMetadataStatement)
-                .filter(this::checkSurrogateMetadataStatementAttestationRootCertificate)
+                .filter(MetadataStatementUtil::checkSurrogateMetadataStatementAttestationRootCertificate)
                 .collect(Collectors.toSet());
     }
 
@@ -56,16 +55,18 @@ public class MetadataBLOBBasedMetadataStatementRepository implements MetadataSta
     public Set<MetadataStatement> find(byte[] attestationCertificateKeyIdentifier) {
         return metadataBLOBProviders.stream()
                 .flatMap(provider -> provider.provide().getPayload().getEntries().stream())
-                .filter(entry -> {
-                    MetadataStatement metadataStatement = entry.getMetadataStatement();
-                    if(metadataStatement == null || metadataStatement.getAttestationCertificateKeyIdentifiers() == null){
-                        return false;
-                    }
-                    return metadataStatement.getAttestationCertificateKeyIdentifiers().stream().anyMatch(identifier -> Arrays.equals(HexUtil.decode(identifier), attestationCertificateKeyIdentifier));
-                })
+                .filter(entry -> matchAttestationCertificateKeyIdentifier(entry, attestationCertificateKeyIdentifier))
                 .map(MetadataBLOBPayloadEntry::getMetadataStatement)
-                .filter(this::checkSurrogateMetadataStatementAttestationRootCertificate)
+                .filter(MetadataStatementUtil::checkSurrogateMetadataStatementAttestationRootCertificate)
                 .collect(Collectors.toSet());
+    }
+
+    public static boolean matchAttestationCertificateKeyIdentifier(MetadataBLOBPayloadEntry entry, byte[] attestationCertificateKeyIdentifier) {
+        MetadataStatement metadataStatement = entry.getMetadataStatement();
+        if(metadataStatement == null || metadataStatement.getAttestationCertificateKeyIdentifiers() == null){
+            return false;
+        }
+        return metadataStatement.getAttestationCertificateKeyIdentifiers().stream().anyMatch(identifier -> Arrays.equals(HexUtil.decode(identifier), attestationCertificateKeyIdentifier));
     }
 
 
@@ -85,59 +86,4 @@ public class MetadataBLOBBasedMetadataStatementRepository implements MetadataSta
         this.selfAssertionSubmittedAllowed = selfAssertionSubmittedAllowed;
     }
 
-    private boolean checkMetadataBLOBPayloadEntry(@NotNull MetadataBLOBPayloadEntry metadataBLOBPayloadEntry) {
-        List<StatusReport> statusReports = metadataBLOBPayloadEntry.getStatusReports();
-        for (StatusReport report : statusReports) {
-            switch (report.getStatus()) {
-                //Info statuses
-                case UPDATE_AVAILABLE:
-                    // UPDATE_AVAILABLE itself doesn't mean security issue. If security related update is available,
-                    // corresponding status report is expected to be added to the report list.
-                    break;
-
-                //Certification Related statuses
-                case FIDO_CERTIFIED:
-                case FIDO_CERTIFIED_L1:
-                case FIDO_CERTIFIED_L1_PLUS:
-                case FIDO_CERTIFIED_L2:
-                case FIDO_CERTIFIED_L2_PLUS:
-                case FIDO_CERTIFIED_L3:
-                case FIDO_CERTIFIED_L3_PLUS:
-                    break;
-                case NOT_FIDO_CERTIFIED:
-                    if (notFidoCertifiedAllowed) {
-                        break;
-                    }
-                    else {
-                        return false;
-                    }
-                case SELF_ASSERTION_SUBMITTED:
-                    if (selfAssertionSubmittedAllowed) {
-                        break;
-                    }
-                    else {
-                        return false;
-                    }
-
-                    // Security Notification statuses
-                case ATTESTATION_KEY_COMPROMISE:
-                case USER_VERIFICATION_BYPASS:
-                case USER_KEY_REMOTE_COMPROMISE:
-                case USER_KEY_PHYSICAL_COMPROMISE:
-                case REVOKED:
-                default:
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean checkSurrogateMetadataStatementAttestationRootCertificate(MetadataStatement metadataStatement) {
-        boolean isSurrogate = metadataStatement != null && metadataStatement.getAttestationTypes().stream().allMatch(type -> type.equals(AuthenticatorAttestationType.BASIC_SURROGATE));
-
-        if (isSurrogate) {
-            return metadataStatement.getAttestationRootCertificates().isEmpty();
-        }
-        return true;
-    }
 }

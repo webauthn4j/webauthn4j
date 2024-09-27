@@ -57,6 +57,7 @@ public class MetadataBLOBPayloadEntry {
     @Nullable
     private final String rogueListHash;
 
+    @SuppressWarnings("java:S107")
     public MetadataBLOBPayloadEntry(
             @JsonProperty("aaid") @Nullable AAID aaid,
             @JsonProperty("aaguid") @Nullable AAGUID aaguid,
