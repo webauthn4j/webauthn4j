@@ -22,7 +22,7 @@ buildscript {
         asciidoctorGradleVersion = "4.0.3"
 
         // Define implementation dependency versions independently
-        jacksonVersion = "2.17.2"
+        jacksonVersion = "2.18.0"
         kerbyVersion = "2.1.0"
         slf4jVersion = "2.0.16"
         bouncyCastleVersion = "1.70"
