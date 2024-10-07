@@ -72,13 +72,13 @@ public class KeyDescriptionVerifier {
         if (attestationExtensionBytes == null) {
             throw new KeyDescriptionValidationException("KeyDescription must not be null");
         }
-        byte[] wrapped = (byte[])ASN1.parseASN1(attestationExtensionBytes).value.get(0);
+        byte[] wrapped = (byte[]) ASN1.parseASN1(attestationExtensionBytes).getValue().get(0);
         return ASN1.parseASN1(wrapped);
     }
 
     void doVerify(@NotNull ASN1.ASN keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
         /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
-        byte[] attestationChallenge = (byte[]) ((ASN1.ASN) keyDescription.value.get(ATTESTATION_CHALLENGE_INDEX)).value.get(0);
+        byte[] attestationChallenge = (byte[]) ((ASN1.ASN) keyDescription.getValue().get(ATTESTATION_CHALLENGE_INDEX)).getValue().get(0);
         // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(attestationChallenge, clientDataHash)) {
@@ -88,8 +88,8 @@ public class KeyDescriptionVerifier {
         /// Verify the following using the appropriate authorization list from the attestation certificate extension data:
 
         /// The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
-        ASN1.ASN softwareEnforced = (ASN1.ASN) keyDescription.value.get(SW_ENFORCED_INDEX);
-        ASN1.ASN teeEnforced = (ASN1.ASN) keyDescription.value.get(TEE_ENFORCED_INDEX);
+        ASN1.ASN softwareEnforced = (ASN1.ASN) keyDescription.getValue().get(SW_ENFORCED_INDEX);
+        ASN1.ASN teeEnforced = (ASN1.ASN) keyDescription.getValue().get(TEE_ENFORCED_INDEX);
 
         if (findAuthorizationListEntry(softwareEnforced, KM_TAG_ALL_APPLICATIONS) != null ||
                 findAuthorizationListEntry(teeEnforced, KM_TAG_ALL_APPLICATIONS) != null) {
@@ -146,7 +146,7 @@ public class KeyDescriptionVerifier {
                 return false;
             }
             ASN1.ASN set = purposes;
-            for (Object valueItem: set.value) {
+            for (Object valueItem: set.getValue()) {
                 ASN1.ASN purpose = (ASN1.ASN) valueItem;
                 if (Objects.equals(getIntegerFromAsn1(purpose), BigInteger.valueOf(KM_PURPOSE_SIGN))) {
                     return true;
@@ -172,10 +172,10 @@ public class KeyDescriptionVerifier {
 
     private @Nullable ASN1.ASN findAuthorizationListEntry(
             @NotNull ASN1.ASN authorizationList, int tag) {
-        for (Object listItem : authorizationList.value) {
+        for (Object listItem : authorizationList.getValue()) {
             ASN1.ASN entry = (ASN1.ASN)listItem;
-            if (entry.tag.number == tag) {
-                return (ASN1.ASN)entry.value.get(0);
+            if (entry.getTag().getNumber() == tag) {
+                return (ASN1.ASN) entry.getValue().get(0);
             }
         }
         return null;

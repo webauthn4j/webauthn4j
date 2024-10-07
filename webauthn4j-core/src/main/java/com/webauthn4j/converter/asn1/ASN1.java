@@ -80,9 +80,9 @@ public class ASN1 {
     }
 
     public static class ASN {
-        public final ASNTag tag;
-        public final List<Object> value;
-        public final ASNLength length;
+        private final ASNTag tag;
+        private final List<Object> value;
+        private final ASNLength length;
 
         private ASN(ASNTag tag, ASNLength length, List<Object> value) {
             this.tag = tag;
@@ -91,7 +91,7 @@ public class ASN1 {
         }
 
         public byte[] binary(int index) {
-            return (byte[]) value.get(index);
+            return (byte[]) getValue().get(index);
         }
 
         public int integer(int index) {
@@ -111,11 +111,11 @@ public class ASN1 {
         }
 
         public ASN object(int index) {
-            return (ASN) value.get(index);
+            return (ASN) getValue().get(index);
         }
 
         public ASN object(int index, int type) {
-            ASN object = (ASN) value.get(index);
+            ASN object = (ASN) getValue().get(index);
             if (!object.is(type)) {
                 throw new ClassCastException("Object at index(" + index + ") is not of type: " + type);
             }
@@ -155,22 +155,34 @@ public class ASN1 {
         }
 
         public int length() {
-            return value.size();
+            return getValue().size();
         }
 
         public boolean is(int number) {
-            if (tag.constructed) {
-                return tag.type == CONSTRUCTED + number;
+            if (getTag().isConstructed()) {
+                return getTag().getType() == CONSTRUCTED + number;
             } else {
-                return tag.type == number;
+                return getTag().getType() == number;
             }
+        }
+
+        public ASNTag getTag() {
+            return tag;
+        }
+
+        public List<Object> getValue() {
+            return value;
+        }
+
+        public ASNLength getLength() {
+            return length;
         }
     }
 
     public static class ASNTag {
-        public final int type;
-        public final boolean constructed;
-        public final int number;
+        private final int type;
+        private final boolean constructed;
+        private final int number;
         private final int nextPos;
 
         private ASNTag(int type, boolean constructed, int number, int nextPos) {
@@ -179,17 +191,42 @@ public class ASN1 {
             this.number = number;
             this.nextPos = nextPos;
         }
+
+
+        public int getType() {
+            return type;
+        }
+
+        public boolean isConstructed() {
+            return constructed;
+        }
+
+        public int getNumber() {
+            return number;
+        }
+
+        public int getNextPos() {
+            return nextPos;
+        }
     }
 
     public static class ASNLength {
-        public final boolean indefinite;
-        public final int contentLength;
+        private final boolean indefinite;
+        private final int contentLength;
         private final int nextPos;
 
         private ASNLength(boolean indefinite, int contentLength, int nextPos) {
             this.indefinite = indefinite;
             this.contentLength = contentLength;
             this.nextPos = nextPos;
+        }
+
+        public boolean isIndefinite() {
+            return indefinite;
+        }
+
+        public int getContentLength() {
+            return contentLength;
         }
     }
 
@@ -203,7 +240,7 @@ public class ASN1 {
 
     public static ASN parseASN1(Buffer buffer, int startPos) {
         ASNTag tag = readTag(buffer, startPos);
-        ASNLength length = readLength(buffer, tag.nextPos);
+        ASNLength length = readLength(buffer, tag.getNextPos());
         List<Object> value = readValue(buffer, length.nextPos, tag, length);
         return new ASN(tag, length, value);
     }
@@ -255,18 +292,18 @@ public class ASN1 {
     private static List<Object> readValue(Buffer buffer, int startPos, ASNTag tagObj, ASNLength lengthObj) {
         List<Object> res = new ArrayList<>();
         int pos = startPos;
-        if (!tagObj.constructed) {
-            res.add(buffer.getBytes(pos, startPos + lengthObj.contentLength));
+        if (!tagObj.isConstructed()) {
+            res.add(buffer.getBytes(pos, startPos + lengthObj.getContentLength()));
         } else {
-            while (pos < startPos + lengthObj.contentLength) {
+            while (pos < startPos + lengthObj.getContentLength()) {
                 ASN newObj = parseASN1(buffer, pos);
-                pos = newObj.length.nextPos + newObj.length.contentLength;
+                pos = newObj.getLength().nextPos + newObj.getLength().getContentLength();
 
                 if (
-                        newObj.tag.type == 0 &&
-                                !newObj.tag.constructed &&
-                                newObj.tag.number == 0 &&
-                                newObj.length.contentLength == 0) break; // end-of-contents contents (8.1.5)
+                        newObj.getTag().getType() == 0 &&
+                                !newObj.getTag().isConstructed() &&
+                                newObj.getTag().getNumber() == 0 &&
+                                newObj.getLength().getContentLength() == 0) break; // end-of-contents contents (8.1.5)
 
                 res.add(newObj);
             }
