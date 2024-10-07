@@ -21,6 +21,8 @@ package com.webauthn4j.converter.asn1;
  *
  *  You may elect to redistribute this code under either of these licenses.
  */
+import io.vertx.core.buffer.Buffer;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;

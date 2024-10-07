@@ -19,14 +19,10 @@
 
 package com.webauthn4j.verifier.attestation.statement.androidkey;
 
+import com.webauthn4j.converter.asn1.ASN1;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.KeyDescriptionValidationException;
-import org.apache.kerby.asn1.parse.Asn1Container;
-import org.apache.kerby.asn1.parse.Asn1ParseResult;
-import org.apache.kerby.asn1.parse.Asn1Parser;
-import org.apache.kerby.asn1.type.Asn1Integer;
-import org.apache.kerby.asn1.type.Asn1OctetString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -35,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Objects;
@@ -63,27 +58,27 @@ public class KeyDescriptionVerifier {
         AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
 
         try {
-            Asn1Container keyDescription = extractKeyDescription(x509Certificate);
+            ASN1.ASN keyDescription = extractKeyDescription(x509Certificate);
             doVerify(keyDescription, clientDataHash, teeEnforcedOnly);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    @NotNull Asn1Container extractKeyDescription(@NotNull X509Certificate x509Certificate) throws IOException {
+    @NotNull ASN1.ASN extractKeyDescription(@NotNull X509Certificate x509Certificate) throws IOException {
 
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
-        Asn1OctetString envelope = new Asn1OctetString();
+
         if (attestationExtensionBytes == null) {
             throw new KeyDescriptionValidationException("KeyDescription must not be null");
         }
-        envelope.decode(attestationExtensionBytes);
-        return (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(envelope.getValue()));
+        byte[] wrapped = (byte[])ASN1.parseASN1(attestationExtensionBytes).value.get(0);
+        return ASN1.parseASN1(wrapped);
     }
 
-    void doVerify(@NotNull Asn1Container keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
+    void doVerify(@NotNull ASN1.ASN keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
         /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
-        byte[] attestationChallenge = keyDescription.getChildren().get(ATTESTATION_CHALLENGE_INDEX).readBodyBytes();
+        byte[] attestationChallenge = (byte[]) ((ASN1.ASN) keyDescription.value.get(ATTESTATION_CHALLENGE_INDEX)).value.get(0);
         // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(attestationChallenge, clientDataHash)) {
@@ -93,8 +88,8 @@ public class KeyDescriptionVerifier {
         /// Verify the following using the appropriate authorization list from the attestation certificate extension data:
 
         /// The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
-        Asn1Container softwareEnforced = (Asn1Container) keyDescription.getChildren().get(SW_ENFORCED_INDEX);
-        Asn1Container teeEnforced = (Asn1Container) keyDescription.getChildren().get(TEE_ENFORCED_INDEX);
+        ASN1.ASN softwareEnforced = (ASN1.ASN) keyDescription.value.get(SW_ENFORCED_INDEX);
+        ASN1.ASN teeEnforced = (ASN1.ASN) keyDescription.value.get(TEE_ENFORCED_INDEX);
 
         if (findAuthorizationListEntry(softwareEnforced, KM_TAG_ALL_APPLICATIONS) != null ||
                 findAuthorizationListEntry(teeEnforced, KM_TAG_ALL_APPLICATIONS) != null) {
@@ -104,7 +99,7 @@ public class KeyDescriptionVerifier {
         verifyAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
     }
 
-    private void verifyAuthorizationList(boolean teeEnforcedOnly, @NotNull Asn1Container softwareEnforced, @NotNull Asn1Container teeEnforced) throws IOException {
+    private void verifyAuthorizationList(boolean teeEnforcedOnly, @NotNull ASN1.ASN softwareEnforced, @NotNull ASN1.ASN teeEnforced) throws IOException {
         /// For the following,
         /// use only the teeEnforced authorization list if the RP wants to accept only keys
         /// from a trusted execution environment,
@@ -135,7 +130,7 @@ public class KeyDescriptionVerifier {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean isKeyGeneratedInKeymaster(@Nullable Asn1ParseResult origin) {
+    private boolean isKeyGeneratedInKeymaster(@Nullable ASN1.ASN origin) {
         try {
             return Objects.equals(getIntegerFromAsn1(origin), BigInteger.valueOf(KM_ORIGIN_GENERATED));
         } catch (RuntimeException | IOException e) {
@@ -145,13 +140,14 @@ public class KeyDescriptionVerifier {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean containsValidPurpose(@Nullable Asn1ParseResult purposes) throws IOException {
+    private boolean containsValidPurpose(@Nullable ASN1.ASN purposes) throws IOException {
         try {
             if (purposes == null) {
                 return false;
             }
-            Asn1Container set = (Asn1Container) purposes;
-            for (Asn1ParseResult purpose : set.getChildren()) {
+            ASN1.ASN set = purposes;
+            for (Object valueItem: set.value) {
+                ASN1.ASN purpose = (ASN1.ASN) valueItem;
                 if (Objects.equals(getIntegerFromAsn1(purpose), BigInteger.valueOf(KM_PURPOSE_SIGN))) {
                     return true;
                 }
@@ -164,23 +160,22 @@ public class KeyDescriptionVerifier {
     }
 
 
-    private @Nullable BigInteger getIntegerFromAsn1(Asn1ParseResult asn1Value) throws IOException {
+    private @Nullable BigInteger getIntegerFromAsn1(ASN1.ASN asn1Value) throws IOException {
         if (asn1Value == null) {
             return null;
         }
-        if (!asn1Value.isPrimitive()) {
+        if (!asn1Value.is(ASN1.INTEGER)) {
             throw new BadAttestationStatementException(String.format("ASN1Integer is expected. Found %s instead.", asn1Value.getClass().getName()));
         }
-        Asn1Integer value = new Asn1Integer();
-        value.decode(asn1Value);
-        return value.getValue();
+        return asn1Value.bigInteger(0);
     }
 
-    private @Nullable Asn1ParseResult findAuthorizationListEntry(
-            @NotNull Asn1Container authorizationList, int tag) {
-        for (Asn1ParseResult entry : authorizationList.getChildren()) {
-            if (entry.tagNo() == tag) {
-                return ((Asn1Container) entry).getChildren().get(0);
+    private @Nullable ASN1.ASN findAuthorizationListEntry(
+            @NotNull ASN1.ASN authorizationList, int tag) {
+        for (Object listItem : authorizationList.value) {
+            ASN1.ASN entry = (ASN1.ASN)listItem;
+            if (entry.tag.number == tag) {
+                return (ASN1.ASN)entry.value.get(0);
             }
         }
         return null;
