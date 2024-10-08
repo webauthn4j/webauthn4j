@@ -24,10 +24,6 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
-    //TO BE REMOVED
-    implementation("io.vertx:vertx-core:4.5.10")
-    implementation("io.vertx:vertx-codegen:4.5.10")
-
     compileOnly("org.jetbrains:annotations")
 
     //Test

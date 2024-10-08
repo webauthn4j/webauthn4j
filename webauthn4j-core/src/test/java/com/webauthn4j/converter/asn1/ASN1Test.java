@@ -12,7 +12,7 @@ class ASN1Test {
     @Test
     void can_parse_x509Certificate() {
         X509Certificate attestationCertificate = TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate();
-        assertThatCode(()->ASN1.parseASN1(attestationCertificate.getEncoded())).doesNotThrowAnyException();
+        assertThatCode(()-> ASN1.parseASN1(attestationCertificate.getEncoded())).doesNotThrowAnyException();
     }
 
 }

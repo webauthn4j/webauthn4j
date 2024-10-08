@@ -20,6 +20,8 @@
 package com.webauthn4j.verifier.attestation.statement.androidkey;
 
 import com.webauthn4j.converter.asn1.ASN1;
+import com.webauthn4j.converter.asn1.ASN1Primitive;
+import com.webauthn4j.converter.asn1.ASN1Sequence;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.KeyDescriptionValidationException;
@@ -34,6 +36,8 @@ import java.math.BigInteger;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Objects;
+
+import static com.webauthn4j.converter.asn1.ASN1.ASN1Tag.INTEGER;
 
 public class KeyDescriptionVerifier {
 
@@ -58,27 +62,27 @@ public class KeyDescriptionVerifier {
         AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
 
         try {
-            ASN1.ASN keyDescription = extractKeyDescription(x509Certificate);
+            ASN1Sequence keyDescription = extractKeyDescription(x509Certificate);
             doVerify(keyDescription, clientDataHash, teeEnforcedOnly);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    @NotNull ASN1.ASN extractKeyDescription(@NotNull X509Certificate x509Certificate) throws IOException {
+    @NotNull ASN1Sequence extractKeyDescription(@NotNull X509Certificate x509Certificate) throws IOException {
 
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
 
         if (attestationExtensionBytes == null) {
             throw new KeyDescriptionValidationException("KeyDescription must not be null");
         }
-        byte[] wrapped = (byte[]) ASN1.parseASN1(attestationExtensionBytes).getValue().get(0);
-        return ASN1.parseASN1(wrapped);
+        byte[] wrapped = ((ASN1Primitive) ASN1.parseASN1(attestationExtensionBytes)).getValue();
+        return (ASN1Sequence)ASN1.parseASN1(wrapped);
     }
 
-    void doVerify(@NotNull ASN1.ASN keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
+    void doVerify(@NotNull ASN1Sequence keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
         /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
-        byte[] attestationChallenge = (byte[]) ((ASN1.ASN) keyDescription.getValue().get(ATTESTATION_CHALLENGE_INDEX)).getValue().get(0);
+        byte[] attestationChallenge = ((ASN1Primitive) keyDescription.getValue().get(ATTESTATION_CHALLENGE_INDEX)).getValue();
         // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(attestationChallenge, clientDataHash)) {
@@ -88,8 +92,8 @@ public class KeyDescriptionVerifier {
         /// Verify the following using the appropriate authorization list from the attestation certificate extension data:
 
         /// The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
-        ASN1.ASN softwareEnforced = (ASN1.ASN) keyDescription.getValue().get(SW_ENFORCED_INDEX);
-        ASN1.ASN teeEnforced = (ASN1.ASN) keyDescription.getValue().get(TEE_ENFORCED_INDEX);
+        ASN1Sequence softwareEnforced = (ASN1Sequence) keyDescription.getValue().get(SW_ENFORCED_INDEX);
+        ASN1Sequence teeEnforced = (ASN1Sequence) keyDescription.getValue().get(TEE_ENFORCED_INDEX);
 
         if (findAuthorizationListEntry(softwareEnforced, KM_TAG_ALL_APPLICATIONS) != null ||
                 findAuthorizationListEntry(teeEnforced, KM_TAG_ALL_APPLICATIONS) != null) {
@@ -99,7 +103,7 @@ public class KeyDescriptionVerifier {
         verifyAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
     }
 
-    private void verifyAuthorizationList(boolean teeEnforcedOnly, @NotNull ASN1.ASN softwareEnforced, @NotNull ASN1.ASN teeEnforced) throws IOException {
+    private void verifyAuthorizationList(boolean teeEnforcedOnly, @NotNull ASN1Sequence softwareEnforced, @NotNull ASN1Sequence teeEnforced) throws IOException {
         /// For the following,
         /// use only the teeEnforced authorization list if the RP wants to accept only keys
         /// from a trusted execution environment,
@@ -130,7 +134,7 @@ public class KeyDescriptionVerifier {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean isKeyGeneratedInKeymaster(@Nullable ASN1.ASN origin) {
+    private boolean isKeyGeneratedInKeymaster(@Nullable ASN1 origin) {
         try {
             return Objects.equals(getIntegerFromAsn1(origin), BigInteger.valueOf(KM_ORIGIN_GENERATED));
         } catch (RuntimeException | IOException e) {
@@ -140,14 +144,14 @@ public class KeyDescriptionVerifier {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean containsValidPurpose(@Nullable ASN1.ASN purposes) throws IOException {
+    private boolean containsValidPurpose(@Nullable ASN1 purposes) throws IOException {
         try {
             if (purposes == null) {
                 return false;
             }
-            ASN1.ASN set = purposes;
+            ASN1Sequence set = (ASN1Sequence)purposes;
             for (Object valueItem: set.getValue()) {
-                ASN1.ASN purpose = (ASN1.ASN) valueItem;
+                ASN1Primitive purpose = (ASN1Primitive) valueItem;
                 if (Objects.equals(getIntegerFromAsn1(purpose), BigInteger.valueOf(KM_PURPOSE_SIGN))) {
                     return true;
                 }
@@ -160,22 +164,21 @@ public class KeyDescriptionVerifier {
     }
 
 
-    private @Nullable BigInteger getIntegerFromAsn1(ASN1.ASN asn1Value) throws IOException {
+    private @Nullable BigInteger getIntegerFromAsn1(ASN1 asn1Value) throws IOException {
         if (asn1Value == null) {
             return null;
         }
-        if (!asn1Value.is(ASN1.INTEGER)) {
+        if (!(asn1Value.getClass() == ASN1Primitive.class && asn1Value.getTag().getNumber() == INTEGER)) {
             throw new BadAttestationStatementException(String.format("ASN1Integer is expected. Found %s instead.", asn1Value.getClass().getName()));
         }
-        return asn1Value.bigInteger(0);
+        return ((ASN1Primitive)asn1Value).asBigInteger();
     }
 
-    private @Nullable ASN1.ASN findAuthorizationListEntry(
-            @NotNull ASN1.ASN authorizationList, int tag) {
+    private @Nullable ASN1 findAuthorizationListEntry(@NotNull ASN1Sequence authorizationList, int tag) {
         for (Object listItem : authorizationList.getValue()) {
-            ASN1.ASN entry = (ASN1.ASN)listItem;
+            ASN1Sequence entry = (ASN1Sequence)listItem;
             if (entry.getTag().getNumber() == tag) {
-                return (ASN1.ASN) entry.getValue().get(0);
+                return entry.getValue().get(0);
             }
         }
         return null;
