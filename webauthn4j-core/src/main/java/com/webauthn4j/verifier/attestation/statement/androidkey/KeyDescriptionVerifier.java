@@ -19,9 +19,9 @@
 
 package com.webauthn4j.verifier.attestation.statement.androidkey;
 
-import com.webauthn4j.converter.internal.asn1.ASN1;
-import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
-import com.webauthn4j.converter.internal.asn1.ASN1Sequence;
+import com.webauthn4j.verifier.internal.asn1.ASN1;
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
+import com.webauthn4j.verifier.internal.asn1.ASN1Sequence;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.KeyDescriptionValidationException;
@@ -35,7 +35,7 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.webauthn4j.converter.internal.asn1.ASN1Tag.INTEGER;
+import static com.webauthn4j.verifier.internal.asn1.ASN1Tag.INTEGER;
 
 public class KeyDescriptionVerifier {
 
@@ -70,7 +70,7 @@ public class KeyDescriptionVerifier {
         if (attestationExtensionBytes == null) {
             throw new KeyDescriptionValidationException("KeyDescription must not be null");
         }
-        return (ASN1Sequence) ASN1Primitive.parse(attestationExtensionBytes).getValueAsASN1();
+        return ASN1Primitive.parse(attestationExtensionBytes).getValueAsASN1Sequence();
     }
 
     void doVerify(@NotNull ASN1Sequence keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) {

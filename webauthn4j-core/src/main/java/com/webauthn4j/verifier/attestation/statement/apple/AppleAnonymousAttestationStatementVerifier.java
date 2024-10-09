@@ -16,8 +16,8 @@
 
 package com.webauthn4j.verifier.attestation.statement.apple;
 
-import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
-import com.webauthn4j.converter.internal.asn1.ASN1Sequence;
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
+import com.webauthn4j.verifier.internal.asn1.ASN1Sequence;
 import com.webauthn4j.data.attestation.statement.AppleAnonymousAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.util.AssertUtil;
@@ -70,7 +70,7 @@ public class AppleAnonymousAttestationStatementVerifier extends AbstractStatemen
 
         try {
             ASN1Primitive extensionEnvelope = ASN1Primitive.parse(extensionValue);
-            ASN1Sequence sequence = (ASN1Sequence) extensionEnvelope.getValueAsASN1();
+            ASN1Sequence sequence = extensionEnvelope.getValueAsASN1Sequence();
             ASN1Sequence innerSequence = (ASN1Sequence) sequence.get(0);
             ASN1Primitive firstItem = (ASN1Primitive) innerSequence.get(0);
             extracted =  firstItem.getValue();

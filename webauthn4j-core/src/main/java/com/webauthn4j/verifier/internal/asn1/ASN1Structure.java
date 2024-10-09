@@ -1,4 +1,4 @@
-package com.webauthn4j.converter.internal.asn1;
+package com.webauthn4j.verifier.internal.asn1;
 
 
 import java.nio.ByteBuffer;
@@ -13,7 +13,7 @@ public interface ASN1Structure extends Iterable<ASN1> {
         int readLength = 0;
         while (readLength < valueLength) {
             int beforePos = byteBuffer.position();
-            ASN1 newObj = ASN1.parse(byteBuffer);
+            ASN1 newObj = parse(byteBuffer);
             int afterPos = byteBuffer.position();
             int newObjLength = afterPos - beforePos;
             readLength += newObjLength;
@@ -29,6 +29,19 @@ public interface ASN1Structure extends Iterable<ASN1> {
         }
 
         return res;
+    }
+
+    static ASN1 parse(ByteBuffer byteBuffer) {
+        ASN1Tag tag = ASN1Tag.parse(byteBuffer);
+        ASN1Length length = ASN1Length.parse(byteBuffer);
+        if(tag.isConstructed()){
+            List<ASN1> value = ASN1Structure.parseValue(byteBuffer, length);
+            return new ASN1Sequence(tag, length, value); //TODO: non-sequence structure
+        }
+        else {
+            byte[] value = ASN1Primitive.parseValue(byteBuffer, length);
+            return new ASN1Primitive(tag, length, value);
+        }
     }
 
 }

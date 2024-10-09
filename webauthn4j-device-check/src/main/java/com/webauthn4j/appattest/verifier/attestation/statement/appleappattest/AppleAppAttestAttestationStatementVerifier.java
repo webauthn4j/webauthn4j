@@ -18,8 +18,8 @@ package com.webauthn4j.appattest.verifier.attestation.statement.appleappattest;
 
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
 import com.webauthn4j.appattest.verifier.DCRegistrationObject;
-import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
-import com.webauthn4j.converter.internal.asn1.ASN1Sequence;
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
+import com.webauthn4j.verifier.internal.asn1.ASN1Sequence;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.util.AssertUtil;
@@ -122,7 +122,7 @@ public class AppleAppAttestAttestationStatementVerifier extends AbstractStatemen
         }
 
         ASN1Primitive envelope = ASN1Primitive.parse(attestationExtensionBytes);
-        ASN1Sequence sequence = (ASN1Sequence)envelope.getValueAsASN1();
+        ASN1Sequence sequence = envelope.getValueAsASN1Sequence();
         ASN1Sequence item = (ASN1Sequence)sequence.get(0);
         ASN1Primitive nonceContainer = (ASN1Primitive)item.get(0);
         return nonceContainer.getValue();

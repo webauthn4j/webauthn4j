@@ -1,4 +1,4 @@
-package com.webauthn4j.converter.internal.asn1;
+package com.webauthn4j.verifier.internal.asn1;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -16,9 +16,9 @@
 
 package com.webauthn4j.async.metadata;
 
-import com.webauthn4j.converter.internal.asn1.ASN1;
-import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
-import com.webauthn4j.converter.internal.asn1.ASN1Sequence;
+import com.webauthn4j.verifier.internal.asn1.ASN1;
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
+import com.webauthn4j.verifier.internal.asn1.ASN1Sequence;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.CertPathCheckContext;
 import com.webauthn4j.metadata.data.MetadataBLOB;
@@ -222,7 +222,7 @@ public class FidoMDS3MetadataBLOBAsyncProvider extends CachingMetadataBLOBAsyncP
             byte[] extensionValue = x509Certificate.getExtensionValue("2.5.29.31");
 
             ASN1Primitive envelope = ASN1Primitive.parse(extensionValue);
-            ASN1Sequence crlDistributionPoints = (ASN1Sequence) envelope.getValueAsASN1();
+            ASN1Sequence crlDistributionPoints = envelope.getValueAsASN1Sequence();
             ArrayList<String> urls = new ArrayList<>();
             for (ASN1 item: crlDistributionPoints){
                 ASN1Sequence distributionPointSequence = (ASN1Sequence)item;

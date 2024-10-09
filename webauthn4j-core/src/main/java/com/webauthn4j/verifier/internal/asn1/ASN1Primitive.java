@@ -1,4 +1,4 @@
-package com.webauthn4j.converter.internal.asn1;
+package com.webauthn4j.verifier.internal.asn1;
 
 import com.webauthn4j.util.UnsignedNumberUtil;
 
@@ -61,8 +61,12 @@ public class ASN1Primitive extends ASN1{
         return new BigInteger(value);
     }
 
-    public ASN1 getValueAsASN1(){
-        return ASN1.parse(getValue());
+    public ASN1Primitive getValueAsASN1Primitive(){
+        return ASN1Primitive.parse(getValue());
+    }
+
+    public ASN1Sequence getValueAsASN1Sequence(){
+        return ASN1Sequence.parse(getValue());
     }
 
 }

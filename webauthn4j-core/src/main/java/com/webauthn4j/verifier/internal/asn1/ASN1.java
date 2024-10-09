@@ -15,7 +15,7 @@
  */
 
 
-// Portions of the code under `com.webauthn4j.converter.internal.asn1` are derived from work by `io.vertx.ext.auth.impl.asn.ASN1`
+// Portions of the code under `com.webauthn4j.verifier.internal.asn1` are derived from work by `io.vertx.ext.auth.impl.asn.ASN1`
 // Original site: https://github.com/eclipse-vertx/vertx-auth/blob/4.5.10/vertx-auth-common/src/main/java/io/vertx/ext/auth/impl/asn/ASN1.java
 // Original author: Paulo Lopes
 
@@ -39,31 +39,9 @@
  *  You may elect to redistribute this code under either of these licenses.
  */
 
-package com.webauthn4j.converter.internal.asn1;
+package com.webauthn4j.verifier.internal.asn1;
 
-import java.nio.ByteBuffer;
-import java.util.List;
-
-public class ASN1 {
-
-    public static ASN1 parse(byte[] bytes) {
-        return parse(ByteBuffer.wrap(bytes));
-    }
-
-    public static ASN1 parse(ByteBuffer byteBuffer) {
-        ASN1Tag tag = ASN1Tag.parse(byteBuffer);
-        ASN1Length length = ASN1Length.parse(byteBuffer);
-        if(tag.isConstructed()){
-            List<ASN1> value = ASN1Structure.parseValue(byteBuffer, length);
-            return new ASN1Sequence(tag, length, value); //TODO: non-sequence structure
-        }
-        else {
-            byte[] value = ASN1Primitive.parseValue(byteBuffer, length);
-            return new ASN1Primitive(tag, length, value);
-        }
-    }
-
-
+public abstract class ASN1 {
 
     private final ASN1Tag tag;
     private final ASN1Length length;
