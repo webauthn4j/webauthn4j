@@ -31,6 +31,7 @@ import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAlgorithmException;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
+import com.webauthn4j.verifier.internal.asn1.ASN1Sequence;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -106,13 +107,17 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
     }
 
     @NotNull AAGUID extractAAGUIDFromAttestationCertificate(@NotNull X509Certificate certificate) {
-        byte[] extensionValue = certificate.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
-        if (extensionValue == null) {
-            return AAGUID.NULL;
+        try {
+            byte[] extensionValue = certificate.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
+            if (extensionValue == null) {
+                return AAGUID.NULL;
+            }
+            ASN1Primitive envelope = ASN1Primitive.parse(extensionValue);
+            ASN1Primitive innerEnvelope = ASN1Primitive.parse(envelope.getValue());
+            return new AAGUID(UUIDUtil.fromBytes(innerEnvelope.getValue()));
+        } catch (RuntimeException e) {
+            throw new BadAttestationStatementException("Failed to extract aaguid from Packed attestation statement.", e);
         }
-        ASN1Primitive envelope = ASN1Primitive.parse(extensionValue);
-        ASN1Primitive innerEnvelope = ASN1Primitive.parse(envelope.getValue());
-        return new AAGUID(UUIDUtil.fromBytes(innerEnvelope.getValue()));
     }
 
     @SuppressWarnings("SameReturnValue")
