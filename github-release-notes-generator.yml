@@ -15,3 +15,10 @@ releasenotes:
     - title: "Bugs"
       emoji: ":beetle:"
       labels: ["bug"]
+    - title: "Documentation"
+      emoji: ":memo:"
+      labels: ["documentation"]
+    - title: "Build/Test"
+      emoji: ":hammer_and_wrench:"
+      labels: ["build/test"]
+
