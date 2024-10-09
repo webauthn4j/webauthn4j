@@ -68,7 +68,7 @@ public class ASN1Tag {
     private final boolean constructed;
     private final int number;
 
-    private ASN1Tag(ASN1TagClass tagClass, boolean constructed, int number) {
+    ASN1Tag(ASN1TagClass tagClass, boolean constructed, int number) {
         this.tagClass = tagClass;
         this.constructed = constructed;
         this.number = number;
