@@ -23,6 +23,7 @@ import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.CompletionStageUtil;
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier;
 import com.webauthn4j.verifier.exception.CertificateException;
 import com.webauthn4j.verifier.exception.TrustAnchorNotFoundException;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +57,7 @@ public class DefaultCertPathTrustworthinessAsyncVerifier implements CertPathTrus
 
             if(attestationStatement instanceof FIDOU2FAttestationStatement){
                 FIDOU2FAttestationStatement fidou2fAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
-                byte[] subjectKeyIdentifier = CertificateUtil.extractSubjectKeyIdentifier(fidou2fAttestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate());
+                byte[] subjectKeyIdentifier = DefaultCertPathTrustworthinessVerifier.extractSubjectKeyIdentifier(fidou2fAttestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate());
                 return trustAnchorAsyncRepository.find(subjectKeyIdentifier);
             }
             else {

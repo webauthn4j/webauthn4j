@@ -1,7 +1,8 @@
 package com.webauthn4j.verifier.attestation.statement.tpm;
 
+import com.webauthn4j.converter.internal.asn1.ASN1;
+import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
-import org.apache.kerby.asn1.type.Asn1Utf8String;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingEnumeration;
@@ -10,6 +11,7 @@ import javax.naming.directory.Attributes;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,9 +41,9 @@ public class DefaultTPMDevicePropertyDecoder implements TPMDevicePropertyDecoder
             return null;
         }
         else {
-            Asn1Utf8String attrAsn1Utf8String = new Asn1Utf8String();
-            attrAsn1Utf8String.decode(attr);
-            return attrAsn1Utf8String.getValue();
+            ASN1Primitive asn1Primitive = ASN1Primitive.parse(attr);
+            byte[] bytes = asn1Primitive.getValue();
+            return new String(bytes, StandardCharsets.UTF_8);
         }
     }
 

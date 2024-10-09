@@ -18,6 +18,8 @@ package com.webauthn4j.appattest.verifier.attestation.statement.appleappattest;
 
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
 import com.webauthn4j.appattest.verifier.DCRegistrationObject;
+import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
+import com.webauthn4j.converter.internal.asn1.ASN1Sequence;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.util.AssertUtil;
@@ -26,14 +28,9 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
-import org.apache.kerby.asn1.parse.Asn1Container;
-import org.apache.kerby.asn1.parse.Asn1Parser;
-import org.apache.kerby.asn1.type.Asn1OctetString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
@@ -124,15 +121,10 @@ public class AppleAppAttestAttestationStatementVerifier extends AbstractStatemen
             throw new BadAttestationStatementException("Apple X.509 extension not found");
         }
 
-        Asn1OctetString envelope = new Asn1OctetString();
-        try {
-            envelope.decode(attestationExtensionBytes);
-            Asn1Container container = (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(envelope.getValue()));
-            Asn1OctetString subEnvelop = new Asn1OctetString();
-            subEnvelop.decode(container.getChildren().get(0));
-            return subEnvelop.getValue();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        ASN1Primitive envelope = ASN1Primitive.parse(attestationExtensionBytes);
+        ASN1Sequence sequence = (ASN1Sequence)envelope.getValueAsASN1();
+        ASN1Sequence item = (ASN1Sequence)sequence.get(0);
+        ASN1Primitive nonceContainer = (ASN1Primitive)item.get(0);
+        return nonceContainer.getValue();
     }
 }

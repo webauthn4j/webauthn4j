@@ -16,6 +16,8 @@
 
 package com.webauthn4j.verifier.attestation.statement.apple;
 
+import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
+import com.webauthn4j.converter.internal.asn1.ASN1Sequence;
 import com.webauthn4j.data.attestation.statement.AppleAnonymousAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.util.AssertUtil;
@@ -24,13 +26,8 @@ import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.PublicKeyMismatchException;
-import org.apache.kerby.asn1.parse.Asn1Container;
-import org.apache.kerby.asn1.parse.Asn1ParseResult;
-import org.apache.kerby.asn1.parse.Asn1Parser;
-import org.apache.kerby.asn1.type.Asn1OctetString;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.security.PublicKey;
 import java.util.Arrays;
@@ -70,17 +67,24 @@ public class AppleAnonymousAttestationStatementVerifier extends AbstractStatemen
         byte[] nonce = getNonce(registrationObject);
         byte[] extensionValue = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.2.840.113635.100.8.2");
         byte[] extracted;
+
         try {
-            Asn1OctetString extensionEnvelope = new Asn1OctetString();
-            extensionEnvelope.decode(extensionValue);
-            extensionEnvelope.getValue();
-            byte[] extensionEnvelopeValue = extensionEnvelope.getValue();
-            Asn1Container container = (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(extensionEnvelopeValue));
-            Asn1ParseResult firstElement = container.getChildren().get(0);
-            Asn1OctetString octetString = new Asn1OctetString();
-            octetString.decode(firstElement);
-            extracted = octetString.getValue();
-        } catch (IOException | RuntimeException e) {
+            ASN1Primitive extensionEnvelope = ASN1Primitive.parse(extensionValue);
+            ASN1Sequence sequence = (ASN1Sequence) extensionEnvelope.getValueAsASN1();
+            ASN1Sequence innerSequence = (ASN1Sequence) sequence.get(0);
+            ASN1Primitive firstItem = (ASN1Primitive) innerSequence.get(0);
+            extracted =  firstItem.getValue();
+
+//            Asn1OctetString extensionEnvelope = new Asn1OctetString();
+//            extensionEnvelope.decode(extensionValue);
+//            extensionEnvelope.getValue();
+//            byte[] extensionEnvelopeValue = extensionEnvelope.getValue();
+//            Asn1Container container = (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(extensionEnvelopeValue));
+//            Asn1ParseResult firstElement = container.getChildren().get(0);
+//            Asn1OctetString octetString = new Asn1OctetString();
+//            octetString.decode(firstElement);
+//            extracted = octetString.getValue();
+        } catch (RuntimeException e) {
             throw new BadAttestationStatementException("Failed to extract nonce from Apple anonymous attestation statement.", e);
         }
         // As nonce is known data to client side(potential attacker) because it is calculated from parts of a message,

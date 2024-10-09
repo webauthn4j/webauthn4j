@@ -36,7 +36,7 @@ NOTE: FIDO2 Test ToolsはFIDO2 Transport Binding ProfileのREST API経由でテ�
 
 ==== ポータビリティ
 
-WebAuthn4JはSLF4JとJackson、Apache Kerbyにのみ依存しており、非常に高いポータビリティを持っています。 あなたのJavaアプリへの導入の障害は殆どないでしょう。
+WebAuthn4JはSLF4JとJacksonにのみ依存しており、非常に高いポータビリティを持っています。 あなたのJavaアプリへの導入の障害は殆どないでしょう。
 
 === 要件
 

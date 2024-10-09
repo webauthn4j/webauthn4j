@@ -1,24 +1,24 @@
-package com.webauthn4j.converter.asn1;
+package com.webauthn4j.converter.internal.asn1;
 
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface ASN1Structure {
+public interface ASN1Structure extends Iterable<ASN1> {
 
-    static List<ASN1> parseValue(ByteBuffer byteBuffer, ASN1.ASN1Tag tag, ASN1.ASN1Length length) {
+    static List<ASN1> parseValue(ByteBuffer byteBuffer, ASN1Tag tag, ASN1Length length) {
         List<ASN1> res = new ArrayList<>();
         int valueLength = length.getValueLength();
         int readLength = 0;
         while (readLength < valueLength) {
             int beforePos = byteBuffer.position();
-            ASN1 newObj = ASN1.parseASN1(byteBuffer);
+            ASN1 newObj = ASN1.parse(byteBuffer);
             int afterPos = byteBuffer.position();
             int newObjLength = afterPos - beforePos;
             readLength += newObjLength;
 
-            if (newObj.getTag().getTagClass() == ASN1.ASN1TagClass.UNIVERSAL &&
+            if (newObj.getTag().getTagClass() == ASN1Tag.ASN1TagClass.UNIVERSAL &&
                     !newObj.getTag().isConstructed() &&
                     newObj.getTag().getNumber() == 0 &&
                     newObj.getLength().getValueLength() == 0) {

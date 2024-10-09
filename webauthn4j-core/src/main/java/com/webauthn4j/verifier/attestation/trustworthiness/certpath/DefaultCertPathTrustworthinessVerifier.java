@@ -17,11 +17,15 @@
 package com.webauthn4j.verifier.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.anchor.TrustAnchorRepository;
+import com.webauthn4j.converter.internal.asn1.ASN1;
+import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
+import com.webauthn4j.converter.internal.asn1.ASN1Sequence;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.exception.CertificateException;
 import com.webauthn4j.verifier.exception.TrustAnchorNotFoundException;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +62,7 @@ public class DefaultCertPathTrustworthinessVerifier implements CertPathTrustwort
 
         if(attestationStatement instanceof FIDOU2FAttestationStatement){
             FIDOU2FAttestationStatement fidou2fAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
-            byte[] subjectKeyIdentifier = CertificateUtil.extractSubjectKeyIdentifier(fidou2fAttestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate());
+            byte[] subjectKeyIdentifier = extractSubjectKeyIdentifier(fidou2fAttestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate());
             trustAnchors = trustAnchorRepository.find(subjectKeyIdentifier);
         }
         else {
@@ -131,5 +135,13 @@ public class DefaultCertPathTrustworthinessVerifier implements CertPathTrustwort
 
     public void setPolicyQualifiersRejected(boolean policyQualifiersRejected) {
         this.policyQualifiersRejected = policyQualifiersRejected;
+    }
+
+    public static @NotNull byte[] extractSubjectKeyIdentifier(X509Certificate certificate){
+        byte[] publicKeyEncoded = certificate.getPublicKey().getEncoded();
+        ASN1Sequence sequence = ASN1Sequence.parse(publicKeyEncoded);
+        ASN1Primitive publicKey = (ASN1Primitive) sequence.get(1);
+        byte[] publicKeyBytes = publicKey.getValueAsBitString();
+        return MessageDigestUtil.createMessageDigest("SHA-1").digest(publicKeyBytes);
     }
 }

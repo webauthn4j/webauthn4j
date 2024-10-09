@@ -21,7 +21,6 @@ dependencies {
     api project(':webauthn4j-core')
 
     implementation("org.slf4j:slf4j-api")
-    implementation("org.apache.kerby:kerby-asn1")
 
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
