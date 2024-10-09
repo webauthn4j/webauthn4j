@@ -54,7 +54,7 @@ public class ASN1 {
         ASN1Tag tag = ASN1Tag.parse(byteBuffer);
         ASN1Length length = ASN1Length.parse(byteBuffer);
         if(tag.isConstructed()){
-            List<ASN1> value = ASN1Structure.parseValue(byteBuffer, tag, length);
+            List<ASN1> value = ASN1Structure.parseValue(byteBuffer, length);
             return new ASN1Sequence(tag, length, value); //TODO: non-sequence structure
         }
         else {

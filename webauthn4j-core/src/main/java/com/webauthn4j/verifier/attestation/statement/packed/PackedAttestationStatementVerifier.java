@@ -16,7 +16,6 @@
 
 package com.webauthn4j.verifier.attestation.statement.packed;
 
-import com.webauthn4j.converter.internal.asn1.ASN1;
 import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;

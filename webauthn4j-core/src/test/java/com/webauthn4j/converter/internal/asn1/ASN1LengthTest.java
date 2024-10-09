@@ -18,7 +18,8 @@ class ASN1LengthTest {
         ASN1Length instanceA = new ASN1Length(false, 8);
         ASN1Length instanceB = new ASN1Length(false, 8);
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
     }
 }

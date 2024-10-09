@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ASN1Structure extends Iterable<ASN1> {
 
-    static List<ASN1> parseValue(ByteBuffer byteBuffer, ASN1Tag tag, ASN1Length length) {
+    static List<ASN1> parseValue(ByteBuffer byteBuffer, ASN1Length length) {
         List<ASN1> res = new ArrayList<>();
         int valueLength = length.getValueLength();
         int readLength = 0;

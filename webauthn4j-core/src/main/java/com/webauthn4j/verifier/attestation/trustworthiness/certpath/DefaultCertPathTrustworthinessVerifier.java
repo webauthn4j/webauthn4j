@@ -17,7 +17,6 @@
 package com.webauthn4j.verifier.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.anchor.TrustAnchorRepository;
-import com.webauthn4j.converter.internal.asn1.ASN1;
 import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
 import com.webauthn4j.converter.internal.asn1.ASN1Sequence;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;

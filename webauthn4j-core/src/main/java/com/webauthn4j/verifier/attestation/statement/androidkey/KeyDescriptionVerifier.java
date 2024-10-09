@@ -30,8 +30,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -61,15 +59,11 @@ public class KeyDescriptionVerifier {
         AssertUtil.notNull(x509Certificate, "x509Certificate must not be null");
         AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
 
-        try {
-            ASN1Sequence keyDescription = extractKeyDescription(x509Certificate);
-            doVerify(keyDescription, clientDataHash, teeEnforcedOnly);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        ASN1Sequence keyDescription = extractKeyDescription(x509Certificate);
+        doVerify(keyDescription, clientDataHash, teeEnforcedOnly);
     }
 
-    @NotNull ASN1Sequence extractKeyDescription(@NotNull X509Certificate x509Certificate) throws IOException {
+    @NotNull ASN1Sequence extractKeyDescription(@NotNull X509Certificate x509Certificate) {
 
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
 
@@ -79,7 +73,7 @@ public class KeyDescriptionVerifier {
         return (ASN1Sequence) ASN1Primitive.parse(attestationExtensionBytes).getValueAsASN1();
     }
 
-    void doVerify(@NotNull ASN1Sequence keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
+    void doVerify(@NotNull ASN1Sequence keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) {
         /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
         byte[] attestationChallenge = ((ASN1Primitive) keyDescription.get(ATTESTATION_CHALLENGE_INDEX)).getValue();
         // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
@@ -102,7 +96,7 @@ public class KeyDescriptionVerifier {
         verifyAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
     }
 
-    private void verifyAuthorizationList(boolean teeEnforcedOnly, @NotNull ASN1Sequence softwareEnforced, @NotNull ASN1Sequence teeEnforced) throws IOException {
+    private void verifyAuthorizationList(boolean teeEnforcedOnly, @NotNull ASN1Sequence softwareEnforced, @NotNull ASN1Sequence teeEnforced) {
         /// For the following,
         /// use only the teeEnforced authorization list if the RP wants to accept only keys
         /// from a trusted execution environment,
@@ -136,20 +130,20 @@ public class KeyDescriptionVerifier {
     private boolean isKeyGeneratedInKeymaster(@Nullable ASN1 origin) {
         try {
             return Objects.equals(getIntegerFromAsn1(origin), BigInteger.valueOf(KM_ORIGIN_GENERATED));
-        } catch (RuntimeException | IOException e) {
+        } catch (RuntimeException e) {
             logger.debug("Failed to retrieve origin.", e);
             return false;
         }
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean containsValidPurpose(@Nullable ASN1 purposes) throws IOException {
+    private boolean containsValidPurpose(@Nullable ASN1 purposes) {
         try {
             if (purposes == null) {
                 return false;
             }
             ASN1Sequence set = (ASN1Sequence)purposes;
-            for (Object valueItem: set) {
+            for (ASN1 valueItem: set) {
                 ASN1Primitive purpose = (ASN1Primitive) valueItem;
                 if (Objects.equals(getIntegerFromAsn1(purpose), BigInteger.valueOf(KM_PURPOSE_SIGN))) {
                     return true;
@@ -163,7 +157,7 @@ public class KeyDescriptionVerifier {
     }
 
 
-    private @Nullable BigInteger getIntegerFromAsn1(ASN1 asn1Value) throws IOException {
+    private @Nullable BigInteger getIntegerFromAsn1(ASN1 asn1Value) {
         if (asn1Value == null) {
             return null;
         }
@@ -174,7 +168,7 @@ public class KeyDescriptionVerifier {
     }
 
     private @Nullable ASN1 findAuthorizationListEntry(@NotNull ASN1Sequence authorizationList, int tag) {
-        for (Object listItem : authorizationList) {
+        for (ASN1 listItem : authorizationList) {
             ASN1Sequence entry = (ASN1Sequence)listItem;
             if (entry.getTag().getNumber() == tag) {
                 return entry.get(0);

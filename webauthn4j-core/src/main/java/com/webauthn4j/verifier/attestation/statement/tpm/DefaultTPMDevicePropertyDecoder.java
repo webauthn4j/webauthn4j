@@ -1,6 +1,5 @@
 package com.webauthn4j.verifier.attestation.statement.tpm;
 
-import com.webauthn4j.converter.internal.asn1.ASN1;
 import com.webauthn4j.converter.internal.asn1.ASN1Primitive;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 
@@ -10,8 +9,6 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,24 +16,19 @@ import java.util.stream.Collectors;
 public class DefaultTPMDevicePropertyDecoder implements TPMDevicePropertyDecoder {
 
     public TPMDeviceProperty decode(String subjectAlternativeName) throws BadAttestationStatementException {
-        try{
-            Map<String, Object> map = parseSubjectAlternativeName(subjectAlternativeName);
+        Map<String, Object> map = parseSubjectAlternativeName(subjectAlternativeName);
 
-            byte[] manufacturerAttr = (byte[]) map.get("2.23.133.2.1");
-            byte[] partNumberAttr = (byte[]) map.get("2.23.133.2.2");
-            byte[] firmwareVersionAttr = (byte[]) map.get("2.23.133.2.3");
+        byte[] manufacturerAttr = (byte[]) map.get("2.23.133.2.1");
+        byte[] partNumberAttr = (byte[]) map.get("2.23.133.2.2");
+        byte[] firmwareVersionAttr = (byte[]) map.get("2.23.133.2.3");
 
-            String manufacturer = decodeAttr(manufacturerAttr);
-            String partNumber = decodeAttr(partNumberAttr);
-            String firmwareVersion = decodeAttr(firmwareVersionAttr);
-            return new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion);
-        }
-        catch (IOException e) {
-            throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", e);
-        }
+        String manufacturer = decodeAttr(manufacturerAttr);
+        String partNumber = decodeAttr(partNumberAttr);
+        String firmwareVersion = decodeAttr(firmwareVersionAttr);
+        return new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion);
     }
 
-    public static String decodeAttr(byte[] attr) throws IOException {
+    public static String decodeAttr(byte[] attr) {
         if (attr == null) {
             return null;
         }
