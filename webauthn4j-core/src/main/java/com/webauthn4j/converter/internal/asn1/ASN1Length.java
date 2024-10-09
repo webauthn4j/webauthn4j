@@ -31,7 +31,7 @@ public class ASN1Length {
     private final boolean indefinite;
     private final int valueLength;
 
-    private ASN1Length(boolean indefinite, int valueLength) {
+    ASN1Length(boolean indefinite, int valueLength) {
         this.indefinite = indefinite;
         this.valueLength = valueLength;
     }

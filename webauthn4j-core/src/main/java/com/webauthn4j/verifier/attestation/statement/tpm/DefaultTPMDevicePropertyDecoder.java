@@ -42,8 +42,7 @@ public class DefaultTPMDevicePropertyDecoder implements TPMDevicePropertyDecoder
         }
         else {
             ASN1Primitive asn1Primitive = ASN1Primitive.parse(attr);
-            byte[] bytes = asn1Primitive.getValue();
-            return new String(bytes, StandardCharsets.UTF_8);
+            return asn1Primitive.getValueAsUtf8String();
         }
     }
 

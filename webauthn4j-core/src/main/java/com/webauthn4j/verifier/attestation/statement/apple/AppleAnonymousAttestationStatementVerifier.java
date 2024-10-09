@@ -74,16 +74,6 @@ public class AppleAnonymousAttestationStatementVerifier extends AbstractStatemen
             ASN1Sequence innerSequence = (ASN1Sequence) sequence.get(0);
             ASN1Primitive firstItem = (ASN1Primitive) innerSequence.get(0);
             extracted =  firstItem.getValue();
-
-//            Asn1OctetString extensionEnvelope = new Asn1OctetString();
-//            extensionEnvelope.decode(extensionValue);
-//            extensionEnvelope.getValue();
-//            byte[] extensionEnvelopeValue = extensionEnvelope.getValue();
-//            Asn1Container container = (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(extensionEnvelopeValue));
-//            Asn1ParseResult firstElement = container.getChildren().get(0);
-//            Asn1OctetString octetString = new Asn1OctetString();
-//            octetString.decode(firstElement);
-//            extracted = octetString.getValue();
         } catch (RuntimeException e) {
             throw new BadAttestationStatementException("Failed to extract nonce from Apple anonymous attestation statement.", e);
         }
