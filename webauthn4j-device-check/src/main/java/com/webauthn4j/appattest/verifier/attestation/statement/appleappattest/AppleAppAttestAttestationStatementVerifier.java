@@ -116,15 +116,19 @@ public class AppleAppAttestAttestationStatementVerifier extends AbstractStatemen
     }
 
     byte[] extractNonce(X509Certificate attestationCertificate) {
-        byte[] attestationExtensionBytes = attestationCertificate.getExtensionValue(APPLE_CRED_CERT_EXTENSION_OID);
-        if (attestationExtensionBytes == null) {
+        byte[] extensionValue = attestationCertificate.getExtensionValue(APPLE_CRED_CERT_EXTENSION_OID);
+        if (extensionValue == null) {
             throw new BadAttestationStatementException("Apple X.509 extension not found");
         }
 
-        ASN1Primitive envelope = ASN1Primitive.parse(attestationExtensionBytes);
-        ASN1Sequence sequence = envelope.getValueAsASN1Sequence();
-        ASN1Sequence item = (ASN1Sequence)sequence.get(0);
-        ASN1Primitive nonceContainer = (ASN1Primitive)item.get(0);
-        return nonceContainer.getValue();
+        try {
+            ASN1Primitive envelope = ASN1Primitive.parse(extensionValue);
+            ASN1Sequence sequence = envelope.getValueAsASN1Sequence();
+            ASN1Sequence item = (ASN1Sequence)sequence.get(0);
+            ASN1Primitive nonceContainer = (ASN1Primitive)item.get(0);
+            return nonceContainer.getValue();
+        } catch (RuntimeException e) {
+            throw new BadAttestationStatementException("Failed to extract nonce from Apple App Attest attestation statement.", e);
+        }
     }
 }

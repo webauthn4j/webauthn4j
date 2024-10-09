@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.security.PublicKey;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 public class AppleAnonymousAttestationStatementVerifier extends AbstractStatementVerifier<AppleAnonymousAttestationStatement> {
@@ -65,18 +66,8 @@ public class AppleAnonymousAttestationStatementVerifier extends AbstractStatemen
         AppleAnonymousAttestationStatement attestationStatement = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] nonce = getNonce(registrationObject);
-        byte[] extensionValue = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.2.840.113635.100.8.2");
-        byte[] extracted;
+        byte[] extracted = extractNonce(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate());
 
-        try {
-            ASN1Primitive extensionEnvelope = ASN1Primitive.parse(extensionValue);
-            ASN1Sequence sequence = extensionEnvelope.getValueAsASN1Sequence();
-            ASN1Sequence innerSequence = (ASN1Sequence) sequence.get(0);
-            ASN1Primitive firstItem = (ASN1Primitive) innerSequence.get(0);
-            extracted =  firstItem.getValue();
-        } catch (RuntimeException e) {
-            throw new BadAttestationStatementException("Failed to extract nonce from Apple anonymous attestation statement.", e);
-        }
         // As nonce is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(extracted, nonce)) {
@@ -97,6 +88,23 @@ public class AppleAnonymousAttestationStatementVerifier extends AbstractStatemen
         PublicKey publicKeyInCredentialData = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getPublicKey();
         if (!publicKeyInEndEntityCert.equals(publicKeyInCredentialData)) {
             throw new PublicKeyMismatchException("The public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData in authenticatorData.");
+        }
+    }
+
+    private byte[] extractNonce(X509Certificate attestationCertificate) {
+        byte[] extensionValue = attestationCertificate.getExtensionValue("1.2.840.113635.100.8.2");
+        if (extensionValue == null) {
+            throw new BadAttestationStatementException("Apple X.509 extension not found");
+        }
+
+        try {
+            ASN1Primitive extensionEnvelope = ASN1Primitive.parse(extensionValue);
+            ASN1Sequence sequence = extensionEnvelope.getValueAsASN1Sequence();
+            ASN1Sequence innerSequence = (ASN1Sequence) sequence.get(0);
+            ASN1Primitive firstItem = (ASN1Primitive) innerSequence.get(0);
+            return firstItem.getValue();
+        } catch (RuntimeException e) {
+            throw new BadAttestationStatementException("Failed to extract nonce from Apple anonymous attestation statement.", e);
         }
     }
 
