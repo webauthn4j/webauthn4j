@@ -65,8 +65,8 @@ public class ASN1Primitive extends ASN1{
         return ASN1Primitive.parse(getValue());
     }
 
-    public ASN1Sequence getValueAsASN1Sequence(){
-        return ASN1Sequence.parse(getValue());
+    public ASN1Structure getValueAsASN1Structure(){
+        return ASN1Structure.parse(getValue());
     }
 
 }

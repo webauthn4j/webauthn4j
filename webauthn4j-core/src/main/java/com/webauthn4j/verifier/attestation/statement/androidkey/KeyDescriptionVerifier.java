@@ -21,7 +21,7 @@ package com.webauthn4j.verifier.attestation.statement.androidkey;
 
 import com.webauthn4j.verifier.internal.asn1.ASN1;
 import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
-import com.webauthn4j.verifier.internal.asn1.ASN1Sequence;
+import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.KeyDescriptionValidationException;
@@ -59,21 +59,21 @@ public class KeyDescriptionVerifier {
         AssertUtil.notNull(x509Certificate, "x509Certificate must not be null");
         AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
 
-        ASN1Sequence keyDescription = extractKeyDescription(x509Certificate);
+        ASN1Structure keyDescription = extractKeyDescription(x509Certificate);
         doVerify(keyDescription, clientDataHash, teeEnforcedOnly);
     }
 
-    @NotNull ASN1Sequence extractKeyDescription(@NotNull X509Certificate x509Certificate) {
+    @NotNull ASN1Structure extractKeyDescription(@NotNull X509Certificate x509Certificate) {
 
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
 
         if (attestationExtensionBytes == null) {
             throw new KeyDescriptionValidationException("KeyDescription must not be null");
         }
-        return ASN1Primitive.parse(attestationExtensionBytes).getValueAsASN1Sequence();
+        return ASN1Primitive.parse(attestationExtensionBytes).getValueAsASN1Structure();
     }
 
-    void doVerify(@NotNull ASN1Sequence keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) {
+    void doVerify(@NotNull ASN1Structure keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) {
         /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
         byte[] attestationChallenge = ((ASN1Primitive) keyDescription.get(ATTESTATION_CHALLENGE_INDEX)).getValue();
         // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
@@ -85,8 +85,8 @@ public class KeyDescriptionVerifier {
         /// Verify the following using the appropriate authorization list from the attestation certificate extension data:
 
         /// The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
-        ASN1Sequence softwareEnforced = (ASN1Sequence) keyDescription.get(SW_ENFORCED_INDEX);
-        ASN1Sequence teeEnforced = (ASN1Sequence) keyDescription.get(TEE_ENFORCED_INDEX);
+        ASN1Structure softwareEnforced = (ASN1Structure) keyDescription.get(SW_ENFORCED_INDEX);
+        ASN1Structure teeEnforced = (ASN1Structure) keyDescription.get(TEE_ENFORCED_INDEX);
 
         if (findAuthorizationListEntry(softwareEnforced, KM_TAG_ALL_APPLICATIONS) != null ||
                 findAuthorizationListEntry(teeEnforced, KM_TAG_ALL_APPLICATIONS) != null) {
@@ -96,7 +96,7 @@ public class KeyDescriptionVerifier {
         verifyAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
     }
 
-    private void verifyAuthorizationList(boolean teeEnforcedOnly, @NotNull ASN1Sequence softwareEnforced, @NotNull ASN1Sequence teeEnforced) {
+    private void verifyAuthorizationList(boolean teeEnforcedOnly, @NotNull ASN1Structure softwareEnforced, @NotNull ASN1Structure teeEnforced) {
         /// For the following,
         /// use only the teeEnforced authorization list if the RP wants to accept only keys
         /// from a trusted execution environment,
@@ -142,7 +142,7 @@ public class KeyDescriptionVerifier {
             if (purposes == null) {
                 return false;
             }
-            ASN1Sequence set = (ASN1Sequence)purposes;
+            ASN1Structure set = (ASN1Structure)purposes;
             for (ASN1 valueItem: set) {
                 ASN1Primitive purpose = (ASN1Primitive) valueItem;
                 if (Objects.equals(getIntegerFromAsn1(purpose), BigInteger.valueOf(KM_PURPOSE_SIGN))) {
@@ -167,9 +167,9 @@ public class KeyDescriptionVerifier {
         return ((ASN1Primitive)asn1Value).getValueAsBigInteger();
     }
 
-    private @Nullable ASN1 findAuthorizationListEntry(@NotNull ASN1Sequence authorizationList, int tag) {
+    private @Nullable ASN1 findAuthorizationListEntry(@NotNull ASN1Structure authorizationList, int tag) {
         for (ASN1 listItem : authorizationList) {
-            ASN1Sequence entry = (ASN1Sequence)listItem;
+            ASN1Structure entry = (ASN1Structure)listItem;
             if (entry.getTag().getNumber() == tag) {
                 return entry.get(0);
             }

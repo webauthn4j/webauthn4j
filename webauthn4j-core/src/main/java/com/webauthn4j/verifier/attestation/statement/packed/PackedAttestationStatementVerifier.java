@@ -31,7 +31,6 @@ import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAlgorithmException;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
-import com.webauthn4j.verifier.internal.asn1.ASN1Sequence;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
