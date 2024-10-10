@@ -40,9 +40,3 @@ dependencies {
     testCompileOnly("org.jetbrains:annotations")
 
 }
-
-tasks.named('jar') {
-    manifest {
-        attributes('Automatic-Module-Name': 'com.webauthn4j.metadata.async')
-    }
-}

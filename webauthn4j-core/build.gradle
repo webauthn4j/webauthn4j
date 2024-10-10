@@ -39,9 +39,3 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
     testCompileOnly("org.jetbrains:annotations")
 }
-
-tasks.named('jar') {
-    manifest {
-        attributes('Automatic-Module-Name': 'com.webauthn4j.core')
-    }
-}

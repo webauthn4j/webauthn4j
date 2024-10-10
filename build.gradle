@@ -147,6 +147,7 @@ subprojects {
         options.compilerArgs << "-Xlint:static"
         //options.compilerArgs << "-Xlint:deprecation" //Temporary suspended to allow com.webauthn4j.metadata.legacy classes TODO: enable this option again when legacy classes are removed
         options.compilerArgs << "-Werror"
+        options.compilerArgs << "-Xlint:-module" //Not sure why, but without this compiler option, compiler fails with a module error for "exports <package name> to <module name>.
     }
 
 
