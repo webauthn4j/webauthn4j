@@ -17,17 +17,10 @@
 package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import org.apache.kerby.asn1.parse.Asn1Container;
-import org.apache.kerby.asn1.parse.Asn1ParseResult;
-import org.apache.kerby.asn1.parse.Asn1Parser;
-import org.apache.kerby.asn1.type.Asn1BitString;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -112,19 +105,6 @@ public class CertificateUtil {
         }
     }
 
-    public static @NotNull byte[] extractSubjectKeyIdentifier(X509Certificate certificate){
-        try{
-            byte[] publicKeyEncoded = certificate.getPublicKey().getEncoded();
-            Asn1ParseResult result = Asn1Parser.parse(ByteBuffer.wrap(publicKeyEncoded));
-            List<Asn1ParseResult> children = ((Asn1Container) result).getChildren();
-            Asn1BitString asn1BitString = new Asn1BitString();
-            asn1BitString.decode(children.get(1));
-            byte[] publicKeyBytes = asn1BitString.getValue();
-            return MessageDigestUtil.createMessageDigest("SHA-1").digest(publicKeyBytes);
-        }
-        catch (IOException e){
-            throw new UncheckedIOException(e);
-        }
-    }
+
 
 }

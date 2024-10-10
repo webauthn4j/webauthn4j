@@ -16,6 +16,7 @@
 
 package com.webauthn4j.verifier.attestation.statement.packed;
 
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -30,11 +31,8 @@ import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAlgorithmException;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
-import org.apache.kerby.asn1.type.Asn1OctetString;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.PublicKey;
@@ -108,18 +106,16 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
     }
 
     @NotNull AAGUID extractAAGUIDFromAttestationCertificate(@NotNull X509Certificate certificate) {
-        byte[] extensionValue = certificate.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
-        if (extensionValue == null) {
-            return AAGUID.NULL;
-        }
         try {
-            Asn1OctetString envelope = new Asn1OctetString();
-            envelope.decode(extensionValue);
-            Asn1OctetString innerEnvelope = new Asn1OctetString();
-            innerEnvelope.decode(envelope.getValue());
+            byte[] extensionValue = certificate.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
+            if (extensionValue == null) {
+                return AAGUID.NULL;
+            }
+            ASN1Primitive envelope = ASN1Primitive.parse(extensionValue);
+            ASN1Primitive innerEnvelope = ASN1Primitive.parse(envelope.getValue());
             return new AAGUID(UUIDUtil.fromBytes(innerEnvelope.getValue()));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+        } catch (RuntimeException e) {
+            throw new BadAttestationStatementException("Failed to extract aaguid from Packed attestation statement.", e);
         }
     }
 

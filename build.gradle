@@ -23,7 +23,6 @@ buildscript {
 
         // Define implementation dependency versions independently
         jacksonVersion = "2.18.0"
-        kerbyVersion = "2.1.0"
         slf4jVersion = "2.0.16"
         bouncyCastleVersion = "1.70"
         jetbrainsAnnotationsVersion = "26.0.0"
@@ -98,8 +97,6 @@ subprojects {
             implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
             implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:$jacksonVersion")
             implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-
-            implementation("org.apache.kerby:kerby-asn1:$kerbyVersion")
 
             implementation("org.slf4j:slf4j-api:$slf4jVersion")
 

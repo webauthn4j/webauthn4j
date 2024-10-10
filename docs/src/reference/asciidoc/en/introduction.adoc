@@ -39,6 +39,10 @@ are passed.
 
 NOTE: Since FIDO2 Test Tools runs the test via the REST API of FIDO2 Transport Binding Profile, it is executed through the REST API implementation provided by WebAuthn4j Spring Security.
 
+==== Portability
+
+WebAuthn4J only depends on SLF4J and Jackson, offering very high portability. There should be almost no barriers to introducing webauthn4j into your Java application.
+
 === Requirements
 
 ==== Language & Framework

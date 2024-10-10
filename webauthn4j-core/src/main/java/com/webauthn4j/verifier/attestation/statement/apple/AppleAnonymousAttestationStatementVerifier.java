@@ -16,6 +16,8 @@
 
 package com.webauthn4j.verifier.attestation.statement.apple;
 
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
+import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import com.webauthn4j.data.attestation.statement.AppleAnonymousAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.util.AssertUtil;
@@ -24,15 +26,11 @@ import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.PublicKeyMismatchException;
-import org.apache.kerby.asn1.parse.Asn1Container;
-import org.apache.kerby.asn1.parse.Asn1ParseResult;
-import org.apache.kerby.asn1.parse.Asn1Parser;
-import org.apache.kerby.asn1.type.Asn1OctetString;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.security.PublicKey;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 public class AppleAnonymousAttestationStatementVerifier extends AbstractStatementVerifier<AppleAnonymousAttestationStatement> {
@@ -68,21 +66,8 @@ public class AppleAnonymousAttestationStatementVerifier extends AbstractStatemen
         AppleAnonymousAttestationStatement attestationStatement = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] nonce = getNonce(registrationObject);
-        byte[] extensionValue = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.2.840.113635.100.8.2");
-        byte[] extracted;
-        try {
-            Asn1OctetString extensionEnvelope = new Asn1OctetString();
-            extensionEnvelope.decode(extensionValue);
-            extensionEnvelope.getValue();
-            byte[] extensionEnvelopeValue = extensionEnvelope.getValue();
-            Asn1Container container = (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(extensionEnvelopeValue));
-            Asn1ParseResult firstElement = container.getChildren().get(0);
-            Asn1OctetString octetString = new Asn1OctetString();
-            octetString.decode(firstElement);
-            extracted = octetString.getValue();
-        } catch (IOException | RuntimeException e) {
-            throw new BadAttestationStatementException("Failed to extract nonce from Apple anonymous attestation statement.", e);
-        }
+        byte[] extracted = extractNonce(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate());
+
         // As nonce is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(extracted, nonce)) {
@@ -103,6 +88,23 @@ public class AppleAnonymousAttestationStatementVerifier extends AbstractStatemen
         PublicKey publicKeyInCredentialData = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getPublicKey();
         if (!publicKeyInEndEntityCert.equals(publicKeyInCredentialData)) {
             throw new PublicKeyMismatchException("The public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData in authenticatorData.");
+        }
+    }
+
+    private byte[] extractNonce(X509Certificate attestationCertificate) {
+        byte[] extensionValue = attestationCertificate.getExtensionValue("1.2.840.113635.100.8.2");
+        if (extensionValue == null) {
+            throw new BadAttestationStatementException("Apple X.509 extension not found");
+        }
+
+        try {
+            ASN1Primitive extensionEnvelope = ASN1Primitive.parse(extensionValue);
+            ASN1Structure sequence = extensionEnvelope.getValueAsASN1Structure();
+            ASN1Structure innerSequence = (ASN1Structure) sequence.get(0);
+            ASN1Primitive firstItem = (ASN1Primitive) innerSequence.get(0);
+            return firstItem.getValue();
+        } catch (RuntimeException e) {
+            throw new BadAttestationStatementException("Failed to extract nonce from Apple anonymous attestation statement.", e);
         }
     }
 

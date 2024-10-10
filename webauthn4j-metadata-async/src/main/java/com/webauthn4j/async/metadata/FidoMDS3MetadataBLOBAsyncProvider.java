@@ -16,6 +16,9 @@
 
 package com.webauthn4j.async.metadata;
 
+import com.webauthn4j.verifier.internal.asn1.ASN1;
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
+import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.CertPathCheckContext;
 import com.webauthn4j.metadata.data.MetadataBLOB;
@@ -23,19 +26,12 @@ import com.webauthn4j.metadata.data.MetadataBLOBFactory;
 import com.webauthn4j.metadata.exception.CertPathCheckException;
 import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.util.CertificateUtil;
-import org.apache.kerby.asn1.parse.Asn1Container;
-import org.apache.kerby.asn1.parse.Asn1ParseResult;
-import org.apache.kerby.asn1.parse.Asn1Parser;
-import org.apache.kerby.asn1.type.Asn1GeneralString;
-import org.apache.kerby.asn1.type.Asn1OctetString;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.cert.*;
 import java.util.*;
@@ -223,28 +219,22 @@ public class FidoMDS3MetadataBLOBAsyncProvider extends CachingMetadataBLOBAsyncP
 
         @SuppressWarnings("java:S1155")
         private List<String> extractCRLDistributionPoints(X509Certificate x509Certificate){
-            try {
-                byte[] extensionValue = x509Certificate.getExtensionValue("2.5.29.31");
-                Asn1OctetString extensionEnvelope = new Asn1OctetString();
-                extensionEnvelope.decode(extensionValue);
-                byte[] extensionEnvelopeValue = extensionEnvelope.getValue();
-                Asn1Container container = (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(extensionEnvelopeValue));
-                var distributionPoints = container.getChildren();
-                List<String> crlDistributionPoints = new ArrayList<>();
-                for (Asn1ParseResult distributionPoint : distributionPoints) {
-                    var list = ((Asn1Container) distributionPoint).getChildren();
-                    //noinspection SizeReplaceableByIsEmpty
-                    if (list.size() > 0) {
-                        var distributionPointName = list.get(0);
-                        Asn1GeneralString asn1GeneralString = new Asn1GeneralString();
-                        asn1GeneralString.decode(distributionPointName.readBodyBytes());
-                        crlDistributionPoints.add(asn1GeneralString.getValue());
-                    }
+            byte[] extensionValue = x509Certificate.getExtensionValue("2.5.29.31");
+
+            ASN1Primitive envelope = ASN1Primitive.parse(extensionValue);
+            ASN1Structure crlDistributionPoints = envelope.getValueAsASN1Structure();
+            ArrayList<String> urls = new ArrayList<>();
+            for (ASN1 item: crlDistributionPoints){
+                ASN1Structure distributionPointSequence = (ASN1Structure)item;
+                ASN1Structure distributionPoint = (ASN1Structure) distributionPointSequence.get(0);
+                ASN1Structure fullName = (ASN1Structure)distributionPoint.get(0);
+                for (ASN1 fullNameItem : fullName){
+                    String url = ((ASN1Primitive)fullNameItem).getValueAsUtf8String();
+                    urls.add(url);
                 }
-                return Collections.unmodifiableList(crlDistributionPoints);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
             }
+
+            return Collections.unmodifiableList(urls);
         }
     }
 }
