@@ -125,7 +125,7 @@ public class ServerProperty extends CoreServerProperty {
         return "ServerProperty{" +
                 "rpId=" + getRpId() +
                 ", challenge=" + getChallenge() +
-                "origins=" + origins +
+                ", origins=" + origins +
                 ", tokenBindingId=" + ArrayUtil.toHexString(tokenBindingId) +
                 '}';
     }
