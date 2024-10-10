@@ -37,8 +37,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.sql.Date;
 import java.time.Instant;
+import java.util.Date;
 
 public class AttestationCertificateBuilder {
 

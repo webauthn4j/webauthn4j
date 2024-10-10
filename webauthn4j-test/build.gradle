@@ -38,12 +38,6 @@ dependencies {
 
 }
 
-tasks.named('jar') {
-    manifest {
-        attributes('Automatic-Module-Name': 'com.webauthn4j.test')
-    }
-}
-
 sonarqube {
     skipProject = true
 }
