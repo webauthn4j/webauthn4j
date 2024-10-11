@@ -13,7 +13,7 @@ class DefaultTPMDevicePropertyDecoderTest {
     private final DefaultTPMDevicePropertyDecoder target = new DefaultTPMDevicePropertyDecoder();
 
     @Test
-    void parseTpmSAN_test_case1() throws IOException {
+    void parseTpmSAN_test_case1() {
         String directoryName = "2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433";
         TPMDeviceProperty tpmDeviceProperty = target.decode(directoryName);
         assertAll(
@@ -24,7 +24,7 @@ class DefaultTPMDevicePropertyDecoderTest {
     }
 
     @Test
-    void parseTpmSAN_test_case2() throws IOException {
+    void parseTpmSAN_test_case2() {
         String directoryName = "2.23.133.2.3=#0c0569643a3133+2.23.133.2.2=#0c074e504354367878+2.23.133.2.1=#0c0b69643a3445353434333030";
         TPMDeviceProperty tpmDeviceProperty = target.decode(directoryName);
         assertAll(
@@ -40,7 +40,7 @@ class DefaultTPMDevicePropertyDecoderTest {
     }
 
     @Test
-    void decodeAttr_null_test() throws IOException {
+    void decodeAttr_null_test() {
         assertThat(DefaultTPMDevicePropertyDecoder.decodeAttr(null)).isNull();
     }
 

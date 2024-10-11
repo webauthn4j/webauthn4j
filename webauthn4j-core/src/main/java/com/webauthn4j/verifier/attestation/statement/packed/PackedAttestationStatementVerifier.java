@@ -16,7 +16,6 @@
 
 package com.webauthn4j.verifier.attestation.statement.packed;
 
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -31,6 +30,7 @@ import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAlgorithmException;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;

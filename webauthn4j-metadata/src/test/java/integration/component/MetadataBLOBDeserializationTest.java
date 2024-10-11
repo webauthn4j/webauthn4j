@@ -19,7 +19,6 @@ package integration.component;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.metadata.data.MetadataBLOBPayload;
-import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

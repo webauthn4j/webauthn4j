@@ -1,7 +1,7 @@
 package com.webauthn4j.verifier.attestation.statement.tpm;
 
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingEnumeration;

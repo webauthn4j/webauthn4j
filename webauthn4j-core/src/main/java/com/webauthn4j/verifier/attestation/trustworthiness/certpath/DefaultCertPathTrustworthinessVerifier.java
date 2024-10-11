@@ -17,8 +17,6 @@
 package com.webauthn4j.verifier.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.anchor.TrustAnchorRepository;
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
-import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
@@ -27,6 +25,8 @@ import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.exception.CertificateException;
 import com.webauthn4j.verifier.exception.TrustAnchorNotFoundException;
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
+import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidAlgorithmParameterException;

@@ -66,7 +66,7 @@ class UvmEntryTest {
         assertThat(instance.get(1)).isEqualTo(KeyProtectionType.HARDWARE.getValue());
         assertThat(instance.get(2)).isEqualTo(MatcherProtectionType.TEE.getValue());
 
-        assertThat(instance.size()).isEqualTo(3);
+        assertThat(instance).hasSize(3);
     }
 
     @Test
