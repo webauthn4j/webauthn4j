@@ -20,7 +20,6 @@ import com.webauthn4j.metadata.exception.MDSException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
-import java.util.Objects;
 
 /**
  * HTTP Client for FIDO MetadataItemImpl Service

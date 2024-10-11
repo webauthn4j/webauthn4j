@@ -19,15 +19,12 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.data.MetadataBLOB;
 import com.webauthn4j.metadata.exception.MDSException;
-import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.CertificateUtil;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;

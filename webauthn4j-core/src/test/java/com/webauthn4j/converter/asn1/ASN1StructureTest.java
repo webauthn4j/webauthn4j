@@ -1,7 +1,7 @@
 package com.webauthn4j.converter.asn1;
 
-import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;

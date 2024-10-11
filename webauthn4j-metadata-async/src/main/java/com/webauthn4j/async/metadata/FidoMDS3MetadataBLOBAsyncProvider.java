@@ -16,9 +16,6 @@
 
 package com.webauthn4j.async.metadata;
 
-import com.webauthn4j.verifier.internal.asn1.ASN1;
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
-import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.CertPathCheckContext;
 import com.webauthn4j.metadata.data.MetadataBLOB;
@@ -26,6 +23,9 @@ import com.webauthn4j.metadata.data.MetadataBLOBFactory;
 import com.webauthn4j.metadata.exception.CertPathCheckException;
 import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.verifier.internal.asn1.ASN1;
+import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
+import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

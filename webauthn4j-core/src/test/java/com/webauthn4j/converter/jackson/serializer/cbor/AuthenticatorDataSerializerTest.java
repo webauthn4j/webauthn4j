@@ -70,7 +70,7 @@ class AuthenticatorDataSerializerTest {
                 () -> assertThat(restored.getAttestedCredentialData().getAaguid()).isEqualTo(aaguid),
                 () -> assertThat(restored.getAttestedCredentialData().getCredentialId()).isEqualTo(credentialId),
                 () -> assertThat(restored.getAttestedCredentialData().getCOSEKey()).isEqualTo(credentialPublicKey),
-                () -> assertThat(restored.getExtensions().getKeys().isEmpty()).isTrue()
+                () -> assertThat(restored.getExtensions().getKeys()).isEmpty()
         );
     }
 }
