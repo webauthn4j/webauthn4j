@@ -20,7 +20,7 @@ import com.webauthn4j.data.client.Origin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Verifies the specified {@link Origin} instance
+ * Handler interface to verify the given {@link Origin} instance
  */
 public interface OriginVerifier {
 
