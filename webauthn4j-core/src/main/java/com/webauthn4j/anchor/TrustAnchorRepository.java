@@ -22,10 +22,22 @@ import java.security.cert.TrustAnchor;
 import java.util.Set;
 
 /**
- * TrustAnchor Repository
+ * Repository interface that look up {@link TrustAnchor}(s)
+ * WebAuthn4J uses this interface to lookup {@link TrustAnchor}(s) for an attestation certificate when verifying the authenticator.
  */
 public interface TrustAnchorRepository {
 
+    /**
+     * Look up {@link TrustAnchor}(s) by {@link AAGUID}
+     * @param aaguid {@link AAGUID} for the authenticator
+     * @return {@link Set<TrustAnchor>}
+     */
     Set<TrustAnchor> find(AAGUID aaguid);
+
+    /**
+     * Look up {@link TrustAnchor}(s) by attestationCertificateKeyIdentifier. This is used for FIDO-U2F authenticator
+     * @param attestationCertificateKeyIdentifier attestationCertificateKeyIdentifier for the authenticator
+     * @return {@link Set<TrustAnchor>}
+     */
     Set<TrustAnchor> find(byte[] attestationCertificateKeyIdentifier);
 }
