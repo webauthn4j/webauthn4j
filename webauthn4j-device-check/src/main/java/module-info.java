@@ -2,10 +2,11 @@ module com.webauthn4j.appattest {
     requires com.webauthn4j.util;
     requires com.webauthn4j.core;
 
+    requires org.slf4j;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.dataformat.cbor;
 
-    requires org.jetbrains.annotations;
+    requires static org.jetbrains.annotations;
 
     exports com.webauthn4j.appattest;
     exports com.webauthn4j.appattest.authenticator;

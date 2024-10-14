@@ -18,11 +18,12 @@ description = "WebAuthn4J Core library"
 
 dependencies {
     api project(':webauthn4j-util')
-    implementation("org.slf4j:slf4j-api")
 
+    implementation("org.slf4j:slf4j-api")
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
+    //CompileOnly
     compileOnly("org.jetbrains:annotations")
 
     //Test

@@ -3,11 +3,11 @@ module com.webauthn4j.core {
 
     requires com.webauthn4j.util;
 
+    requires org.slf4j;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.dataformat.cbor;
-    requires org.slf4j;
 
-    requires org.jetbrains.annotations;
+    requires static org.jetbrains.annotations;
 
     exports com.webauthn4j;
     exports com.webauthn4j.anchor;
