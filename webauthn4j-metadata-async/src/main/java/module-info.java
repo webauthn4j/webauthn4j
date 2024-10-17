@@ -1,10 +1,8 @@
 module com.webauthn4j.metadata.async {
     requires java.net.http;
 
-    requires com.webauthn4j.util;
-    requires com.webauthn4j.core;
-    requires com.webauthn4j.core.async;
-    requires com.webauthn4j.metadata;
+    requires transitive com.webauthn4j.core.async;
+    requires transitive com.webauthn4j.metadata;
 
     requires org.slf4j;
 
