@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-description = "WebAuthn4J Device Check library"
+description = "WebAuthn4J App Attest library"
 
 
 dependencies {
