@@ -169,8 +169,8 @@ Risk metric evaluation is not supported for now.
 
 ==== Getting from Maven Central
 
-Apple App Attest validators are contained in the dedicated `webauthn4j-device-check` module.
-If you are using maven, add the `webauthn4j-device-check` as a dependency in this way:
+Apple App Attest validators are contained in the dedicated `webauthn4j-appattest` module.
+If you are using maven, add the `webauthn4j-appattest` as a dependency in this way:
 
 [source,xml]
 ----
@@ -185,7 +185,7 @@ If you are using maven, add the `webauthn4j-device-check` as a dependency in thi
   ...
   <dependency>
     <groupId>com.webauthn4j</groupId>
-    <artifactId>webauthn4j-device-check</artifactId>
+    <artifactId>webauthn4j-appattest</artifactId>
     <version>${webauthn4j.version}</version>
   </dependency>
   ...
@@ -224,7 +224,7 @@ The instance is required at the time of authentication.
 ===== Production environment? Development environment?
 
 Apple App Attest can return a development attestation for development.
-By default, webAuthn4j-device-check is set to accept a production attestation.
+By default, webAuthn4j-appattest is set to accept a production attestation.
 If you want to accept a development attestation, you need to `DCAttestationDataVerifier#setProduction` `false`.
 
 [source,java]
