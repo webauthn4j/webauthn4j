@@ -28,7 +28,7 @@ buildscript {
         jetbrainsAnnotationsVersion = "26.0.1"
 
         // for test library dependencies
-        mockitoVersion = "5.14.1"
+        mockitoVersion = "5.14.2"
         springBootBomVersion = "3.3.4"
         logbackVersion = "1.5.9"
     }
