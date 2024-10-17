@@ -25,7 +25,7 @@ buildscript {
         jacksonVersion = "2.18.0"
         slf4jVersion = "2.0.16"
         bouncyCastleVersion = "1.70"
-        jetbrainsAnnotationsVersion = "26.0.0"
+        jetbrainsAnnotationsVersion = "26.0.1"
 
         // for test library dependencies
         mockitoVersion = "5.14.1"
