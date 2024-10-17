@@ -18,24 +18,24 @@ description = "WebAuthn4J Device Check library"
 
 
 dependencies {
-    api project(':webauthn4j-core')
+    api(project(":webauthn4j-core"))
 
-    implementation("org.slf4j:slf4j-api")
-    implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
+    implementation(libs.slf4j.api)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.dataformat.cbor)
 
     //CompileOnly
-    compileOnly("org.jetbrains:annotations")
+    compileOnly(libs.jetbrains.annotations)
 
     //Test
-    testImplementation project(':webauthn4j-test')
+    testImplementation(project(":webauthn4j-test"))
 
-    testImplementation('ch.qos.logback:logback-classic')
-    testImplementation('org.projectlombok:lombok')
-    testImplementation('org.mockito:mockito-core')
-    testImplementation('org.assertj:assertj-core')
-    testImplementation('org.junit.jupiter:junit-jupiter-api')
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
-    testCompileOnly("org.jetbrains:annotations")
+    testImplementation("ch.qos.logback:logback-classic")
+    testImplementation("org.projectlombok:lombok")
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testCompileOnly(libs.jetbrains.annotations)
 
 }

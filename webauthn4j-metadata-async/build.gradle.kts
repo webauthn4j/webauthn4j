@@ -17,25 +17,25 @@
 description = "WebAuthn4J Metadata Async library"
 
 dependencies {
-    api project(':webauthn4j-core-async')
-    api project(':webauthn4j-metadata')
+    api(project(":webauthn4j-core-async"))
+    api(project(":webauthn4j-metadata"))
 
-    implementation("org.slf4j:slf4j-api")
-    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation(libs.slf4j.api)
+    implementation(libs.jackson.databind)
 
 
     //CompileOnly
-    compileOnly("org.jetbrains:annotations")
+    compileOnly(libs.jetbrains.annotations)
 
     //Test
-    testImplementation project(':webauthn4j-test')
+    testImplementation(project(":webauthn4j-test"))
 
-    testImplementation('ch.qos.logback:logback-classic')
-    testImplementation('org.projectlombok:lombok')
-    testImplementation('org.mockito:mockito-core')
-    testImplementation('org.assertj:assertj-core')
-    testImplementation('org.junit.jupiter:junit-jupiter-api')
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
-    testCompileOnly("org.jetbrains:annotations")
+    testImplementation("ch.qos.logback:logback-classic")
+    testImplementation("org.projectlombok:lombok")
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testCompileOnly(libs.jetbrains.annotations)
 
 }

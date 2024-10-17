@@ -21,16 +21,8 @@ buildscript {
         sonarqubeVersion = "5.1.0.4882"
         asciidoctorGradleVersion = "4.0.3"
 
-        // Define implementation dependency versions independently
-        jacksonVersion = "2.18.0"
-        slf4jVersion = "2.0.16"
-        bouncyCastleVersion = "1.70"
-        jetbrainsAnnotationsVersion = "26.0.1"
-
         // for test library dependencies
-        mockitoVersion = "5.14.2"
         springBootBomVersion = "3.3.4"
-        logbackVersion = "1.5.11"
     }
 
     repositories {
@@ -92,27 +84,7 @@ subprojects {
 
 
     dependencies {
-        constraints {
-            // Implementation dependencies
-            implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-            implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:$jacksonVersion")
-            implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-
-            implementation("org.slf4j:slf4j-api:$slf4jVersion")
-
-            implementation("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
-
-            // Test dependencies
-            implementation("ch.qos.logback:logback-classic:$logbackVersion")
-            implementation("org.mockito:mockito-core:$mockitoVersion")
-            implementation("org.mockito:mockito-junit-jupiter:$mockitoVersion")
-
-            // webauthn4j-test implementation dependencies
-            implementation("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
-            implementation("org.bouncycastle:bcpkix-jdk15on:$bouncyCastleVersion")
-        }
-
-        testImplementation platform("org.springframework.boot:spring-boot-dependencies:${springBootBomVersion}")
+        testImplementation(platform(libs.spring.boot.bom))
     }
 
     java {
