@@ -1,6 +1,5 @@
 module com.webauthn4j.appattest {
-    requires com.webauthn4j.util;
-    requires com.webauthn4j.core;
+    requires transitive com.webauthn4j.core;
 
     requires org.slf4j;
     requires com.fasterxml.jackson.databind;

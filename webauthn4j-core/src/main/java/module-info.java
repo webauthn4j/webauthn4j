@@ -1,7 +1,7 @@
 module com.webauthn4j.core {
     requires java.naming;
 
-    requires com.webauthn4j.util;
+    requires transitive com.webauthn4j.util;
 
     requires org.slf4j;
     requires com.fasterxml.jackson.databind;

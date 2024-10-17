@@ -1,8 +1,8 @@
 module com.webauthn4j.test {
-    requires com.webauthn4j.util;
-    requires com.webauthn4j.core;
-    requires com.webauthn4j.core.async;
-    requires com.webauthn4j.appattest;
+    requires transitive com.webauthn4j.core;
+    requires transitive com.webauthn4j.appattest;
+    requires transitive com.webauthn4j.metadata;
+    requires transitive com.webauthn4j.core.async;
 
     requires org.slf4j;
     requires com.fasterxml.jackson.databind;
