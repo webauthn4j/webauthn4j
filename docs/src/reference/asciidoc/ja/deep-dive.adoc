@@ -142,7 +142,7 @@ WebAuthn Attestation/Assertionの検証機能およびコア機能の非同期�
 
 FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能の非同期バージョンを提供します。 現時点では、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
 
-==== Device-Check: webauthn4j-device-check.jar
+==== App Attest: webauthn4j-appattest.jar
 
 Apple App Attest Attestation/Assertionの検証機能を提供します。
 

@@ -150,7 +150,7 @@ updateCounter(
 
 ==== Maven Centralからの取得
 
-Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)とは別の、webauthn4j-device-checkというモジュールとして配布されています。 Mavenを使用している場合、以下のようにwebauthn4j-device-checkを依存関係として追加してください。
+Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)とは別の、webauthn4j-appattestというモジュールとして配布されています。 Mavenを使用している場合、以下のようにwebauthn4j-appattestを依存関係として追加してください。
 
 [source,xml]
 ----
@@ -165,7 +165,7 @@ Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)と�
   ...
   <dependency>
     <groupId>com.webauthn4j</groupId>
-    <artifactId>webauthn4j-device-check</artifactId>
+    <artifactId>webauthn4j-appattest</artifactId>
     <version>${webauthn4j.version}</version>
   </dependency>
   ...

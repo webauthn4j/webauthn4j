@@ -110,7 +110,7 @@ String serializedClientExtensions = objectConverter.getJsonConverter().writeValu
 
 === DCAppleDevice serialization and deserialization
 
-When you use `webauthn4j-device-check`, you need to persist `DCAppleDevice` instead of `CredentialRecord` interface between attestation and assertion.
+When you use `webauthn4j-appattest`, you need to persist `DCAppleDevice` instead of `CredentialRecord` interface between attestation and assertion.
 In general, you can serialize and deserialize it by the method explained in <<CredentialRecord serialization and deserialization>>, but `ObjectConverter` must be the one with `DeviceCheckCBORModule` registered.
 A `ObjectConverter` with a `DeviceCheckCBORModule` can be obtained with `DeviceCheckManager.createObjectConverter` static method.
 
@@ -159,7 +159,7 @@ Since this module is in experimental status, the included classes don't follow s
 Provides async variant of additional features regarding FIDO Metadata Service.
 Since this module is in experimental status, the included classes don't follow semantic versioning and the design may change even though it is public.
 
-==== Device-Check: webauthn4j-device-check.jar
+==== App Attest: webauthn4j-appattest.jar
 
 Provides core features for Apple App Attest attestation and assertion verification.
 
