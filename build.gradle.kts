@@ -1,4 +1,5 @@
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.jvm.tasks.Jar
 import java.net.URI
 import java.nio.charset.StandardCharsets
@@ -31,6 +32,19 @@ subprojects {
     apply(plugin = "signing")
     apply(plugin = "maven-publish")
     apply(plugin = "jacoco")
+
+    tasks.test {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed") //, "standardOut", "standardError"
+            showExceptions = true
+            exceptionFormat = TestExceptionFormat.FULL
+            showCauses = true
+            showStackTraces = true
+
+            showStandardStreams = false
+        }
+    }
 
     tasks.register<Jar>("javadocJar") {
         group = "build"
