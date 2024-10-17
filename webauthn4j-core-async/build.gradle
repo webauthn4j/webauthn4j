@@ -21,10 +21,9 @@ dependencies {
     api project(':webauthn4j-core')
 
     implementation("org.slf4j:slf4j-api")
-
     implementation("com.fasterxml.jackson.core:jackson-databind")
 
-
+    //CompileOnly
     compileOnly("org.jetbrains:annotations")
 
     //Test
@@ -38,10 +37,4 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
     testCompileOnly("org.jetbrains:annotations")
 
-}
-
-tasks.named('jar') {
-    manifest {
-        attributes('Automatic-Module-Name': 'com.webauthn4j.core.async')
-    }
 }

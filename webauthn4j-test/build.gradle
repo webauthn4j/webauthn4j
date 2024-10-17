@@ -22,11 +22,15 @@ dependencies {
     implementation project(':webauthn4j-metadata')
     implementation project(':webauthn4j-core-async')
 
+    implementation("org.slf4j:slf4j-api")
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
     implementation("org.bouncycastle:bcprov-jdk15on")
     implementation("org.bouncycastle:bcpkix-jdk15on")
+
+    //CompileOnly
+    compileOnly("org.jetbrains:annotations")
 
     //Test
     testImplementation('ch.qos.logback:logback-classic')
@@ -36,12 +40,6 @@ dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter-api')
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
 
-}
-
-tasks.named('jar') {
-    manifest {
-        attributes('Automatic-Module-Name': 'com.webauthn4j.test')
-    }
 }
 
 sonarqube {

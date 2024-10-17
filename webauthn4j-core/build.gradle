@@ -18,11 +18,12 @@ description = "WebAuthn4J Core library"
 
 dependencies {
     api project(':webauthn4j-util')
-    implementation("org.slf4j:slf4j-api")
 
+    implementation("org.slf4j:slf4j-api")
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
+    //CompileOnly
     compileOnly("org.jetbrains:annotations")
 
     //Test
@@ -38,10 +39,4 @@ dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter-params')
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
     testCompileOnly("org.jetbrains:annotations")
-}
-
-tasks.named('jar') {
-    manifest {
-        attributes('Automatic-Module-Name': 'com.webauthn4j.core')
-    }
 }

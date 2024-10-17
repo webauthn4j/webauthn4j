@@ -21,11 +21,10 @@ dependencies {
     api project(':webauthn4j-metadata')
 
     implementation("org.slf4j:slf4j-api")
-
     implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
+
+    //CompileOnly
     compileOnly("org.jetbrains:annotations")
 
     //Test
@@ -39,10 +38,4 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
     testCompileOnly("org.jetbrains:annotations")
 
-}
-
-tasks.named('jar') {
-    manifest {
-        attributes('Automatic-Module-Name': 'com.webauthn4j.metadata.async')
-    }
 }
