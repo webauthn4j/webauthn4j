@@ -7,6 +7,7 @@ plugins {
     id("java-library")
     id("signing")
     id("maven-publish")
+    id("jacoco")
 
     id(libs.plugins.asciidoctor.get().pluginId) version libs.versions.asciidoctor
     id(libs.plugins.sonarqube.get().pluginId) version libs.versions.sonarqube
@@ -29,7 +30,6 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "signing")
     apply(plugin = "maven-publish")
-
     apply(plugin = "jacoco")
 
     tasks.register<Jar>("javadocJar") {
@@ -45,6 +45,12 @@ subprojects {
         description = "Assembles sources jar"
         archiveClassifier = "javadoc"
         from(sourceSets.main.get().allSource)
+    }
+
+    tasks.jacocoTestReport {
+        reports {
+            xml.required = true
+        }
     }
 
     fun getVariable(envName: String, propertyName: String): String?{
