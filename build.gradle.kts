@@ -46,6 +46,13 @@ subprojects {
         }
     }
 
+    tasks.javadoc{
+        options {
+            charset("UTF-8")
+            encoding("UTF-8")
+        }
+    }
+
     tasks.register<Jar>("javadocJar") {
         group = "build"
         description = "Assembles Javadoc jar"
@@ -57,7 +64,7 @@ subprojects {
     tasks.register<Jar>("sourcesJar") {
         group = "build"
         description = "Assembles sources jar"
-        archiveClassifier = "javadoc"
+        archiveClassifier = "sources"
         from(sourceSets.main.get().allSource)
     }
 
