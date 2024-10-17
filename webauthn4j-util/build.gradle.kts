@@ -28,6 +28,8 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
 
     //Test
+    testImplementation(platform(libs.spring.boot.bom))
+
     testImplementation(project(":webauthn4j-test"))
     testImplementation(libs.bouncycastle.bcprov.jdk15to18)
     testImplementation(libs.bouncycastle.bcpkix.jdk15to18)

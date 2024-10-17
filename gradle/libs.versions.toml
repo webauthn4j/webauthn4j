@@ -3,6 +3,8 @@
 slf4j = "2.0.16"
 jackson = "2.18.0"
 
+# webauthn4j-test dependencies
+
 bouncycastle = "1.78.1"
 
 # Build dependencies
@@ -11,26 +13,14 @@ jetbrains-annotations = "26.0.1"
 asciidoctor = "4.0.3"
 
 # Test dependencies
-junit-jupiter = "5.11.2"
-
-assertj = "3.26.3"
-
-mockito = "5.8.0"
-
-mockito-kotlin = "5.4.0"
-
-logbackClassic = "1.5.10"
-
-sonarqube = "5.1.0.4882"
 
 spring-boot-bom = "3.3.4"
+sonarqube = "5.1.0.4882"
 
 [libraries]
 # Third-party libraries
 
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j"}
-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackClassic" }
-
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jackson"}
 jackson-dataformat-cbor = { group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-cbor", version.ref = "jackson"}
@@ -39,22 +29,12 @@ jackson-dataformat-cbor = { group = "com.fasterxml.jackson.dataformat", name = "
 bouncycastle-bcprov-jdk15to18 = { group = "org.bouncycastle", name = "bcprov-jdk15to18", version.ref = "bouncycastle"}
 bouncycastle-bcpkix-jdk15to18 = { group = "org.bouncycastle", name = "bcpkix-jdk15to18", version.ref = "bouncycastle"}
 
-# build
+# Build dependencies
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 
-
-# test
+# test dependencies
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot-bom" }
 
-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
-
-assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
-
-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
-mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito" }
-mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 
 [plugins]
 asciidoctor = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor"}

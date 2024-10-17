@@ -33,6 +33,8 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
 
     //Test
+    testImplementation(platform(libs.spring.boot.bom))
+
     testImplementation("ch.qos.logback:logback-classic")
     testImplementation("org.projectlombok:lombok")
     testImplementation("org.mockito:mockito-core")
