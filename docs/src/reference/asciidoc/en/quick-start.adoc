@@ -251,8 +251,8 @@ try {
 }
 try {
     deviceCheckManager.verify(dcAttestationData, dcAttestationParameters);
-} catch (ValidationException e) {
-    // If you would like to handle Apple App Attest data validation error, please catch ValidationException
+} catch (VerificationException e) {
+    // If you would like to handle Apple App Attest data validation error, please catch VerificationException
     throw e;
 }
 
