@@ -1,7 +1,7 @@
 [versions]
 
 slf4j = "2.0.16"
-jackson = "2.18.0"
+jackson = "2.18.1"
 
 # webauthn4j-test dependencies
 
