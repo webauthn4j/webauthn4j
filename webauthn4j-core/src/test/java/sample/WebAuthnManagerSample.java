@@ -44,7 +44,7 @@ public class WebAuthnManagerSample {
         webAuthnManager = WebAuthnManager.createNonStrictWebAuthnManager();
     }
 
-    public void registrationValidationSample() {
+    public void registration_verify_sample() {
 
         String registrationResponseJSON = "<registrationResponseJSON>"; /* set registrationResponseJSON received from frontend */
         RegistrationData registrationData;
@@ -59,8 +59,7 @@ public class WebAuthnManagerSample {
         Origin origin = null /* set origin */;
         String rpId = null /* set rpId */;
         Challenge challenge = null /* set challenge */;
-        byte[] tokenBindingId = null /* set tokenBindingId */;
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
 
         // expectations
         List<PublicKeyCredentialParameters> pubKeyCredParams = null;
@@ -88,7 +87,7 @@ public class WebAuthnManagerSample {
     }
 
 
-    public void authenticationValidationSample() {
+    public void authentication_verify_sample() {
 
         String authenticationResponseJSON = "<authenticationResponseJSON>"; /* set authenticationResponseJSON received from frontend */
 
@@ -104,8 +103,7 @@ public class WebAuthnManagerSample {
         Origin origin = null /* set origin */;
         String rpId = null /* set rpId */;
         Challenge challenge = null /* set challenge */;
-        byte[] tokenBindingId = null /* set tokenBindingId */;
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
 
         // expectations
         List<byte[]> allowCredentials = null;

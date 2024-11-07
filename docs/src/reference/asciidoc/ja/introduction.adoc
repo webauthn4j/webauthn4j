@@ -2,11 +2,16 @@
 
 === Web Authenticationとは
 
-Web Authenticationは、W3Cで2019年3月に勧告になった、Webアプリケーションの新しいセキュアな認証方式仕様です。 ローカル認証や公開鍵認証、Origin別の鍵管理を組み合わせることで、フィッシングなど認証プロセスに対する攻撃に対して堅固な認証を実現しています。 主要ブラウザでの実装が進みつつあり、セキュリティ、利便性を重視するユーザーに対して優れた選択肢を提供します。 当初はFIDO AllianceでFIDO2.0の一部として仕様策定が進められていましたが、現在はW3Cに移管され、仕様策定が行われています。
+Web Authenticationは、W3Cで2019年3月に勧告になった、Webアプリケーションの新しいセキュアな認証方式仕様です。 WebAuthnという略称で表記されることもあります。ローカル認証や公開鍵認証、Origin別の鍵管理を組み合わせることで、フィッシングなど認証プロセスに対する攻撃に対して堅固で便利な認証を実現しています。
+主要ブラウザで実装されており、セキュリティ、利便性を重視するユーザーに対して優れた選択肢を提供します。
+
+=== Passkeysとは
+
+Passkeysは、WebAuthn仕様の使いやすさを向上させ、一般に受け入れられるようにしたWebAuthn Level3仕様に対するわかりやすいブランディング名です。
 
 === WebAuthn4Jとは
 
-WebAuthn4Jは、Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。WebAuthnではなく、Apple App Attestや、FIDO CTAP2セキュリティキーを用いた独自アプリケーションのサーバーサイド検証に用いることも可能です。 Web Authentication仕様で定められた全ての構成証明ステートメント（Attestation）をサポートしながら、外部ライブラリへの依存関係は最小限に抑えたポータブルなライブラリです。
+WebAuthn4Jは、Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。WebAuthn/Passkeysだけでなく、Apple App Attestや、FIDO CTAP2セキュリティキーを用いた独自アプリケーションのサーバーサイド検証に用いることも可能です。 Web Authentication仕様で定められた全ての構成証明ステートメント（Attestation）をサポートしながら、外部ライブラリへの依存関係は最小限に抑えたポータブルなライブラリです。
 
 === WebAuthn4J Spring Securityとは
 
@@ -36,17 +41,18 @@ NOTE: FIDO2 Test ToolsはFIDO2 Transport Binding ProfileのREST API経由でテ�
 
 ==== ポータビリティ
 
-WebAuthn4JはSLF4JとJacksonにのみ依存しており、非常に高いポータビリティを持っています。 あなたのJavaアプリへの導入の障害は殆どないでしょう。
+WebAuthn4JはSLF4JとJacksonにのみ依存しており、非常に高いポータビリティを持っています。
+あなたのJavaアプリケーションにほぼ制約なく組み込めるでしょう。
 
 === 要件
 
 ==== 言語
 
-- Java11以降
+- Java11以降 (EdDSAを利用したい場合、Java17以降)
 
 === 動作環境
 
-- SecureContext（サイトがHTTPS接続か、localhost）
+- SecureContext（サイトがHTTPS接続か、localhost。WebAuthn仕様上の要件）
 
 === Maven Centralからの取得
 
@@ -82,9 +88,8 @@ git clone git@github.com:webauthn4j/webauthn4j.git
 
 === ライセンス
 
-WebAuthn4jは http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license] ライセンスの オープンソースソフトウェアです。
+WebAuthn4jは https://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 License] の オープンソースソフトウェアです。
 
 === 開発への参加
 
 WebAuthn4Jに興味を持って頂きありがとうございます。WebAuthn4JはGitHub上で開発を進めています。 お気軽にIssueやPull Requestをお寄せ下さい。
-

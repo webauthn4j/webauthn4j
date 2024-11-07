@@ -202,6 +202,14 @@ tasks.register<JavaExec>("generateReleaseNote") {
     args(webAuthn4JVersion, file("build/release-note.md").absolutePath, "--spring.config.location=file:" + file("github-release-notes-generator.yml").absolutePath)
 }
 
+asciidoctorj{
+    modules{
+        diagram.use()
+        diagram.version("2.3.1")
+    }
+    attributes(mapOf("source-highlighter" to "rouge"))
+}
+
 tasks.register<AsciidoctorTask>("generateReferenceJA") {
     group = "documentation"
     description = "Generate reference (ja)"
