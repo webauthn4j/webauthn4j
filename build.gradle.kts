@@ -33,6 +33,11 @@ subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "jacoco")
 
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11 // Although webauthn4j uses JDK 15+ API to support EdDSA, keep target version 11 to support JDK11 users who don't need EdDSA.
+    }
+
     tasks.test {
         useJUnitPlatform()
         testLogging {
