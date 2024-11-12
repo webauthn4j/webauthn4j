@@ -1,4 +1,4 @@
-// == FAQ
+== FAQ
 
 === WebAuthnManager class has too many responsibility
 
