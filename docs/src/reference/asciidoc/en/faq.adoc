@@ -1,2 +1,9 @@
 // == FAQ
 
+=== WebAuthnManager class has too many responsibility
+
+Q: `WebAuthnManager` provides two distinct functions: registration and authentication.
+This can be inconvenient for classes that only need authentication function, as they must still configure attestation settings required only for registration when instantiating `WebAuthnManager`.
+
+A: Please consider using `WebAuthnRegistrationManager` and `WebAuthnAuthenticationManager`, each dedicated to either registration or authentication.
+

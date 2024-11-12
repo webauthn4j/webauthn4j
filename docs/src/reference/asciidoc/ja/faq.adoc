@@ -1,4 +1,4 @@
-// == FAQ
+== FAQ
 
 // === allowCredentials, excludeCredentials
 //
@@ -7,4 +7,11 @@
 // === 二段階認証としてのWebAuthn
 //
 // === パスワードレス認証としてのWebAuthn
+
+=== WebAuthnManagerクラス、責務が多すぎでは？
+
+Q: `WebAuthnManager` は、登録処理と認証処理という異なる2つの機能を提供しており、
+認証処理だけを必要とするクラスから呼び出す場合も、`WebAuthnManager` のインスタンス化時に登録処理だけで必要なAttestation関連の設定が必要であり、不便です。
+
+A: `WebAuthnManager` を分割した `WebAuthnRegistrationManager` と `WebAuthnAuthenticationManager` を提供していますのでそちらをご利用下さい。
 
