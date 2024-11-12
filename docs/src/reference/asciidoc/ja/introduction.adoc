@@ -7,7 +7,7 @@ Web Authenticationは、W3Cで2019年3月に勧告になった、Webアプリケ
 
 === Passkeysとは
 
-Passkeysは、WebAuthn仕様の使いやすさを向上させ、一般に受け入れられるようにしたWebAuthn Level3仕様に対するわかりやすいブランディング名です。
+Passkeysは、WebAuthn仕様の使いやすさを向上させたWebAuthn Level3仕様に対するわかりやすいブランディング名です。
 
 === WebAuthn4Jとは
 
@@ -93,3 +93,4 @@ WebAuthn4jは https://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 Licens
 === 開発への参加
 
 WebAuthn4Jに興味を持って頂きありがとうございます。WebAuthn4JはGitHub上で開発を進めています。 お気軽にIssueやPull Requestをお寄せ下さい。
+
