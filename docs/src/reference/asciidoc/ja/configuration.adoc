@@ -1,7 +1,7 @@
 == 設定
 
 WebAuthn4Jを利用する上で中心となるクラスは `WebAuthnManager` クラスです。
-`WebAuthnManager` は登録リクエスト検証時の構成証明ステートメントの署名と信頼性の検証は、 それぞれ `AttestationStatementVerifier` と `CertPathTrustworthinessVerifier` インタフェースの実装に委譲します。
+`WebAuthnManager` は登録リクエスト検証時の構成証明ステートメントの署名と信頼性の検証を、 それぞれ `AttestationStatementVerifier` と `CertPathTrustworthinessVerifier` インタフェースの実装に委譲します。
 
 大多数のサイトは厳密な構成証明ステートメントの検証を必要とせず、エンタープライズ用途以外では厳密な構成証明ステートメントの検証は非推奨とされていることから（
 https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAuthn仕様書関連個所参照] ）、 WebAuthn4Jでは構成証明ステートメントの検証をしないように `AttestationStatementVerifier` と
@@ -14,9 +14,11 @@ https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAu
 
 === 構成証明ステートメントの検証
 
-構成証明ステートメントの検証は、 `AttestationStatementVerifier` インタフェースの実装クラスが提供します。 構成照明ステートメント毎に、対応する実装クラスが提供されていますので、必要なVerifierからなるListを
+構成証明ステートメントの検証は、 `AttestationStatementVerifier` インタフェースの実装クラスが提供します。 構成証明ステートメント毎に、対応する実装クラスが提供されていますので、必要なVerifierからなるListを
 `WebAuthnManager` クラスのコンストラクタに指定して下さい。 例えば、 `packed` のみをサポートする場合は、 `PackedAttestationStatementVerifier` を唯一の要素とするListとし、 例えば、 `packed`, `tpm` をサポートする場合は、 `PackedAttestationStatementVerifier` と `TPMAttestationStatementVerifier`
 からなるListを指定して下さい。
+Attestation検証を行わない `NoneAttestationStatementVerifier` や `NullPackedAttestationStatementVerifier` と、 他の `AttestationStatementVerifier` を混在させるのはやめましょう。
+検証を行わない `NoneAttestationStatementVerifier` などを、他の検証を行う `AttestationStatementVerifier` と混ぜてしまうと、Attestation検証迂回に使用される抜け穴となります。
 
 ==== 構成証明ステートメントの信頼性の検証
 
@@ -27,8 +29,7 @@ WebAuthn4Jは `CertPathTrustworthinessVerifier` インタフェースの実装�
 
 前節で `TrustAnchorRepository` インタフェースがトラストアンカーの取得に使用されると述べましたが、 `TrustAnchorRepository` インタフェースは `AAGUID` や `attestationCertificateKeyIdentifier` に基づいて `TrustAnchor` を返却するインタフェースです。
 `webauthn4j-core` モジュールでは、 `TrustAnchorRepository` の実装として、`KeyStoreTrustAnchorRepository` を提供しています。
-`KeyStoreTrustAnchorRepository` は、Java Key Storeファイルからトラストアンカーを取得します。なお、 `KeyStoreTrustAnchorRepository` は `AAGUID` や `attestationCertificateKeyIdentifier` に応じて異なる TrustAnchorを返却することはせず、
-Java Key Storeファイルに登録された証明書を全てトラストアンカーとして扱います。
+`KeyStoreTrustAnchorRepository` は、Java Key Storeファイルからトラストアンカーを取得します。なお、 `KeyStoreTrustAnchorRepository` は `AAGUID` や `attestationCertificateKeyIdentifier` に応じて異なる TrustAnchorを返却することはせず、Java Key Storeファイルに登録された証明書を全てトラストアンカーとして扱います。
 
 ===== FIDO Metadata Serviceを用いたトラストアンカーの取得
 
@@ -39,7 +40,8 @@ FIDO Allianceでは、FIDO Metadata Serviceという、認証デバイスのメ�
 `MetadataBLOBBasedTrustAnchorRepository` は `FidoMDS3MetadataBLOBAsyncProvider` と組み合わせることで
 FIDO Metadata Serviceの公開する情報に基づいてトラストアンカーを構築することが可能です。
 
-=== WebAuthn4Jが提供しない機能
 
-WebAuthn4Jは特定のフレームワークに依存しないポータビリティを実現する為、 WebAuthnのAssertion/Attestationの検証に意図的に機能を絞り込んでおり、HTTPリクエストからのパラメータの取出、 Challengeの発行・セッションへの保存、カウンタ値の検証は具備していません。 使用する認証フレームワークに合わせて独自に実装して下さい。Spring Securityをご利用の場合は、 WebAuthn4J Spring Securityがそれらの認証フレームワーク特化の部分の実装を提供しますので活用をご検討下さい。
+=== ログ
+
+WebAuthn4JはSLF4Jをログインタフェースライブラリとして使用します。 Logbackなどログ実装ライブラリを構成し、ログをお好みのスタイルで出力してください。
 

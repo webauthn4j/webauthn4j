@@ -28,6 +28,7 @@ AttestedCredentialData deserialized = attestedCredentialDataConverter.convert(se
 
 `AttestationStatement` はインタフェースであり、`PackedAttestationStatement` や、`AndroidKeyAttestationStatement` など、フォーマットにあわせて複数の実装があります。
 `AttestationStatement` のCBOR表現は具象型が何であるかについて自己記述性を持たない為、フォーマットは別途、別のフィールドとして永続化する必要があります。 そのため、CBORとしてシリアライズする際は、実際のattestationStatementのフィールドと、フォーマットのフィールドを持つエンベロープクラスを用意し、エンベロープクラスをシリアライズしなければなりません。
+エンベロープクラス自体は、WebAuthn4Jライブラリでは提供していないため、以下の例を参考にアプリケーションコード側で実装下さい。
 
 [source,java]
 ----
@@ -83,7 +84,8 @@ String serializedTransports = objectConverter.getJsonConverter().writeValueAsStr
 
 ==== authenticatorExtensions
 
-authenticatorExtensionsは元来CBORデータの為、CBORに変換できます。
+authenticatorExtensionsは元来CBORデータの為、CBOR byte配列に変換できます。
+なお、`String` として保存したい場合、さらに `Base64UrlUtil` を用いることで `byte[]` から Base64Url `String` に変換することが出来ます。
 
 [source,java]
 ----
@@ -92,7 +94,7 @@ byte[] serializedAuthenticatorExtensions = objectConverter.getCborConverter().wr
 
 ==== clientExtensions
 
-clientExtensionsは元来JSONデータの為、JSONに変換できます。
+clientExtensionsは元来JSONデータの為、JSON文字列に変換できます。
 
 [source,java]
 ----
@@ -101,9 +103,92 @@ String serializedClientExtensions = objectConverter.getJsonConverter().writeValu
 
 === DCAppleDeviceのシリアライズ、デシリアライズ
 
-webauthn4j-device-checkでは、`CredentialRecord` インタフェースの代わりに、`DCAppleDevice` インタフェースを実装したクラスを、構成証明の検証時とアサーションの検証時の間で永続化する必要があります。 概ね<<CredentialRecordのシリアライズ、デシリアライズ>>で解説した方法でシリアライズ、デシリアライズが可能ですが、一点気を付ける必要がある点として、 webauthn4j-device-check独自のクラス（例えば `AppleAppAttestAttestationStatement` )のシリアライズ、デシリアライズを行う為に、
+webauthn4j-appattestでは、`CredentialRecord` インタフェースの代わりに、`DCAppleDevice` インタフェースを実装したクラスを、構成証明の検証時とアサーションの検証時の間で永続化する必要があります。 概ね<<CredentialRecordのシリアライズ、デシリアライズ>>で解説した方法でシリアライズ、デシリアライズが可能ですが、一点気を付ける必要がある点として、 webauthn4j-appattest独自のクラス（例えば `AppleAppAttestAttestationStatement` )のシリアライズ、デシリアライズを行う為に、
 `ObjectConverter` は `DeviceCheckCBORModule` が登録されたものを使用する必要があります。
-`DeviceCheckCBORModule` が登録された`ObjectConverter` は `DeviceCheckManager#createObjectConverter` で得ることが出来ます。
+`DeviceCheckCBORModule` が登録された `ObjectConverter` は `DeviceCheckManager#createObjectConverter` で得ることが出来ます。
+
+
+// === 非同期サポート
+//
+// TODO: webauthn4j-core-asyncの解説
+
+=== モジュール構成
+
+WebAuthn4Jは、以下のModuleから構成されます。
+
+==== Core: webauthn4j-core.jar
+
+WebAuthn Attestation/Assertionの検証機能およびコア機能を提供します。
+
+==== Metadata: webauthn4j-metadata.jar
+
+FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能を提供します。
+
+==== Core-Async: webauthn4j-core-async.jar
+
+WebAuthn Attestation/Assertionの検証機能およびコア機能の非同期版を提供します。
+現時点では、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
+
+==== Metadata-Async: webauthn4j-metadata-async.jar
+
+FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能の非同期バージョンを提供します。
+現時点では、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
+
+==== App Attest: webauthn4j-appattest.jar
+
+Apple App Attest Attestation/Assertionの検証機能を提供します。
+
+==== Test: webauthn4j-test.jar
+
+WebAuthn4Jのテストを行うための内部ライブラリです。含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに 破壊的変更が入る場合があります。
+
+==== Util: webauthn4j-util.jar
+
+WebAuthn4Jライブラリで使用されるユーティリティクラスをまとめたライブラリです。
+
+
+=== カスタムな検証ロジックの実装
+
+WebAuthn4Jでは、カスタムな検証ロジックを実装し、追加することが可能です。 登録時の検証にカスタムロジックを追加する場合は、 `CustomRegistrationVerifier` を実装してください。 認証時の検証にカスタムロジックを追加する場合は、 `CustomAuthenticationVerifier` を実装してください。
+
+==== カスタム検証ロジックの登録
+
+`CustomRegistrationVerifier` と `CustomAuthenticationVerifier` の実装は `WebAuthnManager` のコンストラクタの
+`customRegistrationVerifiers` パラメータおよび `customAuthenticationVerifiers` パラメータを通じて登録することが出来ます。
+
+=== カスタムなデータ変換ロジックの実装
+
+WebAuthn4Jでは、JSONやCBORのシリアライズ、デシリアライズ処理にJacksonライブラリを使用しています。 Client ExtensionやAuthenticator Extensionのデータ変換でカスタムな変換を行いたい場合、WebAuthn4Jが内部で使用している Jacksonの `ObjectMapper` にカスタムなシリアライザ、デシリアライザを登録することで実現できます。
+
+==== カスタムなデータ変換ロジックの登録
+
+WebAuthn4Jは、Jacksonの `ObjectMapper` を `ObjectConverter` というクラスでラップして使用しており、 カスタムなシリアライザ、デシリアライザを登録した `ObjectMapper` を `ObjectConverter` インスタンス作成時にコンストラクタから インジェクトし、その `ObjectConverter` を `WebAuthnManager` のインスタンス作成時にパラメータとして指定してください。
+
+
+=== クラス
+
+==== Data transfer Objects
+
+`com.webauthn4j.data` パッケージ配下のクラスはイミュータブルなDTOとして設計されています。
+
+==== Converter, WebAuthnModule
+
+データパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。 一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 `converter` パッケージ配下に集約されています。 カスタムシリアライザ、デシリアライザは `WebAuthnJSONModule` と `WebAuthnCBORModule` というJacksonのModuleにまとめられています。 WebAuthn4Jは内部で使用するJacksonの `ObjectMapper` に自動で `WebAuthnModule` を適用しますが、`WebAuthnManager` の外部で WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合は、Jacksonの `ObjectMapper` に `WebAuthnJSONModule` と `WebAuthnCBORModule` を登録すると 良いでしょう。
+
+==== TrustAnchorsResolver
+
+`TrustAnchorsResolver` インタフェースは `TrustAnchorCertPathTrustworthinessVerifier` で構成証明ステートメントの信頼性の 検証を行う際に信頼するルート証明書のセットを探索するために使用されます。
+
+==== TrustAnchorsProvider
+
+`TrustAnchorsProvider` インタフェースは前述の `TrustAnchorsResolver` インタフェースの実装である `TrustAnchorsResolverImpl`
+がTrustAnchorの読込処理を委譲する先のインタフェースです。実装としてJava Key StoreファイルからTrustAnchorを読み込む
+`KeyStoreFileTrustAnchorsProvider` クラスが提供されている他、WebAuthn4J Spring Securityでは、SpringのResourceから TrustAnchorを読み込む `CertFileResourcesTrustAnchorProvider` が提供されています。
+
+==== 例外クラス
+
+データの変換に失敗した場合、 `DataConversionException` のサブクラスがスローされます。 データの検証に失敗した場合、 `VerificationException` のサブクラスがスローされます。
+
 
 === WebAuthn以外のFIDO CTAP2セキュリティキーを用いた独自アプリケーションでの利用
 
@@ -121,81 +206,3 @@ FIDO CTAP2セキュリティキーを独自アプリケーションで認証に�
 
 さて、FIDO CTAP2では、登録時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] メソッドと認証時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] メソッド 、どちらにも共通するパラメータとして、`clientDataHash` というパラメータが存在します。セキュリティキーは、受け取った `clientDataHash` パラメータを署名対象のデータの一部として署名を生成するため、アプリケーションとして署名で保護したいクライアントデータのハッシュを取得し、
 `clientDataHash` にセットすることで、アプリケーション固有のクライアントデータが改竄されていない真正なデータか、サーバー側で検証することが出来ます。
-
-=== Project Modules
-
-WebAuthn4Jは、以下の4つのModuleから構成されます。
-
-==== Core: webauthn4j-core.jar
-
-WebAuthn Attestation/Assertionの検証機能およびコア機能を提供します。
-
-==== Metadata: webauthn4j-metadata.jar
-
-FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能を提供します。
-
-==== Core-Async: webauthn4j-core-async.jar
-
-WebAuthn Attestation/Assertionの検証機能およびコア機能の非同期版を提供します。現時点では、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
-
-==== Metadata-Async: webauthn4j-metadata-async.jar
-
-FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能の非同期バージョンを提供します。 現時点では、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
-
-==== App Attest: webauthn4j-appattest.jar
-
-Apple App Attest Attestation/Assertionの検証機能を提供します。
-
-==== Test: webauthn4j-test.jar
-
-WebAuthn4Jのテストを行うための内部ライブラリです。含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに 破壊的変更が入る場合があります。
-
-==== Util: webauthn4j-util.jar
-
-WebAuthn4Jライブラリで使用されるユーティリティクラスをまとめたライブラリです。
-
-=== カスタムなデータ変換ロジックの実装
-
-WebAuthn4Jでは、JSONやCBORのシリアライズ、デシリアライズ処理にJacksonライブラリを使用しています。 Client ExtensionやAuthenticator Extensionのデータ変換でカスタムな変換を行いたい場合、WebAuthn4Jが内部で使用している Jacksonの `ObjectMapper` にカスタムなシリアライザ、デシリアライザを登録することで実現できます。
-
-==== カスタムなデータ変換ロジックの登録
-
-WebAuthn4Jは、Jacksonの `ObjectMapper` を `ObjectConverter` というクラスでラップして使用しており、 カスタムなシリアライザ、デシリアライザを登録した `ObjectMapper` を `ObjectConverter` インスタンス作成時にコンストラクタから インジェクトし、その `ObjectConverter` を `WebAuthnManager` のインスタンス作成時にパラメータとして指定してください。
-
-=== カスタムな検証ロジックの実装
-
-WebAuthn4Jでは、カスタムな検証ロジックを実装し、追加することが可能です。 登録時の検証にカスタムロジックを追加する場合は、 `CustomRegistrationVerifier` を実装してください。 認証時の検証にカスタムロジックを追加する場合は、 `CustomAuthenticationVerifier` を実装してください。
-
-==== カスタム検証ロジックの登録
-
-`CustomRegistrationVerifier` と `CustomAuthenticationVerifier` の実装は `WebAuthnManager` のコンストラクタの
-`customRegistrationVerifiers` パラメータおよび `customAuthenticationVerifiers` パラメータを通じて登録することが出来ます。
-
-=== クラス
-
-==== Data transfer Objects
-
-`com.webauthn4j.data` パッケージ配下のクラスはイミュータブルなDTOとして設計されています。
-
-==== Converter, WebAuthnModule
-
-データパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。 一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 `converter` パッケージ配下に集約されています。 カスタムシリアライザ、デシリアライザは `WebAuthnJSONModule` と `WebAuthnCBORModule` というJacksonのModuleにまとめられています。 WebAuthn4Jは内部で使用するJacksonの `ObjectMapper` に自動で `WebAuthnModule` を適用しますが、`WebAuthnManager` の外部で WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合は、Jacksonの `ObjectMapper` に `WebAuthnModule` を登録すると 良いでしょう。
-
-==== TrustAnchorsResolver
-
-`TrustAnchorsResolver` インタフェースは `TrustAnchorCertPathTrustworthinessVerifier` で構成証明ステートメントの信頼性の 検証を行う際に信頼するルート証明書のセットを探索するために使用されます。
-
-==== TrustAnchorsProvider
-
-`TrustAnchorsProvider` インタフェースは前述の `TrustAnchorsResolver` インタフェースの実装である `TrustAnchorsResolverImpl`
-がTrustAnchorの読込処理を委譲する先のインタフェースです。実装としてJava Key StoreファイルからTrustAnchorを読み込む
-`KeyStoreFileTrustAnchorsProvider` クラスが提供されている他、WebAuthn4J Spring Securityでは、SpringのResourceから TrustAnchorを読み込む `CertFileResourcesTrustAnchorProvider` が提供されています。
-
-==== 例外クラス
-
-データの変換に失敗した場合、 `DataConversionException` のサブクラスがスローされます。 データの検証に失敗した場合、 `VerificationException` のサブクラスがスローされます。
-
-=== ログ
-
-WebAuthn4JはSLF4Jをログインタフェースライブラリとして使用します。 Logbackなどログ実装ライブラリを構成し、ログをお好みのスタイルで出力してください。
-

@@ -1,0 +1,10 @@
+// == FAQ
+
+// === allowCredentials, excludeCredentials
+//
+// allowCredentials, excludeCredentialsに何を指定すべきか
+
+// === 二段階認証としてのWebAuthn
+//
+// === パスワードレス認証としてのWebAuthn
+

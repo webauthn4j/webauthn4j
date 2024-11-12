@@ -1,120 +1,342 @@
 == クイックスタート
 
-WebAuthn認証は、事前に認証デバイスで生成した公開鍵をサーバーに登録し、認証時に認証デバイスで生成した署名を公開鍵で検証することで認証が成立する認証方式です。 このクイックスタートでは、WebAuthn4Jを用いてWebAuthn認証における登録時にサーバーに送信される公開鍵やデバイスの構成情報を 含むデータ（構成証明、Attestation）の検証と、認証時にサーバーに送信される署名を含んだデータ（アサーション、Assertion）を検証する方法を解説します。 また、Apple App Attestの構成証明、アサーションを検証する方法も示します。
+このクイックスタートでは、WebAuthn認証の処理の概要を紹介し、その後、WebAuthn4Jライブラリがカバーする範囲や制限、およびWebAuthn4Jを利用したWebAuthn認証の実装方法を説明します。
 
-=== WebAuthnの検証
+=== WebAuthn認証の処理概要
 
-==== WebAuthn構成証明の検証
+==== 認証のフロー
 
-認証デバイスの登録時に構成証明を検証する際は、`RegistrationRequest` を引数に
-`WebAuthnManager#verify` メソッドを用いて登録リクエストのパース、検証を行ってください。 登録リクエストの検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
-`WebAuthnManager#parse` メソッドを用いて登録リクエストをパースしたうえで、 得られた `RegistrationData` のインスタンスを `WebAuthnManager#verify` メソッドに渡して実行してください。
+WebAuthn認証は、端的に言えば、ウェブでの利用にあわせて設計された公開鍵認証です。
+予め鍵ペアを作成し、サーバー側に公開鍵、認証デバイス側に秘密鍵を保存しておき、
+認証時は認証デバイスで秘密鍵で署名を行い、署名をサーバー側に送信して公開鍵で署名を検証することで認証を行う方式です。
 
-`RegistrationRequest` のメンバー はフロントエンド側でWebAuthn JS APIを実行して取得した値となります。 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
+署名対象のデータは、クライアントのデータや、認証デバイスのデータです。クライアントのデータには、予めサーバー側で生成したチャレンジや、表示しているサイトのドメイン（origin）等、サーバー側に関連するデータも含まれます。
+署名の検証だけでなく、チャレンジの一致もサーバー側で検証しているため、リプレイ攻撃を防止できます。
+他にも様々なクライアントのデータや、認証デバイスのデータが署名対象データに含まれており、サーバー側での検証の対象となっています。
+認証時のデータの流れを図にすると以下の通りです。
 
-`RegistrationParameters` は、`WebAuthnManager#verify` メソッドのもう一つの引数であり、 サーバーの状態や検証条件をまとめたパラメータです。 サーバーの状態については、 `serverProperty` としてまとめています。
-`ServerProperty` のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。
+[plantuml,authentication sequence,svg]
+....
+@startuml
+title WebAuthn Authentication Overview
+autonumber
+actor "User"
+participant "Authenticator"
+participant "Client"
+participant "Server"
+database Session
 
-- `origin` にはWebAuthnによる認証を提供するサイトのOriginを指定して下さい。WebAuthnでは、ブラウザが認識しているOriginを ClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれたOriginが指定されたOriginと合致するかを検証することで、 フィッシング攻撃を防ぎます。
-- `rpId` にはWebAuthnによる認証を提供するサイトのrpIdを指定して下さい。rpIdは資格情報のスコープを指定するパラメータです。 詳しくは https://www.w3.org/TR/webauthn-1/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
-- `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側でWebAuthn JS APIを実行する際に パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
-- `tokenBindingId` はToken bindingを利用する場合のパラメータです。利用しない場合は `null` を指定してください。
+"Server" -> "Server": generate challenge
+"Server" -> "Session": challenge
+"Server" -> "Client": challenge
 
-検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `CredentialRecord` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。永続化方法について詳しくは、 <<./deep-dive.adoc#CredentialRecordのシリアライズデシリアライズ,CredentialRecordのシリアライズ、デシリアライズ>> を参照して下さい。
+"Client" -> "Client": generate client data (challenge, origin, etc.)
+"Client" -> "Authenticator": credential request (client data hash, etc.)
+"Authenticator" -> "User": consent request
+"User" -> "Authenticator": authorization gesture
+"Authenticator" -> "Authenticator": generate authenticator data (user verification status, etc)
+"Authenticator" -> "Authenticator": sign over authenticator data and client data hash
+"Authenticator" -> "Client": credential response (authenticator data, signature, etc.)
+"Client" -> "Server": assertion \n (authenticator data, client data, signature, etc.)
+"Session" -> "Server": load challenge
+"Server" -> "Server": verify
 
-[source,java]
+@enduml
+....
+
+==== 登録のフロー
+
+WebAuthnの新しいクレデンシャル登録処理とは、クライアントが認証デバイスに対して新しい鍵ペアの生成を要求し、
+認証デバイスからクライアントに返却された公開鍵等をクレデンシャルとしてサーバーに登録する処理です。
+実は、新しいクレデンシャル登録時も認証時と類似したフローであり、
+まずサーバーから送信されたチャレンジを含むクライアントデータと、認証デバイスのデータに対して
+認証デバイスが署名して返却し、これをクライアント経由で受け取ったサーバーは署名検証を実施、
+成功した場合、クレデンシャルレコードとして登録する、という流れになっています。
+但し、登録時の場合、署名対象の認証デバイスのデータに、生成された新しい鍵ペアの公開鍵が含まれます。
+サーバーにはこの公開鍵が登録され、認証時の署名検証で使用されることになります。
+
+図にしますと以下の通りです。
+
+[plantuml,registration sequence,svg]
+....
+@startuml
+title WebAuthn Registration Overview
+autonumber
+actor "User"
+participant "Authenticator"
+participant "Client"
+participant "Server"
+database Session
+
+"Server" -> "Server": generate challenge
+"Server" -> "Session": challenge
+"Server" -> "Client": challenge
+
+"Client" -> "Client": generate client data (challenge, origin, etc.)
+"Client" -> "Authenticator": credential request (client data hash, etc.)
+"Authenticator" -> "User": consent request
+"User" -> "Authenticator": authorization gesture
+"Authenticator" -> "Authenticator": generate authenticator data\n(credential public key, user verification status, etc.)
+"Authenticator" -> "Authenticator": sign over authenticator data and client data hash
+"Authenticator" -> "Authenticator": generate attestation statement\n(authenticator attestation, signature, etc.)
+"Authenticator" -> "Client": credential response\n(authenticator data, attestation statement, etc.)
+"Client" -> "Server": attestation \n (authenticator data, client data, attestation statement, etc.)
+"Session" -> "Server": load challenge
+"Server" -> "Server": verify
+
+@enduml
+....
+
+前のセクションで説明した通り、認証時はクレデンシャルの秘密鍵で署名されているので、署名をクレデンシャルの公開鍵で検証する仕組となっていますが、
+それでは公開鍵登録時に認証デバイスのデータとクライアントのデータに署名する際に使用される秘密鍵は何なのでしょうか。また、この署名を検証する公開鍵をサーバーはどうやって入手するのでしょうか。
+通常、実はこの秘密鍵は認証デバイスのモデル毎に固有の鍵で、認証デバイスにあらかじめ焼きこまれています。
+検証に使用する公開鍵に関しては、予め信頼する認証デバイスの公開鍵をサーバーに構成しておくか、 FIDO Metadata Serviceのように、認証デバイスのモデル毎の公開鍵を公開しているレジストリから取得することが可能です。
+
+このように、クレデンシャルの公開鍵登録のメッセージを認証デバイスのモデル固有の秘密鍵で署名することで、
+登録しようとしている認証デバイスが特定のモデルであることを証明する"Attestation"（構成証明）という仕組がWebAuthnには備わっており、
+このデバイスの構成証明情報を含んだデータ構造は、構成証明ステートメント（Attestation Statement）と呼ばれます。
+ただし、ユーザーがどのモデルの認証デバイスを使っているかという構成証明ステートメントは、ユーザートラッキングにも使われうる情報です。
+そのため、デフォルトの構成では、認証デバイスが構成証明ステートメントを返却してもクライアントによって破棄され、サーバー側には送信されません。
+構成証明ステートメントを送信するようオプションで明示的に指定した場合にのみ、エンドユーザーの同意を得たうえで構成証明ステートメントは開示されます。
+
+=== WebAuthn4Jのスコープ
+
+WebAuthn4Jは特定のWebアプリケーションフレームワークに依存しないポータビリティを実現する為、WebAuthnの登録時、認証時のサーバー側の検証に意図的に機能を絞り込んでいます。
+
+[plantuml,webauthn4j scope,svg]
+....
+@startuml
+title WebAuthn4J Scope
+autonumber
+actor "User"
+participant "Authenticator"
+participant "Client"
+participant "Server"
+database Session
+
+"Server" -> "Server": generate challenge
+"Server" -> "Session": challenge
+"Server" -> "Client": challenge
+
+"Client" -> "Client": generate client data (challenge, origin, etc.)
+"Client" -> "Authenticator": credential request (client data hash, etc.)
+"Authenticator" -> "User": consent request
+"User" -> "Authenticator": authorization gesture
+"Authenticator" -> "Authenticator": generate authenticator data (user verification status, etc)
+"Authenticator" -> "Authenticator": sign over authenticator data and client data hash
+"Authenticator" -> "Client": credential response (authenticator data, signature, etc.)
+"Client" -> "Server": assertion \n (authenticator data, client data, signature, etc.)
+"Session" -> "Server": load challenge
+group WebAuthn4J scope
+"Server" -> "Server": verify
+end
+
+@enduml
+....
+
+そのため、HTTPリクエストからのパラメータの取出、チャレンジのセッションへの保存、 フロントエンド側への返却、
+生成された公開鍵などをクレデンシャルレコードとして保存する処理、認証時にクレデンシャルレコードをロードする処理、といった機能は具備していません。
+それらの処理は、利用しているフレームワークにあわせて実装する必要があるためです。
+ご利用のフレームワークで、それらをケアしてくれるWebAuthn4Jのラッパーライブラリが存在する場合は、そちらを利用すると良いでしょう。
+例えば、
+
+- Quarkus Security WebAuthn
+- Spring Security Passkeys
+- Vert.x Auth WebAuthn4J
+
+といったラッパーライブラリが提供されています。
+ラッパーライブラリが存在しない場合は、自前でそれらの処理を実装頂く必要があります。次のセクションで説明していきます。
+
+=== WebAuthn4Jを利用した登録処理の実装
+
+==== WebAuthnの鍵ペアの生成
+
+WebAuthnの鍵ペアの生成において中心となるAPIは、ブラウザの `navigator.credentials.create` メソッドです。
+このAPIを呼び出すことで、WebAuthnの鍵ペアが認証デバイスによって生成され、公開鍵を含むWebAuthnのクレデンシャルが戻り値として返却されます。
+
+`navigator.credentials.create` メソッドの呼出時には、様々なオプションが指定出来ます。
+そのオプションの一つに、 `challenge` が存在します。前述の通り、チャレンジはリプレイ攻撃を防止するためのパラメータであり、サーバー側で生成した値をパラメータとして指定し、また、同じ値をセッション等に保存しておく必要があります。
+登録のフローの図の通り、まずバックエンドサーバーでチャレンジを生成してセッションに保存し、それをクライアントに渡す必要があります。
+バックエンドサーバーからフロントエンドへのチャレンジの受け渡し方法はWebAuthn仕様では特に定められていません。
+HTMLページに埋め込んでも良いですし、チャレンジを返却するRESTエンドポイントを用意することも可能です。
+`navigator.credentials.create` メソッドのパラメータである、 `PublicKeyCredentialCreationOptions` 全体を返却するエンドポイントを用意するのも良いアイデアでしょう。
+WebAuthnのJava Script APIには、 `PublicKeyCredential.parseCreationOptionsFromJSON` というメソッドが用意されており、JSONとしてシリアライズされた `PublicKeyCredentialCreationOptions` をパースすることが可能です。
+WebAuthn4Jは `PublicKeyCredentialCreationOptions` を表現するJavaのクラスを提供しており、バックエンドサーバー側でJSONを組み立てる際にご活用頂けます。
+
+.`PublicKeyCredentialCreationOptions` 全体をREST Endpointから取得して `navigator.credentials.create` を呼出
+[source,javascript,caption="例 {counter:number}: "]
 ----
-// Client properties
-byte[] attestationObject = null /* set attestationObject */;
-byte[] clientDataJSON = null /* set clientDataJSON */;
-String clientExtensionJSON = null;  /* set clientExtensionJSON */;
-Set<String> transports = null /* set transports */;
+const response = await fetch("/passkeys/attestationOptions") //fetch PublicKeyCredentialCreationOptions as JSON string
+const publicKeyCredentialCreationOptionsJSON = await response.json() // convert to JSONObject
+const credentialCreationOptions = PublicKeyCredential.parseCreationOptionsFromJSON(publicKeyCredentialCreationOptionsJSON); // convert to PublicKeyCredentialCreationOptions
+const publicKeyCredential = await navigator.credentials.create({ publicKey: credentialCreationOptions}); // create PublicKeyCredential
+----
+
+いずれにせよ、バックエンドサーバー側でチャレンジを生成し、セッションに保存した上で、何らかの方法でフロントエンド側に引き渡した上で、
+フロントエンド側のJava Scriptで `navigator.credentials.create` メソッドを呼び出してWebAuthnクレデンシャルを生成して下さい。
+`navigator.credentials.create` メソッドに指定できるその他のオプションに関しては、 https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create[MDN: CredentialsContainer: create() メソッド]を参照下さい。
+
+==== WebAuthnの公開鍵のサーバーへの登録
+
+生成されたWebAuthnクレデンシャルは、何らかの方法でバックエンドサーバー側に送信する必要があります。
+バックエンドサーバー側にどのようなフォーマットで送信するかについてもWebAuthn仕様では定義されていません。
+但し、WebAuthnクレデンシャルである `PublicKeyCredential` というJavaScriptの型には、 `toJSON` というメソッドが用意されており、
+こちらと `JSON.stringify` を利用してシリアライズしたデータを送信するのが一つのベストプラクティスです。
+
+.`PublicKeyCredential` の送信
+[source,javascript,caption="例 {counter:number}: "]
+----
+const registrationResponseJSON = publicKeyCredential.toJSON(); // convert to JSONObject
+await fetch("/register", {
+    method : 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+        'username': document.getElementById('username').value,
+        'registrationResponseJSON': JSON.stringify(registrationResponseJSON) //convert to string
+    })
+});
+----
+
+バックエンドサーバー側は受け取ったWebAuthnクレデンシャルを検証した上で、公開鍵を含むWebAuthnクレデンシャルレコードを永続化する必要があります。
+WebAuthn4Jでは、 `PublicKeyCredential` のJSON表現を `WebAuthnManager#verifyRegistrationResponseJSON` というメソッドで直接検証することが可能です。
+`WebAuthnManager#parseRegistrationResponseJSON` は、検証を行わず、`PublicKeyCredential` のデシリアライズ処理のみを行います。
+検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
+`WebAuthnManager#parseRegistrationResponseJSON` メソッドを用いてパースしたうえで、 得られた `RegistrationData` のインスタンスを `WebAuthnManager#verify` メソッドに渡して検証を実行してください。
+
+.`PublicKeyCredential` のサーバーサイド検証
+[source,java,caption="例 {counter:number}: "]
+----
+String registrationResponseJSON = "<registrationResponseJSON>"; /* set registrationResponseJSON received from frontend */
+RegistrationData registrationData;
+try {
+    registrationData = webAuthnManager.parseRegistrationResponseJSON(registrationResponseJSON);
+}
+catch (DataConversionException e) {
+    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
+    throw e;
+}
 
 // Server properties
 Origin origin = null /* set origin */;
 String rpId = null /* set rpId */;
 Challenge challenge = null /* set challenge */;
-byte[] tokenBindingId = null /* set tokenBindingId */;
-ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
 
 // expectations
+List<PublicKeyCredentialParameters> pubKeyCredParams = null;
 boolean userVerificationRequired = false;
 boolean userPresenceRequired = true;
 
-RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired);
-RegistrationData registrationData;
-try{
-    registrationData = webAuthnManager.parse(registrationRequest);
-}
-catch (DataConversionException e){
-    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
-    throw e;
-}
-try{
+RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, pubKeyCredParams, userVerificationRequired, userPresenceRequired);
+
+try {
     webAuthnManager.verify(registrationData, registrationParameters);
-}
-catch (ValidationException e){
-    // If you would like to handle WebAuthn data validation error, please catch ValidationException
+} catch (VerificationException e) {
+    // If you would like to handle WebAuthn data verification error, please catch VerificationException
     throw e;
 }
 
 // please persist CredentialRecord object, which will be used in the authentication process.
 CredentialRecord credentialRecord =
-    new CredentialRecordImpl( // You may create your own CredentialRecord implementation to save friendly authenticator name
-        registrationData.getAttestationObject(),
-        registrationData.getCollectedClientData(),
-        registrationData.getClientExtensions(),
-        registrationData.getTransports()
-    );
+        new CredentialRecordImpl( // You may create your own CredentialRecord implementation to save friendly authenticator name
+                registrationData.getAttestationObject(),
+                registrationData.getCollectedClientData(),
+                registrationData.getClientExtensions(),
+                registrationData.getTransports()
+        );
 save(credentialRecord); // please persist credentialRecord in your manner
 ----
 
-==== WebAuthnアサーションの検証
+`RegistrationParameters` は、`WebAuthnManager#verifyRegistrationResponseJSON` メソッドのもう一つの引数であり、 サーバーの状態や検証条件をまとめたパラメータです。
 
-認証時にアサーションを検証する際は、`AuthenticationRequest` を引数に  `WebAuthnManager#verify` メソッドを 実行してください。`AuthenticationRequest` の コンストラクタの引数に指定する、 `credentialId` と `userHandle` 、 `authenticatorData`  、 `clientDataJSON` 、`signature` は フロントエンド側でWebAuthn JS APIを実行して取得した値となります。 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
-`WebAuthnManager#verify` メソッドのもう一つの引数である `AuthenticationParameters`  の コンストラクタの引数に指定する、 `serverProperty` はサーバー側から取得する値をまとめたパラメータです。
+- `serverProperty` は、サーバーの状態を渡すパラメータです。次の<<ServerProperty>>を参照して下さい。
+- `pubKeyCredParams` には `PublicKeyCredentialCreationOptions` で指定した `pubKeyCredParams` と同じ値を指定して下さい。
+- `userVerificationRequired` は、認証デバイスでのユーザーの生体認証やPIN確認などでの当人認証を必須とするかのパラメータです。
+- `userPresenceRequired` は、認証デバイス側でのユーザーの介在確認を必須とするかのパラメータです。ユーザーによって何らかのジェスチャー入力が行われたことを示すUPフラグを確認します。
+  このジェスチャーには、生体認証に限らず、静電容量ボタンのタッチ等、当人認証が行われない操作も含まれます。
+  WebAuthnにおいては、UPフラグは基本的に必須ですので `true` を指定すべきですが、パスワードからパスキーへの自動アップグレード時のクレデンシャル自動生成時のシナリオに限っては `false` となります。
 
-`userVerificationRequired` は認証デバイスでのユーザーの本人性確認が必要かどうかを示すパラメータです。 パスワード＋認証デバイスの「所持」による多要素認証を行う場合は、パスワードで本人性の確認が出来ている為 `false` で良いでしょう。 パスワードレス認証として、認証デバイスによる本人性確認＋「所持」による多要素認証を行う場合は `true` を指定する必要があります。
+b
+サーバーの状態については、 `serverProperty` としてまとめています。
+`ServerProperty` のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。
 
-`authenticator` には、登録時に永続化した `CredentialRecord` を指定してください。
+- `origin` にはWebAuthnによる認証を提供するサイトのOriginを指定して下さい。WebAuthnでは、ブラウザが認識しているOriginをClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれたOriginが指定されたOriginと合致するかを検証することで、 フィッシング攻撃を防ぎます。
+- `rpId` にはWebAuthnによる認証を提供するサイトのrpIdを指定して下さい。rpIdは資格情報のスコープを指定するパラメータです。 詳しくは https://www.w3.org/TR/webauthn-1/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
+- `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側でWebAuthn JS APIを実行する際に パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行したChallengeを検証時まで永続化しておくのはWebAuthn4Jライブラリ呼出側の責務です。セッションなどに格納しておくと良いでしょう。
 
-検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。 検証後は、 `CredentialRecord` に紐づけたcounterおよび、uvInitialized、backedUpの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
-https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
+検証に成功した場合は、返却された値から `CredentialRecord` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に使用します。
+永続化方法について詳しくは、 <<./deep-dive.adoc#CredentialRecordのシリアライズデシリアライズ,CredentialRecordのシリアライズ、デシリアライズ>> を参照して下さい。
+検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。
 
-[source,java]
+=== WebAuthn4Jを利用した認証処理の実装
+
+==== WebAuthnのアサーションの生成
+
+WebAuthnでの認証時において中心となるAPIは、ブラウザの `navigator.credentials.get` メソッドです。
+認証のフローの図の通り、認証処理においても、まずバックエンドサーバー側でチャレンジを生成し、セッションに保存する一方、クライアントにチャレンジを引き渡す必要があります。
+`navigator.credentials.get` メソッドのパラメータにも `challenge` が存在するためです。
+バックエンドサーバーからフロントエンド（クライアント）への認証処理のチャレンジの受け渡し方法もWebAuthn仕様では定められていません。登録処理同様、お好みの方法でチャレンジをフロントエンド側に引き渡して下さい。
+`navigator.credentials.get` メソッドのパラメータである、 `PublicKeyCredentialGetOptions` をパースするJava Script APIは、 `PublicKeyCredential.parseCreationGetOptionsFromJSON` です。
+`navigator.credentials.get` メソッドに指定できるその他のオプションに関しては、  https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get[MDN: CredentialsContainer: get() メソッド]を参照下さい。
+
+.`PublicKeyCredentialGetOptions` 全体をREST Endpointから取得して `navigator.credentials.get` を呼出
+[caption="例 {counter:number}: "]
+[source,javascript]
 ----
-// Client properties
-byte[] credentialId = null /* set credentialId */;
-byte[] userHandle = null /* set userHandle */;
-byte[] authenticatorData = null /* set authenticatorData */;
-byte[] clientDataJSON = null /* set clientDataJSON */;
-String clientExtensionJSON = null /* set clientExtensionJSON */;
-byte[] signature = null /* set signature */;
+const response = await fetch("/passkeys/assertionOptions");
+const publicKeyCredentialRequestOptionsJSON = await response.json();
+const credentialGetOptions = PublicKeyCredential.parseRequestOptionsFromJSON(publicKeyCredentialRequestOptionsJSON);
+const publicKeyCredential = await navigator.credentials.get({ publicKey: credentialGetOptions});
+----
+
+==== WebAuthnのアサーションの検証処理、および後処理
+
+`navigator.credentials.get` メソッドによって生成されたアサーションは、バックエンドサーバー側に送信し、検証する必要があります。登録時同様、`toJSON` メソッドでシリアライズが可能です。
+
+.`PublicKeyCredential` をサーバーに送信
+[source,javascript,caption="例 {counter:number}: "]
+----
+const authenticationResponseJSON = publicKeyCredential.toJSON();
+console.debug("authenticationResponseJSON: %s", authenticationResponseJSON);
+await fetch("/passkeys/authenticate", {
+    method : 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(authenticationResponseJSON)
+});
+----
+
+WebAuthn4Jでは、 `PublicKeyCredential` のJSON表現を `WebAuthnManager#verifyAuthenticationResponseJSON` というメソッドで検証することが可能です。
+パースし、検証する2段階を踏む場合は、`WebAuthnManager#parseAuthenticationResponseJSON` メソッドと `WebAuthnManager#verify` メソッドをご利用下さい。
+
+.`PublicKeyCredential` のサーバーサイド検証
+[source,java,caption="例 {counter:number}: "]
+----
+String authenticationResponseJSON = "<authenticationResponseJSON>"; /* set authenticationResponseJSON received from frontend */
+
+AuthenticationData authenticationData;
+try {
+    authenticationData = webAuthnManager.parseAuthenticationResponseJSON(authenticationResponseJSON);
+} catch (DataConversionException e) {
+    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
+    throw e;
+}
 
 // Server properties
 Origin origin = null /* set origin */;
 String rpId = null /* set rpId */;
 Challenge challenge = null /* set challenge */;
-byte[] tokenBindingId = null /* set tokenBindingId */;
-ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
 
 // expectations
 List<byte[]> allowCredentials = null;
 boolean userVerificationRequired = true;
 boolean userPresenceRequired = true;
 
-CredentialRecord credentialRecord = load(credentialId); // please load authenticator object persisted in the registration process in your manner
-
-AuthenticationRequest authenticationRequest =
-        new AuthenticationRequest(
-                credentialId,
-                userHandle,
-                authenticatorData,
-                clientDataJSON,
-                clientExtensionJSON,
-                signature
-        );
+CredentialRecord credentialRecord = load(authenticationData.getCredentialId()); // please load authenticator object persisted in the registration process in your manner
 AuthenticationParameters authenticationParameters =
         new AuthenticationParameters(
                 serverProperty,
@@ -124,16 +346,9 @@ AuthenticationParameters authenticationParameters =
                 userPresenceRequired
         );
 
-AuthenticationData authenticationData;
-try {
-    authenticationData = webAuthnManager.parse(authenticationRequest);
-} catch (DataConversionException e) {
-    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
-    throw e;
-}
 try {
     webAuthnManager.verify(authenticationData, authenticationParameters);
-} catch (ValidationException e) {
+} catch (VerificationException e) {
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
     throw e;
 }
@@ -143,6 +358,19 @@ updateCounter(
         authenticationData.getAuthenticatorData().getSignCount()
 );
 ----
+
+`WebAuthnManager#verifyAuthenticationResponseJSON` メソッドのもう一つの引数である `AuthenticationParameters` は、サーバーの状態や検証条件をまとめたパラメータです。
+
+- `serverProperty` は、サーバーの状態を渡すパラメータです。詳しくは<<ServerProperty>> を参照して下さい。
+- `userVerificationRequired` は認証デバイスでのユーザーの生体認証やPIN確認などでの当人認証を必須とするかのパラメータです。パスワード＋認証デバイスの「所持」による多要素認証を行う場合は、パスワードで本人性の確認が出来ている為 `false` で良いでしょう。 パスワードレス認証として、認証デバイスによる本人性確認＋「所持」による多要素認証を行う場合は `true` を指定する必要があります。
+- `authenticator` には、登録時に永続化した `CredentialRecord` を指定してください。
+
+検証に成功した場合は、認証に成功したものと見做すことが出来ますので、永続化された `CredentialRecord` に紐づけたcounterおよび、uvInitialized、backedUpの値を更新してください。
+カウンタは万が一認証デバイスのクローンが 作成されたことを検知するために用意されています。
+カウンタについて詳しくは https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
+
+その後、認証済セッションを作成するなど、ユーザー認証成功時の処理を実施下さい。
+検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。
 
 === Apple App Attestの検証
 
@@ -291,4 +519,3 @@ updateCounter(
         dcAssertionData.getAuthenticatorData().getSignCount()
 );
 ----
-
