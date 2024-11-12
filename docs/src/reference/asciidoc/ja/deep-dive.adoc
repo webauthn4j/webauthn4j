@@ -206,3 +206,4 @@ FIDO CTAP2セキュリティキーを独自アプリケーションで認証に�
 
 さて、FIDO CTAP2では、登録時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] メソッドと認証時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] メソッド 、どちらにも共通するパラメータとして、`clientDataHash` というパラメータが存在します。セキュリティキーは、受け取った `clientDataHash` パラメータを署名対象のデータの一部として署名を生成するため、アプリケーションとして署名で保護したいクライアントデータのハッシュを取得し、
 `clientDataHash` にセットすることで、アプリケーション固有のクライアントデータが改竄されていない真正なデータか、サーバー側で検証することが出来ます。
+

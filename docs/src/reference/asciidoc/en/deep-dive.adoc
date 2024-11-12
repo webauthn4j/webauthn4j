@@ -233,3 +233,4 @@ Implementing the above flow will provide authentication feature, but if the enti
 The client data itself can be sent together with the attestation and assertion, but in order to protect the client data from MITM attacks, it need to be signed and protected.
 In FIDO CTAP2 specification, there is a parameter named `clientDataHash` that is common to https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] method used at registration and https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] method used at authentication.
 Since the security key generates a signature from data that contains `clientDataHash`, an application can verify its specific client data by setting `clientDataHash` to the hash of the client data and validating the signature.
+
