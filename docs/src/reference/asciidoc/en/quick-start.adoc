@@ -160,7 +160,7 @@ const publicKeyCredential = await navigator.credentials.create({ publicKey: cred
 In any case, generate the challenge on the backend server, store it in the session, and pass it to the frontend by some means.
 Then, in the frontend JavaScript, call the `navigator.credentials.create` method with it to generate the WebAuthn credential. For more information on the other options available for the `navigator.credentials.create` method, please refer https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create[MDN: CredentialsContainer: create() method].
 
-=== Registering the WebAuthn public key credential on the server
+==== Registering the WebAuthn public key credential on the server
 
 The generated WebAuthn credential must be sent to the backend server in some way.
 The WebAuthn specification does not define the format in which it should be sent to the server.
