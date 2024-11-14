@@ -3,9 +3,9 @@ module com.webauthn4j.core {
 
     requires transitive com.webauthn4j.util;
 
+    requires transitive com.fasterxml.jackson.databind;
+    requires transitive com.fasterxml.jackson.dataformat.cbor;
     requires org.slf4j;
-    requires com.fasterxml.jackson.databind;
-    requires com.fasterxml.jackson.dataformat.cbor;
 
     requires static org.jetbrains.annotations;
 

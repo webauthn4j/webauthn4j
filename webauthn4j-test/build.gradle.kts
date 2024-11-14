@@ -23,8 +23,6 @@ dependencies {
     implementation(project(":webauthn4j-core-async"))
 
     implementation(libs.slf4j.api)
-    implementation(libs.jackson.databind)
-    implementation(libs.jackson.dataformat.cbor)
 
     implementation(libs.bouncycastle.bcprov.jdk15to18)
     implementation(libs.bouncycastle.bcpkix.jdk15to18)

@@ -21,8 +21,6 @@ dependencies {
     api(project(":webauthn4j-core"))
 
     implementation(libs.slf4j.api)
-    implementation(libs.jackson.databind)
-    implementation(libs.jackson.dataformat.cbor)
 
     //CompileOnly
     compileOnly(libs.jetbrains.annotations)

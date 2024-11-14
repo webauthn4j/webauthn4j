@@ -5,8 +5,6 @@ module com.webauthn4j.test {
     requires transitive com.webauthn4j.core.async;
 
     requires org.slf4j;
-    requires com.fasterxml.jackson.databind;
-    requires com.fasterxml.jackson.dataformat.cbor;
 
     requires org.bouncycastle.pkix;
     requires org.bouncycastle.provider;
