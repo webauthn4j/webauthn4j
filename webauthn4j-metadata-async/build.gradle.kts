@@ -21,8 +21,6 @@ dependencies {
     api(project(":webauthn4j-metadata"))
 
     implementation(libs.slf4j.api)
-    implementation(libs.jackson.databind)
-
 
     //CompileOnly
     compileOnly(libs.jetbrains.annotations)

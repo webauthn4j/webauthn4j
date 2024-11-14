@@ -2,8 +2,6 @@ module com.webauthn4j.appattest {
     requires transitive com.webauthn4j.core;
 
     requires org.slf4j;
-    requires com.fasterxml.jackson.databind;
-    requires com.fasterxml.jackson.dataformat.cbor;
 
     requires static org.jetbrains.annotations;
 

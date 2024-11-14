@@ -19,9 +19,9 @@ description = "WebAuthn4J Core library"
 dependencies {
     api(project(":webauthn4j-util"))
 
+    api(libs.jackson.databind)
+    api(libs.jackson.dataformat.cbor)
     implementation(libs.slf4j.api)
-    implementation(libs.jackson.databind)
-    implementation(libs.jackson.dataformat.cbor)
 
     //CompileOnly
     compileOnly(libs.jetbrains.annotations)
