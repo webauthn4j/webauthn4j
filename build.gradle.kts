@@ -186,7 +186,7 @@ tasks.register("updateVersionsInDocuments"){
     val regex = Regex("""<webauthn4j\.version>.*</webauthn4j\.version>""")
     val replacement = "<webauthn4j.version>$latestReleasedWebAuthn4JVersion</webauthn4j.version>"
 
-    val files = arrayOf(file("README.md"), file("docs/src/reference/asciidoc/en/introduction.adoc"), file("docs/src/reference/asciidoc/ja/introduction.adoc"))
+    val files = arrayOf(file("README.md"), file("docs/src/reference/asciidoc/en/introduction.adoc"), file("docs/src/reference/asciidoc/ja/introduction.adoc"), file("docs/src/reference/asciidoc/en/quick-start.adoc"), file("docs/src/reference/asciidoc/ja/quick-start.adoc"))
     files.forEach { file ->
         val updated = file.readText(StandardCharsets.UTF_8).replaceFirst(regex, replacement)
         file.writeText(updated, StandardCharsets.UTF_8)
