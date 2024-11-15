@@ -47,6 +47,11 @@ module com.webauthn4j.core {
     exports com.webauthn4j.verifier.exception;
     exports com.webauthn4j.verifier.internal;
 
+    opens com.webauthn4j.converter.jackson.serializer.cbor;
+    opens com.webauthn4j.converter.jackson.serializer.json;
+    opens com.webauthn4j.converter.jackson.deserializer.cbor;
+    opens com.webauthn4j.converter.jackson.deserializer.json;
+
     opens com.webauthn4j.data;
     opens com.webauthn4j.data.attestation;
     opens com.webauthn4j.data.attestation.statement;
