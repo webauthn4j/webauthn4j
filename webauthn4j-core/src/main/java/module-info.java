@@ -46,4 +46,16 @@ module com.webauthn4j.core {
     exports com.webauthn4j.verifier.attestation.trustworthiness.self;
     exports com.webauthn4j.verifier.exception;
     exports com.webauthn4j.verifier.internal;
+
+    opens com.webauthn4j.data;
+    opens com.webauthn4j.data.attestation;
+    opens com.webauthn4j.data.attestation.statement;
+    opens com.webauthn4j.data.attestation.authenticator;
+    opens com.webauthn4j.data.client;
+    opens com.webauthn4j.data.client.challenge;
+    opens com.webauthn4j.data.extension;
+    opens com.webauthn4j.data.extension.authenticator;
+    opens com.webauthn4j.data.extension.client;
+    opens com.webauthn4j.data.jws;
+
 }
