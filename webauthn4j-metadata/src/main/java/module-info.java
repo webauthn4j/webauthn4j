@@ -16,4 +16,9 @@ module com.webauthn4j.metadata {
     exports com.webauthn4j.metadata.data.uaf;
     exports com.webauthn4j.metadata.exception;
     exports com.webauthn4j.metadata.util.internal to com.webauthn4j.metadata.async;
+
+    opens com.webauthn4j.metadata.data;
+    opens com.webauthn4j.metadata.data.statement;
+    opens com.webauthn4j.metadata.data.toc;
+    opens com.webauthn4j.metadata.data.uaf;
 }
