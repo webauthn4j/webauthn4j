@@ -376,7 +376,7 @@ If you are using maven, add the `webauthn4j-appattest` as a dependency in this w
 <properties>
   ...
   <!-- Use the latest version whenever possible. -->
-  <webauthn4j.version>0.28.2.RELEASE</webauthn4j.version>
+  <webauthn4j.version>0.28.3.RELEASE</webauthn4j.version>
   ...
 </properties>
 
