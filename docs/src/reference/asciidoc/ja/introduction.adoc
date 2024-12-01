@@ -13,10 +13,6 @@ Passkeysは、WebAuthn仕様の使いやすさを向上させたWebAuthn Level3�
 
 WebAuthn4Jは、Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。WebAuthn/Passkeysだけでなく、Apple App Attestや、FIDO CTAP2セキュリティキーを用いた独自アプリケーションのサーバーサイド検証に用いることも可能です。 Web Authentication仕様で定められた全ての構成証明ステートメント（Attestation）をサポートしながら、外部ライブラリへの依存関係は最小限に抑えたポータブルなライブラリです。
 
-=== WebAuthn4J Spring Securityとは
-
-WebAuthn4Jの関連プロジェクトとして、Spring SecurityでWebAuthnを利用するためのラッパーライブラリを https://github.com/webauthn4j/webauthn4j-spring-security[WebAuthn4J Spring Security] という名前で開発しています。 Spring Securityを活用したアプリケーションでWebAuthnを導入する場合は、WebAuthn4Jを直接利用するのではなく、 WebAuthn4J Spring Securityを利用するのが良いでしょう。
-
 === 特徴
 
 ==== サポートする構成証明ステートメントフォーマット

@@ -16,12 +16,6 @@ WebAuthn4J is a Java library for WebAuthn and Apple App Attest server side verif
 It can be used not only for server-side verification of WebAuthn/Passkeys, but also for custom applications that use Apple App Attest or FIDO CTAP2 security keys.
 It is a portable library that supports all attestation statement formats defined in the Web Authentication specification while keeping external dependencies to a minimum.
 
-=== WebAuthn4J Spring Security
-
-As a related project of WebAuthn4J, we are developing a wrapper library named https://github.com/webauthn4j/webauthn4j-spring-security[WebAuthn4J Spring Security]
-to support WebAuthn with Spring Security.
-To introduce WebAuthn in an application built with Spring Security, it is better to use WebAuthn4J Spring Security rather than directly using WebAuthn4J.
-
 === Feature
 
 ==== Supported Attestation Statement Formats
