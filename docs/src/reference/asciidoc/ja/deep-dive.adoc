@@ -127,12 +127,10 @@ FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能
 ==== Core-Async: webauthn4j-core-async.jar
 
 WebAuthn Attestation/Assertionの検証機能およびコア機能の非同期版を提供します。
-現時点では、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
 
 ==== Metadata-Async: webauthn4j-metadata-async.jar
 
 FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能の非同期バージョンを提供します。
-現時点では、実験的な提供です。 含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
 
 ==== App Attest: webauthn4j-appattest.jar
 
