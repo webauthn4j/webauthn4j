@@ -136,12 +136,10 @@ Provides additional features regarding FIDO Metadata Service.
 ==== Core-Async: webauthn4j-core-async.jar
 
 Provides async variant of core features for WebAuthn attestation and assertion verification.
-Since this module is in experimental status, the included classes don't follow semantic versioning and the design may change even though it is public.
 
 ==== Metadata-Async: webauthn4j-metadata-async.jar
 
 Provides async variant of additional features regarding FIDO Metadata Service.
-Since this module is in experimental status, the included classes don't follow semantic versioning and the design may change even though it is public.
 
 ==== App Attest: webauthn4j-appattest.jar
 
