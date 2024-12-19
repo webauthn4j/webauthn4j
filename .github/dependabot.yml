@@ -10,12 +10,3 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-
-# For 0.24.x branch
-
-  - package-ecosystem: gradle
-    directory: "/"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-    target-branch: 0.24.x
