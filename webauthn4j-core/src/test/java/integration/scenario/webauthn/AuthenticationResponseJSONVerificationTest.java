@@ -35,6 +35,7 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.ClientPlatform;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,14 +46,14 @@ class AuthenticationResponseJSONVerificationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
 
+    private final String rpId = "example.com";
     private final Origin origin = new Origin("http://example.com");
     private final ClientPlatform clientPlatform = EmulatorUtil.createClientPlatform(EmulatorUtil.PACKED_AUTHENTICATOR);
     private final WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager(objectConverter);
 
 
     @Test
-    void test() {
-        String rpId = "example.com";
+    void test_with_authenticationResponseJSON_as_string() {
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
 
@@ -86,8 +87,45 @@ class AuthenticationResponseJSONVerificationTest {
                 );
 
         assertThatCode(()->target.parseAuthenticationResponseJSON(authenticationResponseJSON)).doesNotThrowAnyException();
-        AuthenticationData authenticationData = target.parseAuthenticationResponseJSON(authenticationResponseJSON);
-        assertThatCode(()->target.verify(authenticationData, authenticationParameters)).doesNotThrowAnyException();
+        assertThatCode(()->target.verifyAuthenticationResponseJSON(authenticationResponseJSON, authenticationParameters)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void test_with_authenticationResponseJSON_as_InputStream() {
+        long timeout = 0;
+        Challenge challenge = new DefaultChallenge();
+
+        // create
+        AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+
+        // get
+        PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
+                challenge,
+                timeout,
+                rpId,
+                null,
+                UserVerificationRequirement.REQUIRED,
+                null
+        );
+
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        byte[] authenticationResponseJSON = objectConverter.getJsonConverter().writeValueAsBytes(credential);
+
+
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+
+        List<byte[]> allowCredentials = null;
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        allowCredentials,
+                        true
+                );
+
+        assertThatCode(()->target.parseAuthenticationResponseJSON(new ByteArrayInputStream(authenticationResponseJSON))).doesNotThrowAnyException();
+        assertThatCode(()->target.verifyAuthenticationResponseJSON(new ByteArrayInputStream(authenticationResponseJSON), authenticationParameters)).doesNotThrowAnyException();
     }
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {

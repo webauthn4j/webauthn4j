@@ -48,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -170,10 +171,18 @@ public class WebAuthnRegistrationManager {
         );
     }
 
-    @SuppressWarnings("java:S2583")
-    public RegistrationData parse(String registrationResponseJSON) {
+    public @NotNull RegistrationData parse(@NotNull String registrationResponseJSON) {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<>() {});
+        return toRegistrationData(publicKeyCredential);
+    }
 
+    public @NotNull RegistrationData parse(@NotNull InputStream registrationResponseJSON) {
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<>() {});
+        return toRegistrationData(publicKeyCredential);
+    }
+
+    @SuppressWarnings("java:S2583")
+    private @NotNull RegistrationData toRegistrationData(@NotNull PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential){
         byte[] attestationObjectBytes = publicKeyCredential.getResponse().getAttestationObject();
         AttestationObject attestationObject = attestationObjectBytes == null ? null : attestationObjectConverter.convert(attestationObjectBytes);
         byte[] clientDataBytes = publicKeyCredential.getResponse().getClientDataJSON();
@@ -218,7 +227,12 @@ public class WebAuthnRegistrationManager {
 
     }
 
-    public RegistrationData verify(String registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) {
+    public @NotNull RegistrationData verify(@NotNull String registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) {
+        RegistrationData registrationData = parse(registrationResponseJSON);
+        return verify(registrationData, registrationParameters);
+    }
+
+    public @NotNull RegistrationData verify(@NotNull InputStream registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) {
         RegistrationData registrationData = parse(registrationResponseJSON);
         return verify(registrationData, registrationParameters);
     }

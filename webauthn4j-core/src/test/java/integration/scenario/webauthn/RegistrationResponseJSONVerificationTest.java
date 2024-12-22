@@ -40,6 +40,7 @@ import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertP
 import com.webauthn4j.verifier.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessVerifier;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +52,9 @@ class RegistrationResponseJSONVerificationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
 
+    private final String rpId = "example.com";
     private final Origin origin = new Origin("http://localhost");
+    private final Challenge challenge = new DefaultChallenge();
     private final WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.PACKED_AUTHENTICATOR);
     private final ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
     private final NoneAttestationStatementVerifier noneAttestationStatementValidator = new NoneAttestationStatementVerifier();
@@ -71,9 +74,46 @@ class RegistrationResponseJSONVerificationTest {
     );
 
     @Test
-    void test() {
-        String rpId = "example.com";
-        Challenge challenge = new DefaultChallenge();
+    void test_with_registrationResponseJSON_as_string() {
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = createCredential();
+        String registrationResponseJSON = objectConverter.getJsonConverter().writeValueAsString(credential);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        List<PublicKeyCredentialParameters> pubKeyCredParams = null;
+        RegistrationParameters registrationParameters = new RegistrationParameters(
+                serverProperty,
+                pubKeyCredParams,
+                false
+        );
+
+        assertThatCode(()->target.parseRegistrationResponseJSON(registrationResponseJSON)).doesNotThrowAnyException();
+
+        RegistrationData registrationData = target.parseRegistrationResponseJSON(registrationResponseJSON);
+        assertThatCode(()->target.verify(registrationData, registrationParameters)).doesNotThrowAnyException();
+
+        assertThatCode(()->target.verifyRegistrationResponseJSON(registrationResponseJSON, registrationParameters)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void test_with_registrationResponseJSON_as_InputStream() {
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = createCredential();
+        byte[] registrationResponseJSON = objectConverter.getJsonConverter().writeValueAsBytes(credential);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        List<PublicKeyCredentialParameters> pubKeyCredParams = null;
+        RegistrationParameters registrationParameters = new RegistrationParameters(
+                serverProperty,
+                pubKeyCredParams,
+                false
+        );
+
+        assertThatCode(()->target.parseRegistrationResponseJSON(new ByteArrayInputStream(registrationResponseJSON))).doesNotThrowAnyException();
+
+        RegistrationData registrationData = target.parseRegistrationResponseJSON(new ByteArrayInputStream(registrationResponseJSON));
+        assertThatCode(()->target.verify(registrationData, registrationParameters)).doesNotThrowAnyException();
+
+        assertThatCode(()->target.verifyRegistrationResponseJSON(new ByteArrayInputStream(registrationResponseJSON), registrationParameters)).doesNotThrowAnyException();
+    }
+
+    private PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> createCredential(){
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
                 new AuthenticatorSelectionCriteria(
                         AuthenticatorAttachment.CROSS_PLATFORM,
@@ -97,21 +137,6 @@ class RegistrationResponseJSONVerificationTest {
                 AttestationConveyancePreference.NONE,
                 extensions
         );
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        String registrationResponseJSON = objectConverter.getJsonConverter().writeValueAsString(credential);
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        List<PublicKeyCredentialParameters> pubKeyCredParams = null;
-        RegistrationParameters registrationParameters = new RegistrationParameters(
-                serverProperty,
-                pubKeyCredParams,
-                false
-        );
-
-        assertThatCode(()->target.parseRegistrationResponseJSON(registrationResponseJSON)).doesNotThrowAnyException();
-
-        RegistrationData registrationData = target.parseRegistrationResponseJSON(registrationResponseJSON);
-        assertThatCode(()->target.verify(registrationData, registrationParameters)).doesNotThrowAnyException();
-
-        assertThatCode(()->target.verifyRegistrationResponseJSON(registrationResponseJSON, registrationParameters)).doesNotThrowAnyException();
+        return clientPlatform.create(credentialCreationOptions);
     }
 }

@@ -38,6 +38,7 @@ import com.webauthn4j.verifier.attestation.trustworthiness.self.SelfAttestationT
 import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -150,12 +151,20 @@ public class WebAuthnManager {
         return this.webAuthnRegistrationManager.parse(registrationResponseJSON);
     }
 
+    public @NotNull RegistrationData parseRegistrationResponseJSON(@NotNull InputStream registrationResponseJSON){
+        return this.webAuthnRegistrationManager.parse(registrationResponseJSON);
+    }
+
     @SuppressWarnings("squid:S1130")
     public @NotNull RegistrationData parse(@NotNull RegistrationRequest registrationRequest) throws DataConversionException {
         return this.webAuthnRegistrationManager.parse(registrationRequest);
     }
 
     public @NotNull RegistrationData verifyRegistrationResponseJSON(@NotNull String registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {
+        return this.webAuthnRegistrationManager.verify(registrationResponseJSON, registrationParameters);
+    }
+
+    public @NotNull RegistrationData verifyRegistrationResponseJSON(@NotNull InputStream registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {
         return this.webAuthnRegistrationManager.verify(registrationResponseJSON, registrationParameters);
     }
 
@@ -189,12 +198,20 @@ public class WebAuthnManager {
         return this.webAuthnAuthenticationManager.parse(authenticationResponseJSON);
     }
 
+    public @NotNull AuthenticationData parseAuthenticationResponseJSON(@NotNull InputStream authenticationResponseJSON) throws DataConversionException {
+        return this.webAuthnAuthenticationManager.parse(authenticationResponseJSON);
+    }
+
     @SuppressWarnings("squid:S1130")
     public @NotNull AuthenticationData parse(@NotNull AuthenticationRequest authenticationRequest) throws DataConversionException {
         return this.webAuthnAuthenticationManager.parse(authenticationRequest);
     }
 
     public @NotNull AuthenticationData verifyAuthenticationResponseJSON(@NotNull String authenticationResponseJSON, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
+        return this.webAuthnAuthenticationManager.verify(authenticationResponseJSON, authenticationParameters);
+    }
+
+    public @NotNull AuthenticationData verifyAuthenticationResponseJSON(@NotNull InputStream authenticationResponseJSON, @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
         return this.webAuthnAuthenticationManager.verify(authenticationResponseJSON, authenticationParameters);
     }
 

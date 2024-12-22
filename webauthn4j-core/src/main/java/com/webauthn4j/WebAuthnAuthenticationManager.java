@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -79,10 +80,18 @@ public class WebAuthnAuthenticationManager {
     }
 
 
-    @SuppressWarnings("java:S2583")
-    public AuthenticationData parse(String authenticationResponseJSON) {
+    public @NotNull AuthenticationData parse(@NotNull String authenticationResponseJSON) {
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<>() {});
+        return toAuthenticationData(publicKeyCredential);
+    }
 
+    public @NotNull AuthenticationData parse(@NotNull InputStream authenticationResponseJSON) {
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<>() {});
+        return toAuthenticationData(publicKeyCredential);
+    }
+
+    @SuppressWarnings("java:S2583")
+    private @NotNull AuthenticationData toAuthenticationData(@NotNull PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential){
         byte[] credentialId = publicKeyCredential.getRawId();
         byte[] userHandle = publicKeyCredential.getResponse().getUserHandle();
 
@@ -141,6 +150,13 @@ public class WebAuthnAuthenticationManager {
 
     public @NotNull AuthenticationData verify(
             @NotNull String authenticationResponseJSON,
+            @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
+        AuthenticationData authenticationData = parse(authenticationResponseJSON);
+        return verify(authenticationData, authenticationParameters);
+    }
+
+    public @NotNull AuthenticationData verify(
+            @NotNull InputStream authenticationResponseJSON,
             @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
         AuthenticationData authenticationData = parse(authenticationResponseJSON);
         return verify(authenticationData, authenticationParameters);
