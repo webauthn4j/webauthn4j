@@ -161,6 +161,8 @@ WebAuthnの鍵ペアの生成において中心となるAPIは、ブラウザの
 HTMLページに埋め込んでも良いですし、チャレンジを返却するRESTエンドポイントを用意することも可能です。
 `navigator.credentials.create` メソッドのパラメータである、 `PublicKeyCredentialCreationOptions` 全体を返却するエンドポイントを用意するのも良いアイデアでしょう。
 WebAuthnのJava Script APIには、 `PublicKeyCredential.parseCreationOptionsFromJSON` というメソッドが用意されており、JSONとしてシリアライズされた `PublicKeyCredentialCreationOptions` をパースすることが可能です。
+但し、2024/12現在、Safariでは `PublicKeyCredential.parseCreationOptionsFromJSON` が利用できません。代替策については、<<./deep-dive.adoc#Safariで未サポートなJSON serialization APIsの代替,Safariで未サポートなJSON serialization APIsの代替>> を参照してください。
+
 WebAuthn4Jは `PublicKeyCredentialCreationOptions` を表現するJavaのクラスを提供しており、バックエンドサーバー側でJSONを組み立てる際にご活用頂けます。
 
 .`PublicKeyCredentialCreationOptions` 全体をREST Endpointから取得して `navigator.credentials.create` を呼出
@@ -182,6 +184,7 @@ const publicKeyCredential = await navigator.credentials.create({ publicKey: cred
 バックエンドサーバー側にどのようなフォーマットで送信するかについてもWebAuthn仕様では定義されていません。
 但し、WebAuthnクレデンシャルである `PublicKeyCredential` というJavaScriptの型には、 `toJSON` というメソッドが用意されており、
 こちらと `JSON.stringify` を利用してシリアライズしたデータを送信するのが一つのベストプラクティスです。
+但し、この `toJSON` メソッドもSafariでは利用できませんが、代替策については、<<./deep-dive.adoc#Safariで未サポートなJSON serialization APIsの代替,Safariで未サポートなJSON serialization APIsの代替>> を参照してください。
 
 .`PublicKeyCredential` の送信
 [source,javascript,caption="例 {counter:number}: "]
@@ -258,7 +261,7 @@ save(credentialRecord); // please persist credentialRecord in your manner
   このジェスチャーには、生体認証に限らず、静電容量ボタンのタッチ等、当人認証が行われない操作も含まれます。
   WebAuthnにおいては、UPフラグは基本的に必須ですので `true` を指定すべきですが、パスワードからパスキーへの自動アップグレード時のクレデンシャル自動生成時のシナリオに限っては `false` となります。
 
-b
+
 サーバーの状態については、 `serverProperty` としてまとめています。
 `ServerProperty` のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。
 
@@ -278,7 +281,7 @@ WebAuthnでの認証時において中心となるAPIは、ブラウザの `navi
 認証のフローの図の通り、認証処理においても、まずバックエンドサーバー側でチャレンジを生成し、セッションに保存する一方、クライアントにチャレンジを引き渡す必要があります。
 `navigator.credentials.get` メソッドのパラメータにも `challenge` が存在するためです。
 バックエンドサーバーからフロントエンド（クライアント）への認証処理のチャレンジの受け渡し方法もWebAuthn仕様では定められていません。登録処理同様、お好みの方法でチャレンジをフロントエンド側に引き渡して下さい。
-`navigator.credentials.get` メソッドのパラメータである、 `PublicKeyCredentialGetOptions` をパースするJava Script APIは、 `PublicKeyCredential.parseCreationGetOptionsFromJSON` です。
+`navigator.credentials.get` メソッドのパラメータである、 `PublicKeyCredentialGetOptions` をパースするJava Script APIは、 `PublicKeyCredential.parseCreationGetOptionsFromJSON` です。 `PublicKeyCredential.parseCreationGetOptionsFromJSON` がSafariで利用できない問題の代替案は<<./deep-dive.adoc#Safariで未サポートなJSON serialization APIsの代替,Safariで未サポートなJSON serialization APIsの代替>> を参照してください。
 `navigator.credentials.get` メソッドに指定できるその他のオプションに関しては、  https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get[MDN: CredentialsContainer: get() メソッド]を参照下さい。
 
 .`PublicKeyCredentialGetOptions` 全体をREST Endpointから取得して `navigator.credentials.get` を呼出

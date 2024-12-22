@@ -107,6 +107,49 @@ webauthn4j-appattestでは、`CredentialRecord` インタフェースの代わ�
 `ObjectConverter` は `DeviceCheckCBORModule` が登録されたものを使用する必要があります。
 `DeviceCheckCBORModule` が登録された `ObjectConverter` は `DeviceCheckManager#createObjectConverter` で得ることが出来ます。
 
+=== Safariで未サポートなJSON serialization APIsの代替
+
+クイックスタートでは、 `PublicKeyCredentialCreationOptions` をパースするAPIとして `PublicKeyCredential.parseCreationOptionsFromJSON` が、
+`PublicKeyCredential` をシリアライズするAPIとして `PublicKeyCredential#toJSON` が存在すると紹介しましたが、2024/12現在、Safariでは利用できません。
+代わりとして、GitHubが提供するnpmライブラリ、 https://github.com/github/webauthn-json[github/@webauthn-json] が提供する、 pony-fillを利用するのがお勧めです。
+`PublicKeyCredential.parseCreationOptionsFromJSON` の代わりに、 `parseCreationOptionsFromJSON` が、
+`naviagator.credentials.create` の代わりに `create` が提供されています。
+
+.github/@webauthn-jsonを利用したクレデンシャルの作成
+[source,javascript,caption="例 {counter:number}: "]
+----
+import {
+  create,
+  parseCreationOptionsFromJSON,
+} from "@github/webauthn-json/browser-ponyfill";
+
+const response = await fetch("<endpoint path that returns PublicKeyCredentialCreationOptions as JSON>") //fetch PublicKeyCredentialCreationOptions as JSON string
+const publicKeyCredentialCreationOptionsJSON = await response.json() // convert to JSONObject
+const credentialCreationOptions = parseCreationOptionsFromJSON(publicKeyCredentialCreationOptionsJSON); // convert to PublicKeyCredentialCreationOptions
+const publicKeyCredential = await create({ publicKey: credentialCreationOptions}); // create PublicKeyCredential
+const registrationResponseJSON = publicKeyCredential.toJSON() // JSON object of publicKeyCredential
+const registrationResponseJSONStr = JSON.stringify(registrationResponseJSON) // JSON string representation of publicKeyCredential
+----
+このpony-fillの `create` メソッドを利用して得られた publicKeyCredentialでは、 `toJSON` メソッドが利用可能です。
+
+`PublicKeyCredential.parseRequestOptionsFromJSON` の代わりとしては、 `parseRequestOptionsFromJSON` が、
+`naviagator.credentials.get` の代わりに `get` が提供されています。
+
+.github/@webauthn-jsonを利用したクレデンシャルの取得
+[source,javascript,caption="例 {counter:number}: "]
+----
+import {
+  get,
+  parseRequestOptionsFromJSON,
+} from "@github/webauthn-json/browser-ponyfill";
+
+const response = await fetch("<endpoint path that returns PublicKeyCredentialRequestOptions as JSON>");
+const publicKeyCredentialRequestOptionsJSON = await response.json();
+const credentialGetOptions = parseRequestOptionsFromJSON(publicKeyCredentialRequestOptionsJSON);
+const publicKeyCredential = await get({ publicKey: credentialGetOptions});
+const authenticationResponseJSON = publicKeyCredential.toJSON()
+const authenticationResponseJSONStr = JSON.stringify(authenticationResponseJSON)
+----
 
 // === 非同期サポート
 //
