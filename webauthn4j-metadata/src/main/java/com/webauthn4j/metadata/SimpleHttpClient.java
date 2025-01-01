@@ -19,13 +19,10 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.metadata.exception.MDSException;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Tiny implementation of {@link HttpClient}. If you prefer more powerful one, implement {@link HttpClient} with
@@ -34,7 +31,7 @@ import java.nio.charset.StandardCharsets;
 public class SimpleHttpClient implements HttpClient {
 
     @Override
-    public @NotNull String fetch(@NotNull String url) {
+    public @NotNull Response fetch(@NotNull String url) {
         try {
             URL fetchUrl = new URL(url);
             HttpURLConnection urlConnection = (HttpURLConnection) fetchUrl.openConnection();
@@ -45,15 +42,7 @@ public class SimpleHttpClient implements HttpClient {
 
             if (status == HttpURLConnection.HTTP_OK) {
                 InputStream inputStream = urlConnection.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(inputStream);
-                ByteArrayOutputStream buf = new ByteArrayOutputStream();
-                int result = bis.read();
-                while (result != -1) {
-                    buf.write((byte) result);
-                    result = bis.read();
-                }
-                bis.close();
-                return buf.toString(StandardCharsets.UTF_8);
+                return new Response(status, inputStream);
             }
             throw new MDSException("failed to fetch " + url);
         } catch (IOException e) {

@@ -24,6 +24,9 @@ import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.util.CertificateUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
 import java.util.Collections;
@@ -70,7 +73,15 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
     @Override
     protected @NotNull MetadataBLOB doProvide() {
-        String responseBody = httpClient.fetch(blobEndpoint);
+        String responseBody;
+        try {
+            InputStream inputStream = httpClient.fetch(blobEndpoint).getBody();
+            byte[] bytes = inputStream.readAllBytes();
+            responseBody = new String(bytes, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new MDSException("Failed to parse response as String", e);
+        }
+
         MetadataBLOB metadataBLOB = metadataBLOBFactory.parse(responseBody);
         if(!metadataBLOB.isValidSignature()){
             throw new MDSException("MetadataBLOB signature is invalid");

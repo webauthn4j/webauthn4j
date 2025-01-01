@@ -26,7 +26,7 @@ import java.io.InputStream;
  */
 public interface HttpClient {
 
-    @NotNull String fetch(@NotNull String uri) throws MDSException;
+    @NotNull Response fetch(@NotNull String uri) throws MDSException;
 
     class Response{
 
