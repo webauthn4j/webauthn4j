@@ -24,10 +24,11 @@ import com.webauthn4j.util.CertificateUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.cert.TrustAnchor;
@@ -74,10 +75,10 @@ class FidoMDS3MetadataBLOBProviderTest {
 
         @BeforeEach
         void setup() throws IOException, URISyntaxException {
-            HttpClient httpClient = mock(HttpClient.class);
+            HttpClient httpClient = mock(HttpClient.class, Mockito.RETURNS_DEEP_STUBS);
             Path blobJwtPath = Paths.get(ClassLoader.getSystemResource("integration/component/blob.jwt").toURI()); //expired blob
-            String blobJwtString = Files.readString(blobJwtPath);
-            when(httpClient.fetch(FidoMDS3MetadataBLOBProvider.DEFAULT_BLOB_ENDPOINT)).thenReturn(blobJwtString);
+            FileInputStream inputStream = new FileInputStream(blobJwtPath.toFile());
+            when(httpClient.fetch(FidoMDS3MetadataBLOBProvider.DEFAULT_BLOB_ENDPOINT).getBody()).thenReturn(inputStream);
             target = new FidoMDS3MetadataBLOBProvider(new ObjectConverter(), FidoMDS3MetadataBLOBProvider.DEFAULT_BLOB_ENDPOINT, httpClient, Collections.singleton(new TrustAnchor(rootCertificate, null)));
         }
 
