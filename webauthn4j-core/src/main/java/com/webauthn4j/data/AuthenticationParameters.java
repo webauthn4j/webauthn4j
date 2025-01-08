@@ -17,6 +17,9 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.authenticator.CoreAuthenticator;
+import com.webauthn4j.credential.CoreCredentialRecord;
+import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.server.ServerProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,20 +31,49 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
     /**
      * {@link AuthenticationParameters} constructor
      * @param serverProperty server property
+     * @param credentialRecord credential record
      * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
      * @param userVerificationRequired true if user verification is required. Otherwise, false
      * @param userPresenceRequired true if user presence is required. Otherwise, false
      */
-    public AuthenticationParameters(@NotNull ServerProperty serverProperty, @NotNull Authenticator authenticator, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired, boolean userPresenceRequired) {
-        super(serverProperty, authenticator, allowCredentials, userVerificationRequired, userPresenceRequired);
+    public AuthenticationParameters(@NotNull ServerProperty serverProperty, @NotNull CredentialRecord credentialRecord, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired, boolean userPresenceRequired) {
+        super(serverProperty, credentialRecord, allowCredentials, userVerificationRequired, userPresenceRequired);
     }
 
     /**
      * {@link AuthenticationParameters} constructor
      * @param serverProperty server property
+     * @param credentialRecord credential record
      * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
      * @param userVerificationRequired true if user verification is required. Otherwise, false
      */
+    public AuthenticationParameters(@NotNull ServerProperty serverProperty, @NotNull CredentialRecord credentialRecord, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired) {
+        super(serverProperty, credentialRecord, allowCredentials, userVerificationRequired);
+    }
+
+    /**
+     * @deprecated Deprecated as {@link Authenticator} is replaced with {@link CredentialRecord}
+     * {@link AuthenticationParameters} constructor
+     * @param serverProperty server property
+     * @param authenticator authenticator
+     * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     * @param userPresenceRequired true if user presence is required. Otherwise, false
+     */
+    @Deprecated
+    public AuthenticationParameters(@NotNull ServerProperty serverProperty, @NotNull Authenticator authenticator, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired, boolean userPresenceRequired) {
+        super(serverProperty, authenticator, allowCredentials, userVerificationRequired, userPresenceRequired);
+    }
+
+    /**
+     * @deprecated Deprecated as {@link Authenticator} is replaced with {@link CredentialRecord}
+     * {@link AuthenticationParameters} constructor
+     * @param serverProperty server property
+     * @param authenticator authenticator
+     * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     */
+    @Deprecated
     public AuthenticationParameters(@NotNull ServerProperty serverProperty, @NotNull Authenticator authenticator, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired) {
         super(serverProperty, authenticator, allowCredentials, userVerificationRequired);
     }

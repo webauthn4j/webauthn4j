@@ -16,7 +16,7 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
@@ -39,7 +39,7 @@ class AuthenticationParametersTest {
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-        Authenticator authenticator = mock(Authenticator.class);
+        CredentialRecord authenticator = mock(CredentialRecord.class);
 
         // expectations
         boolean userVerificationRequired = true;
@@ -68,7 +68,7 @@ class AuthenticationParametersTest {
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-        Authenticator authenticator = mock(Authenticator.class);
+        CredentialRecord authenticator = mock(CredentialRecord.class);
 
         AuthenticationParameters instance =
                 new AuthenticationParameters(
@@ -95,7 +95,7 @@ class AuthenticationParametersTest {
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-        Authenticator authenticator = mock(Authenticator.class);
+        CredentialRecord authenticator = mock(CredentialRecord.class);
 
         // expectations
         boolean userVerificationRequired = true;
@@ -115,10 +115,10 @@ class AuthenticationParametersTest {
 
     @Test
     void constructor_with_serverProperty_null_test() {
-        Authenticator authenticator = TestDataUtil.createAuthenticator();
+        CredentialRecord credentialRecord = TestDataUtil.createCredentialRecord();
         assertThatThrownBy(() -> new AuthenticationParameters(
                 null,
-                authenticator,
+                credentialRecord,
                 null,
                 true,
                 true
@@ -146,7 +146,7 @@ class AuthenticationParametersTest {
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-        Authenticator authenticator = mock(Authenticator.class);
+        CredentialRecord authenticator = mock(CredentialRecord.class);
 
         // expectations
         boolean userVerificationRequired = true;
@@ -184,7 +184,7 @@ class AuthenticationParametersTest {
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-        Authenticator authenticator = mock(Authenticator.class);
+        CredentialRecord authenticator = mock(CredentialRecord.class);
 
         // expectations
         boolean userVerificationRequired = true;

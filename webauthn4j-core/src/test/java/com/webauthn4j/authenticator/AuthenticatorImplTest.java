@@ -16,6 +16,7 @@
 
 package com.webauthn4j.authenticator;
 
+import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.RegistrationData;
 import com.webauthn4j.data.attestation.AttestationObject;
@@ -44,7 +45,7 @@ class AuthenticatorImplTest {
     void constructor_test() {
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
-        Authenticator authenticator = TestDataUtil.createAuthenticator(attestedCredentialData, attestationStatement);
+        CredentialRecord authenticator = TestDataUtil.createCredentialRecord(attestedCredentialData, attestationStatement);
 
         assertAll(
                 () -> assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
@@ -112,8 +113,8 @@ class AuthenticatorImplTest {
 
     @Test
     void equals_hashCode_test() {
-        Authenticator authenticatorA = TestDataUtil.createAuthenticator();
-        Authenticator authenticatorB = TestDataUtil.createAuthenticator();
+        Authenticator authenticatorA = TestDataUtil.createCredentialRecord();
+        Authenticator authenticatorB = TestDataUtil.createCredentialRecord();
 
         assertAll(
                 () -> assertThat(authenticatorA).isEqualTo(authenticatorB),

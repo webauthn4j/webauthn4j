@@ -27,6 +27,8 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.credential.CredentialRecord;
+import com.webauthn4j.credential.CredentialRecordImpl;
 import com.webauthn4j.data.AuthenticatorAttestationResponse;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.PublicKeyCredential;
@@ -411,12 +413,12 @@ public class TestDataUtil {
         return new ServerProperty(TestDataUtil.createOrigin(), "example.com", challenge, new byte[32]);
     }
 
-    public static Authenticator createAuthenticator(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement) {
-        return new AuthenticatorImpl(attestedCredentialData, attestationStatement, 1);
+    public static CredentialRecord createCredentialRecord(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement) {
+        return new CredentialRecordImpl(attestationStatement, false, false, false, 1L, attestedCredentialData, null, null, null, null);
     }
 
-    public static Authenticator createAuthenticator() {
-        return createAuthenticator(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
+    public static CredentialRecord createCredentialRecord() {
+        return createCredentialRecord(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
     }
 
 
