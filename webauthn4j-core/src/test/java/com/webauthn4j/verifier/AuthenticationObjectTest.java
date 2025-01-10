@@ -47,7 +47,7 @@ class AuthenticationObjectTest {
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
-        Authenticator authenticator = TestDataUtil.createAuthenticator();
+        Authenticator authenticator = TestDataUtil.createCredentialRecord();
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId,
                 authenticatorData,
@@ -81,7 +81,7 @@ class AuthenticationObjectTest {
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
-        Authenticator authenticator = TestDataUtil.createAuthenticator();
+        Authenticator authenticator = TestDataUtil.createCredentialRecord();
 
         AuthenticationObject instanceA = new AuthenticationObject(
                 credentialId,

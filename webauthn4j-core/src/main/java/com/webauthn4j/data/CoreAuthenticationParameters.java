@@ -17,6 +17,7 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.authenticator.CoreAuthenticator;
+import com.webauthn4j.credential.CoreCredentialRecord;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
@@ -39,10 +40,57 @@ public class CoreAuthenticationParameters {
     /**
      * {@link CoreAuthenticationParameters} constructor
      * @param serverProperty server property
+     * @param coreCredentialRecord core credential record
      * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
      * @param userVerificationRequired true if user verification is required. Otherwise, false
      * @param userPresenceRequired true if user presence is required. Otherwise, false
      */
+    public CoreAuthenticationParameters(
+            @NotNull CoreServerProperty serverProperty,
+            @NotNull CoreCredentialRecord coreCredentialRecord,
+            @Nullable List<byte[]> allowCredentials,
+            boolean userVerificationRequired,
+            boolean userPresenceRequired) {
+        AssertUtil.notNull(serverProperty, "serverProperty must not be null");
+        AssertUtil.notNull(coreCredentialRecord, "coreCredentialRecord must not be null");
+        this.serverProperty = serverProperty;
+        this.authenticator = coreCredentialRecord;
+        this.allowCredentials = CollectionUtil.unmodifiableList(allowCredentials);
+        this.userVerificationRequired = userVerificationRequired;
+        this.userPresenceRequired = userPresenceRequired;
+    }
+
+    /**
+     * {@link CoreAuthenticationParameters} constructor
+     * @param serverProperty server property
+     * @param coreCredentialRecord core credential record
+     * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     */
+    public CoreAuthenticationParameters(
+            @NotNull CoreServerProperty serverProperty,
+            @NotNull CoreCredentialRecord coreCredentialRecord,
+            @Nullable List<byte[]> allowCredentials,
+            boolean userVerificationRequired) {
+        this(
+                serverProperty,
+                coreCredentialRecord,
+                allowCredentials,
+                userVerificationRequired,
+                true
+        );
+    }
+
+    /**
+     * @deprecated Deprecated as {@link CoreAuthenticator} is replaced with {@link CoreCredentialRecord}
+     * {@link CoreAuthenticationParameters} constructor
+     * @param serverProperty server property
+     * @param authenticator authenticator
+     * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     * @param userPresenceRequired true if user presence is required. Otherwise, false
+     */
+    @Deprecated
     public CoreAuthenticationParameters(
             @NotNull CoreServerProperty serverProperty,
             @NotNull CoreAuthenticator authenticator,
@@ -59,11 +107,14 @@ public class CoreAuthenticationParameters {
     }
 
     /**
+     * @deprecated Deprecated as {@link CoreAuthenticator} is replaced with {@link CoreCredentialRecord}
      * {@link CoreAuthenticationParameters} constructor
      * @param serverProperty server property
+     * @param authenticator authenticator
      * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
      * @param userVerificationRequired true if user verification is required. Otherwise, false
      */
+    @Deprecated
     public CoreAuthenticationParameters(
             @NotNull CoreServerProperty serverProperty,
             @NotNull CoreAuthenticator authenticator,
