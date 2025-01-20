@@ -52,6 +52,9 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.create("SHA384withRSA")).isEqualTo(SignatureAlgorithm.RS384),
                 () -> assertThat(SignatureAlgorithm.create("SHA512withRSA")).isEqualTo(SignatureAlgorithm.RS512),
                 () -> assertThat(SignatureAlgorithm.create("ed25519")).isEqualTo(SignatureAlgorithm.Ed25519),
+                () -> assertThat(SignatureAlgorithm.create("SHA256withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS256),
+                () -> assertThat(SignatureAlgorithm.create("SHA384withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS384),
+                () -> assertThat(SignatureAlgorithm.create("SHA512withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS512),
                 () -> assertThatThrownBy(()->SignatureAlgorithm.create("invalid")).isInstanceOf(IllegalArgumentException.class)
         );
     }
@@ -66,7 +69,10 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.RS256).hasToString("RS256"),
                 () -> assertThat(SignatureAlgorithm.RS384).hasToString("RS384"),
                 () -> assertThat(SignatureAlgorithm.RS512).hasToString("RS512"),
-                () -> assertThat(SignatureAlgorithm.Ed25519).hasToString("Ed25519")
+                () -> assertThat(SignatureAlgorithm.Ed25519).hasToString("Ed25519"),
+                () -> assertThat(SignatureAlgorithm.PS256).hasToString("PS256"),
+                () -> assertThat(SignatureAlgorithm.PS384).hasToString("PS384"),
+                () -> assertThat(SignatureAlgorithm.PS512).hasToString("PS512")
         );
     }
 
