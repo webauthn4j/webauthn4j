@@ -37,6 +37,7 @@ class COSEAlgorithmIdentifierTest {
     void create_test() {
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.create(-257)).isEqualTo(COSEAlgorithmIdentifier.RS256),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-37)).isEqualTo(COSEAlgorithmIdentifier.RS256_PSS),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-258)).isEqualTo(COSEAlgorithmIdentifier.RS384),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-259)).isEqualTo(COSEAlgorithmIdentifier.RS512),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256),
@@ -52,6 +53,7 @@ class COSEAlgorithmIdentifierTest {
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS1)).isEqualTo(COSEAlgorithmIdentifier.RS1),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS256)).isEqualTo(COSEAlgorithmIdentifier.RS256),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS256_PSS)).isEqualTo(COSEAlgorithmIdentifier.RS256_PSS),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS384)).isEqualTo(COSEAlgorithmIdentifier.RS384),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS512)).isEqualTo(COSEAlgorithmIdentifier.RS512),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ES256)).isEqualTo(COSEAlgorithmIdentifier.ES256),
@@ -66,6 +68,7 @@ class COSEAlgorithmIdentifierTest {
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.RS1).hasToString("RS1"),
                 () -> assertThat(COSEAlgorithmIdentifier.RS256).hasToString("RS256"),
+                () -> assertThat(COSEAlgorithmIdentifier.RS256_PSS).hasToString("RS256/PSS"),
                 () -> assertThat(COSEAlgorithmIdentifier.RS384).hasToString("RS384"),
                 () -> assertThat(COSEAlgorithmIdentifier.RS512).hasToString("RS512"),
                 () -> assertThat(COSEAlgorithmIdentifier.ES256).hasToString("ES256"),

@@ -33,6 +33,7 @@ public class SignatureAlgorithm {
     private static final String JCA_SHA_512_WITH_ECDSA = "SHA512withECDSA";
     private static final String JCA_SHA_1_WITH_RSA = "SHA1withRSA";
     private static final String JCA_SHA_256_WITH_RSA = "SHA256withRSA";
+    private static final String JCA_SHA_256_WITH_RSA_PADDING_PSS = "SHA256withRSA/PSS";
     private static final String JCA_SHA_384_WITH_RSA = "SHA384withRSA";
     private static final String JCA_SHA_512_WITH_RSA = "SHA512withRSA";
     private static final String JCA_ED_25519 = "ed25519";
@@ -42,6 +43,7 @@ public class SignatureAlgorithm {
     public static final SignatureAlgorithm ES512 = new SignatureAlgorithm(JCA_SHA_512_WITH_ECDSA, SHA512);
     public static final SignatureAlgorithm RS1 = new SignatureAlgorithm(JCA_SHA_1_WITH_RSA, SHA1);
     public static final SignatureAlgorithm RS256 = new SignatureAlgorithm(JCA_SHA_256_WITH_RSA, SHA256);
+    public static final SignatureAlgorithm RS256_PSS = new SignatureAlgorithm(JCA_SHA_256_WITH_RSA_PADDING_PSS, SHA256);
     public static final SignatureAlgorithm RS384 = new SignatureAlgorithm(JCA_SHA_384_WITH_RSA, SHA384);
     public static final SignatureAlgorithm RS512 = new SignatureAlgorithm(JCA_SHA_512_WITH_RSA, SHA512);
     /**
@@ -70,6 +72,8 @@ public class SignatureAlgorithm {
                 return RS1;
             case JCA_SHA_256_WITH_RSA:
                 return RS256;
+            case JCA_SHA_256_WITH_RSA_PADDING_PSS:
+                return RS256_PSS;
             case JCA_SHA_384_WITH_RSA:
                 return RS384;
             case JCA_SHA_512_WITH_RSA:
@@ -131,6 +135,8 @@ public class SignatureAlgorithm {
                 return "RS1";
             case JCA_SHA_256_WITH_RSA:
                 return "RS256";
+            case JCA_SHA_256_WITH_RSA_PADDING_PSS:
+                return "RS256/PSS";
             case JCA_SHA_384_WITH_RSA:
                 return "RS384";
             case JCA_SHA_512_WITH_RSA:
