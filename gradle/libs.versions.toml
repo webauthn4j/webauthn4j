@@ -9,7 +9,7 @@ bouncycastle = "1.80"
 
 # Build dependencies
 
-jetbrains-annotations = "26.0.1"
+jetbrains-annotations = "26.0.2"
 asciidoctor = "4.0.4"
 
 # Test dependencies
