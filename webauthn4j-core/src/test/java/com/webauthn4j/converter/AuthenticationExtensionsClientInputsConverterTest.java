@@ -18,10 +18,8 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.data.extension.client.FIDOAppIDExtensionClientInput;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.data.extension.HMACGetSecretInput;
+import com.webauthn4j.data.extension.client.*;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,13 +30,13 @@ class AuthenticationExtensionsClientInputsConverterTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private final AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(objectConverter);
+    private final AuthenticationExtensionsClientInputsConverter target = new AuthenticationExtensionsClientInputsConverter(objectConverter);
 
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void convertRegistrationExtensions_null_test() {
-        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convert(null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convert(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
@@ -46,26 +44,30 @@ class AuthenticationExtensionsClientInputsConverterTest {
         AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
         builder.setAppid("test");
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions = builder.build();
-        assertThat(authenticationExtensionsClientInputsConverter.convertToString(extensions)).isEqualTo("{\"appid\":\"test\"}");
+        assertThat(target.convertToString(extensions)).isEqualTo("{\"appid\":\"test\"}");
     }
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void convertAuthenticationExtensionsToString_null_test() {
-        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convertToString(null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convertToString(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
     void convert_test() {
-        String source = "{\"appid\":\"dummy\"}";
-        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
-        assertThat(clientInputs.getExtension(FIDOAppIDExtensionClientInput.class)).isEqualTo(new FIDOAppIDExtensionClientInput("dummy"));
+        String source = "{\"appid\":\"testappid\",\"appidExclude\":\"testappidexclude\",\"uvm\":true,\"hmacGetSecret\":{\"salt1\":\"AA\",\"salt2\":\"AQ\"},\"myextension\":\"test\"}";
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> clientInputs = target.convert(source);
+        assertThat(clientInputs.getExtension(FIDOAppIDExtensionClientInput.class)).isEqualTo(new FIDOAppIDExtensionClientInput("testappid"));
+        assertThat(clientInputs.getExtension(FIDOAppIDExclusionExtensionClientInput.class)).isEqualTo(new FIDOAppIDExclusionExtensionClientInput("testappidexclude"));
+        assertThat(clientInputs.getExtension(UserVerificationMethodExtensionClientInput.class)).isEqualTo(new UserVerificationMethodExtensionClientInput(true));
+        assertThat(clientInputs.getExtension(HMACSecretAuthenticationExtensionClientInput.class)).isEqualTo(new HMACSecretAuthenticationExtensionClientInput(new HMACGetSecretInput(new byte[] {0}, new byte[] {1})));
+        assertThat(clientInputs.getValue("myextension")).isEqualTo("test");
     }
 
     @Test
     void convert_null_test() {
         String source = "null";
-        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> clientInputs = target.convert(source);
         assertThat(clientInputs).isNull();
     }
 
@@ -73,7 +75,7 @@ class AuthenticationExtensionsClientInputsConverterTest {
     @Test
     void convert_with_invalid_extension_test() {
         String source = "{\"invalid\":\"\"}";
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = authenticationExtensionsClientInputsConverter.convert(source);
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = target.convert(source);
         assertThat(extensions.getUnknownKeys()).contains("invalid");
 
     }

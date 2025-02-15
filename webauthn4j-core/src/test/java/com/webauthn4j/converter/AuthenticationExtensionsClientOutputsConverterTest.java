@@ -19,8 +19,12 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.extension.HMACGetSecretOutput;
+import com.webauthn4j.data.extension.UvmEntries;
+import com.webauthn4j.data.extension.client.*;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AuthenticationExtensionsClientOutputsConverterTest {
@@ -40,4 +44,14 @@ class AuthenticationExtensionsClientOutputsConverterTest {
         //noinspection ConstantConditions
         assertThatThrownBy(() -> target.convertToString(null)).isInstanceOf(DataConversionException.class);
     }
+
+    @Test
+    void convert_test() {
+        String source = "{\"appid\":true,\"uvm\":[],\"hmacGetSecret\":{\"output1\":\"AA\",\"output2\":\"AQ\"},\"myextension\":\"test\"}"; // "appidExclude":"testappidexclude"
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientOutputs = target.convert(source);
+        assertThat(clientOutputs.getExtension(UserVerificationMethodExtensionClientOutput.class)).isEqualTo(new UserVerificationMethodExtensionClientOutput(new UvmEntries()));
+        assertThat(clientOutputs.getExtension(HMACSecretAuthenticationExtensionClientOutput.class)).isEqualTo(new HMACSecretAuthenticationExtensionClientOutput(new HMACGetSecretOutput(new byte[] {0}, new byte[] {1})));
+        assertThat(clientOutputs.getValue("myextension")).isEqualTo("test");
+    }
+
 }
