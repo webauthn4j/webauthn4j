@@ -26,7 +26,8 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     private final Map<String, Object> unknowns = new HashMap<>();
     @JsonProperty
     private Boolean appid;
-    //appidExclude doesn't exist in ExtensionsClientOutputs
+    @JsonProperty
+    private Boolean appidExclude;
     @JsonProperty
     private UvmEntries uvm;
     @JsonProperty
@@ -54,6 +55,9 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
         if (appid != null) {
             keys.add("appid");
         }
+        if (appidExclude != null) {
+            keys.add("appidExclude");
+        }
         if (uvm != null) {
             keys.add("uvm");
         }
@@ -80,6 +84,8 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
         switch (key) {
             case "appid":
                 return appid;
+            case "appidExclude":
+                return appidExclude;
             case "uvm":
                 return uvm;
             case "credProps":
@@ -96,6 +102,11 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     @JsonIgnore
     public @Nullable Boolean getAppid() {
         return this.appid;
+    }
+
+    @JsonIgnore
+    public @Nullable Boolean getAppidExclude() {
+        return this.appidExclude;
     }
 
     @JsonIgnore
@@ -131,6 +142,9 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             if (appid != null) {
                 map.put((Class<? extends T>) FIDOAppIDExtensionClientOutput.class, (T) new FIDOAppIDExtensionClientOutput(appid));
             }
+            if (appidExclude != null) {
+                map.put((Class<? extends T>) FIDOAppIDExclusionExtensionClientOutput.class, (T) new FIDOAppIDExclusionExtensionClientOutput(appidExclude));
+            }
             if (uvm != null) {
                 map.put((Class<? extends T>) UserVerificationMethodExtensionClientOutput.class, (T) new UserVerificationMethodExtensionClientOutput(uvm));
             }
@@ -150,15 +164,14 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationExtensionsClientOutputs<?> that = (AuthenticationExtensionsClientOutputs<?>) o;
-        return Objects.equals(unknowns, that.unknowns) && Objects.equals(appid, that.appid) && Objects.equals(uvm, that.uvm) && Objects.equals(credProps, that.credProps) && Objects.equals(hmacCreateSecret, that.hmacCreateSecret) && Objects.equals(hmacGetSecret, that.hmacGetSecret) && Objects.equals(extensions, that.extensions);
+        return Objects.equals(unknowns, that.unknowns) && Objects.equals(appid, that.appid) && Objects.equals(appidExclude, that.appidExclude) && Objects.equals(uvm, that.uvm) && Objects.equals(credProps, that.credProps) && Objects.equals(hmacCreateSecret, that.hmacCreateSecret) && Objects.equals(hmacGetSecret, that.hmacGetSecret) && Objects.equals(extensions, that.extensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(unknowns, appid, uvm, credProps, hmacCreateSecret, hmacGetSecret, extensions);
+        return Objects.hash(unknowns, appid, appidExclude, uvm, credProps, hmacCreateSecret, hmacGetSecret, extensions);
     }
 
     @Override
@@ -221,12 +234,14 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
         private final Map<String, Object> unknowns = new HashMap<>();
         private Boolean appid;
+        private Boolean appidExclude;
         private UvmEntries uvm;
         private HMACGetSecretOutput hmacGetSecret;
 
         public @NotNull AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> build() {
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
             instance.appid = this.appid;
+            instance.appidExclude = this.appidExclude;
             instance.uvm = this.uvm;
             instance.hmacGetSecret = this .hmacGetSecret;
             instance.unknowns.putAll(this.unknowns);
@@ -236,6 +251,11 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
         public @NotNull BuilderForAuthentication setAppid(@Nullable Boolean appid) {
             this.appid = appid;
+            return this;
+        }
+
+        public @NotNull BuilderForAuthentication setAppidExclude(@Nullable Boolean appidExclude) {
+            this.appidExclude = appidExclude;
             return this;
         }
 

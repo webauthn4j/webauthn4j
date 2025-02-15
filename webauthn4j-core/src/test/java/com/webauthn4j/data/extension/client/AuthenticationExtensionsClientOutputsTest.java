@@ -83,14 +83,16 @@ class AuthenticationExtensionsClientOutputsTest {
         UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
         builder.setAppid(true);
+        builder.setAppidExclude(true);
         builder.setUvm(uvm);
         builder.setHMACGetSecret(new HMACGetSecretOutput(new byte[32], new byte[32]));
         builder.set("unknown", "data");
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("appid", "uvm", "hmacGetSecret", "unknown");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("appid", "appidExclude", "uvm", "hmacGetSecret", "unknown");
 
         assertThat(target.getAppid()).isTrue();
+        assertThat(target.getAppidExclude()).isTrue();
         assertThat(target.getUvm()).isEqualTo(uvm);
         assertThat(target.getCredProps()).isNull();
         assertThat(target.getHMACCreateSecret()).isNull();
@@ -98,6 +100,7 @@ class AuthenticationExtensionsClientOutputsTest {
         assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat((Boolean) target.getValue("appid")).isTrue();
+        assertThat((Boolean) target.getValue("appidExclude")).isTrue();
         assertThat(target.getValue("uvm")).isEqualTo(uvm);
         assertThat(target.getValue("credProps")).isNull();
         assertThat((Boolean) target.getValue("hmacCreateSecret")).isNull();
@@ -108,6 +111,9 @@ class AuthenticationExtensionsClientOutputsTest {
         assertThat(target.getExtension(FIDOAppIDExtensionClientOutput.class)).isNotNull();
         assertThat(target.getExtension(FIDOAppIDExtensionClientOutput.class).getIdentifier()).isEqualTo("appid");
         assertThat(target.getExtension(FIDOAppIDExtensionClientOutput.class).getAppid()).isTrue();
+        assertThat(target.getExtension(FIDOAppIDExclusionExtensionClientOutput.class)).isNotNull();
+        assertThat(target.getExtension(FIDOAppIDExclusionExtensionClientOutput.class).getIdentifier()).isEqualTo("appidExclude");
+        assertThat(target.getExtension(FIDOAppIDExclusionExtensionClientOutput.class).getAppidExclude()).isTrue();
         assertThat(target.getExtension(UserVerificationMethodExtensionClientOutput.class)).isNotNull();
         assertThat(target.getExtension(UserVerificationMethodExtensionClientOutput.class).getIdentifier()).isEqualTo("uvm");
         assertThat(target.getExtension(UserVerificationMethodExtensionClientOutput.class).getUvm()).isEqualTo(uvm);
@@ -125,11 +131,13 @@ class AuthenticationExtensionsClientOutputsTest {
         UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder1 = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
         builder1.setAppid(true);
+        builder1.setAppidExclude(true);
         builder1.setUvm(uvm);
         builder1.setHMACGetSecret(new HMACGetSecretOutput(new byte[32], new byte[32]));
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance1 = builder1.build();
         AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder2 = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
         builder2.setAppid(true);
+        builder2.setAppidExclude(true);
         builder2.setUvm(uvm);
         builder2.setHMACGetSecret(new HMACGetSecretOutput(new byte[32], new byte[32]));
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance2 = builder2.build();
