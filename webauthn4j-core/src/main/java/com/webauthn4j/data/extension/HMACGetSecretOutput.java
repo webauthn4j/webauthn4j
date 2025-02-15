@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data.extension;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,10 +26,15 @@ import java.util.Arrays;
 
 public class HMACGetSecretOutput {
 
+    @JsonProperty
     private final byte[] output1;
+    @JsonProperty
     private final byte[] output2;
 
-    public HMACGetSecretOutput(@NotNull byte[] output1, @Nullable byte[] output2) {
+    @JsonCreator
+    public HMACGetSecretOutput(
+            @NotNull @JsonProperty("output1") byte[] output1,
+            @Nullable @JsonProperty("output2") byte[] output2) {
         this.output1 = ArrayUtil.clone(output1);
         this.output2 = ArrayUtil.clone(output2);
     }
@@ -47,7 +54,6 @@ public class HMACGetSecretOutput {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HMACGetSecretOutput that = (HMACGetSecretOutput) o;
         return Arrays.equals(output1, that.output1) && Arrays.equals(output2, that.output2);

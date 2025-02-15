@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data.extension;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,10 +26,15 @@ import java.util.Arrays;
 
 public class HMACGetSecretInput {
 
+    @JsonProperty
     private final byte[] salt1;
+    @JsonProperty
     private final byte[] salt2;
 
-    public HMACGetSecretInput(@NotNull byte[] salt1, @Nullable byte[] salt2) {
+    @JsonCreator
+    public HMACGetSecretInput(
+            @NotNull @JsonProperty("salt1") byte[] salt1,
+            @Nullable @JsonProperty("salt2") byte[] salt2) {
         this.salt1 = ArrayUtil.clone(salt1);
         this.salt2 = ArrayUtil.clone(salt2);
     }
