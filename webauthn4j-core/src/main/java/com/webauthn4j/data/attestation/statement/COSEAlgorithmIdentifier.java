@@ -32,6 +32,7 @@ public class COSEAlgorithmIdentifier {
 
     public static final COSEAlgorithmIdentifier RS1;
     public static final COSEAlgorithmIdentifier RS256;
+    public static final COSEAlgorithmIdentifier RS256_PSS;
     public static final COSEAlgorithmIdentifier RS384;
     public static final COSEAlgorithmIdentifier RS512;
     public static final COSEAlgorithmIdentifier ES256;
@@ -49,6 +50,7 @@ public class COSEAlgorithmIdentifier {
     static {
         RS1 = new COSEAlgorithmIdentifier(-65535);
         RS256 = new COSEAlgorithmIdentifier(-257);
+        RS256_PSS = new COSEAlgorithmIdentifier(-37);
         RS384 = new COSEAlgorithmIdentifier(-258);
         RS512 = new COSEAlgorithmIdentifier(-259);
         ES256 = new COSEAlgorithmIdentifier(-7);
@@ -62,6 +64,7 @@ public class COSEAlgorithmIdentifier {
         keyTypeMap.put(COSEAlgorithmIdentifier.EdDSA, COSEKeyType.OKP);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS1, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS256, COSEKeyType.RSA);
+        keyTypeMap.put(COSEAlgorithmIdentifier.RS256_PSS, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS384, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS512, COSEKeyType.RSA);
 
@@ -71,6 +74,7 @@ public class COSEAlgorithmIdentifier {
         algorithmMap.put(COSEAlgorithmIdentifier.EdDSA, SignatureAlgorithm.Ed25519);
         algorithmMap.put(COSEAlgorithmIdentifier.RS1, SignatureAlgorithm.RS1);
         algorithmMap.put(COSEAlgorithmIdentifier.RS256, SignatureAlgorithm.RS256);
+        algorithmMap.put(COSEAlgorithmIdentifier.RS256_PSS, SignatureAlgorithm.RS256_PSS);
         algorithmMap.put(COSEAlgorithmIdentifier.RS384, SignatureAlgorithm.RS384);
         algorithmMap.put(COSEAlgorithmIdentifier.RS512, SignatureAlgorithm.RS512);
 
@@ -151,6 +155,9 @@ public class COSEAlgorithmIdentifier {
         }
         else if(value == RS256.value){
             return "RS256";
+        }
+        else if(value == RS256_PSS.value){
+            return "RS256/PSS";
         }
         else if(value == RS384.value){
             return "RS384";

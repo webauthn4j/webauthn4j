@@ -49,6 +49,7 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.create("SHA512withECDSA")).isEqualTo(SignatureAlgorithm.ES512),
                 () -> assertThat(SignatureAlgorithm.create("SHA1withRSA")).isEqualTo(SignatureAlgorithm.RS1),
                 () -> assertThat(SignatureAlgorithm.create("SHA256withRSA")).isEqualTo(SignatureAlgorithm.RS256),
+                () -> assertThat(SignatureAlgorithm.create("SHA256withRSA/PSS")).isEqualTo(SignatureAlgorithm.RS256_PSS),
                 () -> assertThat(SignatureAlgorithm.create("SHA384withRSA")).isEqualTo(SignatureAlgorithm.RS384),
                 () -> assertThat(SignatureAlgorithm.create("SHA512withRSA")).isEqualTo(SignatureAlgorithm.RS512),
                 () -> assertThat(SignatureAlgorithm.create("ed25519")).isEqualTo(SignatureAlgorithm.Ed25519),
@@ -64,6 +65,7 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.ES512).hasToString("ES512"),
                 () -> assertThat(SignatureAlgorithm.RS1).hasToString("RS1"),
                 () -> assertThat(SignatureAlgorithm.RS256).hasToString("RS256"),
+                () -> assertThat(SignatureAlgorithm.RS256_PSS).hasToString("RS256/PSS"),
                 () -> assertThat(SignatureAlgorithm.RS384).hasToString("RS384"),
                 () -> assertThat(SignatureAlgorithm.RS512).hasToString("RS512"),
                 () -> assertThat(SignatureAlgorithm.Ed25519).hasToString("Ed25519")
