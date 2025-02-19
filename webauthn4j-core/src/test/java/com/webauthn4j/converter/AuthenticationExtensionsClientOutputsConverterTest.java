@@ -47,8 +47,10 @@ class AuthenticationExtensionsClientOutputsConverterTest {
 
     @Test
     void convert_test() {
-        String source = "{\"appid\":true,\"uvm\":[],\"hmacGetSecret\":{\"output1\":\"AA\",\"output2\":\"AQ\"},\"myextension\":\"test\"}"; // "appidExclude":"testappidexclude"
+        String source = "{\"appid\":true,\"appidExclude\":true,\"uvm\":[],\"hmacGetSecret\":{\"output1\":\"AA\",\"output2\":\"AQ\"},\"myextension\":\"test\"}";
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientOutputs = target.convert(source);
+        assertThat(clientOutputs.getExtension(FIDOAppIDExtensionClientOutput.class)).isEqualTo(new FIDOAppIDExtensionClientOutput(true));
+        assertThat(clientOutputs.getExtension(FIDOAppIDExclusionExtensionClientOutput.class)).isEqualTo(new FIDOAppIDExclusionExtensionClientOutput(true));
         assertThat(clientOutputs.getExtension(UserVerificationMethodExtensionClientOutput.class)).isEqualTo(new UserVerificationMethodExtensionClientOutput(new UvmEntries()));
         assertThat(clientOutputs.getExtension(HMACSecretAuthenticationExtensionClientOutput.class)).isEqualTo(new HMACSecretAuthenticationExtensionClientOutput(new HMACGetSecretOutput(new byte[] {0}, new byte[] {1})));
         assertThat(clientOutputs.getValue("myextension")).isEqualTo("test");
