@@ -292,17 +292,17 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return instance;
         }
 
-        public @NotNull BuilderForAuthentication setAppid(@NotNull String appid) {
+        public @NotNull BuilderForAuthentication setAppid(@Nullable String appid) {
             this.appid = appid;
             return this;
         }
 
-        public @NotNull BuilderForAuthentication setAppidExclude(@NotNull String appidExclude) {
+        public @NotNull BuilderForAuthentication setAppidExclude(@Nullable String appidExclude) {
             this.appidExclude = appidExclude;
             return this;
         }
 
-        public @NotNull BuilderForAuthentication setUvm(@NotNull Boolean uvm) {
+        public @NotNull BuilderForAuthentication setUvm(@Nullable Boolean uvm) {
             this.uvm = uvm;
             return this;
         }
