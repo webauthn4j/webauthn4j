@@ -56,6 +56,7 @@ import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
+import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
@@ -232,6 +233,17 @@ public class TestDataUtil {
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
         return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+    }
+
+    public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatementPS256(byte[] clientDataHash) {
+        KeyPair keyPair = RSAUtil.createKeyPair();
+        RSACOSEKey key = RSACOSEKey.create((RSAPrivateKey) keyPair.getPrivate(), COSEAlgorithmIdentifier.PS256);
+        RSACOSEKey keyPublic = RSACOSEKey.create((RSAPublicKey) keyPair.getPublic(), COSEAlgorithmIdentifier.PS256);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(keyPublic);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignaturePS256(key.getPrivateKey(), signedData);
+        return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.PS256, signature));
     }
 
     public static AttestationObject createAttestationObjectWithSelfPackedRSAAttestationStatement(byte[] clientDataHash) {
@@ -430,6 +442,23 @@ public class TestDataUtil {
             }
             else {
                 signature = SignatureUtil.createRS256();
+            }
+            signature.initSign(privateKey);
+            signature.update(signedData);
+            return signature.sign();
+        } catch (InvalidKeyException | SignatureException e) {
+            throw new WebAuthnModelException("Signature calculation error", e);
+        }
+    }
+
+    public static byte[] calculateSignaturePS256(PrivateKey privateKey, byte[] signedData) {
+        try {
+            Signature signature;
+            if (privateKey.getAlgorithm().equals("EC")) {
+                signature = SignatureUtil.createES256();
+            }
+            else {
+                signature = SignatureUtil.createPS256();
             }
             signature.initSign(privateKey);
             signature.update(signedData);

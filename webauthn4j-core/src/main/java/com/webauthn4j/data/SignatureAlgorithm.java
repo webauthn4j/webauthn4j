@@ -33,24 +33,27 @@ public class SignatureAlgorithm {
     private static final String JCA_SHA_512_WITH_ECDSA = "SHA512withECDSA";
     private static final String JCA_SHA_1_WITH_RSA = "SHA1withRSA";
     private static final String JCA_SHA_256_WITH_RSA = "SHA256withRSA";
-    private static final String JCA_SHA_256_WITH_RSA_PADDING_PSS = "SHA256withRSA/PSS";
     private static final String JCA_SHA_384_WITH_RSA = "SHA384withRSA";
     private static final String JCA_SHA_512_WITH_RSA = "SHA512withRSA";
     private static final String JCA_ED_25519 = "ed25519";
+    private static final String JCA_SHA_256_WITH_RSA_PADDING_PSS = "SHA256withRSA/PSS";
+    private static final String JCA_SHA_384_WITH_RSA_PADDING_PSS = "SHA384withRSA/PSS";
+    private static final String JCA_SHA_512_WITH_RSA_PADDING_PSS = "SHA512withRSA/PSS";
 
     public static final SignatureAlgorithm ES256 = new SignatureAlgorithm(JCA_SHA_256_WITH_ECDSA, SHA256);
     public static final SignatureAlgorithm ES384 = new SignatureAlgorithm(JCA_SHA_384_WITH_ECDSA, SHA384);
     public static final SignatureAlgorithm ES512 = new SignatureAlgorithm(JCA_SHA_512_WITH_ECDSA, SHA512);
     public static final SignatureAlgorithm RS1 = new SignatureAlgorithm(JCA_SHA_1_WITH_RSA, SHA1);
     public static final SignatureAlgorithm RS256 = new SignatureAlgorithm(JCA_SHA_256_WITH_RSA, SHA256);
-    public static final SignatureAlgorithm RS256_PSS = new SignatureAlgorithm(JCA_SHA_256_WITH_RSA_PADDING_PSS, SHA256);
     public static final SignatureAlgorithm RS384 = new SignatureAlgorithm(JCA_SHA_384_WITH_RSA, SHA384);
     public static final SignatureAlgorithm RS512 = new SignatureAlgorithm(JCA_SHA_512_WITH_RSA, SHA512);
     /**
      * Ed25519 is only supported on JDK 15 or later
      */
     public static final SignatureAlgorithm Ed25519 = new SignatureAlgorithm(JCA_ED_25519, SHA512);
-
+    public static final SignatureAlgorithm PS256 = new SignatureAlgorithm(JCA_SHA_256_WITH_RSA_PADDING_PSS, SHA256);
+    public static final SignatureAlgorithm PS384 = new SignatureAlgorithm(JCA_SHA_384_WITH_RSA_PADDING_PSS, SHA384);
+    public static final SignatureAlgorithm PS512 = new SignatureAlgorithm(JCA_SHA_512_WITH_RSA_PADDING_PSS, SHA512);
 
     private final String jcaName;
     private final MessageDigestAlgorithm messageDigestAlgorithm;
@@ -72,14 +75,18 @@ public class SignatureAlgorithm {
                 return RS1;
             case JCA_SHA_256_WITH_RSA:
                 return RS256;
-            case JCA_SHA_256_WITH_RSA_PADDING_PSS:
-                return RS256_PSS;
             case JCA_SHA_384_WITH_RSA:
                 return RS384;
             case JCA_SHA_512_WITH_RSA:
                 return RS512;
             case JCA_ED_25519:
                 return Ed25519;
+            case JCA_SHA_256_WITH_RSA_PADDING_PSS:
+                return PS256;
+            case JCA_SHA_384_WITH_RSA_PADDING_PSS:
+                return PS384;
+            case JCA_SHA_512_WITH_RSA_PADDING_PSS:
+                return PS512;
             default:
                 throw new IllegalArgumentException(String.format("jcaName %s is not supported.", jcaName));
         }
@@ -135,14 +142,18 @@ public class SignatureAlgorithm {
                 return "RS1";
             case JCA_SHA_256_WITH_RSA:
                 return "RS256";
-            case JCA_SHA_256_WITH_RSA_PADDING_PSS:
-                return "RS256/PSS";
             case JCA_SHA_384_WITH_RSA:
                 return "RS384";
             case JCA_SHA_512_WITH_RSA:
                 return "RS512";
             case JCA_ED_25519:
                 return "Ed25519";
+            case JCA_SHA_256_WITH_RSA_PADDING_PSS:
+                return "PS256";
+            case JCA_SHA_384_WITH_RSA_PADDING_PSS:
+                return "PS384";
+            case JCA_SHA_512_WITH_RSA_PADDING_PSS:
+                return "PS512";
             default:
                 return "Unknown jcaName: " + jcaName;
         }
