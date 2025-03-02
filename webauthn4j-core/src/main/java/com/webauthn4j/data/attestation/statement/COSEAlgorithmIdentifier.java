@@ -41,6 +41,9 @@ public class COSEAlgorithmIdentifier {
      * EdDSA is only supported on JDK 15 or later
      */
     public static final COSEAlgorithmIdentifier EdDSA;
+    public static final COSEAlgorithmIdentifier PS256;
+    public static final COSEAlgorithmIdentifier PS384;
+    public static final COSEAlgorithmIdentifier PS512;
 
     private static final Map<COSEAlgorithmIdentifier, COSEKeyType> keyTypeMap = new HashMap<>();
     private static final Map<COSEAlgorithmIdentifier, SignatureAlgorithm> algorithmMap = new HashMap<>();
@@ -55,6 +58,9 @@ public class COSEAlgorithmIdentifier {
         ES384 = new COSEAlgorithmIdentifier(-35);
         ES512 = new COSEAlgorithmIdentifier(-36);
         EdDSA = new COSEAlgorithmIdentifier(-8);
+        PS256 = new COSEAlgorithmIdentifier(-37);
+        PS384 = new COSEAlgorithmIdentifier(-38);
+        PS512 = new COSEAlgorithmIdentifier(-39);
 
         keyTypeMap.put(COSEAlgorithmIdentifier.ES256, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ES384, COSEKeyType.EC2);
@@ -64,6 +70,9 @@ public class COSEAlgorithmIdentifier {
         keyTypeMap.put(COSEAlgorithmIdentifier.RS256, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS384, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS512, COSEKeyType.RSA);
+        keyTypeMap.put(COSEAlgorithmIdentifier.PS256, COSEKeyType.RSA);
+        keyTypeMap.put(COSEAlgorithmIdentifier.PS384, COSEKeyType.RSA);
+        keyTypeMap.put(COSEAlgorithmIdentifier.PS512, COSEKeyType.RSA);
 
         algorithmMap.put(COSEAlgorithmIdentifier.ES256, SignatureAlgorithm.ES256);
         algorithmMap.put(COSEAlgorithmIdentifier.ES384, SignatureAlgorithm.ES384);
@@ -73,6 +82,9 @@ public class COSEAlgorithmIdentifier {
         algorithmMap.put(COSEAlgorithmIdentifier.RS256, SignatureAlgorithm.RS256);
         algorithmMap.put(COSEAlgorithmIdentifier.RS384, SignatureAlgorithm.RS384);
         algorithmMap.put(COSEAlgorithmIdentifier.RS512, SignatureAlgorithm.RS512);
+        algorithmMap.put(COSEAlgorithmIdentifier.PS256, SignatureAlgorithm.PS256);
+        algorithmMap.put(COSEAlgorithmIdentifier.PS384, SignatureAlgorithm.PS384);
+        algorithmMap.put(COSEAlgorithmIdentifier.PS512, SignatureAlgorithm.PS512);
 
         for (Map.Entry<COSEAlgorithmIdentifier, SignatureAlgorithm> entry : algorithmMap.entrySet()) {
             reverseAlgorithmMap.put(entry.getValue(), entry.getKey());
@@ -169,6 +181,15 @@ public class COSEAlgorithmIdentifier {
         }
         else if(value == EdDSA.value){
             return "EdDSA";
+        }
+        else if(value == PS256.value){
+            return "RS256/PSS";
+        }
+        else if(value == PS384.value){
+            return "RS384/PSS";
+        }
+        else if(value == PS512.value){
+            return "RS512/PSS";
         }
         else {
             return String.format("Unknown COSEAlgorithmIdentifier(%d)", value);
