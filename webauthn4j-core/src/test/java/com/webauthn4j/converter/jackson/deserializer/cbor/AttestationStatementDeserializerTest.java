@@ -19,7 +19,9 @@ package com.webauthn4j.converter.jackson.deserializer.cbor;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.CompoundAttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +41,20 @@ class AttestationStatementDeserializerTest {
 
         assertAll(
                 () -> assertThat(obj).isInstanceOf(FIDOU2FAttestationStatement.class),
+                () -> assertThat(obj).isEqualTo(source)
+        );
+    }
+
+    @Test
+    void compound_attestation_test() {
+        FIDOU2FAttestationStatement u2f = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
+        PackedAttestationStatement packed = TestAttestationStatementUtil.createBasicPackedAttestationStatement();
+        AttestationStatement source = new CompoundAttestationStatement(u2f, packed);
+        byte[] data = cborConverter.writeValueAsBytes(source);
+        AttestationStatement obj = cborConverter.readValue(data, CompoundAttestationStatement.class);
+
+        assertAll(
+                () -> assertThat(obj).isInstanceOf(CompoundAttestationStatement.class),
                 () -> assertThat(obj).isEqualTo(source)
         );
     }
