@@ -1,6 +1,0 @@
-== Known Issues
-
-=== WebAuthn4J's PS256/PS384/PS512 support
-
-WebAuthn4J has not yet supported PS256, PS384, and PS512 algorithms.
-There is no plan to support it for the time being because these algorithms support is optional by WebAuthn specification.
