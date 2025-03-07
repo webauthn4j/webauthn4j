@@ -33,6 +33,10 @@ public class SignatureUtil {
         return createSignature("SHA256withRSA");
     }
 
+    public static @NotNull Signature createPS256() {
+        return createSignature("SHA256withRSA/PSS");
+    }
+
     public static @NotNull Signature createES256() {
         return createSignature("SHA256withECDSA");
     }
