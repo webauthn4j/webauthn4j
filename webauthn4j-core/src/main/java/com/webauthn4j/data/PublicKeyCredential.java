@@ -56,14 +56,27 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
         this(credentialId, response, null, clientExtensionResults);
     }
 
+    public PublicKeyCredential(
+            @Nullable byte[] credentialId,
+            @Nullable R response,
+            @Nullable AuthenticatorAttachment authenticatorAttachment,
+            @Nullable AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
+        this.id = credentialId == null ? null : Base64UrlUtil.encodeToString(credentialId);
+        this.rawId = credentialId;
+        this.response = response;
+        this.authenticatorAttachment = authenticatorAttachment;
+        this.clientExtensionResults = clientExtensionResults;
+    }
+
     @JsonCreator
     public PublicKeyCredential(
-            @Nullable @JsonProperty("credentialId") byte[] credentialId,
+            @Nullable @JsonProperty("id") String id,
+            @Nullable @JsonProperty("rawId") byte[] rawId,
             @Nullable @JsonProperty("response") R response,
             @Nullable @JsonProperty("authenticatorAttachment") AuthenticatorAttachment authenticatorAttachment,
             @Nullable @JsonProperty("clientExtensionResults") AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
-        this.id = credentialId == null ? null : Base64UrlUtil.encodeToString(credentialId);
-        this.rawId = credentialId;
+        this.id = id;
+        this.rawId = rawId;
         this.response = response;
         this.authenticatorAttachment = authenticatorAttachment;
         this.clientExtensionResults = clientExtensionResults;
