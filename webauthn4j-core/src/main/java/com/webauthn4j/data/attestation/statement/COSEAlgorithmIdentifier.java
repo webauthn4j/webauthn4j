@@ -183,13 +183,13 @@ public class COSEAlgorithmIdentifier {
             return "EdDSA";
         }
         else if(value == PS256.value){
-            return "RS256/PSS";
+            return "PS256";
         }
         else if(value == PS384.value){
-            return "RS384/PSS";
+            return "PS384";
         }
         else if(value == PS512.value){
-            return "RS512/PSS";
+            return "PS512";
         }
         else {
             return String.format("Unknown COSEAlgorithmIdentifier(%d)", value);

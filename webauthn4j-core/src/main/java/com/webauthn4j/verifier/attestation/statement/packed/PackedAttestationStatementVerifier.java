@@ -16,6 +16,7 @@
 
 package com.webauthn4j.verifier.attestation.statement.packed;
 
+import com.webauthn4j.data.MessageDigestAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -36,11 +37,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
-import java.security.InvalidKeyException;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.SignatureException;
+import java.security.*;
 import java.security.cert.X509Certificate;
+import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
 import java.util.Objects;
 
 /**
@@ -146,11 +146,18 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
         try {
             String jcaName = getJcaName(algorithmIdentifier);
             Signature verifier = SignatureUtil.createSignature(jcaName);
+
+            //TODO: here needs refactoring
+            if(COSEAlgorithmIdentifier.PS256.equals(algorithmIdentifier)) {
+                PSSParameterSpec pssSpec = new PSSParameterSpec(MessageDigestAlgorithm.SHA256.getJcaName(), "MGF1", MGF1ParameterSpec.SHA256, 32, 1);
+                verifier.setParameter(pssSpec);
+            }
+            //TODO: PS384, PS512 support
             verifier.initVerify(publicKey);
             verifier.update(data);
 
             return verifier.verify(signature);
-        } catch (SignatureException | InvalidKeyException | RuntimeException e) {
+        } catch (SignatureException | InvalidKeyException | RuntimeException | InvalidAlgorithmParameterException e) {
             logger.debug("Signature verification failed.", e);
             return false;
         }

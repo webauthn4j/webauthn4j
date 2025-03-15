@@ -453,13 +453,7 @@ public class TestDataUtil {
 
     public static byte[] calculateSignaturePS256(PrivateKey privateKey, byte[] signedData) {
         try {
-            Signature signature;
-            if (privateKey.getAlgorithm().equals("EC")) {
-                signature = SignatureUtil.createES256();
-            }
-            else {
-                signature = SignatureUtil.createPS256();
-            }
+            Signature signature = SignatureUtil.createPS256();
             signature.initSign(privateKey);
             signature.update(signedData);
             return signature.sign();

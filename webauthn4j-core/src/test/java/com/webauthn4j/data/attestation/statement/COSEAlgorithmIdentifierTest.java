@@ -78,9 +78,9 @@ class COSEAlgorithmIdentifierTest {
                 () -> assertThat(COSEAlgorithmIdentifier.ES384).hasToString("ES384"),
                 () -> assertThat(COSEAlgorithmIdentifier.ES512).hasToString("ES512"),
                 () -> assertThat(COSEAlgorithmIdentifier.EdDSA).hasToString("EdDSA"),
-                () -> assertThat(COSEAlgorithmIdentifier.PS256).hasToString("RS256/PSS"),
-                () -> assertThat(COSEAlgorithmIdentifier.PS384).hasToString("RS384/PSS"),
-                () -> assertThat(COSEAlgorithmIdentifier.PS512).hasToString("RS512/PSS")
+                () -> assertThat(COSEAlgorithmIdentifier.PS256).hasToString("PS256"),
+                () -> assertThat(COSEAlgorithmIdentifier.PS384).hasToString("PS384"),
+                () -> assertThat(COSEAlgorithmIdentifier.PS512).hasToString("PS512")
         );
     }
 

@@ -21,6 +21,7 @@ import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.verifier.exception.BadSignatureException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.security.*;
+import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
 
 /**
  * Verifies the assertion signature in {@link AuthenticationData} based on {@link COSEKey}
@@ -61,15 +64,23 @@ public class AssertionSignatureVerifier {
             PublicKey publicKey = coseKey.getPublicKey();
             //noinspection ConstantConditions as null check is already done in caller
             SignatureAlgorithm signatureAlgorithm = coseKey.getAlgorithm().toSignatureAlgorithm();
+            Signature verifier;
             String jcaName = signatureAlgorithm.getJcaName();
-            Signature verifier = Signature.getInstance(jcaName);
+            //TODO: here needs refactoring
+            if(SignatureAlgorithm.PS256.equals(signatureAlgorithm)) {
+                verifier = SignatureUtil.createPS256();
+            }
+            //TODO: PS384, PS512 support
+            else{
+                verifier = SignatureUtil.createSignature(jcaName);
+            }
             verifier.initVerify(publicKey);
             verifier.update(data);
             return verifier.verify(signature);
         } catch (IllegalArgumentException e) {
             logger.debug("COSE key alg must be signature algorithm.", e);
             return false;
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
+        } catch (SignatureException | InvalidKeyException | RuntimeException e) {
             logger.debug("Unexpected exception is thrown during signature verification.", e);
             return false;
         }
