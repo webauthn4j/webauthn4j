@@ -18,8 +18,11 @@ package com.webauthn4j.util;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
+import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
 
 /**
  * A Utility class for signature calculation
@@ -31,6 +34,17 @@ public class SignatureUtil {
 
     public static @NotNull Signature createRS256() {
         return createSignature("SHA256withRSA");
+    }
+
+    public static @NotNull Signature createPS256() {
+        try {
+            Signature signature = Signature.getInstance("RSASSA-PSS");
+            PSSParameterSpec pssSpec = new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 32, 1);
+            signature.setParameter(pssSpec);
+            return signature;
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     public static @NotNull Signature createES256() {
