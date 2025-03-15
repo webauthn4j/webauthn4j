@@ -161,12 +161,10 @@ class PackedAttestationStatementVerifierTest {
     }
 
     @Test
-    void verify_with_ECSelfAttestationPS256_test() {
+    void verify_with_RSAPSSSelfAttestation_test() {
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
-        Provider bcProvider = new BouncyCastleProvider();
-        Security.addProvider(bcProvider);
-        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithSelfPackedECAttestationStatementPS256(clientDataHash);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithSelfPackedRSAPSSAttestationStatement(clientDataHash);
 
         verify(clientData, attestationObject);
     }

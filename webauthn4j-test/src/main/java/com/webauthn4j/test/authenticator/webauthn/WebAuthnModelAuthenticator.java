@@ -24,10 +24,7 @@ import com.webauthn4j.data.PublicKeyCredentialParameters;
 import com.webauthn4j.data.PublicKeyCredentialRpEntity;
 import com.webauthn4j.data.PublicKeyCredentialType;
 import com.webauthn4j.data.attestation.AttestationObject;
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.attestation.authenticator.COSEKey;
+import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
@@ -44,6 +41,7 @@ import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.RSAUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -53,8 +51,11 @@ import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
@@ -220,12 +221,28 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         KeyPair credentialKeyPair;
         COSEKey cosePublicKey;
         COSEKey cosePrivateKey;
+        COSEKey coseKeyPair;
+        COSEAlgorithmIdentifier alg = publicKeyCredentialParameters.getAlg();
         try {
-            credentialKeyPair = ECUtil.createKeyPair();
-            ECPublicKey publicKey = (ECPublicKey) credentialKeyPair.getPublic();
-            ECPrivateKey privateKey = (ECPrivateKey) credentialKeyPair.getPrivate();
-            cosePublicKey = TestDataUtil.createEC2COSEPublicKey(publicKey);
-            cosePrivateKey = TestDataUtil.createEC2COSEPrivateKey(publicKey, privateKey);
+            if(Arrays.asList(COSEAlgorithmIdentifier.ES256, COSEAlgorithmIdentifier.ES384, COSEAlgorithmIdentifier.ES512).contains(alg)){
+                credentialKeyPair = ECUtil.createKeyPair();
+                ECPublicKey publicKey = (ECPublicKey) credentialKeyPair.getPublic();
+                ECPrivateKey privateKey = (ECPrivateKey) credentialKeyPair.getPrivate();
+                cosePublicKey = TestDataUtil.createEC2COSEPublicKey(publicKey);
+                cosePrivateKey = TestDataUtil.createEC2COSEPrivateKey(publicKey, privateKey);
+                coseKeyPair= EC2COSEKey.create(credentialKeyPair, alg);
+            }
+            else if(Arrays.asList(COSEAlgorithmIdentifier.RS256, COSEAlgorithmIdentifier.RS384, COSEAlgorithmIdentifier.RS512, COSEAlgorithmIdentifier.PS256, COSEAlgorithmIdentifier.PS384, COSEAlgorithmIdentifier.PS512).contains(alg)){
+                credentialKeyPair = RSAUtil.createKeyPair();
+                RSAPublicKey publicKey = (RSAPublicKey) credentialKeyPair.getPublic();
+                RSAPrivateKey privateKey = (RSAPrivateKey) credentialKeyPair.getPrivate();
+                cosePublicKey = RSACOSEKey.create(publicKey, alg);
+                cosePrivateKey = RSACOSEKey.create(privateKey, alg);
+                coseKeyPair= RSACOSEKey.create(credentialKeyPair, alg);
+            }
+            else{
+                throw new NotSupportedException("Specified alg are not supported");
+            }
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();
@@ -297,7 +314,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         byte[] signedData = getSignedData(authenticatorDataBytes, makeCredentialRequest.getHash());
         byte[] clientDataHash = makeCredentialRequest.getHash();
 
-        AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, credentialKeyPair, clientDataHash);
+        AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, coseKeyPair, clientDataHash);
         AttestationStatement attestationStatement = createAttestationStatement(attestationStatementRequest, registrationEmulationOption);
 
         // Return the attestation object for the new credential created by the procedure specified in
@@ -404,7 +421,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         // The hash of the serialized client data (which potentially has a variable length) is always the last element.
         byte[] clientDataHash = getAssertionRequest.getHash();
         byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
-        byte[] signature = TestDataUtil.calculateSignature(selectedCredential.getPrivateKey().getPrivateKey(), signedData);
+        byte[] signature = TestDataUtil.calculateSignature(selectedCredential.getPrivateKey(), signedData);
         // If any error occurred while generating the assertion signature,
         // return an error code equivalent to "UnknownError" and terminate the operation.
 
@@ -431,7 +448,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     private boolean isCapableOfHandling(PublicKeyCredentialParameters publicKeyCredentialParameters) {
         return publicKeyCredentialParameters.getType().equals(PublicKeyCredentialType.PUBLIC_KEY) &&
-                COSEAlgorithmIdentifier.ES256.equals(publicKeyCredentialParameters.getAlg());
+                (COSEAlgorithmIdentifier.ES256.equals(publicKeyCredentialParameters.getAlg()) || COSEAlgorithmIdentifier.PS256.equals(publicKeyCredentialParameters.getAlg()));
     }
 
     public boolean isCountUpEnabled() {

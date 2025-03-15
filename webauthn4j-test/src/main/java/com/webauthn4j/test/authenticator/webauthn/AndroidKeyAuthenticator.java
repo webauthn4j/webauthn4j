@@ -38,7 +38,7 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
             signature = registrationEmulationOption.getSignature();
         }
         else {
-            signature = TestDataUtil.calculateSignature(attestationStatementRequest.getCredentialKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
+            signature = TestDataUtil.calculateSignature(attestationStatementRequest.getCredentialKeyPair(), attestationStatementRequest.getSignedData());
         }
         AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new AndroidKeyAttestationOption() : registrationEmulationOption.getAttestationOption();
         X509Certificate attestationCertificate =
@@ -55,7 +55,7 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
                 new AttestationCertificateBuilder(
                         getAttestationIssuerCertificate(),
                         new X500Principal(attestationOption.getSubjectDN()),
-                        attestationStatementRequest.getCredentialKeyPair().getPublic());
+                        attestationStatementRequest.getCredentialKeyPair().getPublicKey());
 
         builder.addExtension(new ASN1ObjectIdentifier("1.3.6.1.4.1.11129.2.1.17"), false, createKeyDescriptor(attestationStatementRequest.getClientDataHash()));
         builder.addBasicConstraintsExtension();

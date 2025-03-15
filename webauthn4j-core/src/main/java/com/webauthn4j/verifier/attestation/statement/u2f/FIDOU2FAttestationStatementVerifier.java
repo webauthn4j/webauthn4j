@@ -24,6 +24,7 @@ import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
@@ -93,14 +94,14 @@ public class FIDOU2FAttestationStatementVerifier extends AbstractStatementVerifi
         PublicKey publicKey = getPublicKey(attestationStatement);
 
         try {
-            Signature verifier = Signature.getInstance("SHA256withECDSA");
+            Signature verifier = SignatureUtil.createES256();
             verifier.initVerify(publicKey);
             verifier.update(signedData);
             if (verifier.verify(signature)) {
                 return;
             }
             throw new BadSignatureException("`sig` in attestation statement is not valid signature. Please refer U2F Raw Message Formats. https://fidoalliance.org/specs/fido-u2f-v1.1-id-20160915/fido-u2f-raw-message-formats-v1.1-id-20160915.html");
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
+        } catch (SignatureException | InvalidKeyException e) {
             throw new BadSignatureException("`sig` in attestation statement is not valid signature. Please refer U2F Raw Message Formats. https://fidoalliance.org/specs/fido-u2f-v1.1-id-20160915/fido-u2f-raw-message-formats-v1.1-id-20160915.html");
         }
     }

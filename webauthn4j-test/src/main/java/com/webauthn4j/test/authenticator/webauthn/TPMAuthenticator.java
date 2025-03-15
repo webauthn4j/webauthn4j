@@ -17,6 +17,7 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.data.SignatureAlgorithm;
+import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.TestDataUtil;
@@ -32,6 +33,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
@@ -44,7 +46,7 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
 
         COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ES256;
 
-        TPMTPublic pubArea = createTPMTPublic(attestationStatementRequest.getCredentialKeyPair().getPublic());
+        TPMTPublic pubArea = createTPMTPublic(attestationStatementRequest.getCredentialKeyPair().getPublicKey());
         TPMSAttest certInfo = createTPMSAttest(attestationStatementRequest, alg, pubArea);
 
         byte[] signature;
@@ -52,7 +54,8 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
             signature = registrationEmulationOption.getSignature();
         }
         else {
-            signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), certInfo.getBytes());
+            EC2COSEKey cosePrivateKey = EC2COSEKey.create((ECPrivateKey) this.getAttestationKeyPair().getPrivate(), alg);
+            signature = TestDataUtil.calculateSignature(cosePrivateKey, certInfo.getBytes());
         }
 
         AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new TPMAttestationOption() : registrationEmulationOption.getAttestationOption();

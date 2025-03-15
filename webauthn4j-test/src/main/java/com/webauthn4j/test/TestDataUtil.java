@@ -222,45 +222,63 @@ public class TestDataUtil {
 
     public static AttestationObject createAttestationObjectWithBasicPackedECAttestationStatement(byte[] clientDataHash) {
         PrivateKey privateKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
-        return createAttestationObject(clientDataHash, privateKey, (signature) -> TestAttestationStatementUtil.createBasicPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+        COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ES256;
+        COSEKey cosePrivateKey = EC2COSEKey.create((ECPrivateKey) privateKey, alg);
+        return createAttestationObject(clientDataHash, cosePrivateKey, (signature) -> TestAttestationStatementUtil.createBasicPackedAttestationStatement(alg, signature));
     }
 
     public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = ECUtil.createKeyPair();
-        EC2COSEKey ec2CredentialPublicKey = EC2COSEKey.create((ECPublicKey) keyPair.getPublic(), COSEAlgorithmIdentifier.ES256);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
+        COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ES256;
+        EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) keyPair.getPrivate(), alg);
+        EC2COSEKey publicKey = EC2COSEKey.create((ECPublicKey) keyPair.getPublic(), alg);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(publicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
-        byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
-        return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+        byte[] signature = calculateSignature(privateKey, signedData);
+        return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(alg, signature));
     }
 
-    public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatementPS256(byte[] clientDataHash) {
+    public static AttestationObject createAttestationObjectWithSelfPackedRSAPSSAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = RSAUtil.createKeyPair();
-        RSACOSEKey key = RSACOSEKey.create((RSAPrivateKey) keyPair.getPrivate(), COSEAlgorithmIdentifier.PS256);
-        RSACOSEKey keyPublic = RSACOSEKey.create((RSAPublicKey) keyPair.getPublic(), COSEAlgorithmIdentifier.PS256);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(keyPublic);
+        COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.PS256;
+        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) keyPair.getPrivate(), alg);
+        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) keyPair.getPublic(), alg);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(publicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
-        byte[] signature = calculateSignaturePS256(key.getPrivateKey(), signedData);
-        return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.PS256, signature));
+        byte[] signature = calculateSignature(privateKey, signedData);
+        return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(alg, signature));
     }
 
     public static AttestationObject createAttestationObjectWithSelfPackedRSAAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = RSAUtil.createKeyPair();
-        RSACOSEKey rsaCredentialPublicKey = RSACOSEKey.create((RSAPublicKey) keyPair.getPublic(), COSEAlgorithmIdentifier.RS256);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(rsaCredentialPublicKey);
+        COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.RS256;
+        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) keyPair.getPrivate(), alg);
+        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) keyPair.getPublic(), alg);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(publicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
-        byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
-        return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature));
+        byte[] signature = calculateSignature(privateKey, signedData);
+        return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(alg, signature));
     }
 
     public static AttestationObject createAttestationObjectWithAndroidKeyAttestationStatement(byte[] clientDataHash) {
         PrivateKey privateKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
-        return createAttestationObject(clientDataHash, privateKey, (signature) -> TestAttestationStatementUtil.createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+        COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ES256;
+        COSEKey cosePrivateKey = EC2COSEKey.create((ECPrivateKey) privateKey, alg);
+        return createAttestationObject(clientDataHash, cosePrivateKey, (signature) -> TestAttestationStatementUtil.createAndroidKeyAttestationStatement(alg, signature));
     }
 
+    public static AttestationObject createAttestationObject(byte[] clientDataHash, COSEKey attestationPrivateKey, Function<byte[], AttestationStatement> attestationStatementProvider) {
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignature(attestationPrivateKey, signedData);
+        return new AttestationObject(authenticatorData, attestationStatementProvider.apply(signature));
+    }
+
+    @Deprecated(forRemoval = true)
     public static AttestationObject createAttestationObject(byte[] clientDataHash, PrivateKey attestationPrivateKey, Function<byte[], AttestationStatement> attestationStatementProvider) {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
@@ -433,7 +451,7 @@ public class TestDataUtil {
         return createCredentialRecord(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
     }
 
-
+    @Deprecated
     public static byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {
         try {
             Signature signature;
@@ -451,22 +469,15 @@ public class TestDataUtil {
         }
     }
 
-    public static byte[] calculateSignaturePS256(PrivateKey privateKey, byte[] signedData) {
+    public static byte[] calculateSignature(COSEKey privateKey, byte[] signedData) {
+        //TODO: check if it is private key
         try {
-            Signature signature;
-            if (privateKey.getAlgorithm().equals("EC")) {
-                signature = SignatureUtil.createES256();
-            }
-            else {
-                signature = SignatureUtil.createPS256();
-            }
-            signature.initSign(privateKey);
+            Signature signature = SignatureUtil.createSignature(privateKey.getAlgorithm().toSignatureAlgorithm());
+            signature.initSign(privateKey.getPrivateKey());
             signature.update(signedData);
             return signature.sign();
         } catch (InvalidKeyException | SignatureException e) {
             throw new WebAuthnModelException("Signature calculation error", e);
         }
     }
-
-
 }

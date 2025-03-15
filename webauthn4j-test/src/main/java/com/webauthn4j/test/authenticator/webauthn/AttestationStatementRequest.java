@@ -16,15 +16,17 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
+
 import java.security.KeyPair;
 
 public class AttestationStatementRequest {
 
     private final byte[] signedData;
-    private final KeyPair credentialKeyPair;
+    private final COSEKey credentialKeyPair;
     private final byte[] clientDataHash;
 
-    public AttestationStatementRequest(byte[] signedData, KeyPair credentialKeyPair, byte[] clientDataHash) {
+    public AttestationStatementRequest(byte[] signedData, COSEKey credentialKeyPair, byte[] clientDataHash) {
         this.signedData = signedData;
         this.credentialKeyPair = credentialKeyPair;
         this.clientDataHash = clientDataHash;
@@ -34,7 +36,7 @@ public class AttestationStatementRequest {
         return signedData;
     }
 
-    public KeyPair getCredentialKeyPair() {
+    public COSEKey getCredentialKeyPair() {
         return credentialKeyPair;
     }
 

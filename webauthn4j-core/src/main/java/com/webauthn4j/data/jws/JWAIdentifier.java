@@ -19,6 +19,7 @@ package com.webauthn4j.data.jws;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,6 +68,28 @@ public enum JWAIdentifier {
     public @NotNull String getJcaName() {
         return jcaName;
     }
+
+    public @NotNull SignatureAlgorithm toSignatureAlgorithm() {
+        switch (this){
+            case RS1:
+                return SignatureAlgorithm.RS1;
+            case RS256:
+                return SignatureAlgorithm.RS256;
+            case RS384:
+                return SignatureAlgorithm.RS384;
+            case RS512:
+                return SignatureAlgorithm.RS512;
+            case ES256:
+                return SignatureAlgorithm.ES256;
+            case ES384:
+                return SignatureAlgorithm.ES384;
+            case ES512:
+                return SignatureAlgorithm.ES512;
+            default:
+                throw new IllegalArgumentException("Invalid JWA Identifier provided: " + this);
+        }
+    }
+
 
     @Override
     public String toString() {
