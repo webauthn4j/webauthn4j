@@ -32,6 +32,8 @@ import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
 import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
@@ -45,6 +47,8 @@ import java.util.Objects;
  * Verifies the specified {@link AttestationStatement} is a valid packed attestation
  */
 public class PackedAttestationStatementVerifier extends AbstractStatementVerifier<PackedAttestationStatement> {
+
+    private static final Logger logger = LoggerFactory.getLogger(PackedAttestationStatementVerifier.class);
 
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
 
@@ -147,6 +151,7 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
 
             return verifier.verify(signature);
         } catch (SignatureException | InvalidKeyException | RuntimeException e) {
+            logger.debug("Signature verification failed.", e);
             return false;
         }
     }
