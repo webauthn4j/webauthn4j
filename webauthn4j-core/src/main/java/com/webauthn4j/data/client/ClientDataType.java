@@ -26,16 +26,6 @@ import java.util.Objects;
 public class ClientDataType {
     public static final ClientDataType WEBAUTHN_CREATE = new ClientDataType("webauthn.create");
     public static final ClientDataType WEBAUTHN_GET = new ClientDataType("webauthn.get");
-    /**
-     * @deprecated ClientDataType.CREATE is renamed to ClientDataType.WEBAUTHN_CREATE
-     */
-    @Deprecated
-    public static final ClientDataType CREATE = WEBAUTHN_CREATE;
-    /**
-     * @deprecated ClientDataType.GET is renamed to ClientDataType.WEBAUTHN_GET
-     */
-    @Deprecated
-    public static final ClientDataType GET = WEBAUTHN_GET;
 
     private final String value;
 
