@@ -100,16 +100,6 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
 
     public @Nullable AuthenticatorAttachment getAuthenticatorAttachment() { return authenticatorAttachment; }
 
-    /**
-     * @deprecated Renamed to getResponse() to compliant with WebAuthn Standard interface
-     * @return AuthenticatorResponse
-     */
-    @JsonIgnore
-    @Deprecated
-    public @Nullable R getAuthenticatorResponse() {
-        return response;
-    }
-
     public @Nullable AuthenticationExtensionsClientOutputs<E> getClientExtensionResults() {
         return clientExtensionResults;
     }
