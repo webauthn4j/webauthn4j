@@ -47,7 +47,9 @@ public class ServerProperty extends CoreServerProperty {
      * @param rpId           rpId
      * @param challenge      challenge
      * @param tokenBindingId tokenBindingId
+     * @deprecated While Token Binding was present in Level 1 and Level 2 of WebAuthn, its use is not expected in Level 3. Use constructor without tokenBindingId
      */
+    @Deprecated(forRemoval = false)
     public ServerProperty(@NotNull Origin origin, @NotNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
         super(rpId, challenge);
         AssertUtil.notNull(origin, "origin must not be null");
@@ -60,7 +62,9 @@ public class ServerProperty extends CoreServerProperty {
      * @param rpId           rpId
      * @param challenge      challenge
      * @param tokenBindingId tokenBindingId
+     * @deprecated While Token Binding was present in Level 1 and Level 2 of WebAuthn, its use is not expected in Level 3. Use constructor without tokenBindingId
      */
+    @Deprecated(forRemoval = false)
     public ServerProperty(@NotNull Set<Origin> origins, @NotNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
         super(rpId, challenge);
         AssertUtil.notNull(origins, "origins must not be null");
@@ -97,7 +101,9 @@ public class ServerProperty extends CoreServerProperty {
      * Returns the tokenBindingId
      *
      * @return the tokenBindingId
+     * @deprecated While Token Binding was present in Level 1 and Level 2 of WebAuthn, its use is not expected in Level 3.
      */
+    @Deprecated(forRemoval = false)
     public @Nullable byte[] getTokenBindingId() {
         return tokenBindingId;
     }

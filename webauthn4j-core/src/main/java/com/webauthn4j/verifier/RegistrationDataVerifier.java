@@ -81,7 +81,7 @@ public class RegistrationDataVerifier {
         this.customRegistrationVerifiers = customRegistrationVerifiers;
     }
 
-    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
+    @SuppressWarnings({"ConstantConditions", "java:S1874"}) // as null check is done by BeanAssertUtil#validate
     public void verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) {
 
         //spec| Step1
@@ -160,6 +160,7 @@ public class RegistrationDataVerifier {
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
         //spec| C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
+        //noinspection deprecation
         TokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         //spec| Step10
