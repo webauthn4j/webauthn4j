@@ -190,11 +190,13 @@ public class RegistrationDataAsyncVerifier {
             return originVerifier.verify(registrationObject);
         }
 
+        @SuppressWarnings("java:S1874")
         private CompletionStage<Void> execStep10toStep19(){
             //spec| (Level2) Step10 (Kept for backward compatibility)
             //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
             //spec| which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
             //spec| C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
+            //noinspection deprecation
             TokenBindingVerifier.verify(collectedClientData.getTokenBinding(), registrationObject.getServerProperty().getTokenBindingId());
 
             //spec| Step10

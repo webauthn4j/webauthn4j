@@ -185,6 +185,7 @@ public class AuthenticationDataAsyncVerifier {
             return originAsyncVerifier.verify(authenticationObject);
         }
 
+        @SuppressWarnings("java:S1874")
         private CompletionStage<Void> execStep15toStep20(){
 
             // Verify cross origin. This step is not defined in the spec
@@ -201,6 +202,7 @@ public class AuthenticationDataAsyncVerifier {
             //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
             //spec| which the attestation was obtained. If Token Binding was used on that TLS connection,
             //spec| also verify that C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
+            //noinspection deprecation
             TokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
             //spec| Step16

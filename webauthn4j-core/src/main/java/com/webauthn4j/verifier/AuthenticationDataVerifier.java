@@ -60,7 +60,7 @@ public class AuthenticationDataVerifier {
         this.customAuthenticationVerifiers = new ArrayList<>();
     }
 
-    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
+    @SuppressWarnings({"ConstantConditions", "java:S1874"}) // as null check is done by BeanAssertUtil#validate
     public void verify(@NotNull AuthenticationData authenticationData, @NotNull AuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
@@ -169,6 +169,7 @@ public class AuthenticationDataVerifier {
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the attestation was obtained. If Token Binding was used on that TLS connection,
         //spec| also verify that C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
+        //noinspection deprecation
         TokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         //spec| Step16

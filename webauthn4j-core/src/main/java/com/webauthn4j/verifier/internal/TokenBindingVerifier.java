@@ -26,7 +26,9 @@ import java.security.MessageDigest;
 
 /**
  * Verifies the specified {@link TokenBinding}
+ * @deprecated While Token Binding was present in Level 1 and Level 2 of WebAuthn, its use is not expected in Level 3. Use constructor without tokenBindingId
  */
+@Deprecated(forRemoval = false)
 public class TokenBindingVerifier {
 
     private TokenBindingVerifier(){}
