@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
+import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
@@ -26,23 +27,26 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 
 import javax.security.auth.x500.X500Principal;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.ECPrivateKey;
 
 public class PackedAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override
     public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
+        COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ES256;
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         }
         else {
-            signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
+            EC2COSEKey cosePrivateKey = EC2COSEKey.create((ECPrivateKey) this.getAttestationKeyPair().getPrivate(), alg);
+            signature = TestDataUtil.calculateSignature(cosePrivateKey, attestationStatementRequest.getSignedData());
         }
 
         AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new PackedAttestationOption() : registrationEmulationOption.getAttestationOption();
         X509Certificate attestationCertificate = getAttestationCertificate(attestationStatementRequest, attestationOption);
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificate, this.getCACertificatePath());
-        return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath);
+        return new PackedAttestationStatement(alg, signature, attestationCertificatePath);
     }
 
     @Override

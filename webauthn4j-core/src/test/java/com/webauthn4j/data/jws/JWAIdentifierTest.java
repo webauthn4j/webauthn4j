@@ -19,6 +19,7 @@ package com.webauthn4j.data.jws;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,6 +77,19 @@ class JWAIdentifierTest {
     void fromString_test_with_invalid_value() {
         assertThrows(DataConversionException.class,
                 () -> jsonConverter.readValue("{\"jwa_id\":\"ES521\"}", TestDTO.class)
+        );
+    }
+
+    @Test
+    void toSignatureAlgorithm_test() {
+        assertAll(
+                () -> assertThat(JWAIdentifier.RS1.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.RS1),
+                () -> assertThat(JWAIdentifier.RS256.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.RS256),
+                () -> assertThat(JWAIdentifier.RS384.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.RS384),
+                () -> assertThat(JWAIdentifier.RS512.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.RS512),
+                () -> assertThat(JWAIdentifier.ES256.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ES256),
+                () -> assertThat(JWAIdentifier.ES384.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ES384),
+                () -> assertThat(JWAIdentifier.ES512.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ES512)
         );
     }
 

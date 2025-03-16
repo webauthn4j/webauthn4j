@@ -16,6 +16,7 @@
 
 package com.webauthn4j.util;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,24 +35,31 @@ class SignatureUtilTest {
         assertThat(SignatureUtil.createES256().getAlgorithm()).isEqualTo("SHA256withECDSA");
     }
 
-    @Test
-    void createSignature_test() {
-        SignatureUtil.createSignature("SHA256withRSA");
-    }
+    @Nested
+    class createSignatureTest{
+        @Deprecated
+        @Test
+        void createSignature_test() {
+            SignatureUtil.createSignature("SHA256withRSA");
+        }
 
-    @Test
-    void createSignature_test_with_null() {
-        Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> SignatureUtil.createSignature(null)
-        );
-        assertThat(t).hasMessage("algorithm is required; it must not be null");
-    }
+        @Deprecated
+        @Test
+        void createSignature_test_with_null() {
+            Throwable t = assertThrows(IllegalArgumentException.class,
+                    () -> SignatureUtil.createSignature((String) null)
+            );
+            assertThat(t).hasMessage("algorithm is required; it must not be null");
+        }
 
-    @Test
-    void createSignature_test_with_illegal_argument() {
-        Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> SignatureUtil.createSignature("dummyAlg")
-        );
-        assertThat(t).hasMessageContaining("dummyAlg Signature not available");
+        @Deprecated
+        @Test
+        void createSignature_test_with_illegal_argument() {
+            Throwable t = assertThrows(IllegalArgumentException.class,
+                    () -> SignatureUtil.createSignature("dummyAlg")
+            );
+            assertThat(t).hasMessageContaining("dummyAlg Signature not available");
+        }
+
     }
 }

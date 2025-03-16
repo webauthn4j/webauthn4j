@@ -161,6 +161,15 @@ class PackedAttestationStatementVerifierTest {
     }
 
     @Test
+    void verify_with_RSAPSSSelfAttestation_test() {
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
+        byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithSelfPackedRSAPSSAttestationStatement(clientDataHash);
+
+        verify(clientData, attestationObject);
+    }
+
+    @Test
     void verify_with_RSASelfAttestation_test() {
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);

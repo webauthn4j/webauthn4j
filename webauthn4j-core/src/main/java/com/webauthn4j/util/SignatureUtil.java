@@ -16,10 +16,15 @@
 
 package com.webauthn4j.util;
 
+import com.webauthn4j.data.MessageDigestAlgorithm;
+import com.webauthn4j.data.SignatureAlgorithm;
 import org.jetbrains.annotations.NotNull;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
+import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
 
 /**
  * A Utility class for signature calculation
@@ -30,13 +35,42 @@ public class SignatureUtil {
     }
 
     public static @NotNull Signature createRS256() {
-        return createSignature("SHA256withRSA");
+        return createSignature(SignatureAlgorithm.RS256);
     }
 
     public static @NotNull Signature createES256() {
-        return createSignature("SHA256withECDSA");
+        return createSignature(SignatureAlgorithm.ES256);
     }
 
+
+    public static @NotNull Signature createSignature(@NotNull SignatureAlgorithm algorithm) {
+        AssertUtil.notNull(algorithm, "algorithm is required; it must not be null");
+        try {
+            Signature signature = Signature.getInstance(algorithm.getJcaName());
+            if(SignatureAlgorithm.PS256.equals(algorithm)) {
+                PSSParameterSpec pssSpec = new PSSParameterSpec(MessageDigestAlgorithm.SHA256.getJcaName(), "MGF1", MGF1ParameterSpec.SHA256, 32, 1);
+                signature.setParameter(pssSpec);
+            }
+            else if(SignatureAlgorithm.PS384.equals(algorithm)) {
+                PSSParameterSpec pssSpec = new PSSParameterSpec(MessageDigestAlgorithm.SHA384.getJcaName(), "MGF1", MGF1ParameterSpec.SHA384, 48, 1);
+                signature.setParameter(pssSpec);
+            }
+            else if(SignatureAlgorithm.PS512.equals(algorithm)) {
+                PSSParameterSpec pssSpec = new PSSParameterSpec(MessageDigestAlgorithm.SHA512.getJcaName(), "MGF1", MGF1ParameterSpec.SHA512, 64, 1);
+                signature.setParameter(pssSpec);
+            }
+            return signature;
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
+     * @param algorithm signature algorithm
+     * @return signature algorithm
+     * @deprecated Use SignatureUtil.createSignature(SignatureAlgorithm algorithm) instead.
+     */
+    @Deprecated
     public static @NotNull Signature createSignature(@NotNull String algorithm) {
         AssertUtil.notNull(algorithm, "algorithm is required; it must not be null");
         try {

@@ -157,8 +157,7 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
         X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
 
         /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
-        String jcaName = getJcaName(attestationStatement.getAlg());
-        Signature certInfoSignature = SignatureUtil.createSignature(jcaName);
+        Signature certInfoSignature = SignatureUtil.createSignature(attestationStatement.getAlg().toSignatureAlgorithm());
         try {
             certInfoSignature.initVerify(aikCert.getPublicKey());
             certInfoSignature.update(certInfo.getBytes());

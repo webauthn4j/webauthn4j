@@ -74,10 +74,10 @@ public class JWS<T> {
             if (header.getAlg() == null || header.getX5c() == null || header.getX5c().getCertificates().isEmpty()) {
                 return false;
             }
-            Signature signatureObj = SignatureUtil.createSignature(header.getAlg().getJcaName());
+            Signature signatureInstance = SignatureUtil.createSignature(header.getAlg().toSignatureAlgorithm());
             PublicKey publicKey = header.getX5c().getCertificates().get(0).getPublicKey();
-            signatureObj.initVerify(publicKey);
-            signatureObj.update(signedData.getBytes());
+            signatureInstance.initVerify(publicKey);
+            signatureInstance.update(signedData.getBytes());
             byte[] sig;
             if (publicKey instanceof ECPublicKey) {
                 sig = JWSSignatureUtil.convertJwsSignatureToDerSignature(signature);
@@ -85,7 +85,7 @@ public class JWS<T> {
             else {
                 sig = signature;
             }
-            return signatureObj.verify(sig);
+            return signatureInstance.verify(sig);
         } catch (SignatureException | InvalidKeyException e) {
             logger.debug("Signature verification failed", e);
             return false;

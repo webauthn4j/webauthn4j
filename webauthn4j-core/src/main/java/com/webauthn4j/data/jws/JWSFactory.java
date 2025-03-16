@@ -56,11 +56,11 @@ public class JWSFactory {
         if (header.getAlg() == null) {
             throw new IllegalArgumentException("alg must not be null");
         }
-        Signature signatureObj = SignatureUtil.createSignature(header.getAlg().getJcaName());
+        Signature signatureInstance = SignatureUtil.createSignature(header.getAlg().toSignatureAlgorithm());
         try {
-            signatureObj.initSign(privateKey);
-            signatureObj.update(signedData.getBytes());
-            byte[] derSignature = signatureObj.sign();
+            signatureInstance.initSign(privateKey);
+            signatureInstance.update(signedData.getBytes());
+            byte[] derSignature = signatureInstance.sign();
             byte[] jwsSignature = JWSSignatureUtil.convertDerSignatureToJwsSignature(derSignature);
             return new JWS<>(header, headerString, payload, payloadString, jwsSignature);
         } catch (InvalidKeyException | SignatureException e) {

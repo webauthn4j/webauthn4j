@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
@@ -41,6 +42,7 @@ class SignatureAlgorithmTest {
 
     private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
+    @Deprecated
     @Test
     void create_test() {
         assertAll(
@@ -57,6 +59,24 @@ class SignatureAlgorithmTest {
     }
 
     @Test
+    void deserialize_test() {
+        assertAll(
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA256withECDSA")).isEqualTo(SignatureAlgorithm.ES256),
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA384withECDSA")).isEqualTo(SignatureAlgorithm.ES384),
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA512withECDSA")).isEqualTo(SignatureAlgorithm.ES512),
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA1withRSA")).isEqualTo(SignatureAlgorithm.RS1),
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA256withRSA")).isEqualTo(SignatureAlgorithm.RS256),
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA384withRSA")).isEqualTo(SignatureAlgorithm.RS384),
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA512withRSA")).isEqualTo(SignatureAlgorithm.RS512),
+                () -> assertThat(SignatureAlgorithm.deserialize("ed25519")).isEqualTo(SignatureAlgorithm.Ed25519),
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA256withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS256),
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA384withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS384),
+                () -> assertThat(SignatureAlgorithm.deserialize("SHA512withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS512),
+                () -> assertThatThrownBy(()->SignatureAlgorithm.deserialize("invalid")).isInstanceOf(InvalidFormatException.class)
+        );
+    }
+
+    @Test
     void toString_test() {
         assertAll(
                 () -> assertThat(SignatureAlgorithm.ES256).hasToString("ES256"),
@@ -66,7 +86,10 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.RS256).hasToString("RS256"),
                 () -> assertThat(SignatureAlgorithm.RS384).hasToString("RS384"),
                 () -> assertThat(SignatureAlgorithm.RS512).hasToString("RS512"),
-                () -> assertThat(SignatureAlgorithm.Ed25519).hasToString("Ed25519")
+                () -> assertThat(SignatureAlgorithm.Ed25519).hasToString("Ed25519"),
+                () -> assertThat(SignatureAlgorithm.PS256).hasToString("PS256"),
+                () -> assertThat(SignatureAlgorithm.PS384).hasToString("PS384"),
+                () -> assertThat(SignatureAlgorithm.PS512).hasToString("PS512")
         );
     }
 
@@ -75,7 +98,7 @@ class SignatureAlgorithmTest {
     @EnabledForJreRange(min = JRE.JAVA_15)
     void ed25519_test(){
         assertThatCode(()->{
-            SignatureUtil.createSignature(SignatureAlgorithm.Ed25519.getJcaName());
+            SignatureUtil.createSignature(SignatureAlgorithm.Ed25519);
         }).doesNotThrowAnyException();
     }
 
