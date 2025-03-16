@@ -16,7 +16,7 @@
 
 apply(plugin = "java")
 
-description = "Package that contains utility classes for WebAuthn4J"
+description = "Deprecated package. All classes are moved to webauthnrj-core"
 
 dependencies {
 

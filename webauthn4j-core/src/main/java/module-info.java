@@ -1,8 +1,6 @@
 module com.webauthn4j.core {
     requires java.naming;
 
-    requires transitive com.webauthn4j.util;
-
     requires transitive com.fasterxml.jackson.databind;
     requires transitive com.fasterxml.jackson.dataformat.cbor;
     requires org.slf4j;
@@ -32,6 +30,10 @@ module com.webauthn4j.core {
     exports com.webauthn4j.data.extension.client;
     exports com.webauthn4j.data.jws;
     exports com.webauthn4j.server;
+
+    exports com.webauthn4j.util;
+    exports com.webauthn4j.util.exception;
+
     exports com.webauthn4j.verifier;
     exports com.webauthn4j.verifier.internal.asn1 to com.webauthn4j.appattest, com.webauthn4j.metadata.async;
     exports com.webauthn4j.verifier.attestation.statement;
