@@ -41,6 +41,8 @@ to declare nullability explicitly.
 * [WebAuthn4J Spring Security](https://github.com/webauthn4j/webauthn4j-spring-security)
   * extension for spring security to add webauthn(passkey) support
   * maintained by WebAuthn4J project
+* [Eclipse Vert.x Auth](https://github.com/eclipse-vertx/vertx-auth)
+* [OpenAM](https://github.com/OpenIdentityPlatform/OpenAM)
 * [OpenUnison](https://openunison.github.io)
 
 ## Documentation
