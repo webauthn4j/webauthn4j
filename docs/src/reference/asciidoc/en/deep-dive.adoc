@@ -119,7 +119,7 @@ A `ObjectConverter` with a `DeviceCheckCBORModule` can be obtained with `DeviceC
 
 === Alternative to Unsupported JSON Serialization APIs in Safari
 
-In the Quick Start, `PublicKeyCredential.parseCreationOptionsFromJSON` is introduced as an API for parsing `PublicKeyCredentialCreationOptions`, and `PublicKeyCredential#toJSON` as an API for serializing `PublicKeyCredential`. However, as of today(December 2024), these APIs are not available in Safari.
+In the Quick Start, `PublicKeyCredential.parseCreationOptionsFromJSON` is introduced as an API for parsing `PublicKeyCredentialCreationOptions`, and `PublicKeyCredential#toJSON` as an API for serializing `PublicKeyCredential`. However, these APIs are not available on Safari versions earlier than 18.4.
 
 As an alternative, it is recommended to use the pony-fill provided by the npm library https://github.com/github/webauthn-json[github/@webauthn-json], maintained by GitHub.
 It provides `parseCreationOptionsFromJSON` method as a substitute for `PublicKeyCredential.parseCreationOptionsFromJSON` and `create` as a substitute for `navigator.credentials.create`.

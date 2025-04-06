@@ -110,7 +110,7 @@ webauthn4j-appattestでは、`CredentialRecord` インタフェースの代わ�
 === Safariで未サポートなJSON serialization APIsの代替
 
 クイックスタートでは、 `PublicKeyCredentialCreationOptions` をパースするAPIとして `PublicKeyCredential.parseCreationOptionsFromJSON` が、
-`PublicKeyCredential` をシリアライズするAPIとして `PublicKeyCredential#toJSON` が存在すると紹介しましたが、2024/12現在、Safariでは利用できません。
+`PublicKeyCredential` をシリアライズするAPIとして `PublicKeyCredential#toJSON` が存在すると紹介しましたが、Safariでは18.4以降でしか利用できません。
 代わりとして、GitHubが提供するnpmライブラリ、 https://github.com/github/webauthn-json[github/@webauthn-json] が提供する、 pony-fillを利用するのがお勧めです。
 `PublicKeyCredential.parseCreationOptionsFromJSON` の代わりに、 `parseCreationOptionsFromJSON` が、
 `naviagator.credentials.create` の代わりに `create` が提供されています。

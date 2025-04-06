@@ -161,7 +161,7 @@ WebAuthnの鍵ペアの生成において中心となるAPIは、ブラウザの
 HTMLページに埋め込んでも良いですし、チャレンジを返却するRESTエンドポイントを用意することも可能です。
 `navigator.credentials.create` メソッドのパラメータである、 `PublicKeyCredentialCreationOptions` 全体を返却するエンドポイントを用意するのも良いアイデアでしょう。
 WebAuthnのJava Script APIには、 `PublicKeyCredential.parseCreationOptionsFromJSON` というメソッドが用意されており、JSONとしてシリアライズされた `PublicKeyCredentialCreationOptions` をパースすることが可能です。
-但し、2024/12現在、Safariでは `PublicKeyCredential.parseCreationOptionsFromJSON` が利用できません。代替策については、<<./deep-dive.adoc#Safariで未サポートなJSON serialization APIsの代替,Safariで未サポートなJSON serialization APIsの代替>> を参照してください。
+但し、SafariではSafari 18.4以降でしか `PublicKeyCredential.parseCreationOptionsFromJSON` が利用できません。代替策については、<<./deep-dive.adoc#Safariで未サポートなJSON serialization APIsの代替,Safariで未サポートなJSON serialization APIsの代替>> を参照してください。
 
 WebAuthn4Jは `PublicKeyCredentialCreationOptions` を表現するJavaのクラスを提供しており、バックエンドサーバー側でJSONを組み立てる際にご活用頂けます。
 
