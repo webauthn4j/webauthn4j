@@ -28,6 +28,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * WebAuthn registration data
+ */
 public class RegistrationData extends CoreRegistrationData {
 
     private final CollectedClientData collectedClientData;
@@ -35,6 +38,15 @@ public class RegistrationData extends CoreRegistrationData {
     private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
     private final Set<AuthenticatorTransport> transports;
 
+    /**
+     * {@link RegistrationData} constructor
+     * @param attestationObject      the parsed attestation object
+     * @param attestationObjectBytes the raw attestation object bytes
+     * @param collectedClientData    the parsed collected client data
+     * @param collectedClientDataBytes the raw collected client data bytes
+     * @param clientExtensions       the client extensions
+     * @param transports             the set of transports
+     */
     public RegistrationData(
             @Nullable AttestationObject attestationObject,
             @Nullable byte[] attestationObjectBytes,
@@ -51,18 +63,38 @@ public class RegistrationData extends CoreRegistrationData {
         this.transports = transports;
     }
 
+    /**
+     * Returns the parsed collected client data
+     *
+     * @return the collected client data
+     */
     public @Nullable CollectedClientData getCollectedClientData() {
         return collectedClientData;
     }
 
+    /**
+     * Returns the raw collected client data bytes
+     *
+     * @return the collected client data bytes
+     */
     public @Nullable byte[] getCollectedClientDataBytes() {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
+    /**
+     * Returns the client extensions
+     *
+     * @return the client extensions
+     */
     public @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
 
+    /**
+     * Returns the set of transports
+     *
+     * @return the transports
+     */
     public @Nullable Set<AuthenticatorTransport> getTransports() {
         return transports;
     }

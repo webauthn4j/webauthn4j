@@ -23,12 +23,33 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Core registration data
+ * This class is a subset of {@link RegistrationData} containing only the core registration data fields
+ */
 public class CoreRegistrationData {
 
+    /**
+     * The parsed attestation object
+     */
     private final AttestationObject attestationObject;
+
+    /**
+     * The raw attestation object bytes
+     */
     private final byte[] attestationObjectBytes;
+
+    /**
+     * The hash of the client data
+     */
     private final byte[] clientDataHash;
 
+    /**
+     * {@link CoreRegistrationData} constructor
+     * @param attestationObject      the parsed attestation object
+     * @param attestationObjectBytes the raw attestation object bytes
+     * @param clientDataHash         the hash of the client data
+     */
     public CoreRegistrationData(
             @Nullable AttestationObject attestationObject,
             @Nullable byte[] attestationObjectBytes,
@@ -38,14 +59,29 @@ public class CoreRegistrationData {
         this.clientDataHash = ArrayUtil.clone(clientDataHash);
     }
 
+    /**
+     * Returns the parsed attestation object
+     *
+     * @return the attestation object
+     */
     public @Nullable AttestationObject getAttestationObject() {
         return attestationObject;
     }
 
+    /**
+     * Returns the raw attestation object bytes
+     *
+     * @return the attestation object bytes
+     */
     public @Nullable byte[] getAttestationObjectBytes() {
         return ArrayUtil.clone(attestationObjectBytes);
     }
 
+    /**
+     * Returns the hash of the client data
+     *
+     * @return the client data hash
+     */
     public @Nullable byte[] getClientDataHash() {
         return ArrayUtil.clone(clientDataHash);
     }
