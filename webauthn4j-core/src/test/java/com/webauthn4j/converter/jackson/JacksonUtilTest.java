@@ -33,25 +33,34 @@ import static org.mockito.Mockito.when;
 class JacksonUtilTest {
 
     @Test
-    void readTree_with_IOException_test() throws IOException {
+    void shouldWrapIOExceptionInUncheckedIOExceptionWhenReadingTree() throws IOException {
+        //Given
         ObjectMapper objectMapper = mock(ObjectMapper.class);
         when(objectMapper.readTree((byte[]) any())).thenThrow(IOException.class);
         byte[] value = new byte[0];
+
+        //When/Then
         assertThatThrownBy(() -> JacksonUtil.readTree(objectMapper, value)).isInstanceOf(UncheckedIOException.class);
     }
 
     @Test
-    void readTree_with_JsonParseException_test() throws IOException {
+    void shouldWrapJsonParseExceptionInDataConversionExceptionWhenReadingTree() throws IOException {
+        //Given
         ObjectMapper objectMapper = mock(ObjectMapper.class);
         when(objectMapper.readTree((byte[]) any())).thenThrow(JsonParseException.class);
         byte[] value = new byte[0];
+
+        //When/Then
         assertThatThrownBy(() -> JacksonUtil.readTree(objectMapper, value)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
-    void binaryValue_test() throws IOException {
+    void shouldWrapIOExceptionInUncheckedIOExceptionWhenGettingBinaryValue() throws IOException {
+        //Given
         JsonNode jsonNode = mock(JsonNode.class);
         when(jsonNode.binaryValue()).thenThrow(IOException.class);
+
+        //When/Then
         assertThatThrownBy(() -> JacksonUtil.binaryValue(jsonNode)).isInstanceOf(UncheckedIOException.class);
     }
 

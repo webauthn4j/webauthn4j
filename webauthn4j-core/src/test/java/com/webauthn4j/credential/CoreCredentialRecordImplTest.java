@@ -1,7 +1,13 @@
 package com.webauthn4j.credential;
 
 import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.test.TestDataUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,47 +15,67 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CoreCredentialRecordImplTest {
 
+    private AttestationObject attestationObject;
+    private AttestationStatement attestationStatement;
+    private Boolean flagUV;
+    private Boolean flagBE;
+    private Boolean flagBS;
+    private long signCount;
+    private AttestedCredentialData attestedCredentialData;
+    private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> extensions;
+
+    @BeforeEach
+    void setUp() {
+        attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = attestationObject.getAuthenticatorData();
+        
+        attestationStatement = attestationObject.getAttestationStatement();
+        flagUV = authenticatorData.isFlagUV();
+        flagBE = authenticatorData.isFlagBE();
+        flagBS = authenticatorData.isFlagBS();
+        signCount = authenticatorData.getSignCount();
+        attestedCredentialData = authenticatorData.getAttestedCredentialData();
+        extensions = authenticatorData.getExtensions();
+    }
+
     @Test
-    void constructor_test() {
-        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+    void shouldCreateCoreCredentialRecordWithExplicitParameters() {
         CoreCredentialRecord coreCredentialRecord = new CoreCredentialRecordImpl(
-                attestationObject.getAttestationStatement(),
-                attestationObject.getAuthenticatorData().isFlagUV(),
-                attestationObject.getAuthenticatorData().isFlagBE(),
-                attestationObject.getAuthenticatorData().isFlagBS(),
-                attestationObject.getAuthenticatorData().getSignCount(),
-                attestationObject.getAuthenticatorData().getAttestedCredentialData(),
-                attestationObject.getAuthenticatorData().getExtensions()
-                );
+                attestationStatement,
+                flagUV,
+                flagBE,
+                flagBS,
+                signCount,
+                attestedCredentialData,
+                extensions
+        );
 
         assertAll(
-                () -> assertThat(coreCredentialRecord.isUvInitialized()).isEqualTo(attestationObject.getAuthenticatorData().isFlagUV()),
-                () -> assertThat(coreCredentialRecord.isBackupEligible()).isEqualTo(attestationObject.getAuthenticatorData().isFlagBE()),
-                () -> assertThat(coreCredentialRecord.isBackedUp()).isEqualTo(attestationObject.getAuthenticatorData().isFlagBS()),
-                () -> assertThat(coreCredentialRecord.getAttestedCredentialData()).isEqualTo(attestationObject.getAuthenticatorData().getAttestedCredentialData()),
-                () -> assertThat(coreCredentialRecord.getAttestationStatement()).isEqualTo(attestationObject.getAttestationStatement()),
-                () -> assertThat(coreCredentialRecord.getCounter()).isEqualTo(attestationObject.getAuthenticatorData().getSignCount())
+                () -> assertThat(coreCredentialRecord.isUvInitialized()).isEqualTo(flagUV),
+                () -> assertThat(coreCredentialRecord.isBackupEligible()).isEqualTo(flagBE),
+                () -> assertThat(coreCredentialRecord.isBackedUp()).isEqualTo(flagBS),
+                () -> assertThat(coreCredentialRecord.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
+                () -> assertThat(coreCredentialRecord.getAttestationStatement()).isEqualTo(attestationStatement),
+                () -> assertThat(coreCredentialRecord.getCounter()).isEqualTo(signCount)
         );
     }
 
     @Test
-    void getter_test() {
-        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+    void shouldCreateCoreCredentialRecordFromAttestationObject() {
         CoreCredentialRecord coreCredentialRecord = new CoreCredentialRecordImpl(attestationObject);
 
         assertAll(
-                () -> assertThat(coreCredentialRecord.isUvInitialized()).isEqualTo(attestationObject.getAuthenticatorData().isFlagUV()),
-                () -> assertThat(coreCredentialRecord.isBackupEligible()).isEqualTo(attestationObject.getAuthenticatorData().isFlagBE()),
-                () -> assertThat(coreCredentialRecord.isBackedUp()).isEqualTo(attestationObject.getAuthenticatorData().isFlagBS()),
-                () -> assertThat(coreCredentialRecord.getAttestedCredentialData()).isEqualTo(attestationObject.getAuthenticatorData().getAttestedCredentialData()),
-                () -> assertThat(coreCredentialRecord.getAttestationStatement()).isEqualTo(attestationObject.getAttestationStatement()),
-                () -> assertThat(coreCredentialRecord.getCounter()).isEqualTo(attestationObject.getAuthenticatorData().getSignCount())
+                () -> assertThat(coreCredentialRecord.isUvInitialized()).isEqualTo(flagUV),
+                () -> assertThat(coreCredentialRecord.isBackupEligible()).isEqualTo(flagBE),
+                () -> assertThat(coreCredentialRecord.isBackedUp()).isEqualTo(flagBS),
+                () -> assertThat(coreCredentialRecord.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
+                () -> assertThat(coreCredentialRecord.getAttestationStatement()).isEqualTo(attestationStatement),
+                () -> assertThat(coreCredentialRecord.getCounter()).isEqualTo(signCount)
         );
     }
 
     @Test
-    void setter_test() {
-        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+    void shouldUpdatePropertiesViaSetters() {
         CoreCredentialRecord coreCredentialRecord = new CoreCredentialRecordImpl(attestationObject);
 
         coreCredentialRecord.setUvInitialized(true);
@@ -66,12 +92,12 @@ class CoreCredentialRecordImplTest {
     }
 
     @Test
-    void equals_hashCode_test() {
-        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+    void shouldBeEqualWhenConstructedFromSameAttestationObject() {
         CoreCredentialRecord instanceA = new CoreCredentialRecordImpl(attestationObject);
         CoreCredentialRecord instanceB = new CoreCredentialRecordImpl(attestationObject);
 
-        assertThat(instanceA).isEqualTo(instanceB).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
     }
-
 }

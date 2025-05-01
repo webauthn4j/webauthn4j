@@ -32,10 +32,15 @@ class AttestationCertificatePathConverterTest {
     private final CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
-    void test() {
+    void shouldSerializeAndDeserializeAttestationCertificatePath() {
+        // Given
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(Collections.singletonList(TestAttestationUtil.load2tierTestAuthenticatorAttestationCertificate()));
+
+        // When
         byte[] cbor = cborConverter.writeValueAsBytes(attestationCertificatePath);
         AttestationCertificatePath restored = cborConverter.readValue(cbor, AttestationCertificatePath.class);
+
+        // Then
         assertThat(restored).isEqualTo(attestationCertificatePath);
     }
 }

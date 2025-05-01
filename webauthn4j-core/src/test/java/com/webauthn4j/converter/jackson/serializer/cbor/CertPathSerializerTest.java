@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,18 +40,15 @@ class CertPathSerializerTest {
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    void test() throws CertificateException {
-
+    void shouldSerializeAndDeserializeCertPath() throws CertificateException {
         //Given
         Certificate cert1 = TestAttestationUtil.loadFirefoxSWTokenAttestationCertificate();
         Certificate cert2 = TestAttestationUtil.loadFirefoxSWTokenAttestationCertificate();
-
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         CertPath certPath = certificateFactory.generateCertPath(Arrays.asList(cert1, cert2));
 
-        byte[] result = cborConverter.writeValueAsBytes(certPath);
-
         //When
+        byte[] result = cborConverter.writeValueAsBytes(certPath);
         CertPath restored = cborConverter.readValue(result, CertPath.class);
 
         //Then
@@ -59,9 +56,12 @@ class CertPathSerializerTest {
     }
 
     @Test
-    void null_serialize_test() {
+    void shouldHandleNullCertPath() {
+        //Given
         TestDto testDto = new TestDto();
         testDto.setCertPath(null);
+
+        //When/Then
         assertThatCode(() -> cborConverter.writeValueAsBytes(testDto)).doesNotThrowAnyException();
     }
 

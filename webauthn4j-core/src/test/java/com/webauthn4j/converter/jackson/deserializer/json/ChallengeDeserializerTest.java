@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,14 +36,12 @@ class ChallengeDeserializerTest {
     private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
     @Test
-    void test() {
-
-
+    void shouldDeserializeEmptyChallenge() {
         //Given
-        String input = "{ \"challenge\" : \"\" }";
+        String json = "{ \"challenge\" : \"\" }";
 
         //When
-        ChallengeDto result = jsonConverter.readValue(input, ChallengeDto.class);
+        ChallengeDto result = jsonConverter.readValue(json, ChallengeDto.class);
 
         //Then
         assertAll(
@@ -53,27 +51,25 @@ class ChallengeDeserializerTest {
     }
 
     @Test
-    void null_test() {
-
+    void shouldHandleNullChallenge() {
         //Given
-        String input = "{ \"challenge\" : null }";
+        String json = "{ \"challenge\" : null }";
 
         //When
-        ChallengeDto result = jsonConverter.readValue(input, ChallengeDto.class);
+        ChallengeDto result = jsonConverter.readValue(json, ChallengeDto.class);
 
         //Then
         assertThat(result.getChallenge()).isNull();
     }
 
     @Test
-    void invalid_value_test() {
-
+    void shouldThrowExceptionForInvalidValue() {
         //Given
-        String input = "{ \"challenge\" : \"ddddd\" }";
+        String json = "{ \"challenge\" : \"ddddd\" }";
 
         //When
         assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue(input, ChallengeDto.class)
+                () -> jsonConverter.readValue(json, ChallengeDto.class)
         );
     }
 

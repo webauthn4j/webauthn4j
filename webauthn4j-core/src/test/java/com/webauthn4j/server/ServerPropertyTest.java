@@ -20,12 +20,15 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.test.TestDataUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -34,180 +37,332 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ConstantConditions")
 class ServerPropertyTest {
-    private final String rpId = "rp-origin.com";
+    // Constants
+    private static final String RP_ID = "rp-origin.com";
+    private static final byte[] TOKEN_BINDING_ID_1 = "random-token-binding1".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] TOKEN_BINDING_ID_2 = "random-token-binding2".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] TOKEN_BINDING_ID_3 = "random-token-binding3".getBytes(StandardCharsets.UTF_8);
+    
+    // Test data
     private final Origin webApp1Origin = new Origin("https://app1.rp-origin.com");
     private final Origin webApp2Origin = new Origin("https://app2.rp-origin.com");
     private final Origin apk1Origin = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
     private final Origin apk2Origin = new Origin("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=");
 
+    // Shared objects
+    private Challenge challenge;
+    private HashSet<Origin> multipleOrigins;
+
+    @BeforeEach
+    void setUp() {
+        challenge = new DefaultChallenge();
+        multipleOrigins = new HashSet<>(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin));
+    }
 
     @Test
-    void constructor_rpId_null() {
-
-        //When
+    void nullRpIdShouldThrowException() {
+        // Given
+        Origin origin = webApp1Origin;
+        
+        // When/Then
         assertThrows(IllegalArgumentException.class,
-                () -> new ServerProperty(webApp1Origin, null, null, null)
+                () -> new ServerProperty(origin, null, null)
         );
     }
 
     @Test
-    void constructor_without_tokenBindingId() {
-        Challenge challenge = new DefaultChallenge();
-        //When
-        assertThatCode(() -> new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin)), rpId, challenge)).doesNotThrowAnyException();
-        assertThatCode(() -> new ServerProperty(webApp1Origin, rpId, challenge)).doesNotThrowAnyException();
+    void constructorWithoutTokenBindingIdShouldSucceed() {
+        // Given
+        HashSet<Origin> origins = multipleOrigins;
+        Origin singleOrigin = webApp1Origin;
+        
+        // When/Then
+        assertThatCode(() -> new ServerProperty(origins, RP_ID, challenge)).doesNotThrowAnyException();
+        assertThatCode(() -> new ServerProperty(singleOrigin, RP_ID, challenge)).doesNotThrowAnyException();
     }
 
     @Test
-    void equals_hashCode_test() {
-        Challenge challenge = new DefaultChallenge();
+    void sameValuesShouldBeEqual() {
+        // Given
         ServerProperty serverPropertyA = TestDataUtil.createServerProperty(challenge);
         ServerProperty serverPropertyB = TestDataUtil.createServerProperty(challenge);
 
+        // When
+        boolean equals = serverPropertyA.equals(serverPropertyB);
+        int hashCodeA = serverPropertyA.hashCode();
+        int hashCodeB = serverPropertyB.hashCode();
+
+        // Then
         assertAll(
-                () -> assertThat(serverPropertyA).isEqualTo(serverPropertyB),
-                () -> assertThat(serverPropertyA).hasSameHashCodeAs(serverPropertyB)
+                () -> assertThat(equals).isTrue(),
+                () -> assertThat(hashCodeA).isEqualTo(hashCodeB)
         );
     }
 
     @Test
-    void equals_hashCode_multiple_origin_test() {
-        final Challenge challenge = new DefaultChallenge();
+    void multipleOriginsInDifferentOrderShouldBeEqual() {
+        // Given
         final ServerProperty serverPropertyA =
-                new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin)), rpId, challenge, new byte[32]);
+                new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin)), RP_ID, challenge);
         final ServerProperty serverPropertyB =
-                new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, apk1Origin, webApp2Origin, apk2Origin)), rpId, challenge, new byte[32]);
+                new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, apk1Origin, webApp2Origin, apk2Origin)), RP_ID, challenge);
 
+        // When
+        boolean equals = serverPropertyA.equals(serverPropertyB);
+        int hashCodeA = serverPropertyA.hashCode();
+        int hashCodeB = serverPropertyB.hashCode();
+
+        // Then
         assertAll(
-                () -> assertThat(serverPropertyA).isEqualTo(serverPropertyB),
-                () -> assertThat(serverPropertyA).hasSameHashCodeAs(serverPropertyB)
+                () -> assertThat(equals).isTrue(),
+                () -> assertThat(hashCodeA).isEqualTo(hashCodeB)
         );
     }
 
-    @Deprecated
     @Test
-    void test_getters_null_origin_input() {
-        final byte[] tokenBindingBytes = "random-token-binding1".getBytes(StandardCharsets.UTF_8);
-        final Challenge challenge = new DefaultChallenge();
+    void emptyOriginsShouldReturnEmptySet() {
+        // Given
         final ServerProperty serverProperty =
-                new ServerProperty(Collections.emptySet(), rpId, challenge, tokenBindingBytes);
+                new ServerProperty(Collections.emptySet(), RP_ID, challenge);
+        
+        // When
+        Set<Origin> origins = serverProperty.getOrigins();
+        String rpId = serverProperty.getRpId();
+        Challenge retrievedChallenge = serverProperty.getChallenge();
+        
+        // Then
         assertAll(
-                () -> assertThat(serverProperty.getOrigins()).isEmpty(),
-                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
+                () -> assertThat(origins).isEmpty(),
+                () -> assertThat(rpId).isEqualTo(RP_ID),
+                () -> assertThat(retrievedChallenge).isEqualTo(challenge)
         );
     }
 
-    @Deprecated
     @Test
-    void test_getters_null_origins_input() {
-        final byte[] tokenBindingBytes = "random-token-binding1".getBytes(StandardCharsets.UTF_8);
-        final Challenge challenge = new DefaultChallenge();
+    void singleOriginShouldReturnSingletonSet() {
+        // Given
         final ServerProperty serverProperty =
-                new ServerProperty(Collections.emptySet(), rpId, challenge, tokenBindingBytes);
+                new ServerProperty(webApp1Origin, RP_ID, challenge);
+        
+        // When
+        Set<Origin> origins = serverProperty.getOrigins();
+        String rpId = serverProperty.getRpId();
+        Challenge retrievedChallenge = serverProperty.getChallenge();
+        
+        // Then
         assertAll(
-                () -> assertThat(serverProperty.getOrigins()).isEmpty(),
-                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
+                () -> assertThat(origins).isEqualTo(Collections.singleton(webApp1Origin)),
+                () -> assertThat(rpId).isEqualTo(RP_ID),
+                () -> assertThat(retrievedChallenge).isEqualTo(challenge)
         );
     }
 
-    @Deprecated
     @Test
-    void test_getters_empty_origins_input() {
-        final byte[] tokenBindingBytes = "random-token-binding1".getBytes(StandardCharsets.UTF_8);
-        final Challenge challenge = new DefaultChallenge();
+    void multipleOriginsShouldReturnAllOrigins() {
+        // Given
         final ServerProperty serverProperty =
-                new ServerProperty(new HashSet<>(), rpId, challenge, tokenBindingBytes);
+                new ServerProperty(multipleOrigins, RP_ID, challenge);
+
+        // When
+        Set<Origin> origins = serverProperty.getOrigins();
+        String rpId = serverProperty.getRpId();
+        Challenge retrievedChallenge = serverProperty.getChallenge();
+        
+        // Then
         assertAll(
-                () -> assertThat(serverProperty.getOrigins()).isEmpty(),
-                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
-        );
-    }
-
-    @Deprecated
-    @Test
-    void test_getters_with_single_origin_input() {
-        final byte[] tokenBindingBytes = "random-token-binding2".getBytes(StandardCharsets.UTF_8);
-
-        final Challenge challenge = new DefaultChallenge();
-        final ServerProperty serverProperty =
-                new ServerProperty(webApp1Origin, rpId, challenge, tokenBindingBytes);
-        assertAll(
-                () -> assertThat(serverProperty.getOrigins()).isEqualTo(Collections.singleton(webApp1Origin)),
-                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
-        );
-
-    }
-
-
-    @Deprecated
-    @Test
-    void test_getters_with_multiple_origin_input() {
-        final byte[] tokenBindingBytes = "random-token-binding3".getBytes(StandardCharsets.UTF_8);
-
-        final Challenge challenge = new DefaultChallenge();
-        final ServerProperty serverProperty =
-                new ServerProperty(
-                        new HashSet<>(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin)),
-                        rpId, challenge, tokenBindingBytes);
-
-
-        assertAll(
-                () -> assertThat(serverProperty.getOrigins()).containsExactlyInAnyOrder(
+                () -> assertThat(origins).containsExactlyInAnyOrder(
                         webApp1Origin, apk1Origin, webApp2Origin, apk2Origin),
-                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
+                () -> assertThat(rpId).isEqualTo(RP_ID),
+                () -> assertThat(retrievedChallenge).isEqualTo(challenge)
         );
-
     }
 
-    @Deprecated
     @Test
-    void test_getters_with_repeated_origins_input() {
-        final byte[] tokenBindingBytes = "random-token-binding3".getBytes(StandardCharsets.UTF_8);
-
-        final Challenge challenge = new DefaultChallenge();
+    void repeatedOriginsShouldReturnUniqueOrigins() {
+        // Given
         final ServerProperty serverProperty =
                 new ServerProperty(
                         new HashSet<>(Arrays.asList(webApp1Origin, webApp1Origin, webApp1Origin, webApp1Origin)),
-                        rpId, challenge, tokenBindingBytes);
+                        RP_ID, challenge);
 
-
+        // When
+        Set<Origin> origins = serverProperty.getOrigins();
+        String rpId = serverProperty.getRpId();
+        Challenge retrievedChallenge = serverProperty.getChallenge();
+        
+        // Then
         assertAll(
-                () -> assertThat(serverProperty.getOrigins()).containsExactlyInAnyOrder(webApp1Origin),
-                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
+                () -> assertThat(origins).containsExactlyInAnyOrder(webApp1Origin),
+                () -> assertThat(rpId).isEqualTo(RP_ID),
+                () -> assertThat(retrievedChallenge).isEqualTo(challenge)
         );
     }
 
-    @Deprecated
     @Test
-    void test_getters_with_with_some_duplicated_origins_input() {
-        final byte[] tokenBindingBytes = "random-token-binding3".getBytes(StandardCharsets.UTF_8);
-
-        final Challenge challenge = new DefaultChallenge();
+    void multipleDuplicatedOriginsShouldReturnUniqueOrigins() {
+        // Given
         final ServerProperty serverProperty =
                 new ServerProperty(
                         new HashSet<>(Arrays.asList(webApp1Origin, webApp1Origin, apk1Origin, apk1Origin)),
-                        rpId, challenge, tokenBindingBytes);
+                        RP_ID, challenge);
 
-
+        // When
+        Set<Origin> origins = serverProperty.getOrigins();
+        String rpId = serverProperty.getRpId();
+        Challenge retrievedChallenge = serverProperty.getChallenge();
+        
+        // Then
         assertAll(
-                () -> assertThat(serverProperty.getOrigins()).containsExactlyInAnyOrder(
+                () -> assertThat(origins).containsExactlyInAnyOrder(
                         webApp1Origin, apk1Origin),
-                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
+                () -> assertThat(rpId).isEqualTo(RP_ID),
+                () -> assertThat(retrievedChallenge).isEqualTo(challenge)
         );
+    }
 
+    /**
+     * Tests for deprecated token binding API methods
+     * These tests are grouped together to make it easier to maintain and eventually
+     * remove when the deprecated methods are finally removed from the codebase.
+     */
+    @Nested
+    class DeprecatedTokenBindingApiTests {
+
+        @Deprecated
+        @Test
+        void withTokenBindingIdShouldBeEqual() {
+            // Given
+            final ServerProperty serverPropertyA =
+                    new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin)), RP_ID, challenge, new byte[32]);
+            final ServerProperty serverPropertyB =
+                    new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, apk1Origin, webApp2Origin, apk2Origin)), RP_ID, challenge, new byte[32]);
+
+            // When
+            boolean equals = serverPropertyA.equals(serverPropertyB);
+            int hashCodeA = serverPropertyA.hashCode();
+            int hashCodeB = serverPropertyB.hashCode();
+
+            // Then
+            assertAll(
+                    () -> assertThat(equals).isTrue(),
+                    () -> assertThat(hashCodeA).isEqualTo(hashCodeB)
+            );
+        }
+        
+        @Deprecated
+        @Test
+        void emptyOriginsWithTokenBinding() {
+            // Given
+            final ServerProperty serverProperty =
+                    new ServerProperty(Collections.emptySet(), RP_ID, challenge, TOKEN_BINDING_ID_1);
+            
+            // When
+            Set<Origin> origins = serverProperty.getOrigins();
+            String rpId = serverProperty.getRpId();
+            Challenge retrievedChallenge = serverProperty.getChallenge();
+            byte[] tokenBindingId = serverProperty.getTokenBindingId();
+            
+            // Then
+            assertAll(
+                    () -> assertThat(origins).isEmpty(),
+                    () -> assertThat(rpId).isEqualTo(RP_ID),
+                    () -> assertThat(retrievedChallenge).isEqualTo(challenge),
+                    () -> assertThat(tokenBindingId).isEqualTo(TOKEN_BINDING_ID_1)
+            );
+        }
+
+        @Deprecated
+        @Test
+        void singleOriginWithTokenBinding() {
+            // Given
+            final ServerProperty serverProperty =
+                    new ServerProperty(webApp1Origin, RP_ID, challenge, TOKEN_BINDING_ID_2);
+            
+            // When
+            Set<Origin> origins = serverProperty.getOrigins();
+            String rpId = serverProperty.getRpId();
+            Challenge retrievedChallenge = serverProperty.getChallenge();
+            byte[] tokenBindingId = serverProperty.getTokenBindingId();
+            
+            // Then
+            assertAll(
+                    () -> assertThat(origins).isEqualTo(Collections.singleton(webApp1Origin)),
+                    () -> assertThat(rpId).isEqualTo(RP_ID),
+                    () -> assertThat(retrievedChallenge).isEqualTo(challenge),
+                    () -> assertThat(tokenBindingId).isEqualTo(TOKEN_BINDING_ID_2)
+            );
+        }
+
+        @Deprecated
+        @Test
+        void multipleOriginsWithTokenBinding() {
+            // Given
+            final ServerProperty serverProperty =
+                    new ServerProperty(multipleOrigins, RP_ID, challenge, TOKEN_BINDING_ID_3);
+
+            // When
+            Set<Origin> origins = serverProperty.getOrigins();
+            String rpId = serverProperty.getRpId();
+            Challenge retrievedChallenge = serverProperty.getChallenge();
+            byte[] tokenBindingId = serverProperty.getTokenBindingId();
+            
+            // Then
+            assertAll(
+                    () -> assertThat(origins).containsExactlyInAnyOrder(
+                            webApp1Origin, apk1Origin, webApp2Origin, apk2Origin),
+                    () -> assertThat(rpId).isEqualTo(RP_ID),
+                    () -> assertThat(retrievedChallenge).isEqualTo(challenge),
+                    () -> assertThat(tokenBindingId).isEqualTo(TOKEN_BINDING_ID_3)
+            );
+        }
+
+        @Deprecated
+        @Test
+        void repeatedOriginsWithTokenBinding() {
+            // Given
+            final ServerProperty serverProperty =
+                    new ServerProperty(
+                            new HashSet<>(Arrays.asList(webApp1Origin, webApp1Origin, webApp1Origin, webApp1Origin)),
+                            RP_ID, challenge, TOKEN_BINDING_ID_3);
+
+            // When
+            Set<Origin> origins = serverProperty.getOrigins();
+            String rpId = serverProperty.getRpId();
+            Challenge retrievedChallenge = serverProperty.getChallenge();
+            byte[] tokenBindingId = serverProperty.getTokenBindingId();
+            
+            // Then
+            assertAll(
+                    () -> assertThat(origins).containsExactlyInAnyOrder(webApp1Origin),
+                    () -> assertThat(rpId).isEqualTo(RP_ID),
+                    () -> assertThat(retrievedChallenge).isEqualTo(challenge),
+                    () -> assertThat(tokenBindingId).isEqualTo(TOKEN_BINDING_ID_3)
+            );
+        }
+
+        @Deprecated
+        @Test
+        void multipleDuplicatedOriginsWithTokenBinding() {
+            // Given
+            final ServerProperty serverProperty =
+                    new ServerProperty(
+                            new HashSet<>(Arrays.asList(webApp1Origin, webApp1Origin, apk1Origin, apk1Origin)),
+                            RP_ID, challenge, TOKEN_BINDING_ID_3);
+
+            // When
+            Set<Origin> origins = serverProperty.getOrigins();
+            String rpId = serverProperty.getRpId();
+            Challenge retrievedChallenge = serverProperty.getChallenge();
+            byte[] tokenBindingId = serverProperty.getTokenBindingId();
+            
+            // Then
+            assertAll(
+                    () -> assertThat(origins).containsExactlyInAnyOrder(
+                            webApp1Origin, apk1Origin),
+                    () -> assertThat(rpId).isEqualTo(RP_ID),
+                    () -> assertThat(retrievedChallenge).isEqualTo(challenge),
+                    () -> assertThat(tokenBindingId).isEqualTo(TOKEN_BINDING_ID_3)
+            );
+        }
     }
 }

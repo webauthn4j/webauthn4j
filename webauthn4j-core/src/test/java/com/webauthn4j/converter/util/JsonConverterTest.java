@@ -39,58 +39,90 @@ class JsonConverterTest {
     private static final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
-    void writeValueAsString_test() {
+    void shouldSerializeObjectToString() {
+        //Given
         ConverterTestDto converterTestDto = new ConverterTestDto();
         converterTestDto.setValue("dummy");
+
+        //When
         String str = jsonConverter.writeValueAsString(converterTestDto);
+
+        //Then
         assertThat(str).isEqualTo("{\"value\":\"dummy\"}");
     }
 
     @Test
-    void writeValueAsString_with_invalid_dto_test() {
+    void shouldThrowExceptionWhenSerializingInvalidObject() {
+        //Given
         ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
         converterTestInvalidDto.setValue(new Object());
+
+        //When/Then
         assertThrows(UncheckedIOException.class, () ->
                 jsonConverter.writeValueAsString(converterTestInvalidDto)
         );
     }
 
     @Test
-    void writeValueAsBytes_test() {
+    void shouldSerializeObjectToBytes() {
+        //Given
         ConverterTestDto converterTestDto = new ConverterTestDto();
         converterTestDto.setValue("dummy");
+
+        //When
         byte[] bytes = jsonConverter.writeValueAsBytes(converterTestDto);
+
+        //Then
         assertThat(Base64UrlUtil.encodeToString(bytes)).isEqualTo("eyJ2YWx1ZSI6ImR1bW15In0");
     }
 
     @Test
-    void writeValueAsString_null_test() {
-        assertThat(jsonConverter.writeValueAsString(null)).isEqualTo("null");
+    void shouldSerializeNullToNullString() {
+        //Given
+
+        //When
+        String result = jsonConverter.writeValueAsString(null);
+
+        //Then
+        assertThat(result).isEqualTo("null");
     }
 
     @Test
-    void writeValueAsBytes_with_invalid_dto_test() {
+    void shouldThrowExceptionWhenSerializingInvalidObjectToBytes() {
+        //Given
         ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
         converterTestInvalidDto.setValue(new Object());
+
+        //When/Then
         assertThrows(UncheckedIOException.class, () ->
                 jsonConverter.writeValueAsBytes(converterTestInvalidDto)
         );
     }
 
     @Test
-    void byteArray_serialization_test() {
+    void shouldSerializeByteArrayToBase64UrlString() {
+        //Given
         ByteArrayContainer container = new ByteArrayContainer(new byte[]{(byte) 0xFF, (byte) 0xFD, (byte) 0xFE, (byte) 0xFC});
+
+        //When
         String serialized = jsonConverter.writeValueAsString(container);
+
+        //Then
         assertThat(serialized).isEqualTo("{\"value\":\"__3-_A\"}");
     }
 
     @Test
-    void custom_serialization_module_can_override_default_serializer_test() {
+    void shouldOverrideDefaultSerializerWithCustomModule() {
+        //Given
         ObjectConverter objectConverter = new ObjectConverter();
         JsonConverter customJsonConverter = objectConverter.getJsonConverter();
         customJsonConverter.registerModule(new ByteArrayBase64ConverterModule());
         ByteArrayContainer container = new ByteArrayContainer(new byte[]{(byte) 0xFF, (byte) 0xFD, (byte) 0xFE, (byte) 0xFC});
+
+        //When
         String serialized = customJsonConverter.writeValueAsString(container);
+
+        //Then
         assertThat(serialized).isEqualTo("{\"value\":\"//3+/A\"}");
     }
 
@@ -109,51 +141,85 @@ class JsonConverterTest {
     @Nested
     class readValue {
         @Test
-        void test() {
-            ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", ConverterTestDto.class);
+        void shouldDeserializeJsonToObject() {
+            //Given
+            String json = "{\"value\":\"dummy\"}";
+
+            //When
+            ConverterTestDto dto = jsonConverter.readValue(json, ConverterTestDto.class);
+
+            //Then
             assertThat(dto.getValue()).isEqualTo("dummy");
         }
 
         @Test
-        void null_test() {
-            ConverterTestDto dto = jsonConverter.readValue("null", ConverterTestDto.class);
+        void shouldReturnNullForNullJson() {
+            //Given
+            String json = "null";
+
+            //When
+            ConverterTestDto dto = jsonConverter.readValue(json, ConverterTestDto.class);
+
+            //Then
             assertThat(dto).isNull();
         }
 
         @Test
-        void invalid_json_test() {
+        void shouldThrowExceptionForInvalidJson() {
+            //Given
+            String invalidJson = "{value:\"dummy\"}";
+
+            //When/Then
             assertThrows(DataConversionException.class,
-                    () -> jsonConverter.readValue("{value:\"dummy\"}", ConverterTestDto.class)
+                    () -> jsonConverter.readValue(invalidJson, ConverterTestDto.class)
             );
         }
 
         @Test
-        void fill_null_to_nonNull_field_test() {
+        void shouldThrowExceptionWhenNullValueProvidedForNonNullField() {
+            //Given
+            String json = "{\"value\": null}";
+
+            //When/Then
             assertThrows(DataConversionException.class,
-                    () -> jsonConverter.readValue("{\"value\": null}", NonNullDto.class)
+                    () -> jsonConverter.readValue(json, NonNullDto.class)
             );
         }
 
         @Test
-        void fill_String_to_Integer_field_test() {
+        void shouldThrowExceptionWhenStringValueProvidedForIntegerField() {
+            //Given
+            String json = "{\"value\": \"invalid\"}";
+
+            //When/Then
             assertThrows(DataConversionException.class,
-                    () -> jsonConverter.readValue("{\"value\": \"invalid\"}", IntegerDto.class)
+                    () -> jsonConverter.readValue(json, IntegerDto.class)
             );
         }
 
         @Test
-        void TypeReference_test() {
-            ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>() {
+        void shouldDeserializeJsonToObjectUsingTypeReference() {
+            //Given
+            String json = "{\"value\":\"dummy\"}";
+
+            //When
+            ConverterTestDto dto = jsonConverter.readValue(json, new TypeReference<ConverterTestDto>() {
             });
+
+            //Then
             assertThat(dto.getValue()).isEqualTo("dummy");
         }
 
         @Test
-        void invalid_json_and_TypeReference_test() {
+        void shouldThrowExceptionForInvalidJsonWithTypeReference() {
+            //Given
+            String invalidJson = "{value:\"dummy\"}";
             TypeReference<ConverterTestDto> typeReference = new TypeReference<ConverterTestDto>() {
             };
+
+            //When/Then
             assertThrows(DataConversionException.class, () ->
-                    jsonConverter.readValue("{value:\"dummy\"}", typeReference)
+                    jsonConverter.readValue(invalidJson, typeReference)
             );
         }
     }

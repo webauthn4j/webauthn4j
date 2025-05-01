@@ -22,9 +22,25 @@ import org.junit.jupiter.api.Test;
 class DataConversionExceptionTest {
 
     @Test
-    void constructor_test() {
+    void shouldCreateExceptionWithCause() {
         RuntimeException cause = new RuntimeException();
         DataConversionException exception = new DataConversionException(cause);
+        Assertions.assertThat(exception.getCause()).isEqualTo(cause);
+    }
+
+    @Test
+    void shouldCreateExceptionWithMessage() {
+        String message = "test message";
+        DataConversionException exception = new DataConversionException(message);
+        Assertions.assertThat(exception.getMessage()).isEqualTo(message);
+    }
+
+    @Test
+    void shouldCreateExceptionWithMessageAndCause() {
+        String message = "test message";
+        RuntimeException cause = new RuntimeException();
+        DataConversionException exception = new DataConversionException(message, cause);
+        Assertions.assertThat(exception.getMessage()).isEqualTo(message);
         Assertions.assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.AttestationObject;
@@ -24,6 +25,7 @@ import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
@@ -33,7 +35,7 @@ class AttestationObjectDeserializerTest {
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    void test() {
+    void shouldDeserializeFIDOU2FAttestationObject() {
         ObjectConverter objectConverter = new ObjectConverter();
         CborConverter cborConverter = objectConverter.getCborConverter();
 
@@ -52,5 +54,28 @@ class AttestationObjectDeserializerTest {
                 () -> assertThat(result.getAttestationStatement()).isNotNull(),
                 () -> assertThat(result.getAttestationStatement()).isInstanceOf(FIDOU2FAttestationStatement.class)
         );
+    }
+
+    @Test
+    void shouldThrowExceptionForInvalidInput() {
+        ObjectConverter objectConverter = new ObjectConverter();
+        CborConverter cborConverter = objectConverter.getCborConverter();
+
+        //Given
+        byte[] invalidCbor = new byte[]{0x00, 0x01, 0x02}; // Invalid CBOR data
+
+        //Then
+        assertThatThrownBy(() -> cborConverter.readValue(invalidCbor, AttestationObject.class))
+                .isInstanceOf(DataConversionException.class);
+    }
+
+    @Test
+    void shouldThrowExceptionForNullInput() {
+        ObjectConverter objectConverter = new ObjectConverter();
+        CborConverter cborConverter = objectConverter.getCborConverter();
+
+        //Then
+        assertThatThrownBy(() -> cborConverter.readValue((byte[])null, AttestationObject.class))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
