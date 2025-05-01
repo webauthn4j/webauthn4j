@@ -23,6 +23,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * WebAuthn registration parameters
+ */
 public class RegistrationParameters extends CoreRegistrationParameters {
 
     /**
