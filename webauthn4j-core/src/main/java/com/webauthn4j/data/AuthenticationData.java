@@ -28,6 +28,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * WebAuthn authentication data
+ */
 public class AuthenticationData extends CoreAuthenticationData {
 
     private final byte[] userHandle;
@@ -35,6 +38,17 @@ public class AuthenticationData extends CoreAuthenticationData {
     private final byte[] collectedClientDataBytes;
     private final AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions;
 
+    /**
+     * {@link AuthenticationData} constructor
+     * @param credentialId credential id
+     * @param userHandle user handle
+     * @param authenticatorData authenticator data
+     * @param authenticatorDataBytes raw authenticator data bytes
+     * @param collectedClientData collected client data
+     * @param collectedClientDataBytes raw collected client data bytes
+     * @param clientExtensions client extensions
+     * @param signature signature
+     */
     @SuppressWarnings("squid:S107")
     public AuthenticationData(
             @Nullable byte[] credentialId,
@@ -52,18 +66,34 @@ public class AuthenticationData extends CoreAuthenticationData {
         this.clientExtensions = clientExtensions;
     }
 
+    /**
+     * Returns the user handle
+     * @return the user handle
+     */
     public @Nullable byte[] getUserHandle() {
         return ArrayUtil.clone(userHandle);
     }
 
+    /**
+     * Returns the collected client data
+     * @return the collected client data
+     */
     public @Nullable CollectedClientData getCollectedClientData() {
         return collectedClientData;
     }
 
+    /**
+     * Returns the raw collected client data bytes
+     * @return the raw collected client data bytes
+     */
     public @Nullable byte[] getCollectedClientDataBytes() {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
+    /**
+     * Returns the client extensions
+     * @return the client extensions
+     */
     public @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
