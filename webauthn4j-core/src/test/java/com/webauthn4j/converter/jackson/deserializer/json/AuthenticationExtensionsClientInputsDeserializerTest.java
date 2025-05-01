@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,53 +17,83 @@
 package com.webauthn4j.converter.jackson.deserializer.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.*;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+/**
+ * Test for AuthenticationExtensionsClientInputsDeserializer
+ */
 @SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsClientInputsDeserializerTest {
 
-    @Test
-    void deserialize_test_with_registration_extension_JSON_data() {
-        ObjectConverter objectConverter = new ObjectConverter();
-        JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
+    @Test
+    void shouldDeserializeRegistrationExtensionInput() {
+        //Given
+        String json = "{ " +
+                "\"credProps\": true " +
+                "}";
+
+        //When
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensionInputs =
                 jsonConverter.readValue(
-                        "{ " +
-                                "\"credProps\": true " +
-                                "}",
+                        json,
                         new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {
                         }
                 );
 
+        //Then
         assertAll(
                 () -> assertThat(extensionInputs.getExtension(CredentialPropertiesExtensionClientInput.class).getValue()).isTrue()
         );
     }
 
     @Test
-    void deserialize_test_with_authentication_extension_JSON_data() {
-        ObjectConverter objectConverter = new ObjectConverter();
-        JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    void shouldDeserializeAuthenticationExtensionInput() {
+        //Given
+        String json = "{ " +
+                "\"appid\": \"dummy\" " +
+                "}";
+
+        //When
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensionInputs =
                 jsonConverter.readValue(
-                        "{ " +
-                                "\"appid\": \"dummy\" " +
-                                "}",
+                        json,
                         new TypeReference<AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>>() {
                         }
                 );
 
+        //Then
         assertAll(
                 () -> assertThat(extensionInputs.getExtension(FIDOAppIDExtensionClientInput.class).getValue()).isEqualTo("dummy")
         );
     }
 
+    @Test
+    void shouldThrowExceptionForInvalidInput() {
+        //Given
+        String invalidJson = "{invalid-json}";
 
+        //Then
+        assertThatThrownBy(() -> jsonConverter.readValue(invalidJson, 
+                new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>(){}))
+                .isInstanceOf(DataConversionException.class);
+    }
+
+    @Test
+    void shouldThrowExceptionForNullInput() {
+        //Then
+        assertThatThrownBy(() -> jsonConverter.readValue((String)null, 
+                new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>(){}))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }

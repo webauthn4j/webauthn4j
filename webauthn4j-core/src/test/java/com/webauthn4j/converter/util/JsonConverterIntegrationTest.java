@@ -31,12 +31,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JsonConverterIntegrationTest {
 
     @Test
-    void constructor_with_customized_objectMapper_inherits_customization() {
+    void shouldInheritCustomizationFromObjectMapper() {
+        //Given
         ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
         SimpleModule module = new SimpleModule();
         module.addSerializer(TestData.class, new TestDataSerializer());
         jsonMapper.registerModule(module);
+
+        //When
         JsonConverter jsonConverter = new JsonConverter(jsonMapper);
+
+        //Then
         assertThat(jsonConverter.writeValueAsString(new TestData())).isEqualTo("\"serialized by TestDataSerializer\"");
     }
 

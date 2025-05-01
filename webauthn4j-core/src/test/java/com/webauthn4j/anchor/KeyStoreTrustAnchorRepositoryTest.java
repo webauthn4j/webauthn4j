@@ -27,17 +27,75 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.BeforeEach;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+import com.webauthn4j.util.CertificateUtil;
+
+import java.nio.file.Files;
+import java.security.KeyStore;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+/**
+ * Test class for {@link KeyStoreTrustAnchorRepository}
+ * This test verifies that the repository correctly loads trust anchors from a KeyStore file
+ * and returns them regardless of search parameters.
+ */
 class KeyStoreTrustAnchorRepositoryTest {
 
+    private Path keyStorePath;
+    private KeyStoreTrustAnchorRepository target;
+    private final String password = "password";
+
+    @BeforeEach
+    void setUp() throws Exception {
+        keyStorePath = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/KeyStoreFileTrustAnchorsProviderTest/test.jks").toURI());
+        target = KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(keyStorePath, password);
+    }
+
     @Test
-    void find_return_all_trustAnchors_to_any_parameters_test() throws Exception {
-        Path path = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/KeyStoreFileTrustAnchorsProviderTest/test.jks").toURI());
-        KeyStoreTrustAnchorRepository target = KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(path, "password");
-        Set<TrustAnchor> trustAnchors;
-        trustAnchors = target.find(new AAGUID(UUID.randomUUID()));
+    void shouldReturnAllTrustAnchorsRegardlessOfSearchParameters() {
+        // AAGUID-based lookup
+        Set<TrustAnchor> trustAnchorsFromAAGUID = target.find(new AAGUID(UUID.randomUUID()));
+        
+        // Key-identifier-based lookup
+        Set<TrustAnchor> trustAnchorsFromKeyId = target.find(new byte[32]);
+        
+        assertAll(
+            () -> assertThat(trustAnchorsFromAAGUID).hasSize(1),
+            () -> assertThat(trustAnchorsFromKeyId).hasSize(1),
+            // All the results should be identical since this implementation returns all anchors
+            () -> assertThat(trustAnchorsFromAAGUID).isEqualTo(trustAnchorsFromKeyId)
+        );
+    }
+
+    @Test
+    void shouldCreateRepositoryFromKeyStoreObject() throws Exception {
+        KeyStore keyStore = CertificateUtil.createKeyStore();
+        keyStore.load(Files.newInputStream(keyStorePath), password.toCharArray());
+        
+        KeyStoreTrustAnchorRepository repository = new KeyStoreTrustAnchorRepository(keyStore);
+        Set<TrustAnchor> trustAnchors = repository.find(new AAGUID(UUID.randomUUID()));
+        
         assertThat(trustAnchors).hasSize(1);
-        trustAnchors = target.find(new byte[32]);
-        assertThat(trustAnchors).hasSize(1);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenKeyStoreFilePathIsInvalid() {
+        Path invalidPath = Paths.get("invalid/path/to/keystore.jks");
+        
+        assertThatThrownBy(() -> 
+            KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(invalidPath, password)
+        ).isInstanceOf(KeyStoreException.class);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenPasswordIsIncorrect() {
+        assertThatThrownBy(() -> 
+            KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(keyStorePath, "wrongPassword")
+        ).isInstanceOf(KeyStoreException.class);
     }
 
 }

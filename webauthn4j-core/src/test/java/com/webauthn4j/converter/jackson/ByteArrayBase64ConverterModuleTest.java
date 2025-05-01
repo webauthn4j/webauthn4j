@@ -13,14 +13,16 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 class ByteArrayBase64ConverterModuleTest {
 
     @Test
-    void test(){
+    void shouldConvertBase64EncodedByteArray(){
+        //Given
         ObjectConverter objectConverter = new ObjectConverter();
         JsonConverter jsonConverter = objectConverter.getJsonConverter();
         jsonConverter.registerModule(new ByteArrayBase64ConverterModule());
-
         byte[] source = TPMISTAttest.TPM_ST_ATTEST_CERTIFY.getValue();
-        String sourceString = "{\"tpmi_st_attest\":\"" + Base64.getEncoder().encodeToString(source) + "\"}";
-        assertThatCode(() -> jsonConverter.readValue(sourceString, TestDTO.class)).doesNotThrowAnyException();
+        String json = "{\"tpmi_st_attest\":\"" + Base64.getEncoder().encodeToString(source) + "\"}";
+
+        //When/Then
+        assertThatCode(() -> jsonConverter.readValue(json, TestDTO.class)).doesNotThrowAnyException();
     }
 
     static class TestDTO {

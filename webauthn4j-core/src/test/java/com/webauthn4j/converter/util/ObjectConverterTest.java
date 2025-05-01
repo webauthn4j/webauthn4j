@@ -25,10 +25,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ObjectConverterTest {
 
     @Test
-    void constructor_test() {
+    void shouldCreateConvertersFromCustomMappers() {
+        //Given
         ObjectMapper jsonMapper = new ObjectMapper();
         ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+
+        //When
         ObjectConverter objectConverter = new ObjectConverter(jsonMapper, cborMapper);
+
+        //Then
         assertThat(objectConverter.getJsonConverter()).isNotNull();
         assertThat(objectConverter.getCborConverter()).isNotNull();
     }

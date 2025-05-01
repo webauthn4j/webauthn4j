@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,20 +40,16 @@ class AuthenticatorDataSerializerTest {
     private final CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
-    void test() {
+    void shouldSerializeAndDeserializeAuthenticatorData() {
+        //Given
         byte[] credentialId = "credentialId".getBytes(StandardCharsets.UTF_8);
         AbstractCOSEKey credentialPublicKey = new EC2COSEKey(null, null, null, null, null, null);
-
         AAGUID aaguid = AAGUID.ZERO;
-
         byte[] rpIdHash = new byte[32];
         byte flags = (byte) (BIT_UP | BIT_AT);
         long counter = 325;
-
         AttestedCredentialData attestationData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(rpIdHash, flags, counter, attestationData);
-
-        //Given
 
         //When
         byte[] result = cborConverter.writeValueAsBytes(authenticatorData);
@@ -61,7 +57,6 @@ class AuthenticatorDataSerializerTest {
         });
 
         //Then
-
         assertAll(
                 () -> assertThat(restored.getRpIdHash()).isEqualTo(rpIdHash),
                 () -> assertThat(restored.getFlags()).isEqualTo(flags),
