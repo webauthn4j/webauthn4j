@@ -54,6 +54,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Manager class for WebAuthn registration operations.
+ * This class provides methods for parsing and verifying WebAuthn registration data.
+ * It handles the registration phase of the WebAuthn authentication process, including
+ * attestation verification, certificate path validation, and custom registration verification.
+ */
 @SuppressWarnings("java:S6539")
 public class WebAuthnRegistrationManager {
 
@@ -70,6 +76,15 @@ public class WebAuthnRegistrationManager {
 
     private final ObjectConverter objectConverter;
 
+    /**
+     * Constructor for WebAuthnRegistrationManager with full customization options
+     *
+     * @param attestationStatementVerifiers list of attestation statement verifiers
+     * @param certPathTrustworthinessVerifier verifier for certification path trustworthiness
+     * @param selfAttestationTrustworthinessVerifier verifier for self attestation trustworthiness
+     * @param customRegistrationVerifiers list of custom registration verifiers
+     * @param objectConverter converter for object serialization/deserialization
+     */
     public WebAuthnRegistrationManager(
             @NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
             @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
@@ -97,6 +112,14 @@ public class WebAuthnRegistrationManager {
         this.objectConverter = objectConverter;
     }
 
+    /**
+     * Constructor for WebAuthnRegistrationManager with custom verifiers
+     *
+     * @param attestationStatementVerifiers list of attestation statement verifiers
+     * @param certPathTrustworthinessVerifier verifier for certification path trustworthiness
+     * @param selfAttestationTrustworthinessVerifier verifier for self attestation trustworthiness
+     * @param customRegistrationVerifiers list of custom registration verifiers
+     */
     public WebAuthnRegistrationManager(@NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
                                        @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
                                        @NotNull SelfAttestationTrustworthinessVerifier selfAttestationTrustworthinessVerifier,
@@ -110,6 +133,14 @@ public class WebAuthnRegistrationManager {
         );
     }
 
+    /**
+     * Constructor for WebAuthnRegistrationManager with custom verifiers and object converter
+     *
+     * @param attestationStatementVerifiers list of attestation statement verifiers
+     * @param certPathTrustworthinessVerifier verifier for certification path trustworthiness
+     * @param selfAttestationTrustworthinessVerifier verifier for self attestation trustworthiness
+     * @param objectConverter converter for object serialization/deserialization
+     */
     public WebAuthnRegistrationManager(@NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
                                        @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
                                        @NotNull SelfAttestationTrustworthinessVerifier selfAttestationTrustworthinessVerifier,
@@ -123,6 +154,13 @@ public class WebAuthnRegistrationManager {
         );
     }
 
+    /**
+     * Constructor for WebAuthnRegistrationManager with custom verifiers and default object converter
+     *
+     * @param attestationStatementVerifiers list of attestation statement verifiers
+     * @param certPathTrustworthinessVerifier verifier for certification path trustworthiness
+     * @param selfAttestationTrustworthinessVerifier verifier for self attestation trustworthiness
+     */
     public WebAuthnRegistrationManager(@NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
                                        @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
                                        @NotNull SelfAttestationTrustworthinessVerifier selfAttestationTrustworthinessVerifier) {
@@ -171,11 +209,23 @@ public class WebAuthnRegistrationManager {
         );
     }
 
+    /**
+     * Parses a WebAuthn registration response JSON string
+     *
+     * @param registrationResponseJSON the registration response in JSON format
+     * @return the parsed registration data
+     */
     public @NotNull RegistrationData parse(@NotNull String registrationResponseJSON) {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<>() {});
         return toRegistrationData(publicKeyCredential);
     }
 
+    /**
+     * Parses a WebAuthn registration response JSON from an input stream
+     *
+     * @param registrationResponseJSON the registration response in JSON format as an input stream
+     * @return the parsed registration data
+     */
     public @NotNull RegistrationData parse(@NotNull InputStream registrationResponseJSON) {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<>() {});
         return toRegistrationData(publicKeyCredential);
@@ -198,6 +248,13 @@ public class WebAuthnRegistrationManager {
         );
     }
 
+    /**
+     * Parses a WebAuthn registration request
+     *
+     * @param registrationRequest the registration request to parse
+     * @return the parsed registration data
+     * @throws DataConversionException if data conversion fails
+     */
     @SuppressWarnings({"java:S2583", "squid:S1130"})
     public @NotNull RegistrationData parse(@NotNull RegistrationRequest registrationRequest) throws DataConversionException {
         AssertUtil.notNull(registrationRequest, "registrationRequest must not be null");
@@ -227,22 +284,53 @@ public class WebAuthnRegistrationManager {
 
     }
 
+    /**
+     * Verifies a WebAuthn registration response JSON string
+     *
+     * @param registrationResponseJSON the registration response in JSON format
+     * @param registrationParameters the parameters for registration verification
+     * @return the verified registration data
+     */
     public @NotNull RegistrationData verify(@NotNull String registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) {
         RegistrationData registrationData = parse(registrationResponseJSON);
         return verify(registrationData, registrationParameters);
     }
 
+    /**
+     * Verifies a WebAuthn registration response JSON from an input stream
+     *
+     * @param registrationResponseJSON the registration response in JSON format as an input stream
+     * @param registrationParameters the parameters for registration verification
+     * @return the verified registration data
+     */
     public @NotNull RegistrationData verify(@NotNull InputStream registrationResponseJSON, @NotNull RegistrationParameters registrationParameters) {
         RegistrationData registrationData = parse(registrationResponseJSON);
         return verify(registrationData, registrationParameters);
     }
 
+    /**
+     * Verifies a WebAuthn registration request
+     *
+     * @param registrationRequest the registration request to verify
+     * @param registrationParameters the parameters for registration verification
+     * @return the verified registration data
+     * @throws DataConversionException if data conversion fails
+     * @throws VerificationException if verification fails
+     */
     @SuppressWarnings("squid:S1130")
     public @NotNull RegistrationData verify(@NotNull RegistrationRequest registrationRequest, @NotNull RegistrationParameters registrationParameters) throws DataConversionException, VerificationException {
         RegistrationData registrationData = parse(registrationRequest);
         return verify(registrationData, registrationParameters);
     }
 
+    /**
+     * Verifies WebAuthn registration data
+     *
+     * @param registrationData the registration data to verify
+     * @param registrationParameters the parameters for registration verification
+     * @return the verified registration data
+     * @throws VerificationException if verification fails
+     */
     @SuppressWarnings("squid:S1130")
     public @NotNull RegistrationData verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) throws VerificationException {
         logger.trace("Verify: {}, {}", registrationData, registrationParameters);
@@ -250,6 +338,11 @@ public class WebAuthnRegistrationManager {
         return registrationData;
     }
 
+    /**
+     * Gets the registration data verifier
+     *
+     * @return the registration data verifier
+     */
     public @NotNull RegistrationDataVerifier getRegistrationDataVerifier() {
         return registrationDataVerifier;
     }

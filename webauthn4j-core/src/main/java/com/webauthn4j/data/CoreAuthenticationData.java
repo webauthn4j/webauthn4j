@@ -24,6 +24,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Core authentication data
+ * This class is a subset of {@link AuthenticationData} containing only the core authentication data fields
+ */
 public class CoreAuthenticationData {
 
     private final byte[] credentialId;
@@ -32,6 +36,14 @@ public class CoreAuthenticationData {
     private final byte[] clientDataHash;
     private final byte[] signature;
 
+    /**
+     * {@link CoreAuthenticationData} constructor
+     * @param credentialId credential id
+     * @param authenticatorData authenticator data
+     * @param authenticatorDataBytes raw authenticator data bytes
+     * @param clientDataHash hash of the client data
+     * @param signature signature
+     */
     @SuppressWarnings("squid:S107")
     public CoreAuthenticationData(
             @Nullable byte[] credentialId,
@@ -46,22 +58,42 @@ public class CoreAuthenticationData {
         this.signature = ArrayUtil.clone(signature);
     }
 
+    /**
+     * Returns the credential id
+     * @return the credential id
+     */
     public @Nullable byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
+    /**
+     * Returns the authenticator data
+     * @return the authenticator data
+     */
     public @Nullable AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 
+    /**
+     * Returns the raw authenticator data bytes
+     * @return the raw authenticator data bytes
+     */
     public @Nullable byte[] getAuthenticatorDataBytes() {
         return ArrayUtil.clone(authenticatorDataBytes);
     }
 
+    /**
+     * Returns the hash of the client data
+     * @return the hash of the client data
+     */
     public @Nullable byte[] getClientDataHash() {
         return ArrayUtil.clone(clientDataHash);
     }
 
+    /**
+     * Returns the signature
+     * @return the signature
+     */
     public @Nullable byte[] getSignature() {
         return ArrayUtil.clone(signature);
     }

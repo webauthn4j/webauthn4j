@@ -40,6 +40,12 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Manager class for WebAuthn authentication operations.
+ * This class provides methods for parsing and verifying WebAuthn authentication data.
+ * It handles the authentication phase of the WebAuthn authentication process, including
+ * signature verification and custom authentication verification.
+ */
 @SuppressWarnings("java:S6539")
 public class WebAuthnAuthenticationManager {
 
@@ -55,6 +61,12 @@ public class WebAuthnAuthenticationManager {
 
     private final ObjectConverter objectConverter;
 
+    /**
+     * Constructor for WebAuthnAuthenticationManager with custom verifiers and object converter
+     *
+     * @param customAuthenticationVerifiers list of custom authentication verifiers
+     * @param objectConverter converter for object serialization/deserialization
+     */
     public WebAuthnAuthenticationManager(
             @NotNull List<CustomAuthenticationVerifier> customAuthenticationVerifiers,
             @NotNull ObjectConverter objectConverter) {
@@ -70,21 +82,42 @@ public class WebAuthnAuthenticationManager {
         this.objectConverter = objectConverter;
     }
 
+    /**
+     * Constructor for WebAuthnAuthenticationManager with custom verifiers
+     *
+     * @param customAuthenticationVerifiers list of custom authentication verifiers
+     */
     public WebAuthnAuthenticationManager(
             @NotNull List<CustomAuthenticationVerifier> customAuthenticationVerifiers) {
         this(customAuthenticationVerifiers, new ObjectConverter());
     }
 
+    /**
+     * Default constructor for WebAuthnAuthenticationManager
+     * Creates an instance with empty custom authentication verifiers and default object converter
+     */
     public WebAuthnAuthenticationManager() {
         this(Collections.emptyList(), new ObjectConverter());
     }
 
 
+    /**
+     * Parses a WebAuthn authentication response JSON string
+     *
+     * @param authenticationResponseJSON the authentication response in JSON format
+     * @return the parsed authentication data
+     */
     public @NotNull AuthenticationData parse(@NotNull String authenticationResponseJSON) {
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<>() {});
         return toAuthenticationData(publicKeyCredential);
     }
 
+    /**
+     * Parses a WebAuthn authentication response JSON from an input stream
+     *
+     * @param authenticationResponseJSON the authentication response in JSON format as an input stream
+     * @return the parsed authentication data
+     */
     public @NotNull AuthenticationData parse(@NotNull InputStream authenticationResponseJSON) {
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<>() {});
         return toAuthenticationData(publicKeyCredential);
@@ -117,6 +150,13 @@ public class WebAuthnAuthenticationManager {
         );
     }
 
+    /**
+     * Parses a WebAuthn authentication request
+     *
+     * @param authenticationRequest the authentication request to parse
+     * @return the parsed authentication data
+     * @throws DataConversionException if data conversion fails
+     */
     @SuppressWarnings({"squid:S1130", "java:S2583"})
     public @NotNull AuthenticationData parse(@NotNull AuthenticationRequest authenticationRequest) throws DataConversionException {
         AssertUtil.notNull(authenticationRequest, "authenticationRequest must not be null");
@@ -148,6 +188,15 @@ public class WebAuthnAuthenticationManager {
 
     }
 
+    /**
+     * Verifies a WebAuthn authentication response JSON string
+     *
+     * @param authenticationResponseJSON the authentication response in JSON format
+     * @param authenticationParameters the parameters for authentication verification
+     * @return the verified authentication data
+     * @throws DataConversionException if data conversion fails
+     * @throws VerificationException if verification fails
+     */
     public @NotNull AuthenticationData verify(
             @NotNull String authenticationResponseJSON,
             @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
@@ -155,6 +204,15 @@ public class WebAuthnAuthenticationManager {
         return verify(authenticationData, authenticationParameters);
     }
 
+    /**
+     * Verifies a WebAuthn authentication response JSON from an input stream
+     *
+     * @param authenticationResponseJSON the authentication response in JSON format as an input stream
+     * @param authenticationParameters the parameters for authentication verification
+     * @return the verified authentication data
+     * @throws DataConversionException if data conversion fails
+     * @throws VerificationException if verification fails
+     */
     public @NotNull AuthenticationData verify(
             @NotNull InputStream authenticationResponseJSON,
             @NotNull AuthenticationParameters authenticationParameters) throws DataConversionException, VerificationException {
@@ -162,6 +220,15 @@ public class WebAuthnAuthenticationManager {
         return verify(authenticationData, authenticationParameters);
     }
 
+    /**
+     * Verifies a WebAuthn authentication request
+     *
+     * @param authenticationRequest the authentication request to verify
+     * @param authenticationParameters the parameters for authentication verification
+     * @return the verified authentication data
+     * @throws DataConversionException if data conversion fails
+     * @throws VerificationException if verification fails
+     */
     @SuppressWarnings("squid:S1130")
     public @NotNull AuthenticationData verify(
             @NotNull AuthenticationRequest authenticationRequest,
@@ -171,6 +238,14 @@ public class WebAuthnAuthenticationManager {
         return authenticationData;
     }
 
+    /**
+     * Verifies WebAuthn authentication data
+     *
+     * @param authenticationData the authentication data to verify
+     * @param authenticationParameters the parameters for authentication verification
+     * @return the verified authentication data
+     * @throws VerificationException if verification fails
+     */
     @SuppressWarnings("squid:S1130")
     public @NotNull AuthenticationData verify(
             @NotNull AuthenticationData authenticationData,
@@ -180,6 +255,11 @@ public class WebAuthnAuthenticationManager {
         return authenticationData;
     }
 
+    /**
+     * Gets the authentication data verifier
+     *
+     * @return the authentication data verifier
+     */
     public @NotNull AuthenticationDataVerifier getAuthenticationDataVerifier() {
         return authenticationDataVerifier;
     }

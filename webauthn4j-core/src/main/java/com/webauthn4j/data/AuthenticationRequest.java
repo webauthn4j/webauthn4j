@@ -22,6 +22,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Data class that represents WebAuthn authentication request data
+ */
 public class AuthenticationRequest {
 
     private final byte[] credentialId;
@@ -31,6 +34,15 @@ public class AuthenticationRequest {
     private final String clientExtensionsJSON;
     private final byte[] signature;
 
+    /**
+     * Constructor
+     * @param credentialId          credential id
+     * @param userHandle            user handle
+     * @param authenticatorData     authenticator data
+     * @param clientDataJSON        ClientDataJSON
+     * @param clientExtensionsJSON  ClientExtensionJSON
+     * @param signature             signature
+     */
     public AuthenticationRequest(
             @Nullable byte[] credentialId,
             @Nullable byte[] userHandle,
@@ -46,6 +58,14 @@ public class AuthenticationRequest {
         this.signature = ArrayUtil.clone(signature);
     }
 
+    /**
+     * Constructor
+     * @param credentialId          credential id
+     * @param authenticatorData     authenticator data
+     * @param clientDataJSON        ClientDataJSON
+     * @param clientExtensionsJSON  ClientExtensionJSON
+     * @param signature             signature
+     */
     public AuthenticationRequest(
             @Nullable byte[] credentialId,
             @Nullable byte[] authenticatorData,
@@ -55,6 +75,14 @@ public class AuthenticationRequest {
         this(credentialId, null, authenticatorData, clientDataJSON, clientExtensionsJSON, signature);
     }
 
+    /**
+     * Constructor
+     * @param credentialId          credential id
+     * @param userHandle            user handle
+     * @param authenticatorData     authenticator data
+     * @param clientDataJSON        ClientDataJSON
+     * @param signature             signature
+     */
     public AuthenticationRequest(
             @Nullable byte[] credentialId,
             @Nullable byte[] userHandle,
@@ -64,6 +92,13 @@ public class AuthenticationRequest {
         this(credentialId, userHandle, authenticatorData, clientDataJSON, null, signature);
     }
 
+    /**
+     * Constructor
+     * @param credentialId          credential id
+     * @param authenticatorData     authenticator data
+     * @param clientDataJSON        ClientDataJSON
+     * @param signature             signature
+     */
     public AuthenticationRequest(
             @Nullable byte[] credentialId,
             @Nullable byte[] authenticatorData,
@@ -72,26 +107,50 @@ public class AuthenticationRequest {
         this(credentialId, null, authenticatorData, clientDataJSON, signature);
     }
 
+    /**
+     * Returns the credential id
+     * @return the credential id
+     */
     public @Nullable byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
+    /**
+     * Returns the user handle
+     * @return the user handle
+     */
     public @Nullable byte[] getUserHandle() {
         return ArrayUtil.clone(userHandle);
     }
 
+    /**
+     * Returns the authenticator data
+     * @return the authenticator data
+     */
     public @Nullable byte[] getAuthenticatorData() {
         return ArrayUtil.clone(authenticatorData);
     }
 
+    /**
+     * Returns the ClientDataJSON
+     * @return the ClientDataJSON
+     */
     public @Nullable byte[] getClientDataJSON() {
         return ArrayUtil.clone(clientDataJSON);
     }
 
+    /**
+     * Returns the ClientExtensionJSON
+     * @return the ClientExtensionJSON
+     */
     public @Nullable String getClientExtensionsJSON() {
         return clientExtensionsJSON;
     }
 
+    /**
+     * Returns the signature
+     * @return the signature
+     */
     public @Nullable byte[] getSignature() {
         return ArrayUtil.clone(signature);
     }

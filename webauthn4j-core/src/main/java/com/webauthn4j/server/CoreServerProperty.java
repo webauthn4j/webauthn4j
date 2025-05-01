@@ -23,16 +23,28 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+/**
+ * Core data transfer object that represents basic relying party server properties
+ */
 public class CoreServerProperty {
+
+    // ~ Instance fields
+    // ================================================================================================
 
     private final String rpId;
     private final Challenge challenge;
+
+    // ~ Constructor
+    // ========================================================================================================
 
     public CoreServerProperty(@NotNull String rpId, @Nullable Challenge challenge) {
         AssertUtil.notNull(rpId, "rpId must not be null");
         this.rpId = rpId;
         this.challenge = challenge;
     }
+
+    // ~ Methods
+    // ========================================================================================================
 
     /**
      * Returns the rpId

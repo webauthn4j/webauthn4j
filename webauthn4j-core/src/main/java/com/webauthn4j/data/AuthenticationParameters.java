@@ -26,6 +26,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * WebAuthn authentication parameters
+ */
 public class AuthenticationParameters extends CoreAuthenticationParameters {
 
     /**
