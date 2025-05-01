@@ -24,6 +24,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Data class that represents WebAuthn registration request data
+ */
 public class RegistrationRequest {
 
     // ~ Instance fields
@@ -35,6 +38,13 @@ public class RegistrationRequest {
     private final String clientExtensionsJSON;
     private final Set<String> transports;
 
+    /**
+     * Constructor
+     * @param attestationObject      attestation object
+     * @param clientDataJSON         ClientDataJSON
+     * @param clientExtensionsJSON   ClientExtensionJSON
+     * @param transports             transports
+     */
     public RegistrationRequest(
             @Nullable byte[] attestationObject,
             @Nullable byte[] clientDataJSON,
@@ -46,6 +56,12 @@ public class RegistrationRequest {
         this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
+    /**
+     * Constructor
+     * @param attestationObject      attestation object
+     * @param clientDataJSON         ClientDataJSON
+     * @param clientExtensionsJSON   ClientExtensionJSON
+     */
     public RegistrationRequest(
             @Nullable byte[] attestationObject,
             @Nullable byte[] clientDataJSON,
@@ -53,6 +69,12 @@ public class RegistrationRequest {
         this(attestationObject, clientDataJSON, clientExtensionsJSON, null);
     }
 
+    /**
+     * Constructor
+     * @param attestationObject      attestation object
+     * @param clientDataJSON         ClientDataJSON
+     * @param transports             transports
+     */
     public RegistrationRequest(
             @Nullable byte[] attestationObject,
             @Nullable byte[] clientDataJSON,
@@ -60,24 +82,45 @@ public class RegistrationRequest {
         this(attestationObject, clientDataJSON, null, transports);
     }
 
+    /**
+     * Constructor
+     * @param attestationObject      attestation object
+     * @param clientDataJSON         ClientDataJSON
+     */
     public RegistrationRequest(
             @Nullable byte[] attestationObject,
             @Nullable byte[] clientDataJSON) {
         this(attestationObject, clientDataJSON, null, null);
     }
 
+    /**
+     * Returns the attestation object
+     * @return the attestation object
+     */
     public @Nullable byte[] getAttestationObject() {
         return ArrayUtil.clone(attestationObject);
     }
 
+    /**
+     * Returns the ClientDataJSON
+     * @return the ClientDataJSON
+     */
     public @Nullable byte[] getClientDataJSON() {
         return ArrayUtil.clone(clientDataJSON);
     }
 
+    /**
+     * Returns the ClientExtensionJSON
+     * @return the ClientExtensionJSON
+     */
     public @Nullable String getClientExtensionsJSON() {
         return clientExtensionsJSON;
     }
 
+    /**
+     * Returns the transports
+     * @return the transports
+     */
     public @Nullable Set<String> getTransports() {
         return transports;
     }
