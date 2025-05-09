@@ -38,11 +38,17 @@ import java.util.Objects;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
+/**
+ * Test for {@link Authenticator} interface implementation
+ */
+@Deprecated
 class AuthenticatorTest {
 
     @Test
-    void serialization_deserialization_test() {
+    void shouldSerializeAndDeserializeCorrectly() {
+        // Given
         ObjectConverter objectConverter = new ObjectConverter();
         CborConverter cborConverter = objectConverter.getCborConverter();
 
@@ -53,12 +59,26 @@ class AuthenticatorTest {
                 Collections.emptySet(),
                 null,
                 null);
+
+        // When
         byte[] serialized = cborConverter.writeValueAsBytes(original);
         TestAuthenticator deserialized = cborConverter.readValue(serialized, TestAuthenticator.class);
 
-        assertThat(deserialized).isEqualTo(original);
+        // Then
+        assertAll(
+                () -> assertThat(deserialized).isEqualTo(original),
+                () -> assertThat(deserialized.getAttestedCredentialData()).isEqualTo(original.getAttestedCredentialData()),
+                () -> assertThat(deserialized.getAttestationStatement()).isEqualTo(original.getAttestationStatement()),
+                () -> assertThat(deserialized.getCounter()).isEqualTo(original.getCounter()),
+                () -> assertThat(deserialized.getTransports()).isEqualTo(original.getTransports()),
+                () -> assertThat(deserialized.getClientExtensions()).isEqualTo(original.getClientExtensions()),
+                () -> assertThat(deserialized.getAuthenticatorExtensions()).isEqualTo(original.getAuthenticatorExtensions())
+        );
     }
 
+    /**
+     * Test implementation of {@link Authenticator} interface for serialization/deserialization testing
+     */
     private static class TestAuthenticator implements Authenticator {
 
         private final AttestedCredentialData attestedCredentialData;
@@ -146,5 +166,4 @@ class AuthenticatorTest {
             return Objects.hash(attestedCredentialData, attestationStatement, transports, counter, clientExtensions, authenticatorExtensions);
         }
     }
-
 }
