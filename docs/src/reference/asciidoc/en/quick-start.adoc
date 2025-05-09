@@ -265,12 +265,12 @@ If verification fails, a subclass of `VerificationException` will be thrown.
 The primary API used during WebAuthn authentication is the browser’s `navigator.credentials.get` method. As illustrated in the authentication flow diagram, first the backend server needs to generate a challenge, save it in a session, and pass it to the client.
 This is necessary because the `navigator.credentials.get` method requires a `challenge` parameter.
 The WebAuthn specification does not define a specific method for transferring the challenge from the backend server to the frontend (client) for authentication.
-Just as with the registration process, feel free to use any preferred method to pass the challenge to the frontend. The JavaScript API for parsing `PublicKeyCredentialGetOptions`, a parameter of `navigator.credentials.get`, is `PublicKeyCredential.parseCreationGetOptionsFromJSON`.
+Just as with the registration process, feel free to use any preferred method to pass the challenge to the frontend. The JavaScript API for parsing `PublicKeyCredentialRequestOptions`, a parameter of `navigator.credentials.get`, is `PublicKeyCredential.parseCreationGetOptionsFromJSON`.
 For alternative solutions to the issue that `PublicKeyCredential.parseCreationGetOptionsFromJSON` is not available in Safari, refer to <<./deep-dive.adoc#_alternative_to_unsupported_json_serialization_apis_in_safari,Alternative to Unsupported JSON Serialization APIs in Safari>>.
 For additional options that can be specified for the `navigator.credentials.get` method, please refer https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get[MDN: CredentialsContainer: get() method].
 
 
-.Retrieving the entire `PublicKeyCredentialGetOptions` from the REST endpoint and calling
+.Retrieving the entire `PublicKeyCredentialRequestOptions` from the REST endpoint and calling
 `navigator.credentials.get`
 [source,javascript,caption="Example {counter:number}: "]
 ----

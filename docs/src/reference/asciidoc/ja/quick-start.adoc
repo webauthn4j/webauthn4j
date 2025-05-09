@@ -281,10 +281,10 @@ WebAuthnでの認証時において中心となるAPIは、ブラウザの `navi
 認証のフローの図の通り、認証処理においても、まずバックエンドサーバー側でチャレンジを生成し、セッションに保存する一方、クライアントにチャレンジを引き渡す必要があります。
 `navigator.credentials.get` メソッドのパラメータにも `challenge` が存在するためです。
 バックエンドサーバーからフロントエンド（クライアント）への認証処理のチャレンジの受け渡し方法もWebAuthn仕様では定められていません。登録処理同様、お好みの方法でチャレンジをフロントエンド側に引き渡して下さい。
-`navigator.credentials.get` メソッドのパラメータである、 `PublicKeyCredentialGetOptions` をパースするJava Script APIは、 `PublicKeyCredential.parseCreationGetOptionsFromJSON` です。 `PublicKeyCredential.parseCreationGetOptionsFromJSON` がSafariで利用できない問題の代替案は<<./deep-dive.adoc#Safariで未サポートなJSON serialization APIsの代替,Safariで未サポートなJSON serialization APIsの代替>> を参照してください。
+`navigator.credentials.get` メソッドのパラメータである、 `PublicKeyCredentialRequestOptions` をパースするJava Script APIは、 `PublicKeyCredential.parseCreationGetOptionsFromJSON` です。 `PublicKeyCredential.parseCreationGetOptionsFromJSON` がSafariで利用できない問題の代替案は<<./deep-dive.adoc#Safariで未サポートなJSON serialization APIsの代替,Safariで未サポートなJSON serialization APIsの代替>> を参照してください。
 `navigator.credentials.get` メソッドに指定できるその他のオプションに関しては、  https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get[MDN: CredentialsContainer: get() メソッド]を参照下さい。
 
-.`PublicKeyCredentialGetOptions` 全体をREST Endpointから取得して `navigator.credentials.get` を呼出
+.`PublicKeyCredentialRequestOptions` 全体をREST Endpointから取得して `navigator.credentials.get` を呼出
 [caption="例 {counter:number}: "]
 [source,javascript]
 ----
