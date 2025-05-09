@@ -24,8 +24,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Converter for {@link AuthenticatorTransport}
+ *
+ * This class provides functionality to convert between AuthenticatorTransport objects and their string
+ * representation for WebAuthn processing.
+ */
 public class AuthenticatorTransportConverter {
 
+    /**
+     * Converts a string to an AuthenticatorTransport object.
+     *
+     * @param value the string representation of authenticator transport
+     * @return the converted AuthenticatorTransport object
+     * @throws DataConversionException if conversion fails
+     */
     public @NotNull AuthenticatorTransport convert(@NotNull String value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
@@ -35,6 +48,13 @@ public class AuthenticatorTransportConverter {
         }
     }
 
+    /**
+     * Converts a set of strings to a set of AuthenticatorTransport objects.
+     *
+     * @param values the set of string representations of authenticator transports
+     * @return the set of converted AuthenticatorTransport objects
+     * @throws DataConversionException if conversion fails
+     */
     @SuppressWarnings("squid:S1168")
     public @NotNull Set<AuthenticatorTransport> convertSet(@NotNull Set<String> values) {
         try {
@@ -45,6 +65,13 @@ public class AuthenticatorTransportConverter {
         }
     }
 
+    /**
+     * Converts an AuthenticatorTransport object to its string representation.
+     *
+     * @param value the AuthenticatorTransport object to convert
+     * @return string representation of the AuthenticatorTransport object
+     * @throws DataConversionException if conversion fails
+     */
     public @NotNull String convertToString(@NotNull AuthenticatorTransport value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
@@ -54,6 +81,13 @@ public class AuthenticatorTransportConverter {
         }
     }
 
+    /**
+     * Converts a set of AuthenticatorTransport objects to a set of strings.
+     *
+     * @param values the set of AuthenticatorTransport objects to convert
+     * @return the set of string representations of the AuthenticatorTransport objects
+     * @throws DataConversionException if conversion fails
+     */
     @SuppressWarnings("squid:S1168")
     public @NotNull Set<String> convertSetToStringSet(@NotNull Set<AuthenticatorTransport> values) {
         try {

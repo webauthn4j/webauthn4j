@@ -28,6 +28,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientOutputs}
+ *
+ * This class provides functionality to convert between AuthenticationExtensionsClientOutputs objects and their JSON string
+ * representation for WebAuthn extensions processing.
  */
 public class AuthenticationExtensionsClientOutputsConverter {
 
@@ -38,6 +41,12 @@ public class AuthenticationExtensionsClientOutputsConverter {
     // ~ Constructors
     // ================================================================================================
 
+    /**
+     * Creates a new AuthenticationExtensionsClientOutputsConverter instance.
+     *
+     * @param objectConverter converter for data serialization
+     * @throws IllegalArgumentException if objectConverter is null
+     */
     public AuthenticationExtensionsClientOutputsConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
@@ -46,6 +55,14 @@ public class AuthenticationExtensionsClientOutputsConverter {
     // ~ Methods
     // ================================================================================================
 
+    /**
+     * Converts a JSON string to an AuthenticationExtensionsClientOutputs object.
+     *
+     * @param value JSON string representation of authentication extensions client outputs
+     * @param <T> the type of extension client output
+     * @return the converted AuthenticationExtensionsClientOutputs object
+     * @throws DataConversionException if conversion fails
+     */
     public <T extends ExtensionClientOutput> @Nullable AuthenticationExtensionsClientOutputs<T> convert(@NotNull String value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
@@ -56,6 +73,14 @@ public class AuthenticationExtensionsClientOutputsConverter {
         }
     }
 
+    /**
+     * Converts an AuthenticationExtensionsClientOutputs object to its JSON string representation.
+     *
+     * @param value the AuthenticationExtensionsClientOutputs object to convert
+     * @param <T> the type of extension client output
+     * @return JSON string representation of the AuthenticationExtensionsClientOutputs object
+     * @throws DataConversionException if conversion fails
+     */
     public <T extends ExtensionClientOutput> @NotNull String convertToString(@NotNull AuthenticationExtensionsClientOutputs<T> value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
