@@ -16,9 +16,10 @@
 
 package com.webauthn4j.converter;
 
-
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.data.AuthenticatorTransport;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -29,53 +30,73 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SuppressWarnings("ConstantConditions")
 class AuthenticatorTransportConverterTest {
 
-    private final AuthenticatorTransportConverter converter = new AuthenticatorTransportConverter();
+    private AuthenticatorTransportConverter target;
 
-
-    @Test
-    void convert_test() {
-        assertThat(converter.convert("usb")).isEqualTo(AuthenticatorTransport.USB);
+    @BeforeEach
+    void setUp() {
+        target = new AuthenticatorTransportConverter();
     }
 
-    @Test
-    void convert_null_test() {
-        assertThatThrownBy(() -> converter.convert(null)).isInstanceOf(DataConversionException.class);
+    @Nested
+    class StringToTransportConversionTests {
+        @Test
+        void shouldConvertStringToTransport() {
+            assertThat(target.convert("usb")).isEqualTo(AuthenticatorTransport.USB);
+        }
+
+        @Test
+        void shouldThrowExceptionWhenInputIsNull() {
+            assertThatThrownBy(() -> target.convert(null))
+                    .isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void shouldHandleUnknownValue() {
+            assertThat(target.convert("unknown")).isEqualTo(AuthenticatorTransport.create("unknown"));
+        }
     }
 
-    @Test
-    void convert_unknown_value_test() {
-        assertThat(converter.convert("unknown")).isEqualTo(AuthenticatorTransport.create("unknown"));
+    @Nested
+    class StringSetToTransportSetConversionTests {
+        @Test
+        void shouldConvertStringSetToTransportSet() {
+            assertThat(target.convertSet(Collections.singleton("usb")))
+                    .containsExactly(AuthenticatorTransport.USB);
+        }
+
+        @Test
+        void shouldThrowExceptionWhenInputSetIsNull() {
+            assertThatThrownBy(() -> target.convertSet(null))
+                    .isInstanceOf(DataConversionException.class);
+        }
     }
 
-    @Test
-    void convertSet_test() {
-        assertThat(converter.convertSet(Collections.singleton("usb"))).containsExactly(AuthenticatorTransport.USB);
+    @Nested
+    class TransportToStringConversionTests {
+        @Test
+        void shouldConvertTransportToString() {
+            assertThat(target.convertToString(AuthenticatorTransport.USB)).isEqualTo("usb");
+        }
+
+        @Test
+        void shouldThrowExceptionWhenTransportIsNull() {
+            assertThatThrownBy(() -> target.convertToString(null))
+                    .isInstanceOf(DataConversionException.class);
+        }
     }
 
-    @Test
-    void convertSet_null_test() {
-        assertThatThrownBy(() -> converter.convertSet(null)).isInstanceOf(DataConversionException.class);
-    }
+    @Nested
+    class TransportSetToStringSetConversionTests {
+        @Test
+        void shouldConvertTransportSetToStringSet() {
+            assertThat(target.convertSetToStringSet(Collections.singleton(AuthenticatorTransport.USB)))
+                    .containsExactly("usb");
+        }
 
-    @Test
-    void convertToString_test() {
-        assertThat(converter.convertToString(AuthenticatorTransport.USB)).isEqualTo("usb");
+        @Test
+        void shouldThrowExceptionWhenTransportSetIsNull() {
+            assertThatThrownBy(() -> target.convertSetToStringSet(null))
+                    .isInstanceOf(DataConversionException.class);
+        }
     }
-
-    @Test
-    void convertToString_null_test() {
-        assertThatThrownBy(() -> converter.convertToString(null)).isInstanceOf(DataConversionException.class);
-    }
-
-    @Test
-    void convertSetToStringSet_test() {
-        assertThat(converter.convertSetToStringSet(Collections.singleton(AuthenticatorTransport.USB))).containsExactly("usb");
-    }
-
-    @Test
-    void convertSetToStringSet_null_test() {
-        //noinspection ConstantConditions
-        assertThatThrownBy(() -> converter.convertSetToStringSet(null)).isInstanceOf(DataConversionException.class);
-    }
-
 }

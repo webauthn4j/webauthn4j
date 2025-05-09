@@ -39,14 +39,19 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
+@Deprecated
 class AuthenticatorImplTest {
 
     @Test
-    void constructor_test() {
+    void shouldCreateAuthenticatorWithCorrectAttributes() {
+        // Given
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
+
+        // When
         CredentialRecord authenticator = TestDataUtil.createCredentialRecord(attestedCredentialData, attestationStatement);
 
+        // Then
         assertAll(
                 () -> assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
                 () -> assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationStatement),
@@ -55,15 +60,28 @@ class AuthenticatorImplTest {
     }
 
     @Test
-    void createFromRegistrationData_test() {
+    void shouldCreateAuthenticatorFromRegistrationData() {
+        // Given
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         byte[] attestationObjectBytes = new byte[32];
         CollectedClientData collectedClientData = mock(CollectedClientData.class);
         byte[] collectedClientDataBytes = new byte[128];
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs.BuilderForRegistration().build();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs =
+                new AuthenticationExtensionsClientOutputs.BuilderForRegistration().build();
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        RegistrationData registrationData = new RegistrationData(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports);
+        RegistrationData registrationData = new RegistrationData(
+                attestationObject,
+                attestationObjectBytes,
+                collectedClientData,
+                collectedClientDataBytes,
+                authenticationExtensionsClientOutputs,
+                transports
+        );
+
+        // When
         AuthenticatorImpl authenticator = AuthenticatorImpl.createFromRegistrationData(registrationData);
+
+        // Then
         assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestationObject.getAuthenticatorData().getAttestedCredentialData());
         assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationObject.getAttestationStatement());
         assertThat(authenticator.getTransports()).isEqualTo(transports);
@@ -73,13 +91,22 @@ class AuthenticatorImplTest {
     }
 
     @Test
-    void getter_setter_test() {
+    void shouldUpdateAuthenticatorPropertiesCorrectly() {
+        // Given
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
-        AuthenticatorImpl authenticator = new AuthenticatorImpl(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createBasicPackedAttestationStatement(), 0);
-        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticatorImpl authenticator = new AuthenticatorImpl(
+                TestDataUtil.createAttestedCredentialData(),
+                TestAttestationStatementUtil.createBasicPackedAttestationStatement(),
+                0
+        );
+        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions =
+                new AuthenticationExtensionsAuthenticatorOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions =
+                new AuthenticationExtensionsClientOutputs<>();
         Set<AuthenticatorTransport> transports = Collections.singleton(AuthenticatorTransport.USB);
+
+        // When
         authenticator.setAttestedCredentialData(attestedCredentialData);
         authenticator.setAttestationStatement(attestationStatement);
         authenticator.setTransports(transports);
@@ -87,6 +114,7 @@ class AuthenticatorImplTest {
         authenticator.setAuthenticatorExtensions(authenticatorExtensions);
         authenticator.setClientExtensions(clientExtensions);
 
+        // Then
         assertAll(
                 () -> assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
                 () -> assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationStatement),
@@ -98,13 +126,21 @@ class AuthenticatorImplTest {
     }
 
     @Test
-    void setCounter_range_test() {
-        AuthenticatorImpl authenticator = new AuthenticatorImpl(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createBasicPackedAttestationStatement(), 0);
+    void shouldRejectInvalidCounterValues() {
+        // Given
+        AuthenticatorImpl authenticator = new AuthenticatorImpl(
+                TestDataUtil.createAttestedCredentialData(),
+                TestAttestationStatementUtil.createBasicPackedAttestationStatement(),
+                0
+        );
 
+        // Then
         assertAll(
+                // When counter is negative
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> authenticator.setCounter(-1)
                 ),
+                // When counter exceeds maximum value
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> authenticator.setCounter(4294967296L)
                 )
@@ -112,10 +148,12 @@ class AuthenticatorImplTest {
     }
 
     @Test
-    void equals_hashCode_test() {
+    void shouldHaveCorrectEqualsAndHashCodeImplementation() {
+        // Given
         Authenticator authenticatorA = TestDataUtil.createCredentialRecord();
         Authenticator authenticatorB = TestDataUtil.createCredentialRecord();
 
+        // Then
         assertAll(
                 () -> assertThat(authenticatorA).isEqualTo(authenticatorB),
                 () -> assertThat(authenticatorA).hasSameHashCodeAs(authenticatorB)

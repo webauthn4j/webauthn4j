@@ -34,21 +34,34 @@ class AuthenticationExtensionsClientOutputsConverterTest {
     private final AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
-    void convert_null_test() {
+    void shouldThrowExceptionWhenConvertingNullInput() {
+        // Given
+        // No setup needed
+        
+        // When/Then
         //noinspection ConstantConditions
         assertThatThrownBy(() -> target.convert(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
-    void convertToString_null_test() {
+    void shouldThrowExceptionWhenConvertingNullOutputToString() {
+        // Given
+        // No setup needed
+        
+        // When/Then
         //noinspection ConstantConditions
         assertThatThrownBy(() -> target.convertToString(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
-    void convert_test() {
+    void shouldConvertJsonStringToAuthenticationExtensionsClientOutputs() {
+        // Given
         String source = "{\"appid\":true,\"appidExclude\":true,\"uvm\":[],\"hmacGetSecret\":{\"output1\":\"AA\",\"output2\":\"AQ\"},\"myextension\":\"test\"}";
+        
+        // When
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientOutputs = target.convert(source);
+        
+        // Then
         assertThat(clientOutputs.getExtension(FIDOAppIDExtensionClientOutput.class)).isEqualTo(new FIDOAppIDExtensionClientOutput(true));
         assertThat(clientOutputs.getExtension(FIDOAppIDExclusionExtensionClientOutput.class)).isEqualTo(new FIDOAppIDExclusionExtensionClientOutput(true));
         assertThat(clientOutputs.getExtension(UserVerificationMethodExtensionClientOutput.class)).isEqualTo(new UserVerificationMethodExtensionClientOutput(new UvmEntries()));

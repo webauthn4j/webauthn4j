@@ -33,36 +33,41 @@ class AttestedCredentialDataConverterTest {
     private final AttestedCredentialDataConverter target = new AttestedCredentialDataConverter(objectConverter);
 
     @Test
-    void convert_test() {
-        //Given
+    void shouldConvertFromBytesToAttestedCredentialData() {
+        // Given
         //noinspection SpellCheckingInspection
         String input = "VQ5LVKpHQJ-alRq3bBMBMQAgcSLOLIaiEIVRz-EklkZ21K71OGcRvvgro1kLdT4pvCClAQIDJiABIVggLDjE-Yci-q4NHPYpTPLJCVkWFkxuL6Zz9jKUvWjnmM8iWCAZAjkRJgA59HxAzqq5NBKjKGNkRPzToDfI6gJR7YBYkQ";
-        //When
+        
+        // When
         AttestedCredentialData attestedCredentialData = target.convert(Base64UrlUtil.decode(input));
 
+        // Then
         assertThat(attestedCredentialData.getAaguid().getBytes()).isEqualTo(Base64UrlUtil.decode("VQ5LVKpHQJ-alRq3bBMBMQ"));
         assertThat(attestedCredentialData.getCredentialId()).isEqualTo(Base64UrlUtil.decode("cSLOLIaiEIVRz-EklkZ21K71OGcRvvgro1kLdT4pvCA"));
-
     }
 
     @Test
-    void convert_null_test() {
+    void shouldThrowExceptionWhenConvertingNullValues() {
+        // Given
+        // No setup needed
+        
+        // When/Then
         assertThatThrownBy(() -> target.convert((AttestedCredentialData) null)).isInstanceOf(DataConversionException.class);
         assertThatThrownBy(() -> target.convert((ByteBuffer) null)).isInstanceOf(DataConversionException.class);
         assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
-    void extractCredentialId_test() {
-        //Given
+    void shouldExtractCredentialIdFromAttestedCredentialData() {
+        // Given
         //noinspection SpellCheckingInspection
         String input = "VQ5LVKpHQJ-alRq3bBMBMQAgcSLOLIaiEIVRz-EklkZ21K71OGcRvvgro1kLdT4pvCC_YTFhMmEzJmItMQFiLTJYICw4xPmHIvquDRz2KUzyyQlZFhZMbi-mc_YylL1o55jPYi0zWCAZAjkRJgA59HxAzqq5NBKjKGNkRPzToDfI6gJR7YBYkWExAv8";
 
-        //When
+        // When
         byte[] result = target.extractCredentialId(Base64UrlUtil.decode(input));
 
+        // Then
         assertThat(result).isEqualTo(Base64UrlUtil.decode("cSLOLIaiEIVRz-EklkZ21K71OGcRvvgro1kLdT4pvCA"));
-
     }
 
 }

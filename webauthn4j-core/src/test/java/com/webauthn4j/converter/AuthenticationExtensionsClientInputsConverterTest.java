@@ -35,28 +35,47 @@ class AuthenticationExtensionsClientInputsConverterTest {
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    void convertRegistrationExtensions_null_test() {
+    void shouldThrowExceptionWhenConvertingNullRegistrationExtensions() {
+        // Given
+        // No setup needed
+        
+        // When/Then
         assertThatThrownBy(() -> target.convert(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
-    void convertAuthenticationExtensionsToString_test() {
+    void shouldConvertAuthenticationExtensionsToJsonString() {
+        // Given
         AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
         builder.setAppid("test");
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions = builder.build();
-        assertThat(target.convertToString(extensions)).isEqualTo("{\"appid\":\"test\"}");
+        
+        // When
+        String result = target.convertToString(extensions);
+        
+        // Then
+        assertThat(result).isEqualTo("{\"appid\":\"test\"}");
     }
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    void convertAuthenticationExtensionsToString_null_test() {
+    void shouldThrowExceptionWhenConvertingNullExtensionsToString() {
+        // Given
+        // No setup needed
+        
+        // When/Then
         assertThatThrownBy(() -> target.convertToString(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
-    void convert_test() {
+    void shouldConvertJsonStringToAuthenticationExtensionsClientInputs() {
+        // Given
         String source = "{\"appid\":\"testappid\",\"appidExclude\":\"testappidexclude\",\"uvm\":true,\"hmacGetSecret\":{\"salt1\":\"AA\",\"salt2\":\"AQ\"},\"myextension\":\"test\"}";
+        
+        // When
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> clientInputs = target.convert(source);
+        
+        // Then
         assertThat(clientInputs.getExtension(FIDOAppIDExtensionClientInput.class)).isEqualTo(new FIDOAppIDExtensionClientInput("testappid"));
         assertThat(clientInputs.getExtension(FIDOAppIDExclusionExtensionClientInput.class)).isEqualTo(new FIDOAppIDExclusionExtensionClientInput("testappidexclude"));
         assertThat(clientInputs.getExtension(UserVerificationMethodExtensionClientInput.class)).isEqualTo(new UserVerificationMethodExtensionClientInput(true));
@@ -65,18 +84,27 @@ class AuthenticationExtensionsClientInputsConverterTest {
     }
 
     @Test
-    void convert_null_test() {
+    void shouldReturnNullWhenConvertingNullJsonString() {
+        // Given
         String source = "null";
+        
+        // When
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> clientInputs = target.convert(source);
+        
+        // Then
         assertThat(clientInputs).isNull();
     }
 
     @SuppressWarnings("unused")
     @Test
-    void convert_with_invalid_extension_test() {
+    void shouldHandleInvalidExtensionsInJsonString() {
+        // Given
         String source = "{\"invalid\":\"\"}";
+        
+        // When
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = target.convert(source);
+        
+        // Then
         assertThat(extensions.getUnknownKeys()).contains("invalid");
-
     }
 }
