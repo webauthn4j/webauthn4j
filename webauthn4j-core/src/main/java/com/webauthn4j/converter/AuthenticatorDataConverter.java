@@ -42,6 +42,9 @@ import java.util.Arrays;
 
 /**
  * Converter for {@link AuthenticatorData}
+ *
+ * This class provides functionality to convert between AuthenticatorData objects and their binary representation
+ * for WebAuthn processing.
  */
 public class AuthenticatorDataConverter {
 
@@ -65,6 +68,12 @@ public class AuthenticatorDataConverter {
     //~ Constructors
     // ================================================================================================
 
+    /**
+     * Creates a new AuthenticatorDataConverter instance.
+     *
+     * @param objectConverter converter for data serialization
+     * @throws IllegalArgumentException if objectConverter is null
+     */
     public AuthenticatorDataConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.cborConverter = objectConverter.getCborConverter();
@@ -78,8 +87,10 @@ public class AuthenticatorDataConverter {
      * Converts from a {@link AuthenticatorData} to byte[].
      *
      * @param source the source object to convert
-     * @param <T>    extension type
+     * @param <T>    the type of extension authenticator output
      * @return the converted byte array
+     * @throws DataConversionException if conversion fails
+     * @throws UncheckedIOException if an I/O error occurs
      */
     public <T extends ExtensionAuthenticatorOutput> @NotNull byte[] convert(@NotNull AuthenticatorData<T> source) {
         try {
@@ -103,9 +114,10 @@ public class AuthenticatorDataConverter {
     /**
      * Converts from a byte array to {@link AuthenticatorData}.
      *
-     * @param <T>    ExtensionAuthenticatorOutput
+     * @param <T>    the type of extension authenticator output
      * @param source the source byte array to convert
      * @return the converted object
+     * @throws DataConversionException if conversion fails
      */
     public <T extends ExtensionAuthenticatorOutput> @NotNull AuthenticatorData<T> convert(@NotNull byte[] source) {
         try {
@@ -149,10 +161,11 @@ public class AuthenticatorDataConverter {
     }
 
     /**
-     * Extract attestedCredData byte array from a authenticatorData byte array.
+     * Extract attestedCredentialData byte array from an authenticatorData byte array.
      *
      * @param authenticatorData the authenticatorData byte array
-     * @return the extracted attestedCredData byte array
+     * @return the extracted attestedCredentialData byte array
+     * @throws IllegalArgumentException if the input format is invalid
      */
     public @NotNull byte[] extractAttestedCredentialData(@NotNull byte[] authenticatorData) {
         byte[] lengthBytes = Arrays.copyOfRange(authenticatorData, L_INDEX, CREDENTIAL_ID_INDEX);
@@ -168,7 +181,7 @@ public class AuthenticatorDataConverter {
     }
 
     /**
-     * Extract signCount from a authenticatorData byte array.
+     * Extract signCount from an authenticatorData byte array.
      *
      * @param authenticatorData the authenticatorData byte array
      * @return the extracted signCount

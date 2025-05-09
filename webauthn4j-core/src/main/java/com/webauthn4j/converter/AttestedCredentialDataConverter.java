@@ -33,6 +33,19 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+/**
+ * A converter class that handles conversion operations for WebAuthn Attested Credential Data.
+ * This class provides functionality to convert between AttestedCredentialData objects and their byte array
+ * representations, as well as extracting credential IDs from attested credential data.
+ *
+ * The class uses CBOR (Concise Binary Object Representation) for data serialization and
+ * handles the WebAuthn attestation data format which includes AAGUID, credential ID,
+ * and credential public key.
+ *
+ * @see AttestedCredentialData
+ * @see COSEKey
+ * @see CborConverter
+ */
 public class AttestedCredentialDataConverter {
 
     private static final String ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL = "attestedCredentialData must not be null";
@@ -46,6 +59,12 @@ public class AttestedCredentialDataConverter {
 
     private final CborConverter cborConverter;
 
+    /**
+     * Constructor for AttestedCredentialDataConverter
+     *
+     * @param objectConverter the object converter to use for CBOR serialization/deserialization
+     * @throws IllegalArgumentException if objectConverter is null
+     */
     public AttestedCredentialDataConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.cborConverter = objectConverter.getCborConverter();
@@ -59,6 +78,12 @@ public class AttestedCredentialDataConverter {
         AssertUtil.notNull(coseKey, "coseKey must not be null");
     }
 
+    /**
+     * Converts an AttestedCredentialData object to its byte array representation.
+     *
+     * @param attestationData the AttestedCredentialData to convert
+     * @return byte array representation of the attestation data
+     */
     public @NotNull byte[] convert(@NotNull AttestedCredentialData attestationData) {
         try {
             AssertUtil.notNull(attestationData, "attestationData must not be null");
@@ -79,6 +104,12 @@ public class AttestedCredentialDataConverter {
         }
     }
 
+    /**
+     * Converts a ByteBuffer containing attested credential data to an AttestedCredentialData object.
+     *
+     * @param attestedCredentialData ByteBuffer containing the credential data
+     * @return converted AttestedCredentialData object
+     */
     public @NotNull AttestedCredentialData convert(@NotNull ByteBuffer attestedCredentialData) {
         try {
             AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
@@ -105,6 +136,12 @@ public class AttestedCredentialDataConverter {
         }
     }
 
+    /**
+     * Converts a byte array containing attested credential data to an AttestedCredentialData object.
+     *
+     * @param attestedCredentialData byte array containing the credential data
+     * @return converted AttestedCredentialData object
+     */
     public @NotNull AttestedCredentialData convert(@NotNull byte[] attestedCredentialData) {
         try {
             AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
