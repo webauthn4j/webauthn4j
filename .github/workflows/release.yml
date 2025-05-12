@@ -1,33 +1,80 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - '*'
+  workflow_dispatch:
+
+env:
+  JAVA_VERSION: 17
 
 jobs:
-  build:
-    name: Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        java_version: [17]
-        os: [ubuntu-24.04]
+  release:
+    permissions:
+      contents: write
+
+    runs-on: ubuntu-24.04
 
     steps:
+      - name: Generate GitHub App(webauthn4j-github-app-bot) Token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
 
-      - name: Set up JDK ${{ matrix.java_version }}
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: ${{ matrix.java_version }}
+          java-version: ${{ env.JAVA_VERSION }}
           cache: 'gradle'
+
+      - name: Switch to release
+        run: |
+          ./gradlew switchToRelease
+
+      - name: Update versions in documents
+        run: |
+          ./gradlew updateVersionsInDocuments
 
       - name: Build with Gradle
         run: |
-          ./gradlew build javadoc generateReferenceEN generateReferenceJA -PfailBuildOnCVSS=4
+          ./gradlew build javadoc generateReferenceEN generateReferenceJA
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          VERSION=$(grep "webAuthn4JVersion" gradle.properties | cut -d'=' -f2)
+          git config user.name "webauthn4j-bot"
+          git config user.email  "info@webauthn4j.com"
+          git add .
+          git commit --allow-empty -m "Release ${VERSION}"
+
+      - name: Push commit
+        shell: bash
+        run: |
+          git fetch
+          git rebase origin/master
+          git push
+
+      - name: Tag commit
+        shell: bash
+        run: |
+          VERSION=$(grep "webAuthn4JVersion" gradle.properties | cut -d'=' -f2)
+          git tag "${VERSION}.RELEASE"
+
+      - name: Push tag
+        shell: bash
+        run: |
+          VERSION=$(grep "webAuthn4JVersion" gradle.properties | cut -d'=' -f2)
+          git fetch
+          git rebase origin/master
+          git push origin "${VERSION}.RELEASE"
+
 
       - name: Publish to Maven Central
         env:
@@ -36,4 +83,4 @@ jobs:
           PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
           PGP_SIGNING_KEY_PASSPHRASE: ${{ secrets.PGP_SIGNING_KEY_PASSPHRASE }}
         run: |
-          ./gradlew publishStandardPublicationToMavenCentralRepository
+          ./gradlew publishStandardPublicationToLocalStagingRepository jreleaserDeploy

@@ -1,6 +1,7 @@
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.jvm.tasks.Jar
+import org.jreleaser.model.Active
 import java.net.URI
 import java.nio.charset.StandardCharsets
 
@@ -10,12 +11,14 @@ plugins {
     id("maven-publish")
     id("jacoco")
 
+    id(libs.plugins.jreleaser.get().pluginId) version libs.versions.jreleaser
     id(libs.plugins.asciidoctor.get().pluginId) version libs.versions.asciidoctor
     id(libs.plugins.sonarqube.get().pluginId) version libs.versions.sonarqube
 }
 
-val webAuthn4JVersion: String by project
-val latestReleasedWebAuthn4JVersion: String by project
+private val webAuthn4JVersion: String by project
+private val isSnapshot: Boolean = (findProperty("isSnapshot") as? String)?.toBoolean() ?: true
+private val effectiveVersion = getEffectiveVersion()
 
 allprojects {
     group = "com.webauthn4j"
@@ -32,6 +35,7 @@ subprojects {
     apply(plugin = "signing")
     apply(plugin = "maven-publish")
     apply(plugin = "jacoco")
+    apply(plugin = "org.jreleaser")
 
     java {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -144,19 +148,15 @@ subprojects {
 
         repositories {
             maven {
-                name = "mavenCentral"
-                url = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-                credentials {
-                    username = "${mavenCentralUser}"
-                    password = "${mavenCentralPassword}"
-                }
+                name = "localStaging"
+                url = layout.buildDirectory.dir("local-staging").get().asFile.toURI()
             }
             maven {
                 name = "snapshot"
-                url = URI("https://oss.sonatype.org/content/repositories/snapshots")
+                url = URI("https://central.sonatype.com/repository/maven-snapshots/")
                 credentials {
-                    username = "${mavenCentralUser}"
-                    password = "${mavenCentralPassword}"
+                    username = mavenCentralUser
+                    password = mavenCentralPassword
                 }
             }
         }
@@ -169,29 +169,116 @@ subprojects {
         tasks.withType(Sign::class.java).configureEach {
             onlyIf { pgpSigningKey != null && pgpSigningKeyPassphrase != null }
         }
-        tasks.named("publishStandardPublicationToSnapshotRepository"){
-            onlyIf{ webAuthn4JVersion.endsWith("-SNAPSHOT") }
+        tasks.named("publishStandardPublicationToSnapshotRepository") {
+            onlyIf { isSnapshot }
         }
-        tasks.named("publishStandardPublicationToMavenCentralRepository"){
-            onlyIf{ !webAuthn4JVersion.endsWith("-SNAPSHOT") }
+
+        jreleaser {
+            project {
+                authors.set(listOf("Yoshikazu Nojima"))
+                license = "Apache-2.0"
+                links {
+                    homepage = githubUrl
+                }
+                version = effectiveVersion
+            }
+
+            release{
+                github{
+                    token.set("dummy")
+                    skipRelease = true
+                    skipTag = true
+                }
+            }
+
+            deploy {
+                maven {
+                    mavenCentral {
+                        this.register("mavenCentral"){
+                            active = Active.RELEASE
+                            sign = false // artifacts are signed by gradle native feature. signing by jreleaser is not required.
+                            username = mavenCentralUser
+                            password = mavenCentralPassword
+                            url = "https://central.sonatype.com/api/v1/publisher/"
+                            stagingRepository(layout.buildDirectory.dir("local-staging").get().asFile.absolutePath)
+                            retryDelay = 10
+                            maxRetries = 1000
+                        }
+                    }
+                }
+            }
         }
     }
+}
 
+tasks.register("bumpPatchVersion"){
+    group = "documentation"
+
+    doLast{
+        val regex = Regex("""^webAuthn4JVersion=.*$""", RegexOption.MULTILINE)
+        val bumpedVersion = bumpPatchVersion(webAuthn4JVersion)
+        val replacement = "webAuthn4JVersion=${bumpedVersion}"
+
+        val file = file("gradle.properties")
+        val original = file.readText(StandardCharsets.UTF_8)
+        if (!regex.containsMatchIn(original)) {
+            throw GradleException("webAuthn4JVersion property not found in gradle.properties")
+        }
+        val updated = original.replaceFirst(regex, replacement)
+        file.writeText(updated, StandardCharsets.UTF_8)
+    }
 }
 
 tasks.register("updateVersionsInDocuments"){
     group = "documentation"
     description = "Update versions in document source code"
 
-    val regex = Regex("""<webauthn4j\.version>.*</webauthn4j\.version>""")
-    val replacement = "<webauthn4j.version>$latestReleasedWebAuthn4JVersion</webauthn4j.version>"
+    doLast {
+        val regex = Regex("""<webauthn4j\.version>.*</webauthn4j\.version>""")
+        val replacement = "<webauthn4j.version>$effectiveVersion</webauthn4j.version>"
 
-    val files = arrayOf(file("README.md"), file("docs/src/reference/asciidoc/en/introduction.adoc"), file("docs/src/reference/asciidoc/ja/introduction.adoc"), file("docs/src/reference/asciidoc/en/quick-start.adoc"), file("docs/src/reference/asciidoc/ja/quick-start.adoc"))
-    files.forEach { file ->
-        val updated = file.readText(StandardCharsets.UTF_8).replaceFirst(regex, replacement)
+        val files = arrayOf(file("README.md"), file("docs/src/reference/asciidoc/en/introduction.adoc"), file("docs/src/reference/asciidoc/ja/introduction.adoc"), file("docs/src/reference/asciidoc/en/quick-start.adoc"), file("docs/src/reference/asciidoc/ja/quick-start.adoc"))
+        files.forEach { file ->
+            val updated = file.readText(StandardCharsets.UTF_8).replaceFirst(regex, replacement)
+            file.writeText(updated, StandardCharsets.UTF_8)
+        }
+    }
+}
+
+tasks.register("switchToSnapshot"){
+    group = "documentation"
+
+    doLast{
+        val regex = Regex("""^isSnapshot=.*$""", RegexOption.MULTILINE)
+        val replacement = "isSnapshot=true"
+
+        val file = file("gradle.properties")
+        val original = file.readText(StandardCharsets.UTF_8)
+        if (!regex.containsMatchIn(original)) {
+            throw GradleException("isSnapshot property not found in gradle.properties")
+        }
+        val updated = original.replaceFirst(regex, replacement)
         file.writeText(updated, StandardCharsets.UTF_8)
     }
 }
+
+tasks.register("switchToRelease"){
+    group = "documentation"
+
+    doLast{
+        val regex = Regex("""^isSnapshot=.*$""", RegexOption.MULTILINE)
+        val replacement = "isSnapshot=false"
+
+        val file = file("gradle.properties")
+        val original = file.readText(StandardCharsets.UTF_8)
+        if (!regex.containsMatchIn(original)) {
+            throw GradleException("isSnapshot property not found in gradle.properties")
+        }
+        val updated = original.replaceFirst(regex, replacement)
+        file.writeText(updated, StandardCharsets.UTF_8)
+    }
+}
+
 
 tasks.register<JavaExec>("generateReleaseNote") {
     group = "documentation"
@@ -271,4 +358,22 @@ sonarqube {
         property("sonar.issue.ignore.multicriteria.e4.ruleKey", "java:S5778")
         property("sonar.issue.ignore.multicriteria.e4.resourceKey", "**/*.java")
     }
+}
+
+private fun getEffectiveVersion(): String{
+    return when {
+        isSnapshot -> webAuthn4JVersion.plus("-SNAPSHOT")
+        else -> webAuthn4JVersion.plus(".RELEASE")
+    }
+}
+
+private fun bumpPatchVersion(version: String): String {
+    val parts = version.split(".")
+    require(parts.size == 3) { "Version must be in the format 'X.Y.Z': $version" }
+
+    val major = parts[0].toInt()
+    val minor = parts[1].toInt()
+    val patch = parts[2].toInt() + 1
+
+    return "$major.$minor.$patch"
 }

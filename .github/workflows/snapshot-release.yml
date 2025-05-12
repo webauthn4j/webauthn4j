@@ -27,9 +27,9 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew build javadoc generateReferenceEN generateReferenceJA -PfailBuildOnCVSS=4
+          ./gradlew build javadoc generateReferenceEN generateReferenceJA
 
-      - name: Publish to oss.sonatype.org snapshot
+      - name: Publish to central.sonatype.com snapshot
         env:
           MAVEN_CENTRAL_USER: ${{ secrets.MAVEN_CENTRAL_USER }}
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
