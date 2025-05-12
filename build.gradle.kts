@@ -22,7 +22,7 @@ private val effectiveVersion = getEffectiveVersion()
 
 allprojects {
     group = "com.webauthn4j"
-    version = webAuthn4JVersion
+    version = effectiveVersion
 
     repositories {
         mavenCentral()
