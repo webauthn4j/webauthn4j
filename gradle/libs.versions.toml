@@ -12,6 +12,8 @@ bouncycastle = "1.80"
 jetbrains-annotations = "26.0.2"
 asciidoctor = "4.0.4"
 
+jreleaser = "1.18.0"
+
 # Test dependencies
 
 spring-boot-bom = "3.3.4"
@@ -37,5 +39,6 @@ spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies"
 
 
 [plugins]
+jreleaser = { id = "org.jreleaser", version.ref = "jreleaser" }
 asciidoctor = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor"}
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
