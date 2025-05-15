@@ -17,7 +17,7 @@ jreleaser = "1.18.0"
 # Test dependencies
 
 spring-boot-bom = "3.3.4"
-sonarqube = "6.1.0.5360"
+sonarqube = "6.2.0.5505"
 
 [libraries]
 # Third-party libraries
