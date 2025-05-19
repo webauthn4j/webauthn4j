@@ -286,7 +286,7 @@ tasks.register<JavaExec>("generateReleaseNote") {
 
     classpath = files("gradle/lib/github-release-notes-generator.jar")
 
-    args(webAuthn4JVersion, file("build/release-note.md").absolutePath, "--spring.config.location=file:" + file("github-release-notes-generator.yml").absolutePath)
+    args(effectiveVersion, file("build/release-note.md").absolutePath, "--spring.config.location=file:" + file("github-release-notes-generator.yml").absolutePath)
 }
 
 asciidoctorj{
@@ -317,7 +317,7 @@ tasks.register<AsciidoctorTask>("generateReferenceJA") {
         "idseparator" to "-",
         "doctype" to "book",
         "numbered" to "",
-        "revnumber" to webAuthn4JVersion
+        "revnumber" to effectiveVersion
     ))
 }
 
@@ -341,7 +341,7 @@ tasks.register<AsciidoctorTask>("generateReferenceEN") {
         "idseparator" to "-",
         "doctype" to "book",
         "numbered" to "",
-        "revnumber" to webAuthn4JVersion
+        "revnumber" to effectiveVersion
     ))
 }
 
