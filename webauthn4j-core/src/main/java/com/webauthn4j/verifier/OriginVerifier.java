@@ -20,11 +20,26 @@ import com.webauthn4j.data.client.Origin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Handler interface to verify the given {@link Origin} instance
+ * Handler interface to verify the given {@link Origin} instance.
+ * This verifier checks that the origin provided in the client data matches
+ * the expected origin for the Relying Party during WebAuthn registration
+ * and authentication ceremonies.
  */
 public interface OriginVerifier {
 
+    /**
+     * Verifies the origin in the registration ceremony.
+     *
+     * @param registrationObject the object containing registration data to verify
+     * @throws com.webauthn4j.verifier.exception.BadOriginException if the origin is invalid
+     */
     void verify(@NotNull RegistrationObject registrationObject);
 
+    /**
+     * Verifies the origin in the authentication ceremony.
+     *
+     * @param authenticationObject the object containing authentication data to verify
+     * @throws com.webauthn4j.verifier.exception.BadOriginException if the origin is invalid
+     */
     void verify(@NotNull AuthenticationObject authenticationObject);
 }
