@@ -4,6 +4,7 @@ import org.gradle.jvm.tasks.Jar
 import org.jreleaser.model.Active
 import java.net.URI
 import java.nio.charset.StandardCharsets
+import com.webauthn4j.gradle.BuildUtils
 
 plugins {
     id("java-library")
@@ -83,21 +84,11 @@ subprojects {
         }
     }
 
-    fun getVariable(envName: String, propertyName: String): String?{
-        return if (System.getenv(envName) != null && System.getenv(envName).isNotEmpty()) {
-            System.getenv(envName)
-        } else if (project.hasProperty(propertyName)) {
-            project.property(propertyName) as String?
-        } else {
-            null
-        }
-    }
-
     val githubUrl = "https://github.com/webauthn4j/webauthn4j"
-    val mavenCentralUser = getVariable("MAVEN_CENTRAL_USER", "mavenCentralUser")
-    val mavenCentralPassword = getVariable("MAVEN_CENTRAL_PASSWORD", "mavenCentralPassword")
-    val pgpSigningKey = getVariable("PGP_SIGNING_KEY", "pgpSigningKey")
-    val pgpSigningKeyPassphrase = getVariable("PGP_SIGNING_KEY_PASSPHRASE", "pgpSigningKeyPassphrase")
+    val mavenCentralUser = BuildUtils.getVariable(project, "MAVEN_CENTRAL_USER", "mavenCentralUser")
+    val mavenCentralPassword = BuildUtils.getVariable(project, "MAVEN_CENTRAL_PASSWORD", "mavenCentralPassword")
+    val pgpSigningKey = BuildUtils.getVariable(project, "PGP_SIGNING_KEY", "pgpSigningKey")
+    val pgpSigningKeyPassphrase = BuildUtils.getVariable(project, "PGP_SIGNING_KEY_PASSPHRASE", "pgpSigningKeyPassphrase")
 
     publishing {
         publications{

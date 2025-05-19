@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include "webauthn4j-core-async"
-include 'webauthn4j-metadata'
-include 'webauthn4j-metadata-async'
-include "webauthn4j-appattest"
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+include("webauthn4j-core")
+include("webauthn4j-core-async")
+include("webauthn4j-metadata")
+include("webauthn4j-metadata-async")
+include("webauthn4j-appattest")
+include("webauthn4j-test")
+include("webauthn4j-util")
 
-rootProject.name = 'webauthn4j'
+rootProject.name = "webauthn4j"
