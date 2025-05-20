@@ -22,6 +22,14 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Default implementation of {@link MaliciousCounterValueHandler} that throws {@link MaliciousCounterValueException}
+ * when a malicious counter value is detected.
+ * <p>
+ * This is the standard security-focused implementation that follows the strict requirements
+ * of the WebAuthn specification by treating any suspicious counter behavior as a security violation
+ * and halting the authentication process immediately.
+ * <p>
+ * Applications that need more lenient handling or want to implement additional logic
+ * should provide their own implementation of {@link MaliciousCounterValueHandler}.
  */
 class DefaultMaliciousCounterValueHandler implements MaliciousCounterValueHandler {
 
@@ -29,6 +37,15 @@ class DefaultMaliciousCounterValueHandler implements MaliciousCounterValueHandle
     // ~ Methods
     // ========================================================================================================
 
+    /**
+     * Handles a detected malicious counter value by throwing a {@link MaliciousCounterValueException}.
+     * <p>
+     * This implementation follows a strict security approach by immediately terminating
+     * the authentication process when a suspicious counter value is detected.
+     *
+     * @param authenticationObject the authentication object containing the detected malicious counter value
+     * @throws MaliciousCounterValueException always thrown to indicate the detection of a malicious counter value
+     */
     @Override
     public void maliciousCounterValueDetected(@NotNull AuthenticationObject authenticationObject) {
         AssertUtil.notNull(authenticationObject, "authenticationObject must not be null");

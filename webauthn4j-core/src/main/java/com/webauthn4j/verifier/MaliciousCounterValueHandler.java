@@ -19,9 +19,26 @@ package com.webauthn4j.verifier;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Strategy interface to handle malicious counter value
+ * Strategy interface to handle malicious counter value during authentication.
+ * <p>
+ * The WebAuthn specification requires that the signature counter value in an authenticator
+ * increases after each authentication operation. If a counter value is detected that is 
+ * less than or equal to the previously registered counter value, it may indicate that 
+ * the authenticator has been cloned or that a replay attack is being attempted.
+ * <p>
+ * Implementations of this interface define strategies for handling such suspicious counter 
+ * values, whether to throw an exception, log a warning, or take other mitigating actions.
  */
 public interface MaliciousCounterValueHandler {
 
+    /**
+     * Handles a detected malicious counter value during authentication.
+     * <p>
+     * This method is called when the authenticator's counter value is less than or equal to
+     * the previously registered counter value, which may indicate a cloned authenticator or replay attack.
+     *
+     * @param authenticationObject the authentication object containing the detected malicious counter value
+     * @throws com.webauthn4j.verifier.exception.MaliciousCounterValueException if the default implementation is used
+     */
     void maliciousCounterValueDetected(@NotNull AuthenticationObject authenticationObject);
 }
