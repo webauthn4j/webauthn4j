@@ -1,5 +1,54 @@
 == FAQ
 
+=== What should be specified in `excludeCredentials` of `PublicKeyCredentialCreationOptions`?
+
+The `excludeCredentials` parameter of `PublicKeyCredentialCreationOptions` is used to specify Authenticators that you want to exclude during registration.
+It can be used to exclude Authenticators that are already linked to an account from new registrations.
+
+[source,java]
+----
+// When there are no Authenticators to exclude
+List<PublicKeyCredentialDescriptor> excludeCredentials = null;
+
+// When excluding specific Authenticators
+List<PublicKeyCredentialDescriptor> excludeCredentials = Collections.singletonList(
+    new PublicKeyCredentialDescriptor(
+        PublicKeyCredentialType.PUBLIC_KEY,
+        existingCredentialId,
+        transports
+    )
+);
+----
+
+* When null is specified, no Authenticators will be excluded
+* By specifying the existing authenticators in `excludeCredentials`, you can prevent accidental re-registration of the same authenticator
+
+=== What should be specified in `allowCredentials` of `PublicKeyCredentialRequestOptions`?
+
+The `allowCredentials` parameter of `PublicKeyCredentialRequestOptions` is used to specify available Authenticators during authentication.
+For non-discoverable credentials, you need to specify the credentialId in `allowCredentials`.
+
+[source,java]
+----
+// When allowing all Authenticators
+List<PublicKeyCredentialDescriptor> allowCredentials = null;
+
+// When allowing only specific Authenticators
+List<PublicKeyCredentialDescriptor> allowCredentials = Collections.singletonList(
+    new PublicKeyCredentialDescriptor(
+        PublicKeyCredentialType.PUBLIC_KEY,
+        credentialId,
+        transports
+    )
+);
+----
+
+=== Isn't the `WebAuthnManager` class responsible for too many things?
+
+Q: The `WebAuthnManager` provides two different functions, registration processing and authentication processing. 
+Even when calling from a class that only requires authentication processing, Attestation-related settings, which are only necessary for registration processing, are needed when instantiating `WebAuthnManager`, which is inconvenient.
+
+A: We provide `WebAuthnRegistrationManager` and `WebAuthnAuthenticationManager`, which are separate components of `WebAuthnManager`, so please use them instead.
 === WebAuthnManager class has too many responsibility
 
 Q: `WebAuthnManager` provides two distinct functions: registration and authentication.
