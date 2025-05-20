@@ -111,7 +111,7 @@ subprojects {
 
                 pom {
                     name = project.name
-                    //description = project.description.toString() //TODO: this doesn't work. to be fixed. https://github.com/gradle/gradle/issues/12259
+                    description = project.description
                     url = githubUrl
                     licenses {
                         license {
@@ -130,9 +130,6 @@ subprojects {
                     scm {
                         url = githubUrl
                     }
-                }
-                pom.withXml{
-                    asNode().appendNode("description", project.description) // workaround for https://github.com/gradle/gradle/issues/12259
                 }
             }
         }
