@@ -2,114 +2,23 @@
 
 This document describes WebAuthn4J release procedure.
 
-### Prepare a release commit
+### Trigger GitHub Actions release workflow
 
-##### Create a release branch
+https://github.com/webauthn4j/webauthn4j/actions/workflows/release.yml
 
-```
-git checkout -b release-<version>
-```
+It will automatically executes following steps:
+1. Create a release commit by updating the `isSnapshot` flag, and versions in documents from the `HEAD` of the `master` branch.
+2. Create a release tag
+3. Publish to Maven Central
 
-##### Update version variables in build.gradle
+After the release workflow completion, bump-version workflow is automatically triggered, and it will create a commit that bumps to the next patch version.
 
-gradle.properties
-```
-webAuthn4JVersion=<version>.RELEASE
-latestReleasedWebAuthn4JVersion=<version>.RELEASE
-```
+### Prepare a release note
 
-##### Update versions in documents
+Write a release note on the GitHub: https://github.com/webauthn4j/webauthn4j/releases
 
-```
-./gradlew updateVersionsInDocuments
-```
-
-##### Create a release commit
-
-```
-git commit -a -m "Release <version>.RELEASE"
-```
-
-##### Push the release branch
-
-```
-git push origin release-<version>
-```
-
-##### Create a pull request
-
-create a pull request with following title: `Release <version>.RELEASE`
-
-##### Check the build status & Merge the pull request
-
-Check the build status & merge the pull request.
-
-### Prepare a release tag
-
-##### Prepare a release note
-
-generate a release note draft
+Release note draft can be generated with the following command. 
 
 ```
 ./gradlew generateReleaseNote
 ```
-
-update the release note draft (`build/release-note.md`) properly with your editor.
-
-##### Create a release tag
-
-```
-git tag <version>.RELEASE
-```
-
-### Ship the release
-
-##### Push the release tag
-
-```
-git push origin <version>.RELEASE
-```
-
-##### Close and Release Staging Repository
-
-Close and release the staging repository by following [OSSRH manual](https://central.sonatype.org/pages/releasing-the-deployment.html#close-and-drop-or-release-your-staging-repository).
-
-##### Update the release note on GitHub
-
-Update the release note on GitHub
-
-### Declare new version development start
-
-##### Create a branch
-
-```
-git checkout -b <new version>-development
-```
-
-##### Update version variables in build.gradle
-
-gradle.properties
-```
-webAuthn4JVersion=<new version>-SNAPSHOT
-latestReleasedWebAuthn4JVersion=<version>.RELEASE
-```
-
-##### Commit the change
-
- ```
-git commit -a -m "Start <new version> development"
- ```
- 
-##### Push the release branch
-
-```
-git push origin <new version>-development
-```
-
-##### Check the build status
-
-Check the build status before continue.
-
-##### Merge the pull request
-
-merge the pull request and delete the branch.
