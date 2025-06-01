@@ -111,7 +111,7 @@ subprojects {
 
                 pom {
                     name = project.name
-                    description = project.description
+                    description.set(provider { project.description }) // use provider for lazy initialization
                     url = githubUrl
                     licenses {
                         license {
