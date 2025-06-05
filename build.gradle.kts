@@ -43,6 +43,11 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_11 // Although webauthn4j uses JDK 15+ API to support EdDSA, keep target version 11 to support JDK11 users who don't need EdDSA.
     }
 
+    tasks.compileJava {
+        options.compilerArgs.add("-Xlint:-module") // Suppress 'module not found' warning regarding 'exports to' directive on multi-module projects.
+        options.compilerArgs.add("-Werror") // Treat all warnings as errors
+    }
+
     tasks.test {
         useJUnitPlatform()
         testLogging {
