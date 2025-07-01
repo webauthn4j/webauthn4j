@@ -12,7 +12,7 @@ bouncycastle = "1.81"
 jetbrains-annotations = "26.0.2"
 asciidoctor = "4.0.4"
 
-jreleaser = "1.18.0"
+jreleaser = "1.19.0"
 
 # Test dependencies
 
