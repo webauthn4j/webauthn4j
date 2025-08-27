@@ -10,7 +10,7 @@ bouncycastle = "1.81"
 # Build dependencies
 
 jetbrains-annotations = "26.0.2"
-asciidoctor = "4.0.4"
+asciidoctor = "4.0.5"
 
 jreleaser = "1.19.0"
 
