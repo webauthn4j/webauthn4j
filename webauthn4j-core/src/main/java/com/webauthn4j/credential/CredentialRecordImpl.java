@@ -61,13 +61,13 @@ public class CredentialRecordImpl extends CoreCredentialRecordImpl implements Cr
      * @param transports              the set of authenticator transport methods supported, may be null
      */
     public CredentialRecordImpl(
-            @NotNull AttestationStatement attestationStatement,
+            @Nullable AttestationStatement attestationStatement,
             @Nullable Boolean uvInitialized,
             @Nullable Boolean backupEligible,
             @Nullable Boolean backupState,
             long counter,
             @NotNull AttestedCredentialData attestedCredentialData,
-            @NotNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions,
+            @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions,
             @Nullable CollectedClientData clientData,
             @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             @Nullable Set<AuthenticatorTransport> transports) {
