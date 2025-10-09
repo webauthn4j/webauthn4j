@@ -55,7 +55,7 @@ public class CredentialRecordImpl extends CoreCredentialRecordImpl implements Cr
      * @param backupState             the backup state, may be null for backward compatibility
      * @param counter                 the signature counter value
      * @param attestedCredentialData  the attested credential data, must not be null
-     * @param authenticatorExtensions the authenticator extensions, must not be null
+     * @param authenticatorExtensions the authenticator extensions, may be null
      * @param clientData              the client data collected during the credential creation process, may be null
      * @param clientExtensions        the client extension outputs from the credential creation process, may be null
      * @param transports              the set of authenticator transport methods supported, may be null
