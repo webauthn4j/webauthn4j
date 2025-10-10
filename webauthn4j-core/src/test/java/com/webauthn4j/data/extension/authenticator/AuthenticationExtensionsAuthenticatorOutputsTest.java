@@ -16,12 +16,17 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.webauthn4j.converter.jackson.deserializer.cbor.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.KeyProtectionType;
 import com.webauthn4j.data.MatcherProtectionType;
 import com.webauthn4j.data.UserVerificationMethod;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.data.extension.UvmEntry;
+import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -129,5 +134,14 @@ class AuthenticationExtensionsAuthenticatorOutputsTest {
         assertThatCode(instance::toString).doesNotThrowAnyException();
     }
 
+    @Test
+    void deserialize_registration_test(){
+        CborConverter cborConverter = new ObjectConverter().getCborConverter();
+
+        byte[] testData = HexUtil.decode("A16B6372656450726F7465637402");
+        AuthenticationExtensionsAuthenticatorOutputsEnvelope<ExtensionAuthenticatorOutput> envelope = cborConverter.readValue(testData, new TypeReference<>() {});
+        byte[] serialized = cborConverter.writeValueAsBytes(envelope.getAuthenticationExtensionsAuthenticatorOutputs());
+        assertThat(testData).isEqualTo(serialized);
+    }
 
 }
