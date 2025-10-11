@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Load MetadataBLOB from a local file. This provider validates MetadataBLOB signature.
+ * Load MetadataBLOB from the FIDO Alliance Metadata Service. This provider validates MetadataBLOB signature.
  */
 public class FidoMDS3MetadataBLOBAsyncProvider extends CachingMetadataBLOBAsyncProvider {
 
