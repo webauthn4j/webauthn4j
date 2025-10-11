@@ -34,7 +34,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
- * Load MetadataBLOB from a local file. This provider validates MetadataBLOB signature.
+ * Load MetadataBLOB from the FIDO Alliance Metadata Service. This provider validates MetadataBLOB signature.
  */
 public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
