@@ -32,6 +32,12 @@ public class DefaultSelfAttestationTrustworthinessVerifier implements SelfAttest
 
     private boolean isSelfAttestationAllowed = true;
 
+    public DefaultSelfAttestationTrustworthinessVerifier() {}
+
+    public DefaultSelfAttestationTrustworthinessVerifier(boolean isSelfAttestationAllowed) {
+        this.isSelfAttestationAllowed = isSelfAttestationAllowed;
+    }
+
     public void verify(@NotNull CertificateBaseAttestationStatement attestationStatement) {
         AssertUtil.notNull(attestationStatement, "attestationStatement must not be null");
         if (!isSelfAttestationAllowed()) {

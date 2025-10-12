@@ -54,9 +54,7 @@ public class DCAttestationDataVerifier extends CoreRegistrationDataVerifier {
     }
 
     private static @NotNull SelfAttestationTrustworthinessVerifier createSelfAttestationTrustWorthinessValidator() {
-        DefaultSelfAttestationTrustworthinessVerifier selfAttestationTrustworthinessValidator = new DefaultSelfAttestationTrustworthinessVerifier();
-        selfAttestationTrustworthinessValidator.setSelfAttestationAllowed(false);
-        return selfAttestationTrustworthinessValidator;
+        return new DefaultSelfAttestationTrustworthinessVerifier(false);
     }
 
     @Override

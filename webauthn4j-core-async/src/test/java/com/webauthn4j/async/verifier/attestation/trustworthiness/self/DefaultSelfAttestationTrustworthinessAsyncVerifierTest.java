@@ -30,8 +30,7 @@ class DefaultSelfAttestationTrustworthinessAsyncVerifierTest {
 
     @Test
     void verify_test_with_self_attestation_allowed_false() {
-        DefaultSelfAttestationTrustworthinessAsyncVerifier target = new DefaultSelfAttestationTrustworthinessAsyncVerifier();
-        target.setSelfAttestationAllowed(false);
+        DefaultSelfAttestationTrustworthinessAsyncVerifier target = new DefaultSelfAttestationTrustworthinessAsyncVerifier(false);
         PackedAttestationStatement attestationStatement = TestAttestationStatementUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
 
         assertThatThrownBy(() -> target.verify(attestationStatement).toCompletableFuture().get()).getRootCause().isInstanceOf(SelfAttestationProhibitedException.class);

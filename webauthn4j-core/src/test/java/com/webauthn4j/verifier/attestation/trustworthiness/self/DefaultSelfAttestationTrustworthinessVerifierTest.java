@@ -47,8 +47,7 @@ class DefaultSelfAttestationTrustworthinessVerifierTest {
 
     @Test
     void verify_test_with_self_attestation_allowed_false() {
-        DefaultSelfAttestationTrustworthinessVerifier validator = new DefaultSelfAttestationTrustworthinessVerifier();
-        validator.setSelfAttestationAllowed(false);
+        DefaultSelfAttestationTrustworthinessVerifier validator = new DefaultSelfAttestationTrustworthinessVerifier(false);
         PackedAttestationStatement attestationStatement = TestAttestationStatementUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
 
         assertThrows(SelfAttestationProhibitedException.class,
