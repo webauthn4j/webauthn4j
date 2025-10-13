@@ -35,6 +35,12 @@ public class DefaultSelfAttestationTrustworthinessAsyncVerifier implements SelfA
 
     private boolean isSelfAttestationAllowed = true;
 
+    public DefaultSelfAttestationTrustworthinessAsyncVerifier() {}
+
+    public DefaultSelfAttestationTrustworthinessAsyncVerifier(boolean isSelfAttestationAllowed) {
+        this.isSelfAttestationAllowed = isSelfAttestationAllowed;
+    }
+
     public CompletionStage<Void> verify(@NotNull CertificateBaseAttestationStatement attestationStatement) {
         return CompletionStageUtil.supply(()->{
             AssertUtil.notNull(attestationStatement, "attestationStatement must not be null");
