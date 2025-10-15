@@ -48,6 +48,8 @@ public class RegistrationDataAsyncVerifier {
 
     private int maxCredentialIdLength = DEFAULT_MAX_CREDENTIAL_ID_LENGTH;
 
+    private boolean crossOriginAllowed = false;
+
     public RegistrationDataAsyncVerifier(
             List<AttestationStatementAsyncVerifier> attestationStatementAsyncVerifiers,
             CertPathTrustworthinessAsyncVerifier certPathTrustworthinessAsyncVerifier,
@@ -199,6 +201,9 @@ public class RegistrationDataAsyncVerifier {
             //noinspection deprecation
             TokenBindingVerifier.verify(collectedClientData.getTokenBinding(), registrationObject.getServerProperty().getTokenBindingId());
 
+            // Verify cross origin. This step is not defined in the spec
+            CrossOriginFlagVerifier.verify(collectedClientData, crossOriginAllowed);
+
             //spec| Step10
             //spec| If C.topOrigin is present:
             //spec|   - Verify that the Relying Party expects that this credential would have been created within an iframe that is not same-origin with its ancestors.
@@ -312,5 +317,13 @@ public class RegistrationDataAsyncVerifier {
             }
             return CompletableFuture.completedFuture(null);
         }
+    }
+
+    public boolean isCrossOriginAllowed() {
+        return crossOriginAllowed;
+    }
+
+    public void setCrossOriginAllowed(boolean crossOriginAllowed) {
+        this.crossOriginAllowed = crossOriginAllowed;
     }
 }

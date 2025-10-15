@@ -61,6 +61,8 @@ public class RegistrationDataVerifier {
 
     private int maxCredentialIdLength = DEFAULT_MAX_CREDENTIAL_ID_LENGTH;
 
+    private boolean crossOriginAllowed = false;
+
     public RegistrationDataVerifier(
             @NotNull List<AttestationStatementVerifier> attestationStatementVerifiers,
             @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
@@ -155,6 +157,9 @@ public class RegistrationDataVerifier {
         //spec| Step9
         //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
         originVerifier.verify(registrationObject);
+
+        // Verify cross origin. This step is not defined in the spec
+        CrossOriginFlagVerifier.verify(collectedClientData, crossOriginAllowed);
 
         //spec| (Level2) Step10 (Kept for backward compatibility)
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
@@ -283,4 +288,11 @@ public class RegistrationDataVerifier {
         return customRegistrationVerifiers;
     }
 
+    public boolean isCrossOriginAllowed() {
+        return crossOriginAllowed;
+    }
+
+    public void setCrossOriginAllowed(boolean crossOriginAllowed) {
+        this.crossOriginAllowed = crossOriginAllowed;
+    }
 }
