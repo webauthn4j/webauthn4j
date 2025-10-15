@@ -427,7 +427,7 @@ public class TestDataUtil {
     }
 
     public static ServerProperty createRelyingParty() {
-        return new ServerProperty(createOrigin(), "localhost", createChallenge(), null);
+        return ServerProperty.builder().origin(createOrigin()).rpId("localhost").challenge(createChallenge()).build();
     }
 
     public static Authenticator createAuthenticator(AttestationObject attestationObject) {
@@ -440,7 +440,11 @@ public class TestDataUtil {
     }
 
     public static ServerProperty createServerProperty(Challenge challenge) {
-        return new ServerProperty(TestDataUtil.createOrigin(), "example.com", challenge, new byte[32]);
+        return ServerProperty.builder()
+                .origin(TestDataUtil.createOrigin())
+                .rpId("example.com")
+                .challenge(challenge)
+                .build();
     }
 
     public static CredentialRecord createCredentialRecord(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement) {

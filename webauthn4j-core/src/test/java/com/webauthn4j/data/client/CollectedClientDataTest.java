@@ -30,7 +30,10 @@ class CollectedClientDataTest {
     void constructor_test() {
         Challenge challenge = new DefaultChallenge();
         Origin origin = Origin.create("http://example.com");
+        Origin topOrigin = Origin.create("http://example.net");
         assertAll(
+                () -> assertThatCode(() -> new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge, origin, true, topOrigin, null)).doesNotThrowAnyException(),
+                () -> assertThatCode(() -> new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge, origin, null, null, null)).doesNotThrowAnyException(),
                 () -> assertThatCode(() -> new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge, origin, true, null)).doesNotThrowAnyException(),
                 () -> assertThatCode(() -> new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge, origin, null)).doesNotThrowAnyException(),
                 () -> assertThatThrownBy(() -> new CollectedClientData(null, challenge, origin, null)).isInstanceOf(IllegalArgumentException.class),

@@ -63,4 +63,9 @@ public class WebAuthnTestUtil {
         var webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.NONE_ATTESTATION_AUTHENTICATOR);
         return new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
     }
+
+    public static ClientPlatform createClientPlatformWithNoneAuthenticator(Origin origin, Origin topOrigin) {
+        var webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.NONE_ATTESTATION_AUTHENTICATOR);
+        return new ClientPlatform(origin, webAuthnAuthenticatorAdaptor, topOrigin);
+    }
 }
