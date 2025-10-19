@@ -211,7 +211,11 @@ catch (DataConversionException e) {
 Origin origin = null /* set origin */;
 String rpId = null /* set rpId */;
 Challenge challenge = null /* set challenge */;
-ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .build();
 
 // expectations
 List<PublicKeyCredentialParameters> pubKeyCredParams = null;
@@ -248,11 +252,36 @@ This verifies the `UP` flag, which indicates that the user performed some gestur
 
 ==== ServerProperty
 
-The server state is encapsulated in `serverProperty`. When calling the `ServerProperty` constructor, specify the following values as parameters:
+The server state is encapsulated in `serverProperty`. When creating the `ServerProperty` (via the builder), specify the following values:
 
-- For `origin`, set the origin of the site providing WebAuthn authentication. In WebAuthn, the browser writes the recognized origin into the client data and signs it. WebAuthn4J verifies that the written origin matches the specified origin to prevent phishing attacks.
-- For `rpId`, specify the relying party id of the site offering WebAuthn authentication. The `rpId` defines the scope of credentials. For more details, refer to the `rpId` section of the WebAuthn specification.
-- For `challenge`, set the generated challenge. The challenge is a parameter that helps prevent replay attacks. Generate a random byte array on the server as the challenge, pass it to the WebAuthn JS API on the frontend, and include it in the data to be signed. The server then verifies the matching values to protect users from replay attacks. It is the responsibility of the WebAuthn4J caller to persist the generated challenge until verification; storing it in a session is recommended.
+* For `origin`, specify the origin you expect the client browser (user agent) to have recognized at the time of the WebAuthn registration and authentication ceremony. The browser writes the recognized origin to clientData and includes this content in the signature. On the server side, by verifying that the origin recorded in clientData matches the expected value, you can prevent ceremonies that are fraudulently launched from unexpected pages or other origins (phishing and framing attacks).
+* For `rpId`, specify the rpId of the site providing WebAuthn authentication. rpId is a parameter that specifies the scope of the credentials. For details, see the rpId section of the WebAuthn specification.
+* For `challenge`, specify the issued challenge. `challenge` is a parameter to prevent replay attacks. You can protect users from replay attacks by generating a random byte sequence as a `challenge` on the server side, specifying it as a parameter when executing the WebAuthn JS API on the front-end, including it in the signature, and verifying that the values ​​match on the server side. It is the responsibility of the WebAuthn4J library caller to persist the issued challenge until verification. It is a good idea to store it in the session or somewhere similar.
+* (Optional) You can specify the top origins to allow by using `topOrigin(...)`/`topOrigins(...)`/`topOriginPredicate(...)`.
+** WebAuthn does not allow cross-origin access in principle, due to the same-origin constraint and clickjacking countermeasures.
+** However, in use cases such as embedding an authentication widget on a site with a different origin, you may want to allow access only from specific parent pages. In that case, please explicitly specify the parent pages (origin of the top-level document) you want to allow using `topOrigin(...)`/`topOrigins(...)`/`topOriginPredicate(...)`. If you absolutely need to allow any parent page, you can use `anyTopOrigin()`, but this should be used with caution as it increases the attack surface.
+** Example (Allow only specific parent pages):
++
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+.origin(new Origin("https://rp.example.com"))
+.rpId("rp.example.com")
+.challenge(challenge)
+.topOrigin(new Origin("https://parent.example.com"))
+.build();
+----
+** Example (Allow/Disable any parent page):
++
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+.origin(new Origin("https://rp.example.com"))
+.rpId("rp.example.com")
+.challenge(challenge)
+.anyTopOrigin()
+.build();
+----
 
 If verification succeeds, create a `CredentialRecord` instance from the returned values and persist it in a database or similar storage for authentication.
 For more information on persistence methods, see <<_credentialrecord_serialization_and_deserialization, Credential Record serialization and deserialization>>.
@@ -320,7 +349,11 @@ try {
 Origin origin = null /* set origin */;
 String rpId = null /* set rpId */;
 Challenge challenge = null /* set challenge */;
-ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .build();
 
 // expectations
 List<byte[]> allowCredentials = null;
@@ -349,6 +382,7 @@ updateCounter(
         authenticationData.getAuthenticatorData().getSignCount()
 );
 ----
+Note: Origin verification checks that the Origin recognized by the browser at the time of the ceremony matches your expected Origin. Cross‑origin iframe execution is disallowed by default. For legitimate embedding use cases, explicitly configure server‑side acceptance of specific parent origins via the ServerProperty builder (`topOrigin(...)`/`topOrigins(...)`/`topOriginPredicate(...)`), or use `anyTopOrigin()` only if strictly necessary. The client’s `crossOrigin` value is a supplemental signal; the server’s top‑origin configuration determines allow/deny.
 
 The `AuthenticationParameters`, which is another argument of the `WebAuthnManager#verifyAuthenticationResponseJSON` method, is a parameter that encapsulates the server’s state and verification conditions.
 

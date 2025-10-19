@@ -40,8 +40,11 @@ class RegistrationContextValidatorSample {
         Origin origin = null /* set origin */;
         String rpId = null /* set rpId */;
         Challenge challenge = null /* set challenge */;
-        byte[] tokenBindingId = null /* set tokenBindingId */;
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+        ServerProperty serverProperty = ServerProperty.builder()
+                .origin(origin)
+                .rpId(rpId)
+                .challenge(challenge)
+                .build();
         List<PublicKeyCredentialParameters> pubKeyCredParams = null;
         boolean userVerificationRequired = false;
 
@@ -86,8 +89,11 @@ class RegistrationContextValidatorSample {
         Origin origin = null /* set origin */;
         String rpId = null /* set rpId */;
         Challenge challenge = null /* set challenge */;
-        byte[] tokenBindingId = null /* set tokenBindingId */;
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+        ServerProperty serverProperty = ServerProperty.builder()
+                .origin(origin)
+                .rpId(rpId)
+                .challenge(challenge)
+                .build();
         Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
         List<byte[]> allowCredentials = null;
         boolean userVerificationRequired = true;

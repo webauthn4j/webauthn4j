@@ -187,6 +187,70 @@ WebAuthn4Jのテストを行うための内部ライブラリです。含まれ�
 
 WebAuthn4Jライブラリで使用されるユーティリティクラスをまとめたライブラリです。
 
+=== Origin検証
+
+WebAuthn の「Origin 検証」とは、登録・認証の各セレモニー時点でクライアント（ブラウザ）が認識していた Origin が、RP が期待する Origin と一致するかをサーバー側で検証することを指します。
+これは、クライアントが生成する clientData に内包される origin を根拠に、セレモニーが想定したページから正しく開始されたことを確認し、他オリジンからの不正な呼び出しを防止する目的があります。
+
+また、iframe 配下でのクロスオリジンな操作（例: https://example.com のページに埋め込まれた https://rp.example.net の iframe 内でWebAuthn認証を実行するような操作）について、WebAuthn は原則として許容しません。
+これは、同一オリジン原則に基づき、クリックジャッキング等のフレーミング攻撃や別オリジンからの恣意的な認証誘発を抑止するためです。
+
+一方で、認証ウィジェットを別オリジンのサイトに iframe 埋め込みする構成（自社・パートナーサイトなど）のようなユースケースでは、適切に制約したうえでクロスオリジンの実行を許容したい場合があります。
+Permissions-Policyディレクティブなどを使用して許可を宣言することで、クロスオリジンでのWebAuthnの使用をクライアントに対して許可することが可能ですが、
+サーバーサイドでも適切に検証が必要であり、WebAuthn4J では、ServerProperty のビルダー API により、通常の origin（RP ページ）に対する検証に加えて、topOrigin（親ページ）の許容条件を宣言的に構成できます。
+既定ではクロスオリジンは許可されません。クロスオリジンを許容する必要がある場合は、許容したい親ページを明示する topOrigin(...)/topOrigins(...)/topOriginPredicate(...) もしくは任意許可の anyTopOrigin() を設定してください。
+
+==== origin の検証
+
+* 指定方法
+** origin(...), origins(...), originPredicate(...): RP ページの許容オリジンを指定します。
+* 既定の挙動
+** 指定した条件に一致するオリジンのみを許容します。
+* 使用例
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .build();
+----
+
+==== topOrigin の検証
+
+* 目的
+** iframe 配下でのクロスオリジンな WebAuthn 操作において、最上位ドキュメント（親ページ）のオリジンを検証し、想定する埋め込み元のみを許容します。
+* 指定方法
+** topOrigin(...), topOrigins(...), topOriginPredicate(...): 許可するトップオリジンを限定
+** anyTopOrigin(): すべてのトップオリジンを許可（利便性は高いがセキュリティ境界を広げるため慎重に使用）
+* 既定の挙動
+** 明示的に topOrigin を設定しない場合、クロスオリジンな iframe からの利用は許可されません。
+** クライアントから topOrigin が提供されない場合は、通常の origin 検証のみが行われます。
+* 使用例（特定のトップオリジンのみ許可）
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .topOrigin(new Origin("https://parent.example.com"))
+    .build();
+----
+* 使用例（任意のトップオリジンを許可）
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .anyTopOrigin()
+    .build();
+----
+* セキュリティ考慮
+** 任意許可（anyTopOrigin）は攻撃面の拡大につながる可能性があります。可能な限り topOrigin/topOrigins/topOriginPredicate により許可範囲を限定してください。
+* 後方互換
+** 旧来の包括的許可フラグは後方互換のために残されていますが、新規の構成では topOriginPredicate（または anyTopOrigin）を使用してください。
+
 
 === カスタムな検証ロジックの実装
 

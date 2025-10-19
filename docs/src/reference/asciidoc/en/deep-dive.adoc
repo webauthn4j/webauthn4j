@@ -198,6 +198,72 @@ The included classes don't follow semantic versioning and the design may be chan
 
 Contains utility classes used in WebAuthn4J library.
 
+=== Origin verification
+
+In WebAuthn, “Origin verification” means the server verifies that the Origin recognized by the user agent (browser) at the time of the registration or authentication ceremony matches the Origin expected by the RP.
+This verification relies on the origin recorded in clientData and ensures the ceremony actually started from the intended page, preventing phishing and unintended cross‑origin invocation.
+
+By default, WebAuthn does not allow cross‑origin usage within iframes (e.g., executing WebAuthn inside an iframe whose parent page is on a different origin).
+This is to uphold the same‑origin policy and mitigate threats such as clickjacking, or forcing authentication from another origin.
+
+That said, there are legitimate use cases where you may want to allow cross‑origin execution in a constrained manner: Embedding an authentication widget in a partner site (different parent and RP origins).
+
+In such cases, you should both declare permission to the client side via Permissions‑Policy directives and also configure server‑side verification appropriately.
+WebAuthn4J provides a ServerProperty builder API to declare acceptable origins for the RP page, and additionally to constrain acceptable top origins (the top‑level document/parent page).
+By default, cross‑origin usage is not allowed; you must explicitly opt in by configuring acceptable top origins.
+
+==== origin verification
+
+* How to specify
+** origin(...), origins(...), originPredicate(...): Specify the acceptable origin(s) for the RP page.
+* Default behavior
+** Only requests whose clientData.origin matches the specified condition are accepted.
+* Example
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .build();
+----
+
+==== topOrigin verification
+
+* Purpose
+** When running WebAuthn in an iframe, verify the top‑level document’s origin (the parent page) and allow the ceremony only when it is framed by the expected parent.
+* How to specify
+** topOrigin(...), topOrigins(...), topOriginPredicate(...): Allow only the specified top origins
+** anyTopOrigin(): Allow any top origin (convenient, but expands the security boundary and should be used with care)
+* Default behavior
+** If you do not configure a topOriginPredicate, cross‑origin iframe usage is not allowed.
+** If the client does not provide topOrigin, only the normal origin verification is performed.
+* Example (allow a specific parent origin)
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .topOrigin(new Origin("https://parent.example.com"))
+    .build();
+----
+* Example (allow any parent origin — not recommended for production)
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .anyTopOrigin()
+    .build();
+----
+* Security considerations
+** anyTopOrigin significantly increases the attack surface. Prefer whitelisting specific parent origins with topOrigin/topOrigins/topOriginPredicate wherever possible.
+* Backward compatibility
+** Legacy coarse‑grained allow flags may remain for compatibility, but for new setups use topOriginPredicate (or anyTopOrigin where strictly necessary). The client’s crossOrigin value is a supplemental signal; the final allow/deny decision should be made by the server‑side topOrigin configuration.
+
+
 
 === Custom validator implementation
 
