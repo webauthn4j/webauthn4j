@@ -30,8 +30,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -66,12 +65,13 @@ class ServerPropertyTest {
         
         // When/Then
         assertThrows(IllegalArgumentException.class,
-                () -> new ServerProperty(origin, null, null)
+                () -> ServerProperty.builder().origin(origin).build()
         );
     }
 
+    @Deprecated
     @Test
-    void constructorWithoutTokenBindingIdShouldSucceed() {
+    void deprecatedConstructorWithoutTokenBindingIdShouldSucceed() {
         // Given
         HashSet<Origin> origins = multipleOrigins;
         Origin singleOrigin = webApp1Origin;
@@ -100,13 +100,20 @@ class ServerPropertyTest {
     }
 
     @Test
-    void multipleOriginsInDifferentOrderShouldBeEqual() {
+    void sameValuesWithAnyTopOriginShouldBeEqual() {
         // Given
-        final ServerProperty serverPropertyA =
-                new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin)), RP_ID, challenge);
-        final ServerProperty serverPropertyB =
-                new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, apk1Origin, webApp2Origin, apk2Origin)), RP_ID, challenge);
-
+        ServerProperty serverPropertyA = ServerProperty.builder()
+                .origin(webApp1Origin)
+                .rpId(RP_ID)
+                .challenge(challenge)
+                .anyTopOrigin()
+                .build();
+        ServerProperty serverPropertyB = ServerProperty.builder()
+                .origin(webApp1Origin)
+                .rpId(RP_ID)
+                .challenge(challenge)
+                .anyTopOrigin()
+                .build();
         // When
         boolean equals = serverPropertyA.equals(serverPropertyB);
         int hashCodeA = serverPropertyA.hashCode();
@@ -120,24 +127,60 @@ class ServerPropertyTest {
     }
 
     @Test
-    void emptyOriginsShouldReturnEmptySet() {
+    void sameValuesWithNoTopOriginShouldBeEqual() {
         // Given
-        final ServerProperty serverProperty =
-                new ServerProperty(Collections.emptySet(), RP_ID, challenge);
-        
+        ServerProperty serverPropertyA = ServerProperty.builder()
+                .origin(webApp1Origin)
+                .rpId(RP_ID)
+                .challenge(challenge)
+                .topOriginPredicate(new ServerProperty.NoOriginPredicate())
+                .build();
+        ServerProperty serverPropertyB = ServerProperty.builder()
+                .origin(webApp1Origin)
+                .rpId(RP_ID)
+                .challenge(challenge)
+                .topOriginPredicate(new ServerProperty.NoOriginPredicate())
+                .build();
         // When
-        Set<Origin> origins = serverProperty.getOrigins();
-        String rpId = serverProperty.getRpId();
-        Challenge retrievedChallenge = serverProperty.getChallenge();
-        
+        boolean equals = serverPropertyA.equals(serverPropertyB);
+        int hashCodeA = serverPropertyA.hashCode();
+        int hashCodeB = serverPropertyB.hashCode();
+
         // Then
         assertAll(
-                () -> assertThat(origins).isEmpty(),
-                () -> assertThat(rpId).isEqualTo(RP_ID),
-                () -> assertThat(retrievedChallenge).isEqualTo(challenge)
+                () -> assertThat(equals).isTrue(),
+                () -> assertThat(hashCodeA).isEqualTo(hashCodeB)
         );
     }
 
+    @Test
+    void multipleOriginsInDifferentOrderShouldBeEqual() {
+        // Given
+        final ServerProperty serverPropertyA =
+                ServerProperty.builder().origins(new HashSet<>(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin))).rpId(RP_ID).challenge(challenge).build();
+        final ServerProperty serverPropertyB =
+                ServerProperty.builder().origins(new HashSet<>(Arrays.asList(webApp1Origin, apk1Origin, webApp2Origin, apk2Origin))).rpId(RP_ID).challenge(challenge).build();
+
+        // When
+        boolean equals = serverPropertyA.equals(serverPropertyB);
+        int hashCodeA = serverPropertyA.hashCode();
+        int hashCodeB = serverPropertyB.hashCode();
+
+        // Then
+        assertAll(
+                () -> assertThat(equals).isTrue(),
+                () -> assertThat(hashCodeA).isEqualTo(hashCodeB)
+        );
+    }
+
+    @Deprecated
+    @Test
+    void emptyOriginsShouldThrowException() {
+        // Given/When/Then
+        assertThrows(IllegalArgumentException.class, () -> ServerProperty.builder().origins(Collections.emptySet()).rpId(RP_ID).challenge(challenge).build());
+    }
+
+    @Deprecated
     @Test
     void singleOriginShouldReturnSingletonSet() {
         // Given
@@ -157,6 +200,7 @@ class ServerPropertyTest {
         );
     }
 
+    @Deprecated
     @Test
     void multipleOriginsShouldReturnAllOrigins() {
         // Given
@@ -218,6 +262,90 @@ class ServerPropertyTest {
                 () -> assertThat(rpId).isEqualTo(RP_ID),
                 () -> assertThat(retrievedChallenge).isEqualTo(challenge)
         );
+    }
+
+    @Nested
+    class BuilderTest{
+        @Test
+        void builderWithMinimalArgumentsShouldCreateValidServerProperty() {
+            ServerProperty serverProperty = ServerProperty.builder()
+                    .rpId(RP_ID)
+                    .challenge(challenge)
+                    .origin(webApp1Origin)
+                    .build();
+            assertThat(serverProperty.getRpId()).isEqualTo(RP_ID);
+            assertThat(serverProperty.getChallenge()).isEqualTo(challenge);
+            assertThat(serverProperty.getOriginPredicate()).isInstanceOf(ServerProperty.SimpleOriginPredicate.class);
+        }
+
+        @Nested
+        class OriginTest{
+            @Test
+            void builderWithOriginsShouldCreateValidServerProperty() {
+                ServerProperty serverProperty = ServerProperty.builder()
+                        .rpId(RP_ID)
+                        .challenge(challenge)
+                        .origins(Set.of(webApp1Origin, webApp2Origin))
+                        .build();
+                assertThat(serverProperty.getRpId()).isEqualTo(RP_ID);
+                assertThat(serverProperty.getChallenge()).isEqualTo(challenge);
+                assertThat(serverProperty.getOriginPredicate()).isInstanceOf(ServerProperty.SimpleOriginPredicate.class);
+            }
+
+            @Test
+            void builderWithOriginNullShouldCreateValidServerProperty() {
+                assertThatThrownBy(()-> ServerProperty.builder()
+                        .rpId(RP_ID)
+                        .challenge(challenge)
+                        .origin(null)
+                        .build()).isInstanceOf(IllegalArgumentException.class);
+            }
+
+            @Test
+            void builderWithOriginsNullShouldCreateValidServerProperty() {
+                assertThatThrownBy(()-> ServerProperty.builder()
+                        .rpId(RP_ID)
+                        .challenge(challenge)
+                        .origins(null)
+                        .build()).isInstanceOf(IllegalArgumentException.class);
+            }
+
+
+            @Test
+            void builderWithOriginPredicateShouldCreateValidServerProperty() {
+                ServerProperty serverProperty = ServerProperty.builder()
+                        .rpId(RP_ID)
+                        .challenge(challenge)
+                        .originPredicate(new TestOriginPredicate())
+                        .build();
+                assertThat(serverProperty.getRpId()).isEqualTo(RP_ID);
+                assertThat(serverProperty.getChallenge()).isEqualTo(challenge);
+                assertThat(serverProperty.getOriginPredicate()).isInstanceOf(TestOriginPredicate.class);
+            }
+
+        }
+
+        @Nested
+        class TopOriginTest {
+            @Test
+            void builderWithTopOriginShouldCreateValidServerProperty() {
+                ServerProperty serverProperty = ServerProperty.builder()
+                        .rpId(RP_ID)
+                        .challenge(challenge)
+                        .origin(webApp1Origin)
+                        .topOrigin(webApp2Origin)
+                        .build();
+                assertThat(serverProperty.getTopOriginPredicate()).isInstanceOf(ServerProperty.SimpleOriginPredicate.class);
+            }
+        }
+
+
+        class TestOriginPredicate implements OriginPredicate {
+            @Override
+            public boolean test(Origin origin) {
+                return false;
+            }
+        }
     }
 
     /**

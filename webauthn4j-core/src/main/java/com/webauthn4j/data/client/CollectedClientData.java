@@ -37,6 +37,7 @@ public class CollectedClientData {
     private final Challenge challenge;
     private final Origin origin;
     private final Boolean crossOrigin;
+    private final Origin topOrigin;
     private final TokenBinding tokenBinding;
 
     @JsonCreator
@@ -44,6 +45,7 @@ public class CollectedClientData {
                                @NotNull @JsonProperty("challenge") Challenge challenge,
                                @NotNull @JsonProperty("origin") Origin origin,
                                @Nullable @JsonProperty("crossOrigin") Boolean crossOrigin,
+                               @Nullable @JsonProperty("topOrigin") Origin topOrigin,
                                @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
         AssertUtil.notNull(type, "type must not be null");
         AssertUtil.notNull(challenge, "challenge must not be null");
@@ -52,7 +54,16 @@ public class CollectedClientData {
         this.challenge = challenge;
         this.origin = origin;
         this.crossOrigin = crossOrigin;
+        this.topOrigin = topOrigin;
         this.tokenBinding = tokenBinding;
+    }
+
+    public CollectedClientData(@NotNull @JsonProperty("type") ClientDataType type,
+                               @NotNull @JsonProperty("challenge") Challenge challenge,
+                               @NotNull @JsonProperty("origin") Origin origin,
+                               @Nullable @JsonProperty("crossOrigin") Boolean crossOrigin,
+                               @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
+        this(type, challenge, origin, crossOrigin, null, tokenBinding);
     }
 
     public CollectedClientData(@NotNull @JsonProperty("type") ClientDataType type,
@@ -79,21 +90,24 @@ public class CollectedClientData {
         return crossOrigin;
     }
 
+    public @NotNull Origin getTopOrigin() {
+        return topOrigin;
+    }
+
     public @Nullable TokenBinding getTokenBinding() {
         return tokenBinding;
     }
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CollectedClientData that = (CollectedClientData) o;
-        return Objects.equals(type, that.type) && Objects.equals(challenge, that.challenge) && Objects.equals(origin, that.origin) && Objects.equals(crossOrigin, that.crossOrigin) && Objects.equals(tokenBinding, that.tokenBinding);
+        return Objects.equals(type, that.type) && Objects.equals(challenge, that.challenge) && Objects.equals(origin, that.origin) && Objects.equals(crossOrigin, that.crossOrigin) && Objects.equals(topOrigin, that.topOrigin) && Objects.equals(tokenBinding, that.tokenBinding);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, challenge, origin, crossOrigin, tokenBinding);
+        return Objects.hash(type, challenge, origin, crossOrigin, topOrigin, tokenBinding);
     }
 
     @Override
@@ -103,6 +117,7 @@ public class CollectedClientData {
                 ", challenge=" + challenge +
                 ", origin=" + origin +
                 ", crossOrigin=" + crossOrigin +
+                ", topOrigin=" + topOrigin +
                 ", tokenBinding=" + tokenBinding +
                 ')';
     }

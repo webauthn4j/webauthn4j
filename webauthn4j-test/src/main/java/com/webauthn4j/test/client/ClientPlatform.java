@@ -45,12 +45,18 @@ public class ClientPlatform {
     private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
 
     private Origin origin;
+    private Origin topOrigin;
     //TODO: support multiple authenticators
     private AuthenticatorAdaptor authenticatorAdaptor;
 
-    public ClientPlatform(Origin origin, AuthenticatorAdaptor authenticatorAdaptor) {
+    public ClientPlatform(Origin origin, AuthenticatorAdaptor authenticatorAdaptor, Origin topOrigin) {
         this.origin = origin;
         this.authenticatorAdaptor = authenticatorAdaptor;
+        this.topOrigin = topOrigin;
+    }
+
+    public ClientPlatform(Origin origin, AuthenticatorAdaptor authenticatorAdaptor) {
+        this(origin, authenticatorAdaptor, null);
     }
 
     public ClientPlatform(AuthenticatorAdaptor authenticatorAdaptor) {
@@ -197,7 +203,12 @@ public class ClientPlatform {
     }
 
     public CollectedClientData createCollectedClientData(ClientDataType type, Challenge challenge) {
-        return new CollectedClientData(type, challenge, origin, null);
+        if(topOrigin == null){
+            return new CollectedClientData(type, challenge, origin, null);
+        }
+        else {
+            return new CollectedClientData(type, challenge, origin, true, topOrigin, null);
+        }
     }
 
     public CollectedClientData createCollectedClientData(ClientDataType type, Challenge challenge, byte[] tokenBindingId) {

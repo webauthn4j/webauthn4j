@@ -14,25 +14,31 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.verifier;
+package com.webauthn4j.verifier.internal;
 
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.Origin;
+import com.webauthn4j.server.OriginPredicate;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.verifier.exception.BadOriginException;
+import com.webauthn4j.verifier.AuthenticationDataVerifier;
+import com.webauthn4j.verifier.AuthenticationObject;
+import com.webauthn4j.verifier.RegistrationObject;
+import com.webauthn4j.verifier.exception.BadTopOriginException;
+import com.webauthn4j.verifier.exception.CrossOriginException;
 import org.jetbrains.annotations.NotNull;
 
-public class OriginVerifierImpl implements OriginVerifier {
+import java.util.Objects;
+
+public class TopOriginVerifier {
 
     //~ Instance fields
     // ================================================================================================
-
+    private boolean forceBlockCrossOrigin = false;
 
     // ~ Methods
     // ========================================================================================================
 
-    @Override
     public void verify(@NotNull RegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         CollectedClientData collectedClientData = registrationObject.getCollectedClientData();
@@ -40,7 +46,6 @@ public class OriginVerifierImpl implements OriginVerifier {
         verify(collectedClientData, serverProperty);
     }
 
-    @Override
     public void verify(@NotNull AuthenticationObject authenticationObject) {
         AssertUtil.notNull(authenticationObject, "authenticationObject must not be null");
         CollectedClientData collectedClientData = authenticationObject.getCollectedClientData();
@@ -52,10 +57,34 @@ public class OriginVerifierImpl implements OriginVerifier {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
 
-        final Origin clientOrigin = collectedClientData.getOrigin();
-        if (!serverProperty.getOriginPredicate().test(clientOrigin)) {
-            throw new BadOriginException("The collectedClientData origin '" + clientOrigin + "' doesn't match any of the preconfigured server origin.");
+        Boolean clientCrossOrigin = collectedClientData.getCrossOrigin();
+        Origin clientTopOrigin = collectedClientData.getTopOrigin();
+        OriginPredicate expectedTopOriginPredicate = serverProperty.getTopOriginPredicate();
+
+        if(Objects.equals(clientCrossOrigin, Boolean.TRUE)){
+            if(forceBlockCrossOrigin){
+                throw new CrossOriginException("Cross-origin request is prohibited. Relax AuthenticationDataVerifier config if necessary.");
+            }
+            if (expectedTopOriginPredicate == null || !expectedTopOriginPredicate.test(clientTopOrigin)) {
+                throw new BadTopOriginException("The collectedClientData topOrigin '" + clientTopOrigin + "' doesn't match any of the preconfigured server topOrigin.");
+            }
+        }
+        else{ // false or null
+            //nop
         }
     }
 
+    /**
+     * @deprecated This method was added to support {@link AuthenticationDataVerifier#setCrossOriginAllowed}, but it is deprecated along with {@link AuthenticationDataVerifier#setCrossOriginAllowed}.
+     * Use {@link ServerProperty.Builder#anyTopOrigin()} or {@link ServerProperty.Builder#topOriginPredicate(OriginPredicate)} instead.
+     */
+    @Deprecated
+    public void setForceBlockCrossOrigin(boolean forceBlockCrossOrigin) {
+        this.forceBlockCrossOrigin = forceBlockCrossOrigin;
+    }
+
+    @Deprecated
+    public boolean isForceBlockCrossOrigin() {
+        return forceBlockCrossOrigin;
+    }
 }

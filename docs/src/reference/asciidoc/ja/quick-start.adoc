@@ -225,7 +225,11 @@ catch (DataConversionException e) {
 Origin origin = null /* set origin */;
 String rpId = null /* set rpId */;
 Challenge challenge = null /* set challenge */;
-ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .build();
 
 // expectations
 List<PublicKeyCredentialParameters> pubKeyCredParams = null;
@@ -265,9 +269,34 @@ save(credentialRecord); // please persist credentialRecord in your manner
 サーバーの状態については、 `serverProperty` としてまとめています。
 `ServerProperty` のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。
 
-- `origin` にはWebAuthnによる認証を提供するサイトのOriginを指定して下さい。WebAuthnでは、ブラウザが認識しているOriginをClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれたOriginが指定されたOriginと合致するかを検証することで、 フィッシング攻撃を防ぎます。
-- `rpId` にはWebAuthnによる認証を提供するサイトのrpIdを指定して下さい。rpIdは資格情報のスコープを指定するパラメータです。 詳しくは https://www.w3.org/TR/webauthn-1/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
-- `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側でWebAuthn JS APIを実行する際に パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行したChallengeを検証時まで永続化しておくのはWebAuthn4Jライブラリ呼出側の責務です。セッションなどに格納しておくと良いでしょう。
+* `origin` には WebAuthn による登録・認証セレモニーの時点でクライアントブラウザ（ユーザーエージェント）が認識していたことを期待する Origin を指定してください。ブラウザは認識した Origin を clientData に書き込み、その内容を含めて署名します。サーバー側では、clientData に記録された Origin が期待値と一致するかを照合することで、想定外のページや別オリジンから不正に起動されたセレモニー（フィッシングやフレーミング誘発）を防ぎます。
+* `rpId` には WebAuthn による認証を提供するサイトの rpId を指定して下さい。rpId は資格情報のスコープを指定するパラメータです。 詳しくは https://www.w3.org/TR/webauthn-1/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
+* `challenge` には発行した Challenge を指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側で WebAuthn JS API を実行する際にパラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行した Challenge を検証時まで永続化しておくのは WebAuthn4J ライブラリ呼出側の責務です。セッションなどに格納しておくと良いでしょう。
+* （オプション）`topOrigin(...)`/`topOrigins(...)`/`topOriginPredicate(...)` を使用することで、許容するtop originを指定することが出来ます。
+** WebAuthn は同一オリジン制約とクリックジャッキング対策の観点から、原則としてクロスオリジンを許容しません。
+** ただし、認証ウィジェットを別オリジンのサイトに埋め込む、といったユースケースでは、親ページを限定して許容したい場合があります。その場合は `topOrigin(...)`/`topOrigins(...)`/`topOriginPredicate(...)` で許容する親ページ（top-level ドキュメントの Origin）を明示してください。どうしても任意の親ページを許可する必要がある場合は `anyTopOrigin()` を使用できますが、攻撃面が広がるため慎重な運用が必要です。
+** 例（特定の親ページのみ許可）:
++
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .topOrigin(new Origin("https://parent.example.com"))
+    .build();
+----
+** 例（任意の親ページを許可）:
++
+[source,java]
+----
+ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .anyTopOrigin()
+    .build();
+----
 
 検証に成功した場合は、返却された値から `CredentialRecord` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に使用します。
 永続化方法について詳しくは、 <<./deep-dive.adoc#CredentialRecordのシリアライズデシリアライズ,CredentialRecordのシリアライズ、デシリアライズ>> を参照して下さい。
@@ -332,7 +361,11 @@ try {
 Origin origin = null /* set origin */;
 String rpId = null /* set rpId */;
 Challenge challenge = null /* set challenge */;
-ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .build();
 
 // expectations
 List<byte[]> allowCredentials = null;

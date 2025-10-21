@@ -27,6 +27,7 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.server.OriginPredicate;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
@@ -47,9 +48,8 @@ public class AuthenticationDataVerifier {
     private final List<CustomAuthenticationVerifier> customAuthenticationVerifiers;
 
     private OriginVerifier originVerifier = new OriginVerifierImpl();
+    private TopOriginVerifier topOriginVerifier = new TopOriginVerifier();
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
-
-    private boolean crossOriginAllowed = false;
 
     public AuthenticationDataVerifier(@NotNull List<CustomAuthenticationVerifier> customAuthenticationVerifiers) {
         AssertUtil.notNull(customAuthenticationVerifiers, "customAuthenticationVerifiers must not be null");
@@ -155,15 +155,12 @@ public class AuthenticationDataVerifier {
         //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
         originVerifier.verify(authenticationObject);
 
-        // Verify cross origin. This step is not defined in the spec
-        CrossOriginFlagVerifier.verify(collectedClientData, crossOriginAllowed);
-
         //spec| Step15
         //spec| If C.topOrigin is present:
         //spec| - Verify that the Relying Party expects this credential to be used within an iframe that is not same-origin with its ancestors.
         //spec| - Verify that the value of C.topOrigin matches the origin of a page that the Relying Party expects to be sub-framed within.
         //spec|   See §13.4.9 Validating the origin of a credential for guidance.
-        //TODO: Once Chrome starts supporting topOrigin, implement topOrigin verification
+        topOriginVerifier.verify(authenticationObject);
 
         //spec| (Level2) Step14 (Kept for backward compatibility)
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
@@ -316,11 +313,21 @@ public class AuthenticationDataVerifier {
         return customAuthenticationVerifiers;
     }
 
+    /**
+     * @deprecated
+     * This method will be removed in a future version.
+     */
+    @Deprecated
     public boolean isCrossOriginAllowed() {
-        return crossOriginAllowed;
+        return !this.topOriginVerifier.isForceBlockCrossOrigin();
     }
 
+    /**
+     * @deprecated Use {@link ServerProperty.Builder#anyTopOrigin()} or {@link ServerProperty.Builder#topOriginPredicate(OriginPredicate)} instead.
+     * This method will be removed in a future version.
+     */
+    @Deprecated
     public void setCrossOriginAllowed(boolean crossOriginAllowed) {
-        this.crossOriginAllowed = crossOriginAllowed;
+        this.topOriginVerifier.setForceBlockCrossOrigin(!crossOriginAllowed);
     }
 }

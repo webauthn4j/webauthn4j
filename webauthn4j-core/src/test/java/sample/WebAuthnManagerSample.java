@@ -59,7 +59,11 @@ public class WebAuthnManagerSample {
         Origin origin = null /* set origin */;
         String rpId = null /* set rpId */;
         Challenge challenge = null /* set challenge */;
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
+        ServerProperty serverProperty = ServerProperty.builder()
+                .origin(origin)
+                .rpId(rpId)
+                .challenge(challenge)
+                .build();
 
         // expectations
         List<PublicKeyCredentialParameters> pubKeyCredParams = null;
@@ -103,7 +107,11 @@ public class WebAuthnManagerSample {
         Origin origin = null /* set origin */;
         String rpId = null /* set rpId */;
         Challenge challenge = null /* set challenge */;
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge);
+        ServerProperty serverProperty = ServerProperty.builder()
+                .origin(origin)
+                .rpId(rpId)
+                .challenge(challenge)
+                .build();
 
         // expectations
         List<byte[]> allowCredentials = null;
