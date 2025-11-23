@@ -125,12 +125,8 @@ public class ClientPlatform {
 
         AuthenticationExtensionsClientOutputs.BuilderForRegistration builder = new AuthenticationExtensionsClientOutputs.BuilderForRegistration();
         extensions.getKeys().forEach((key) -> {
-            switch (key) {
-                case CredentialPropertiesExtensionClientOutput.ID:
-                    builder.setCredProps(new CredentialPropertiesOutput(true));
-                    break;
-                default:
-                    //nop
+            if (key.equals(CredentialPropertiesExtensionClientOutput.ID)) {
+                builder.setCredProps(new CredentialPropertiesOutput(true));
             }
         });
         return builder.build();
