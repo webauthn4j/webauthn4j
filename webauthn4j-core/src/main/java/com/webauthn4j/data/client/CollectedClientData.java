@@ -90,7 +90,7 @@ public class CollectedClientData {
         return crossOrigin;
     }
 
-    public @NotNull Origin getTopOrigin() {
+    public @Nullable Origin getTopOrigin() {
         return topOrigin;
     }
 
