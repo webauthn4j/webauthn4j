@@ -34,9 +34,6 @@ import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.verifier.exception.VerificationException;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @WIP
 public class ClientPlatform {
 
@@ -127,14 +124,9 @@ public class ClientPlatform {
         }
 
         AuthenticationExtensionsClientOutputs.BuilderForRegistration builder = new AuthenticationExtensionsClientOutputs.BuilderForRegistration();
-        Map<String, RegistrationExtensionClientOutput> map = new HashMap<>();
         extensions.getKeys().forEach((key) -> {
-            switch (key) {
-                case CredentialPropertiesExtensionClientOutput.ID:
-                    builder.setCredProps(new CredentialPropertiesOutput(true));
-                    break;
-                default:
-                    //nop
+            if (key.equals(CredentialPropertiesExtensionClientOutput.ID)) {
+                builder.setCredProps(new CredentialPropertiesOutput(true));
             }
         });
         return builder.build();
