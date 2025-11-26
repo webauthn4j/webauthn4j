@@ -5,7 +5,7 @@ jackson = "2.20.1"
 
 # webauthn4j-test dependencies
 
-bouncycastle = "1.82"
+bouncycastle = "1.83"
 
 # Build dependencies
 
