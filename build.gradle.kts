@@ -181,6 +181,7 @@ subprojects {
                     token.set("dummy")
                     skipRelease = true
                     skipTag = true
+                    immutableRelease = false
                 }
             }
 
