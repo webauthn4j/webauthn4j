@@ -176,14 +176,14 @@ subprojects {
                 version = effectiveVersion
             }
 
-            release{
-                github{
-                    token.set("dummy")
-                    skipRelease = true
-                    skipTag = true
-                    immutableRelease = false
-                }
-            }
+//            release{
+//                github{
+//                    token.set("dummy")
+//                    skipRelease = true
+//                    skipTag = true
+//                    immutableRelease = false
+//                }
+//            }
 
             deploy {
                 maven {
