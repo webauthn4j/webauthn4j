@@ -39,4 +39,5 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testCompileOnly(libs.jetbrains.annotations)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
