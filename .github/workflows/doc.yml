@@ -4,15 +4,13 @@ on:
   push:
     branches:
       - master
+env:
+  JAVA_VERSION: 17
 
 jobs:
   build:
     name: Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        java_version: [17]
-        os: [ubuntu-latest]
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
@@ -23,11 +21,11 @@ jobs:
           git submodule update
           git config --local user.email "mail@ynojima.net"
           git config --local user.name "ynojima"
-      - name: Set up JDK ${{ matrix.java_version }}
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: ${{ matrix.java_version }}
+          java-version: ${{ env.JAVA_VERSION }}
           cache: 'gradle'
 
       - name: Build with Gradle
