@@ -4,6 +4,7 @@ import org.jreleaser.model.Active
 import java.net.URI
 import java.nio.charset.StandardCharsets
 import com.webauthn4j.gradle.BuildUtils
+import com.webauthn4j.gradle.VersionUtils
 
 plugins {
     id("java-library")
@@ -18,7 +19,7 @@ plugins {
 
 private val webAuthn4JVersion: String by project
 private val isSnapshot: Boolean = (findProperty("isSnapshot") as? String)?.toBoolean() ?: true
-private val effectiveVersion = getEffectiveVersion()
+private val effectiveVersion = VersionUtils.getEffectiveVersion(isSnapshot, webAuthn4JVersion)
 
 allprojects {
     group = "com.webauthn4j"
@@ -194,7 +195,7 @@ tasks.register("bumpPatchVersion"){
 
     doLast{
         val regex = Regex("""^webAuthn4JVersion=.*$""", RegexOption.MULTILINE)
-        val bumpedVersion = bumpPatchVersion(webAuthn4JVersion)
+        val bumpedVersion = VersionUtils.bumpPatchVersion(webAuthn4JVersion)
         val replacement = "webAuthn4JVersion=${bumpedVersion}"
 
         val file = file("gradle.properties")
@@ -336,22 +337,4 @@ sonarqube {
         property("sonar.issue.ignore.multicriteria.e4.ruleKey", "java:S5778")
         property("sonar.issue.ignore.multicriteria.e4.resourceKey", "**/*.java")
     }
-}
-
-private fun getEffectiveVersion(): String{
-    return when {
-        isSnapshot -> webAuthn4JVersion.plus("-SNAPSHOT")
-        else -> webAuthn4JVersion.plus(".RELEASE")
-    }
-}
-
-private fun bumpPatchVersion(version: String): String {
-    val parts = version.split(".")
-    require(parts.size == 3) { "Version must be in the format 'X.Y.Z': $version" }
-
-    val major = parts[0].toInt()
-    val minor = parts[1].toInt()
-    val patch = parts[2].toInt() + 1
-
-    return "$major.$minor.$patch"
 }
