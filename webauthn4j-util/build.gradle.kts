@@ -18,32 +18,6 @@ apply(plugin = "java")
 
 description = "Deprecated package. All classes are moved to webauthnrj-core"
 
-dependencies {
-
-    implementation(libs.slf4j.api)
-    implementation(libs.jackson.databind)
-    implementation(libs.jackson.dataformat.cbor)
-
-    //CompileOnly
-    compileOnly(libs.jetbrains.annotations)
-
-    //Test
-    testImplementation(platform(libs.spring.boot.bom))
-
-    testImplementation(project(":webauthn4j-test"))
-    testImplementation(libs.bouncycastle.bcprov.jdk15to18)
-    testImplementation(libs.bouncycastle.bcpkix.jdk15to18)
-    testImplementation("ch.qos.logback:logback-classic")
-    testImplementation("org.projectlombok:lombok")
-    testImplementation("org.mockito:mockito-core")
-    testImplementation("org.assertj:assertj-core")
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testCompileOnly(libs.jetbrains.annotations)
-
-}
-
 sonarqube {
     isSkipProject = true
 }
