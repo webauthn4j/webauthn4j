@@ -1,6 +1,5 @@
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.jvm.tasks.Jar
 import org.jreleaser.model.Active
 import java.net.URI
 import java.nio.charset.StandardCharsets
@@ -27,7 +26,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven(url = "https://jitpack.io")
     }
 }
 
@@ -41,6 +39,9 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11 // Although webauthn4j uses JDK 15+ API to support EdDSA, keep target version 11 to support JDK11 users who don't need EdDSA.
+
+        withSourcesJar()
+        withJavadocJar()
     }
 
     tasks.compileJava {
@@ -68,20 +69,6 @@ subprojects {
         }
     }
 
-    tasks.register<Jar>("javadocJar") {
-        group = "build"
-        description = "Assembles Javadoc jar"
-        dependsOn(tasks.named("javadoc"))
-        archiveClassifier = "javadoc"
-        from(tasks.named<Javadoc>("javadoc").get().destinationDir)
-    }
-
-    tasks.register<Jar>("sourcesJar") {
-        group = "build"
-        description = "Assembles sources jar"
-        archiveClassifier = "sources"
-        from(sourceSets.main.get().allSource)
-    }
 
     tasks.jacocoTestReport {
         reports {
@@ -99,8 +86,6 @@ subprojects {
         publications{
             create<MavenPublication>("standard") {
                 from(components["java"])
-                artifact(tasks.named("sourcesJar"))
-                artifact(tasks.named("javadocJar"))
 
                 // "Resolved versions" strategy is used to define dependency version because WebAuthn4J use dependencyManagement (BOM) feature
                 // to define its dependency versions. Without "Resolved versions" strategy, version will not be exposed
