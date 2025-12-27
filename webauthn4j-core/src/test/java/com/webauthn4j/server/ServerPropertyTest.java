@@ -133,13 +133,13 @@ class ServerPropertyTest {
                 .origin(webApp1Origin)
                 .rpId(RP_ID)
                 .challenge(challenge)
-                .topOriginPredicate(new ServerProperty.NoOriginPredicate())
+                .topOriginPredicate(new NoOriginPredicate())
                 .build();
         ServerProperty serverPropertyB = ServerProperty.builder()
                 .origin(webApp1Origin)
                 .rpId(RP_ID)
                 .challenge(challenge)
-                .topOriginPredicate(new ServerProperty.NoOriginPredicate())
+                .topOriginPredicate(new NoOriginPredicate())
                 .build();
         // When
         boolean equals = serverPropertyA.equals(serverPropertyB);
@@ -275,7 +275,7 @@ class ServerPropertyTest {
                     .build();
             assertThat(serverProperty.getRpId()).isEqualTo(RP_ID);
             assertThat(serverProperty.getChallenge()).isEqualTo(challenge);
-            assertThat(serverProperty.getOriginPredicate()).isInstanceOf(ServerProperty.SimpleOriginPredicate.class);
+            assertThat(serverProperty.getOriginPredicate()).isInstanceOf(SimpleOriginPredicate.class);
         }
 
         @Nested
@@ -289,7 +289,7 @@ class ServerPropertyTest {
                         .build();
                 assertThat(serverProperty.getRpId()).isEqualTo(RP_ID);
                 assertThat(serverProperty.getChallenge()).isEqualTo(challenge);
-                assertThat(serverProperty.getOriginPredicate()).isInstanceOf(ServerProperty.SimpleOriginPredicate.class);
+                assertThat(serverProperty.getOriginPredicate()).isInstanceOf(SimpleOriginPredicate.class);
             }
 
             @Test
@@ -335,7 +335,7 @@ class ServerPropertyTest {
                         .origin(webApp1Origin)
                         .topOrigin(webApp2Origin)
                         .build();
-                assertThat(serverProperty.getTopOriginPredicate()).isInstanceOf(ServerProperty.SimpleOriginPredicate.class);
+                assertThat(serverProperty.getTopOriginPredicate()).isInstanceOf(SimpleOriginPredicate.class);
             }
         }
 
