@@ -18,8 +18,6 @@
 package com.webauthn4j.data.extension.authenticator;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.cbor.CredentialProtectionPolicyDeserializer;
 import com.webauthn4j.converter.jackson.serializer.cbor.CredentialProtectionPolicySerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
@@ -27,6 +25,8 @@ import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.*;
 import java.util.stream.Collectors;

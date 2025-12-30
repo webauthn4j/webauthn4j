@@ -16,23 +16,20 @@
 
 package com.webauthn4j.converter.util;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.exc.InvalidDefinitionException;
+import tools.jackson.databind.exc.MismatchedInputException;
+import tools.jackson.databind.exc.ValueInstantiationException;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 
 /**
  * A utility class for CBOR serialization/deserialization
@@ -41,74 +38,65 @@ public class CborConverter {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    private final ObjectMapper cborMapper;
+    private CBORMapper cborMapper;
 
-    CborConverter(@NotNull ObjectMapper cborMapper) {
+    CborConverter(@NotNull CBORMapper cborMapper) {
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
-        AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
-
         this.cborMapper = cborMapper;
     }
 
-    public void registerModule(Module module){
-        this.cborMapper.registerModule(module);
+    //TODO: deprecate
+    public void registerModule(JacksonModule module){
+        this.cborMapper = cborMapper.rebuild()
+                .addModule(module)
+                .build();
     }
 
     public @Nullable <T> T readValue(@NotNull byte[] src, @NotNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
-        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public @Nullable <T> T readValue(@NotNull InputStream src, @NotNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
-        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public @Nullable <T> T readValue(@NotNull byte[] src, @NotNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
-        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public @Nullable <T> T readValue(@NotNull InputStream src, @NotNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
-        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public @NotNull JsonNode readTree(@NotNull byte[] bytes) {
         try {
             return cborMapper.readTree(bytes);
-        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public @NotNull byte[] writeValueAsBytes(@Nullable Object value) {
         try {
             return cborMapper.writeValueAsBytes(value);
-        } catch (JsonProcessingException e) {
-            throw new UncheckedIOException(e);
+        } catch (InvalidDefinitionException e) {
+            throw new DataConversionException(e);
         }
     }
 

@@ -2,7 +2,6 @@ module com.webauthn4j.metadata {
     requires transitive com.webauthn4j.core;
 
     requires org.slf4j;
-    requires com.fasterxml.jackson.datatype.jsr310;
 
     requires static org.jetbrains.annotations;
 

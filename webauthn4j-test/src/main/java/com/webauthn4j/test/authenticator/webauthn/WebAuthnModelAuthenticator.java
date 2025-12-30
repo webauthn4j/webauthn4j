@@ -55,7 +55,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 

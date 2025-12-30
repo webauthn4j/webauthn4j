@@ -16,15 +16,13 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 /**
  * Jackson Deserializer for {@link COSEKeyEnvelope}
@@ -39,9 +37,9 @@ public class COSEKeyEnvelopeDeserializer extends StdDeserializer<COSEKeyEnvelope
      * {@inheritDoc}
      */
     @Override
-    public @NotNull COSEKeyEnvelope deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
+    public @NotNull COSEKeyEnvelope deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         @Nullable COSEKey coseKey = p.readValueAs(new TypeReference<COSEKey>() {});
-        int length = (int) p.getCurrentLocation().getByteOffset();
+        int length = (int) p.currentLocation().getByteOffset();
         return new COSEKeyEnvelope(coseKey, length);
     }
 }

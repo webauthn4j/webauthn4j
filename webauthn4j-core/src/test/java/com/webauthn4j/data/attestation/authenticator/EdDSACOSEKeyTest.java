@@ -18,8 +18,6 @@ import java.security.spec.NamedParameterSpec;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SuppressWarnings("Since15")
-@EnabledForJreRange(min = JRE.JAVA_15)
 class EdDSACOSEKeyTest {
 
     @Test

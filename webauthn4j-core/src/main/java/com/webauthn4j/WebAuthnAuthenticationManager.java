@@ -16,7 +16,6 @@
 
 package com.webauthn4j;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
@@ -35,6 +34,7 @@ import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.type.TypeReference;
 
 import java.io.InputStream;
 import java.util.Collections;

@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.cbor.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
 import com.webauthn4j.converter.jackson.deserializer.cbor.COSEKeyEnvelope;
@@ -30,6 +29,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.core.type.TypeReference;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -62,7 +62,7 @@ public class AuthenticatorDataConverter {
 
     //~ Instance fields
     // ================================================================================================
-    private final CborConverter cborConverter;
+    private final ObjectConverter objectConverter;
     private final AttestedCredentialDataConverter attestedCredentialDataConverter;
 
     //~ Constructors
@@ -76,7 +76,7 @@ public class AuthenticatorDataConverter {
      */
     public AuthenticatorDataConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
-        this.cborConverter = objectConverter.getCborConverter();
+        this.objectConverter = objectConverter;
         this.attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
     }
 
@@ -197,7 +197,7 @@ public class AuthenticatorDataConverter {
             return new byte[0];
         }
         else {
-            return cborConverter.writeValueAsBytes(extensions);
+            return objectConverter.getCborConverter().writeValueAsBytes(extensions);
         }
     }
 
@@ -211,7 +211,7 @@ public class AuthenticatorDataConverter {
         byteBuffer.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
-                cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
+                objectConverter.getCborConverter().readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
                 });
         if (envelope == null) {
             return null;

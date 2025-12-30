@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -25,6 +24,7 @@ import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.core.type.TypeReference;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientOutputs}

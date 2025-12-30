@@ -18,10 +18,10 @@ package com.webauthn4j.data.jws;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.util.Arrays;
 

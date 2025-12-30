@@ -1,10 +1,10 @@
+import com.webauthn4j.gradle.BuildUtils
+import com.webauthn4j.gradle.VersionUtils
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jreleaser.model.Active
 import java.net.URI
 import java.nio.charset.StandardCharsets
-import com.webauthn4j.gradle.BuildUtils
-import com.webauthn4j.gradle.VersionUtils
 
 plugins {
     id("java-library")

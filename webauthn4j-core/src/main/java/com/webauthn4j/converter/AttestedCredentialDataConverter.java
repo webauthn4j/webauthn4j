@@ -57,7 +57,7 @@ public class AttestedCredentialDataConverter {
     private static final int L_INDEX = AAGUID_INDEX + AAGUID_LENGTH;
     private static final int CREDENTIAL_ID_INDEX = L_INDEX + L_LENGTH;
 
-    private final CborConverter cborConverter;
+    private final ObjectConverter objectConverter;
 
     /**
      * Constructor for AttestedCredentialDataConverter
@@ -67,7 +67,7 @@ public class AttestedCredentialDataConverter {
      */
     public AttestedCredentialDataConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
-        this.cborConverter = objectConverter.getCborConverter();
+        this.objectConverter = objectConverter;
     }
 
     private static AttestedCredentialData createAttestedCredentialData(@NotNull AAGUID aaguid, @NotNull byte[] credentialId, @NotNull COSEKey coseKey) {
@@ -167,12 +167,12 @@ public class AttestedCredentialDataConverter {
     @NotNull COSEKeyEnvelope convertToCredentialPublicKey(@NotNull InputStream inputStream) {
         AssertUtil.notNull(inputStream, "inputStream must not be null");
         //noinspection ConstantConditions as input stream is not null
-        return cborConverter.readValue(inputStream, COSEKeyEnvelope.class);
+        return objectConverter.getCborConverter().readValue(inputStream, COSEKeyEnvelope.class);
     }
 
     @NotNull byte[] convert(@NotNull COSEKey coseKey) {
         assertCoseKey(coseKey);
-        return cborConverter.writeValueAsBytes(coseKey);
+        return objectConverter.getCborConverter().writeValueAsBytes(coseKey);
     }
 
 }

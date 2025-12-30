@@ -16,17 +16,16 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorInputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorInput;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.type.TypeReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Test for HMACSecretAuthenticatorInputDeserializer

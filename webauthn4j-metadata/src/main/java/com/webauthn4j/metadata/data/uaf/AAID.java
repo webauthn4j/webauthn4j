@@ -18,9 +18,9 @@ package com.webauthn4j.metadata.data.uaf;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.util.Objects;
 

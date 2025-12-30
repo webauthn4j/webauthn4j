@@ -16,9 +16,7 @@
 
 package com.webauthn4j.appattest.verifier;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
+import com.webauthn4j.appattest.DeviceCheckManager;
 import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -36,15 +34,8 @@ import static org.mockito.Mockito.mockStatic;
 
 class DCRegistrationObjectTest {
 
-    private final ObjectConverter objectConverter = createObjectConverter();
+    private final ObjectConverter objectConverter = DeviceCheckManager.createObjectConverter();
     private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
-
-    private static ObjectConverter createObjectConverter() {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        cborMapper.registerModule(new DeviceCheckCBORModule());
-        return new ObjectConverter(jsonMapper, cborMapper);
-    }
 
     @Test
     void constructor_test() {

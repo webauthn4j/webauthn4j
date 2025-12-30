@@ -16,12 +16,11 @@
 
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.util.Base64Util;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public class ByteArrayBase64Deserializer extends StdDeserializer<byte[]> {
 
@@ -30,7 +29,7 @@ public class ByteArrayBase64Deserializer extends StdDeserializer<byte[]> {
     }
 
     @Override
-    public byte[] deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public byte[] deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         return Base64Util.decode(p.getValueAsString());
     }
 }

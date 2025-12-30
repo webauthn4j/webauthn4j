@@ -18,11 +18,11 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.security.spec.EllipticCurve;
 

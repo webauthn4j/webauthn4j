@@ -16,14 +16,12 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 /**
  * Jackson Serializer for {@link Challenge}
@@ -38,7 +36,7 @@ public class ChallengeSerializer extends StdSerializer<Challenge> {
      * {@inheritDoc}
      */
     @Override
-    public void serialize(@NotNull Challenge value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull Challenge value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         String challenge = Base64UrlUtil.encodeToString(value.getValue());
         gen.writeString(challenge);
     }

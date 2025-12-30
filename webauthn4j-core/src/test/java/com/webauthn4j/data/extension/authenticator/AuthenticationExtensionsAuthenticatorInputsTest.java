@@ -17,13 +17,13 @@
 package com.webauthn4j.data.extension.authenticator;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.type.TypeReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

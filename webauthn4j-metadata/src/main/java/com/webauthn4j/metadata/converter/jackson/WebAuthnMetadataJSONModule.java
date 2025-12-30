@@ -16,7 +16,7 @@
 
 package com.webauthn4j.metadata.converter.jackson;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.module.SimpleModule;
 
 public class WebAuthnMetadataJSONModule extends SimpleModule {
 

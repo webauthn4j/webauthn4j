@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.JacksonUtil;
 import com.webauthn4j.converter.util.CborConverter;
@@ -26,6 +25,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.JsonNode;
 
 /**
  * Converter for {@link AttestationObject}

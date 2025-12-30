@@ -16,15 +16,12 @@
 
 package com.webauthn4j.converter.util;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,10 +30,11 @@ class JsonConverterIntegrationTest {
     @Test
     void shouldInheritCustomizationFromObjectMapper() {
         //Given
-        ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
         SimpleModule module = new SimpleModule();
         module.addSerializer(TestData.class, new TestDataSerializer());
-        jsonMapper.registerModule(module);
+        JsonMapper jsonMapper = JsonMapper.builder()
+                .addModule(module)
+                .build();
 
         //When
         JsonConverter jsonConverter = new JsonConverter(jsonMapper);
@@ -56,7 +54,7 @@ class JsonConverterIntegrationTest {
         }
 
         @Override
-        public void serialize(TestData value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        public void serialize(TestData value, JsonGenerator gen, SerializationContext provider) {
             gen.writeString("serialized by TestDataSerializer");
         }
     }

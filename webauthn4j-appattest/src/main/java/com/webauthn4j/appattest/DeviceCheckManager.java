@@ -16,8 +16,6 @@
 
 package com.webauthn4j.appattest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
 import com.webauthn4j.appattest.data.*;
 import com.webauthn4j.appattest.verifier.DCAssertionDataVerifier;
@@ -30,6 +28,8 @@ import com.webauthn4j.verifier.attestation.trustworthiness.certpath.CertPathTrus
 import com.webauthn4j.verifier.attestation.trustworthiness.certpath.NullCertPathTrustworthinessVerifier;
 import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,9 +94,10 @@ public class DeviceCheckManager {
      * @return configured {@link DeviceCheckManager}
      */
     public static @NotNull DeviceCheckManager createNonStrictDeviceCheckManager() {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        cborMapper.registerModule(new DeviceCheckCBORModule());
+        JsonMapper jsonMapper = new JsonMapper();
+        CBORMapper cborMapper = CBORMapper.builder()
+                .addModule(new DeviceCheckCBORModule())
+                .build();
         ObjectConverter objectConverter = new ObjectConverter(jsonMapper, cborMapper);
         return createNonStrictDeviceCheckManager(objectConverter);
     }
@@ -120,9 +121,10 @@ public class DeviceCheckManager {
      * @return {@link ObjectConverter} instance with {@link DeviceCheckCBORModule}
      */
     public static @NotNull ObjectConverter createObjectConverter() {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        cborMapper.registerModule(new DeviceCheckCBORModule());
+        JsonMapper jsonMapper = new JsonMapper();
+        CBORMapper cborMapper = CBORMapper.builder()
+                .addModule(new DeviceCheckCBORModule())
+                .build();
         return new ObjectConverter(jsonMapper, cborMapper);
     }
 

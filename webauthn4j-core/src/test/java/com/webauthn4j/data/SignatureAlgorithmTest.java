@@ -17,13 +17,6 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -32,6 +25,15 @@ import com.webauthn4j.util.SignatureUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.io.IOException;
 
@@ -117,11 +119,12 @@ class SignatureAlgorithmTest {
 
     @Test
     void override_serialized_value_by_adding_custom_serializer_test() {
-        ObjectMapper jsonMapper = new ObjectMapper();
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(new CustomSignatureAlgorithmSerializer());
-        jsonMapper.registerModule(simpleModule);
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+        JsonMapper jsonMapper = JsonMapper.builder()
+                .addModule(simpleModule)
+                .build();
+        CBORMapper cborMapper = new CBORMapper();
         ObjectConverter objectConverter = new ObjectConverter(jsonMapper, cborMapper);
 
         String string = objectConverter.getJsonConverter().writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
@@ -135,7 +138,7 @@ class SignatureAlgorithmTest {
         }
 
         @Override
-        public void serialize(SignatureAlgorithm value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        public void serialize(SignatureAlgorithm value, JsonGenerator gen, SerializationContext provider) throws JacksonException {
             gen.writeNumber(COSEAlgorithmIdentifier.create(value).getValue());
         }
     }

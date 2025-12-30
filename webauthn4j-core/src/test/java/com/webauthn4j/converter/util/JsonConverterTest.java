@@ -19,7 +19,6 @@ package com.webauthn4j.converter.util;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.ByteArrayBase64ConverterModule;
 import com.webauthn4j.util.AssertUtil;
@@ -27,8 +26,7 @@ import com.webauthn4j.util.Base64UrlUtil;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.io.UncheckedIOException;
+import tools.jackson.core.type.TypeReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,7 +56,7 @@ class JsonConverterTest {
         converterTestInvalidDto.setValue(new Object());
 
         //When/Then
-        assertThrows(UncheckedIOException.class, () ->
+        assertThrows(DataConversionException.class, () ->
                 jsonConverter.writeValueAsString(converterTestInvalidDto)
         );
     }
@@ -94,7 +92,7 @@ class JsonConverterTest {
         converterTestInvalidDto.setValue(new Object());
 
         //When/Then
-        assertThrows(UncheckedIOException.class, () ->
+        assertThrows(DataConversionException.class, () ->
                 jsonConverter.writeValueAsBytes(converterTestInvalidDto)
         );
     }

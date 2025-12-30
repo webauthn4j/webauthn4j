@@ -1,8 +1,9 @@
 module com.webauthn4j.core {
     requires java.naming;
 
-    requires transitive com.fasterxml.jackson.databind;
-    requires transitive com.fasterxml.jackson.dataformat.cbor;
+    requires transitive com.fasterxml.jackson.annotation;
+    requires transitive tools.jackson.databind;
+    requires transitive tools.jackson.dataformat.cbor;
     requires org.slf4j;
 
     requires static org.jetbrains.annotations;

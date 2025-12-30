@@ -17,8 +17,6 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.authenticator.Authenticator;
-import com.webauthn4j.authenticator.CoreAuthenticator;
-import com.webauthn4j.credential.CoreCredentialRecord;
 import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.server.ServerProperty;
 import org.jetbrains.annotations.NotNull;

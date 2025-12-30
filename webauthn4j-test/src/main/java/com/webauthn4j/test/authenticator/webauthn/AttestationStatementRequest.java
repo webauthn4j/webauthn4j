@@ -18,8 +18,6 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 
-import java.security.KeyPair;
-
 public class AttestationStatementRequest {
 
     private final byte[] signedData;

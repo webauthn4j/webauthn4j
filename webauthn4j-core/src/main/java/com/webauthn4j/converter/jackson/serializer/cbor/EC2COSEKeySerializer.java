@@ -16,11 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.jsontype.TypeSerializer;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -43,7 +43,7 @@ public class EC2COSEKeySerializer extends AbstractCtapCanonicalCborSerializer<EC
 
     @Override
     public void serializeWithType(@NotNull EC2COSEKey value, @NotNull JsonGenerator gen,
-                                  @NotNull SerializerProvider provider, @NotNull TypeSerializer typeSer) throws IOException {
+                                  @NotNull SerializationContext provider, @NotNull TypeSerializer typeSer) {
         super.serialize(value, gen, provider);
     }
 
