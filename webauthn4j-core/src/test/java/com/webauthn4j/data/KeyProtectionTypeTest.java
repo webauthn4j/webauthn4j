@@ -25,6 +25,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class KeyProtectionTypeTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Test
     void create_test() {
@@ -69,33 +71,33 @@ class KeyProtectionTypeTest {
         void serialize_test(){
             IntSerializationTestDTO dto = new IntSerializationTestDTO();
             dto.keyProtectionType = KeyProtectionType.HARDWARE;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"keyProtectionType\":2}");
         }
 
         @Test
         void deserialize_test() {
-            IntSerializationTestDTO dto = jsonConverter.readValue("{\"keyProtectionType\":2}", IntSerializationTestDTO.class);
+            IntSerializationTestDTO dto = jsonMapper.readValue("{\"keyProtectionType\":2}", IntSerializationTestDTO.class);
             assertThat(dto.keyProtectionType).isEqualTo(KeyProtectionType.HARDWARE);
         }
 
         @Test
         void deserialize_test_with_out_of_range_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"keyProtectionType\": \"-1\"}", IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"keyProtectionType\": \"-1\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"keyProtectionType\": \"\"}", IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"keyProtectionType\": \"\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            IntSerializationTestDTO data = jsonConverter.readValue("{\"keyProtectionType\":null}", IntSerializationTestDTO.class);
+            IntSerializationTestDTO data = jsonMapper.readValue("{\"keyProtectionType\":null}", IntSerializationTestDTO.class);
             assertThat(data.keyProtectionType).isNull();
         }
     }
@@ -112,26 +114,26 @@ class KeyProtectionTypeTest {
         void serialize_test(){
             StringSerializationTestDTO dto = new StringSerializationTestDTO();
             dto.keyProtectionType = KeyProtectionType.HARDWARE;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"keyProtectionType\":\"hardware\"}");
         }
 
         @Test
         void deserialize_test() {
-            StringSerializationTestDTO dto = jsonConverter.readValue("{\"keyProtectionType\":\"hardware\"}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonMapper.readValue("{\"keyProtectionType\":\"hardware\"}", StringSerializationTestDTO.class);
             assertThat(dto.keyProtectionType).isEqualTo(KeyProtectionType.HARDWARE);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"keyProtectionType\": \"\"}", StringSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"keyProtectionType\": \"\"}", StringSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            StringSerializationTestDTO data = jsonConverter.readValue("{\"keyProtectionType\":null}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO data = jsonMapper.readValue("{\"keyProtectionType\":null}", StringSerializationTestDTO.class);
             assertThat(data.keyProtectionType).isNull();
         }
     }

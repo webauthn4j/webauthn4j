@@ -25,6 +25,8 @@ import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -46,8 +48,8 @@ import static org.mockito.Mockito.when;
 class EC2COSEKeyTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
-    private final CborConverter cborConverter = objectConverter.getCborConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
+    private final CBORMapper cborMapper = objectConverter.getCborMapper();
 
     @Test
     void create_with_alg_test() {
@@ -90,16 +92,16 @@ class EC2COSEKeyTest {
     @Test
     void cbor_serialize_deserialize_test() {
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
-        byte[] serialized = cborConverter.writeValueAsBytes(original);
-        COSEKey result = cborConverter.readValue(serialized, COSEKey.class);
+        byte[] serialized = cborMapper.writeValueAsBytes(original);
+        COSEKey result = cborMapper.readValue(serialized, COSEKey.class);
         assertThat(result).usingRecursiveComparison().isEqualTo(original);
     }
 
     @Test
     void json_serialize_deserialize_test() {
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
-        String serialized = jsonConverter.writeValueAsString(original);
-        COSEKey result = jsonConverter.readValue(serialized, COSEKey.class);
+        String serialized = jsonMapper.writeValueAsString(original);
+        COSEKey result = jsonMapper.readValue(serialized, COSEKey.class);
         assertThat(result).usingRecursiveComparison().isEqualTo(original);
     }
 

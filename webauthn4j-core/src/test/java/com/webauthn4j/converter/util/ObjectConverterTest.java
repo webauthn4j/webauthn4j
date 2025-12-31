@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ObjectConverterTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     void shouldCreateConvertersFromCustomMappers() {
         //Given
@@ -34,6 +35,8 @@ class ObjectConverterTest {
         ObjectConverter objectConverter = new ObjectConverter(jsonMapper, cborMapper);
 
         //Then
+        assertThat(objectConverter.getJsonMapper()).isNotNull();
+        assertThat(objectConverter.getCborMapper()).isNotNull();
         assertThat(objectConverter.getJsonConverter()).isNotNull();
         assertThat(objectConverter.getCborConverter()).isNotNull();
     }

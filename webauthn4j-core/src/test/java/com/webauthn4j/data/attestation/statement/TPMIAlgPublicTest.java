@@ -20,6 +20,9 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMIAlgPublicTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void create_test() {
@@ -50,14 +52,14 @@ class TPMIAlgPublicTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"tpmi_alg_pub\":24}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"tpmi_alg_pub\":24}", TestDTO.class);
         assertThat(dto.tpmi_alg_pub).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"tpmi_alg_pub\":-1}", TestDTO.class)
+        assertThrows(InvalidFormatException.class,
+                () -> jsonMapper.readValue("{\"tpmi_alg_pub\":-1}", TestDTO.class)
         );
     }
 

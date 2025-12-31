@@ -19,25 +19,26 @@ package com.webauthn4j.converter.util;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.ByteArrayBase64ConverterModule;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.core.type.TypeReference;
-
-import java.io.UncheckedIOException;
+import tools.jackson.databind.exc.InvalidDefinitionException;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.exc.ValueInstantiationException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ConstantConditions")
-@Deprecated
-class JsonConverterTest {
+class JsonMapperTest {
 
-    private static final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private static final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void shouldSerializeObjectToString() {
@@ -46,7 +47,7 @@ class JsonConverterTest {
         converterTestDto.setValue("dummy");
 
         //When
-        String str = jsonConverter.writeValueAsString(converterTestDto);
+        String str = jsonMapper.writeValueAsString(converterTestDto);
 
         //Then
         assertThat(str).isEqualTo("{\"value\":\"dummy\"}");
@@ -59,8 +60,8 @@ class JsonConverterTest {
         converterTestInvalidDto.setValue(new Object());
 
         //When/Then
-        assertThrows(DataConversionException.class, () ->
-                jsonConverter.writeValueAsString(converterTestInvalidDto)
+        assertThrows(InvalidDefinitionException.class, () ->
+                jsonMapper.writeValueAsString(converterTestInvalidDto)
         );
     }
 
@@ -71,7 +72,7 @@ class JsonConverterTest {
         converterTestDto.setValue("dummy");
 
         //When
-        byte[] bytes = jsonConverter.writeValueAsBytes(converterTestDto);
+        byte[] bytes = jsonMapper.writeValueAsBytes(converterTestDto);
 
         //Then
         assertThat(Base64UrlUtil.encodeToString(bytes)).isEqualTo("eyJ2YWx1ZSI6ImR1bW15In0");
@@ -82,7 +83,7 @@ class JsonConverterTest {
         //Given
 
         //When
-        String result = jsonConverter.writeValueAsString(null);
+        String result = jsonMapper.writeValueAsString(null);
 
         //Then
         assertThat(result).isEqualTo("null");
@@ -95,8 +96,8 @@ class JsonConverterTest {
         converterTestInvalidDto.setValue(new Object());
 
         //When/Then
-        assertThrows(DataConversionException.class, () ->
-                jsonConverter.writeValueAsBytes(converterTestInvalidDto)
+        assertThrows(InvalidDefinitionException.class, () ->
+                jsonMapper.writeValueAsBytes(converterTestInvalidDto)
         );
     }
 
@@ -106,7 +107,7 @@ class JsonConverterTest {
         ByteArrayContainer container = new ByteArrayContainer(new byte[]{(byte) 0xFF, (byte) 0xFD, (byte) 0xFE, (byte) 0xFC});
 
         //When
-        String serialized = jsonConverter.writeValueAsString(container);
+        String serialized = jsonMapper.writeValueAsString(container);
 
         //Then
         assertThat(serialized).isEqualTo("{\"value\":\"__3-_A\"}");
@@ -116,12 +117,13 @@ class JsonConverterTest {
     void shouldOverrideDefaultSerializerWithCustomModule() {
         //Given
         ObjectConverter objectConverter = new ObjectConverter();
-        JsonConverter customJsonConverter = objectConverter.getJsonConverter();
-        customJsonConverter.registerModule(new ByteArrayBase64ConverterModule());
+        JsonMapper customJsonMapper = objectConverter.getJsonMapper().rebuild()
+                .addModule(new ByteArrayBase64ConverterModule())
+                .build();
         ByteArrayContainer container = new ByteArrayContainer(new byte[]{(byte) 0xFF, (byte) 0xFD, (byte) 0xFE, (byte) 0xFC});
 
         //When
-        String serialized = customJsonConverter.writeValueAsString(container);
+        String serialized = customJsonMapper.writeValueAsString(container);
 
         //Then
         assertThat(serialized).isEqualTo("{\"value\":\"//3+/A\"}");
@@ -147,7 +149,7 @@ class JsonConverterTest {
             String json = "{\"value\":\"dummy\"}";
 
             //When
-            ConverterTestDto dto = jsonConverter.readValue(json, ConverterTestDto.class);
+            ConverterTestDto dto = jsonMapper.readValue(json, ConverterTestDto.class);
 
             //Then
             assertThat(dto.getValue()).isEqualTo("dummy");
@@ -159,7 +161,7 @@ class JsonConverterTest {
             String json = "null";
 
             //When
-            ConverterTestDto dto = jsonConverter.readValue(json, ConverterTestDto.class);
+            ConverterTestDto dto = jsonMapper.readValue(json, ConverterTestDto.class);
 
             //Then
             assertThat(dto).isNull();
@@ -171,8 +173,8 @@ class JsonConverterTest {
             String invalidJson = "{value:\"dummy\"}";
 
             //When/Then
-            assertThrows(DataConversionException.class,
-                    () -> jsonConverter.readValue(invalidJson, ConverterTestDto.class)
+            assertThrows(StreamReadException.class,
+                    () -> jsonMapper.readValue(invalidJson, ConverterTestDto.class)
             );
         }
 
@@ -182,8 +184,8 @@ class JsonConverterTest {
             String json = "{\"value\": null}";
 
             //When/Then
-            assertThrows(DataConversionException.class,
-                    () -> jsonConverter.readValue(json, NonNullDto.class)
+            assertThrows(ValueInstantiationException.class,
+                    () -> jsonMapper.readValue(json, NonNullDto.class)
             );
         }
 
@@ -193,8 +195,8 @@ class JsonConverterTest {
             String json = "{\"value\": \"invalid\"}";
 
             //When/Then
-            assertThrows(DataConversionException.class,
-                    () -> jsonConverter.readValue(json, IntegerDto.class)
+            assertThrows(InvalidFormatException.class,
+                    () -> jsonMapper.readValue(json, IntegerDto.class)
             );
         }
 
@@ -204,7 +206,7 @@ class JsonConverterTest {
             String json = "{\"value\":\"dummy\"}";
 
             //When
-            ConverterTestDto dto = jsonConverter.readValue(json, new TypeReference<ConverterTestDto>() {
+            ConverterTestDto dto = jsonMapper.readValue(json, new TypeReference<ConverterTestDto>() {
             });
 
             //Then
@@ -219,8 +221,8 @@ class JsonConverterTest {
             };
 
             //When/Then
-            assertThrows(DataConversionException.class, () ->
-                    jsonConverter.readValue(invalidJson, typeReference)
+            assertThrows(StreamReadException.class, () ->
+                    jsonMapper.readValue(invalidJson, typeReference)
             );
         }
     }

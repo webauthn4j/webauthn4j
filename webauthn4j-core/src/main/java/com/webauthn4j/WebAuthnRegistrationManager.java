@@ -216,7 +216,7 @@ public class WebAuthnRegistrationManager {
      * @return the parsed registration data
      */
     public @NotNull RegistrationData parse(@NotNull String registrationResponseJSON) {
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<>() {});
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonMapper().readValue(registrationResponseJSON, new TypeReference<>() {});
         return toRegistrationData(publicKeyCredential);
     }
 
@@ -227,7 +227,7 @@ public class WebAuthnRegistrationManager {
      * @return the parsed registration data
      */
     public @NotNull RegistrationData parse(@NotNull InputStream registrationResponseJSON) {
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<>() {});
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonMapper().readValue(registrationResponseJSON, new TypeReference<>() {});
         return toRegistrationData(publicKeyCredential);
     }
 

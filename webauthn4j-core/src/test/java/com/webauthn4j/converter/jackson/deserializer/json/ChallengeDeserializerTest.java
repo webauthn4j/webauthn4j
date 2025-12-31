@@ -21,6 +21,9 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.challenge.Challenge;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -33,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ChallengeDeserializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Test
     void shouldDeserializeEmptyChallenge() {
@@ -41,7 +44,7 @@ class ChallengeDeserializerTest {
         String json = "{ \"challenge\" : \"\" }";
 
         //When
-        ChallengeDto result = jsonConverter.readValue(json, ChallengeDto.class);
+        ChallengeDto result = jsonMapper.readValue(json, ChallengeDto.class);
 
         //Then
         assertAll(
@@ -56,7 +59,7 @@ class ChallengeDeserializerTest {
         String json = "{ \"challenge\" : null }";
 
         //When
-        ChallengeDto result = jsonConverter.readValue(json, ChallengeDto.class);
+        ChallengeDto result = jsonMapper.readValue(json, ChallengeDto.class);
 
         //Then
         assertThat(result.getChallenge()).isNull();
@@ -68,8 +71,8 @@ class ChallengeDeserializerTest {
         String json = "{ \"challenge\" : \"ddddd\" }";
 
         //When
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue(json, ChallengeDto.class)
+        assertThrows(InvalidFormatException.class,
+                () -> jsonMapper.readValue(json, ChallengeDto.class)
         );
     }
 

@@ -20,6 +20,9 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class COSEKeyOperationTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
@@ -61,14 +63,14 @@ class COSEKeyOperationTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"cose_key_op\":1}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"cose_key_op\":1}", TestDTO.class);
         assertThat(dto.cose_key_op).isEqualTo(COSEKeyOperation.SIGN);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"cose_key_op\":0}", TestDTO.class)
+        assertThrows(InvalidFormatException.class,
+                () -> jsonMapper.readValue("{\"cose_key_op\":0}", TestDTO.class)
         );
     }
 

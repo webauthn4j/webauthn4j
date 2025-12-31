@@ -17,13 +17,13 @@
 package com.webauthn4j.data.extension.authenticator;
 
 
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.mock;
 @SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsAuthenticatorInputsTest {
 
-    private final CborConverter cborConverter = new ObjectConverter().getCborConverter();
+    private final CBORMapper cborMapper = new ObjectConverter().getCborMapper();
 
     @SuppressWarnings("java:S5961")
     @Test
@@ -118,14 +118,14 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
         builder.setCredProtect(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         builder.setHMACCreateSecret(true);
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> registrationExtensions = builder.build();
-        byte[] bytes = cborConverter.writeValueAsBytes(registrationExtensions);
+        byte[] bytes = cborMapper.writeValueAsBytes(registrationExtensions);
         assertThat(HexUtil.encodeToString(bytes)).isEqualTo("A36375766DF56B6372656450726F74656374016B686D61632D736563726574F5");
     }
 
     @Test
     void deserialize_registration_test() {
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance =
-                cborConverter.readValue(HexUtil.decode("A36375766DF56B6372656450726F74656374016B686D61632D736563726574F5"), new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>() {
+                cborMapper.readValue(HexUtil.decode("A36375766DF56B6372656450726F74656374016B686D61632D736563726574F5"), new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>() {
                 });
         assertThat(instance.getUvm()).isTrue();
         assertThat(instance.getCredProtect()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);

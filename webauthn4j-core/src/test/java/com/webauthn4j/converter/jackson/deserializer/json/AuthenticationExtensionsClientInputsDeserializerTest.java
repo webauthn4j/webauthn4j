@@ -21,7 +21,9 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.*;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -34,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AuthenticationExtensionsClientInputsDeserializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Test
     void shouldDeserializeRegistrationExtensionInput() {
@@ -45,7 +47,7 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
 
         //When
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensionInputs =
-                jsonConverter.readValue(
+                jsonMapper.readValue(
                         json,
                         new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {
                         }
@@ -66,7 +68,7 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
 
         //When
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensionInputs =
-                jsonConverter.readValue(
+                jsonMapper.readValue(
                         json,
                         new TypeReference<AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>>() {
                         }
@@ -84,15 +86,15 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
         String invalidJson = "{invalid-json}";
 
         //Then
-        assertThatThrownBy(() -> jsonConverter.readValue(invalidJson, 
+        assertThatThrownBy(() -> jsonMapper.readValue(invalidJson,
                 new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>(){}))
-                .isInstanceOf(DataConversionException.class);
+                .isInstanceOf(StreamReadException.class);
     }
 
     @Test
     void shouldThrowExceptionForNullInput() {
         //Then
-        assertThatThrownBy(() -> jsonConverter.readValue((String)null, 
+        assertThatThrownBy(() -> jsonMapper.readValue((String)null,
                 new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>(){}))
                 .isInstanceOf(IllegalArgumentException.class);
     }

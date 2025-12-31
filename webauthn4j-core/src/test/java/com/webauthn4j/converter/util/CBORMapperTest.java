@@ -17,19 +17,19 @@
 package com.webauthn4j.converter.util;
 
 import org.junit.jupiter.api.Test;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CborConverterTest {
+class CBORMapperTest {
 
-    private final CborConverter cborConverter = new ObjectConverter().getCborConverter();
-
+    private final CBORMapper cborMapper = new ObjectConverter().getCborMapper();
     @Test
     void shouldSerializeNullValue() {
         //Given
 
         //When
-        byte[] bytes = cborConverter.writeValueAsBytes(null);
+        byte[] bytes = cborMapper.writeValueAsBytes(null);
 
         //Then
         assertThat(bytes).isNotNull();

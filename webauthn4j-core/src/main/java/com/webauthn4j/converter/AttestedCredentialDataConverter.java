@@ -167,12 +167,12 @@ public class AttestedCredentialDataConverter {
     @NotNull COSEKeyEnvelope convertToCredentialPublicKey(@NotNull InputStream inputStream) {
         AssertUtil.notNull(inputStream, "inputStream must not be null");
         //noinspection ConstantConditions as input stream is not null
-        return objectConverter.getCborConverter().readValue(inputStream, COSEKeyEnvelope.class);
+        return objectConverter.getCborMapper().readValue(inputStream, COSEKeyEnvelope.class);
     }
 
     @NotNull byte[] convert(@NotNull COSEKey coseKey) {
         assertCoseKey(coseKey);
-        return objectConverter.getCborConverter().writeValueAsBytes(coseKey);
+        return objectConverter.getCborMapper().writeValueAsBytes(coseKey);
     }
 
 }

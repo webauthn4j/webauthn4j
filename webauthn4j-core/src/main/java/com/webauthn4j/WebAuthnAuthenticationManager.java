@@ -108,7 +108,7 @@ public class WebAuthnAuthenticationManager {
      * @return the parsed authentication data
      */
     public @NotNull AuthenticationData parse(@NotNull String authenticationResponseJSON) {
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<>() {});
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonMapper().readValue(authenticationResponseJSON, new TypeReference<>() {});
         return toAuthenticationData(publicKeyCredential);
     }
 
@@ -119,7 +119,7 @@ public class WebAuthnAuthenticationManager {
      * @return the parsed authentication data
      */
     public @NotNull AuthenticationData parse(@NotNull InputStream authenticationResponseJSON) {
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<>() {});
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonMapper().readValue(authenticationResponseJSON, new TypeReference<>() {});
         return toAuthenticationData(publicKeyCredential);
     }
 

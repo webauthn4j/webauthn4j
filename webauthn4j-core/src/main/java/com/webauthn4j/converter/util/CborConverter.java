@@ -27,34 +27,34 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.exc.InvalidDefinitionException;
 import tools.jackson.databind.exc.MismatchedInputException;
 import tools.jackson.databind.exc.ValueInstantiationException;
-import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.io.InputStream;
 
 /**
  * A utility class for CBOR serialization/deserialization
  */
+@Deprecated
 public class CborConverter {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    private CBORMapper cborMapper;
+    private final ObjectConverter objectConverter;
 
-    CborConverter(@NotNull CBORMapper cborMapper) {
-        AssertUtil.notNull(cborMapper, "cborMapper must not be null");
-        this.cborMapper = cborMapper;
+    CborConverter(@NotNull ObjectConverter objectConverter) {
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+        this.objectConverter = objectConverter;
     }
 
-    //TODO: deprecate
+    @Deprecated
     public void registerModule(JacksonModule module){
-        this.cborMapper = cborMapper.rebuild()
+        this.objectConverter.cborMapper = objectConverter.getCborMapper().rebuild()
                 .addModule(module)
                 .build();
     }
 
     public @Nullable <T> T readValue(@NotNull byte[] src, @NotNull Class<T> valueType) {
         try {
-            return cborMapper.readValue(src, valueType);
+            return this.objectConverter.getCborMapper().readValue(src, valueType);
         } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
@@ -62,7 +62,7 @@ public class CborConverter {
 
     public @Nullable <T> T readValue(@NotNull InputStream src, @NotNull Class<T> valueType) {
         try {
-            return cborMapper.readValue(src, valueType);
+            return this.objectConverter.getCborMapper().readValue(src, valueType);
         } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
@@ -70,7 +70,7 @@ public class CborConverter {
 
     public @Nullable <T> T readValue(@NotNull byte[] src, @NotNull TypeReference<T> valueTypeRef) {
         try {
-            return cborMapper.readValue(src, valueTypeRef);
+            return this.objectConverter.getCborMapper().readValue(src, valueTypeRef);
         } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
@@ -78,7 +78,7 @@ public class CborConverter {
 
     public @Nullable <T> T readValue(@NotNull InputStream src, @NotNull TypeReference<T> valueTypeRef) {
         try {
-            return cborMapper.readValue(src, valueTypeRef);
+            return this.objectConverter.getCborMapper().readValue(src, valueTypeRef);
         } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
@@ -86,7 +86,7 @@ public class CborConverter {
 
     public @NotNull JsonNode readTree(@NotNull byte[] bytes) {
         try {
-            return cborMapper.readTree(bytes);
+            return this.objectConverter.getCborMapper().readTree(bytes);
         } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
@@ -94,7 +94,7 @@ public class CborConverter {
 
     public @NotNull byte[] writeValueAsBytes(@Nullable Object value) {
         try {
-            return cborMapper.writeValueAsBytes(value);
+            return this.objectConverter.getCborMapper().writeValueAsBytes(value);
         } catch (InvalidDefinitionException e) {
             throw new DataConversionException(e);
         }

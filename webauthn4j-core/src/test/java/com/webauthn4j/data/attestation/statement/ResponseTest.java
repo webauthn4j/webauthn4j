@@ -19,17 +19,18 @@ package com.webauthn4j.data.attestation.statement;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ResponseTest {
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void error_test() {
-        Response response = jsonConverter.readValue("{\"error\": \"message\"}", Response.class);
+        Response response = jsonMapper.readValue("{\"error\": \"message\"}", Response.class);
         assertThat(response.getError()).isEqualTo("message");
     }
 

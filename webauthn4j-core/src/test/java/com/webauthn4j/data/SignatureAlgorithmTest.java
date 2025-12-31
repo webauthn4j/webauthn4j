@@ -17,8 +17,6 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.SignatureUtil;
@@ -27,22 +25,20 @@ import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.JsonGenerator;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.exc.MismatchedInputException;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
 import tools.jackson.databind.ser.std.StdSerializer;
 import tools.jackson.dataformat.cbor.CBORMapper;
-
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SignatureAlgorithmTest {
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Deprecated
     @Test
@@ -106,15 +102,15 @@ class SignatureAlgorithmTest {
 
     @Test
     void serialize_test() {
-        String string = jsonConverter.writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
+        String string = jsonMapper.writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
         assertThat(string).isEqualTo("{\"alg\":\"SHA256withECDSA\"}");
     }
 
     @Test
     void deserialize_test_with_invalid_value() {
         assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"alg\": -1}", SignatureAlgorithmTest.TestDto.class)
-        ).isInstanceOf(DataConversionException.class);
+                () -> jsonMapper.readValue("{\"alg\": -1}", SignatureAlgorithmTest.TestDto.class)
+        ).isInstanceOf(MismatchedInputException.class);
     }
 
     @Test
@@ -127,7 +123,7 @@ class SignatureAlgorithmTest {
         CBORMapper cborMapper = new CBORMapper();
         ObjectConverter objectConverter = new ObjectConverter(jsonMapper, cborMapper);
 
-        String string = objectConverter.getJsonConverter().writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
+        String string = objectConverter.getJsonMapper().writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
         assertThat(string).isEqualTo("{\"alg\":-7}");
     }
 

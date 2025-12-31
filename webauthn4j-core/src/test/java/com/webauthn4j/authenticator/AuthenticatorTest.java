@@ -32,6 +32,7 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.CollectionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -50,7 +51,7 @@ class AuthenticatorTest {
     void shouldSerializeAndDeserializeCorrectly() {
         // Given
         ObjectConverter objectConverter = new ObjectConverter();
-        CborConverter cborConverter = objectConverter.getCborConverter();
+        CBORMapper cborMapper = objectConverter.getCborMapper();
 
         TestAuthenticator original = new TestAuthenticator(
                 TestDataUtil.createAttestedCredentialData(),
@@ -61,8 +62,8 @@ class AuthenticatorTest {
                 null);
 
         // When
-        byte[] serialized = cborConverter.writeValueAsBytes(original);
-        TestAuthenticator deserialized = cborConverter.readValue(serialized, TestAuthenticator.class);
+        byte[] serialized = cborMapper.writeValueAsBytes(original);
+        TestAuthenticator deserialized = cborMapper.readValue(serialized, TestAuthenticator.class);
 
         // Then
         assertAll(

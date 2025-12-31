@@ -7,8 +7,11 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AuthenticatorAttestationTypeTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Test
     void create_test() {
@@ -50,33 +53,33 @@ class AuthenticatorAttestationTypeTest {
         void serialize_test(){
             IntSerializationTestDTO dto = new IntSerializationTestDTO();
             dto.authenticatorAttestationType = AuthenticatorAttestationType.BASIC_FULL;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"authenticatorAttestationType\":15879}");
         }
 
         @Test
         void deserialize_test() {
-            AuthenticatorAttestationTypeTest.IntSerializationTestDTO dto = jsonConverter.readValue("{\"authenticatorAttestationType\":15879}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class);
+            AuthenticatorAttestationTypeTest.IntSerializationTestDTO dto = jsonMapper.readValue("{\"authenticatorAttestationType\":15879}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class);
             assertThat(dto.authenticatorAttestationType).isEqualTo(AuthenticatorAttestationType.BASIC_FULL);
         }
 
         @Test
         void deserialize_test_with_out_of_range_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"authenticatorAttestationType\": \"-1\"}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"authenticatorAttestationType\": \"-1\"}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"authenticatorAttestationType\": \"\"}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"authenticatorAttestationType\": \"\"}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            AuthenticatorAttestationTypeTest.IntSerializationTestDTO data = jsonConverter.readValue("{\"authenticatorAttestationType\":null}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class);
+            AuthenticatorAttestationTypeTest.IntSerializationTestDTO data = jsonMapper.readValue("{\"authenticatorAttestationType\":null}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class);
             assertThat(data.authenticatorAttestationType).isNull();
         }
 
@@ -94,26 +97,26 @@ class AuthenticatorAttestationTypeTest {
         void serialize_test(){
             StringSerializationTestDTO dto = new StringSerializationTestDTO();
             dto.authenticatorAttestationType = AuthenticatorAttestationType.BASIC_FULL;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"authenticatorAttestationType\":\"basic_full\"}");
         }
 
         @Test
         void deserialize_test() {
-            StringSerializationTestDTO dto = jsonConverter.readValue("{\"authenticatorAttestationType\":\"basic_full\"}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonMapper.readValue("{\"authenticatorAttestationType\":\"basic_full\"}", StringSerializationTestDTO.class);
             assertThat(dto.authenticatorAttestationType).isEqualTo(AuthenticatorAttestationType.BASIC_FULL);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"authenticatorAttestationType\": \"invalid\"}", StringSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"authenticatorAttestationType\": \"invalid\"}", StringSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            StringSerializationTestDTO data = jsonConverter.readValue("{\"authenticatorAttestationType\":null}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO data = jsonMapper.readValue("{\"authenticatorAttestationType\":null}", StringSerializationTestDTO.class);
             assertThat(data.authenticatorAttestationType).isNull();
         }
 

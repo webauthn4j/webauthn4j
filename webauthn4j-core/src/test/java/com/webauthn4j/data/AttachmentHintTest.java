@@ -7,8 +7,11 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AttachmentHintTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Nested
     class BasicOperations {
@@ -115,33 +118,33 @@ class AttachmentHintTest {
         void shouldSerializeToJson(){
             IntSerializationTestDTO dto = new IntSerializationTestDTO();
             dto.attachmentHint = AttachmentHint.EXTERNAL;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"attachmentHint\":2}");
         }
     
         @Test
         void shouldDeserializeFromJson() {
-            IntSerializationTestDTO dto = jsonConverter.readValue("{\"attachmentHint\":2}", IntSerializationTestDTO.class);
+            IntSerializationTestDTO dto = jsonMapper.readValue("{\"attachmentHint\":2}", IntSerializationTestDTO.class);
             assertThat(dto.attachmentHint).isEqualTo(AttachmentHint.EXTERNAL);
         }
     
         @Test
         void shouldThrowExceptionWhenDeserializingOutOfRangeValue() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"attachmentHint\": \"-1\"}", IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"attachmentHint\": \"-1\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
     
         @Test
         void shouldThrowExceptionWhenDeserializingInvalidValue() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"attachmentHint\": \"\"}", IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"attachmentHint\": \"\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
     
         @Test
         void shouldDeserializeNullToNull() {
-            IntSerializationTestDTO data = jsonConverter.readValue("{\"attachmentHint\":null}", IntSerializationTestDTO.class);
+            IntSerializationTestDTO data = jsonMapper.readValue("{\"attachmentHint\":null}", IntSerializationTestDTO.class);
             assertThat(data.attachmentHint).isNull();
         }
 
@@ -159,26 +162,26 @@ class AttachmentHintTest {
         void shouldSerializeToJsonString(){
             StringSerializationTestDTO dto = new StringSerializationTestDTO();
             dto.attachmentHint = AttachmentHint.INTERNAL;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"attachmentHint\":\"internal\"}");
         }
     
         @Test
         void shouldDeserializeFromJsonString() {
-            StringSerializationTestDTO dto = jsonConverter.readValue("{\"attachmentHint\":\"internal\"}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonMapper.readValue("{\"attachmentHint\":\"internal\"}", StringSerializationTestDTO.class);
             assertThat(dto.attachmentHint).isEqualTo(AttachmentHint.INTERNAL);
         }
     
         @Test
         void shouldThrowExceptionWhenDeserializingInvalidString() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"attachmentHint\": \"invalid\"}", StringSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"attachmentHint\": \"invalid\"}", StringSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
     
         @Test
         void shouldDeserializeNullToNull() {
-            StringSerializationTestDTO data = jsonConverter.readValue("{\"attachmentHint\":null}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO data = jsonMapper.readValue("{\"attachmentHint\":null}", StringSerializationTestDTO.class);
             assertThat(data.attachmentHint).isNull();
         }
 

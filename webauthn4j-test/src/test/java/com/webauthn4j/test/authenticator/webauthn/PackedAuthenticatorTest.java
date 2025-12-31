@@ -86,10 +86,10 @@ class PackedAuthenticatorTest {
     }
 
     private String serialize(PublicKeyCredentialCreationOptions options) {
-        return objectConverter.getJsonConverter().writeValueAsString(options);
+        return objectConverter.getJsonMapper().writeValueAsString(options);
     }
 
     private PublicKeyCredentialCreationOptions deserialize(String json) {
-        return objectConverter.getJsonConverter().readValue(json, PublicKeyCredentialCreationOptions.class);
+        return objectConverter.getJsonMapper().readValue(json, PublicKeyCredentialCreationOptions.class);
     }
 }

@@ -155,7 +155,7 @@ public class WebAuthnRegistrationAsyncManager {
     @SuppressWarnings("squid:S1130")
     public @NotNull CompletionStage<RegistrationData> parse(String registrationResponseJSON) {
         return CompletionStageUtil
-                .supply(()-> objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput>>() {}))
+                .supply(()-> objectConverter.getJsonMapper().readValue(registrationResponseJSON, new TypeReference<PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput>>() {}))
                 .thenApply(publicKeyCredential -> {
                     byte[] attestationObjectBytes = publicKeyCredential.getResponse().getAttestationObject();
                     AttestationObject attestationObject = attestationObjectBytes == null ? null : attestationObjectConverter.convert(attestationObjectBytes);

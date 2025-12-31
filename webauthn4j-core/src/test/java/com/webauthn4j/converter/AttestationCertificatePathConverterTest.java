@@ -16,11 +16,11 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.util.Collections;
 
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AttestationCertificatePathConverterTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final CborConverter cborConverter = objectConverter.getCborConverter();
+    private final CBORMapper cborMapper = objectConverter.getCborMapper();
 
     @Test
     void shouldSerializeAndDeserializeAttestationCertificatePath() {
@@ -37,8 +37,8 @@ class AttestationCertificatePathConverterTest {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(Collections.singletonList(TestAttestationUtil.load2tierTestAuthenticatorAttestationCertificate()));
 
         // When
-        byte[] cbor = cborConverter.writeValueAsBytes(attestationCertificatePath);
-        AttestationCertificatePath restored = cborConverter.readValue(cbor, AttestationCertificatePath.class);
+        byte[] cbor = cborMapper.writeValueAsBytes(attestationCertificatePath);
+        AttestationCertificatePath restored = cborMapper.readValue(cbor, AttestationCertificatePath.class);
 
         // Then
         assertThat(restored).isEqualTo(attestationCertificatePath);

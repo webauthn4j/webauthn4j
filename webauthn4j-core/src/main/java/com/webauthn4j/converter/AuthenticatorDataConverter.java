@@ -197,7 +197,7 @@ public class AuthenticatorDataConverter {
             return new byte[0];
         }
         else {
-            return objectConverter.getCborConverter().writeValueAsBytes(extensions);
+            return objectConverter.getCborMapper().writeValueAsBytes(extensions);
         }
     }
 
@@ -211,7 +211,7 @@ public class AuthenticatorDataConverter {
         byteBuffer.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
-                objectConverter.getCborConverter().readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
+                objectConverter.getCborMapper().readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
                 });
         if (envelope == null) {
             return null;

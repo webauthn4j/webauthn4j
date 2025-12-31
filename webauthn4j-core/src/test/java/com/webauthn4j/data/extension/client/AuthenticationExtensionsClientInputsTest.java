@@ -22,6 +22,7 @@ import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.HMACGetSecretInput;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsClientInputsTest {
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @SuppressWarnings("java:S5961")
     @Test
@@ -158,7 +159,7 @@ class AuthenticationExtensionsClientInputsTest {
         builder.setCredentialProtectionPolicy(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         builder.setHMACCreateSecret(true);
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> registrationExtensions = builder.build();
-        String json = jsonConverter.writeValueAsString(registrationExtensions);
+        String json = jsonMapper.writeValueAsString(registrationExtensions);
         assertThat(json).isEqualTo("{\"credentialProtectionPolicy\":\"userVerificationOptional\",\"hmacCreateSecret\":true}");
     }
 
@@ -167,14 +168,14 @@ class AuthenticationExtensionsClientInputsTest {
         AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
         builder.setAppid("dummyAppid");
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> authenticationExtensions = builder.build();
-        String json = jsonConverter.writeValueAsString(authenticationExtensions);
+        String json = jsonMapper.writeValueAsString(authenticationExtensions);
         assertThat(json).isEqualTo("{\"appid\":\"dummyAppid\"}");
     }
 
     @Test
     void deserialize_registration_test() {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> instance =
-                jsonConverter.readValue("{\"credentialProtectionPolicy\":\"userVerificationOptionalWithCredentialIDList\",\"hmacCreateSecret\":true}", new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {
+                jsonMapper.readValue("{\"credentialProtectionPolicy\":\"userVerificationOptionalWithCredentialIDList\",\"hmacCreateSecret\":true}", new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {
                 });
         assertThat(instance.getCredentialProtectionPolicy()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
         assertThat(instance.getHMACCreateSecret()).isTrue();
@@ -185,7 +186,7 @@ class AuthenticationExtensionsClientInputsTest {
         AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
         builder.set("appid", "dummyAppid");
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> authenticationExtensions = builder.build();
-        String json = jsonConverter.writeValueAsString(authenticationExtensions);
+        String json = jsonMapper.writeValueAsString(authenticationExtensions);
         assertThat(json).isEqualTo("{\"appid\":\"dummyAppid\"}");
     }
 

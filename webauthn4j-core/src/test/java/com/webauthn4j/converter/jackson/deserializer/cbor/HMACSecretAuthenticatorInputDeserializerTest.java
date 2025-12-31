@@ -22,7 +22,9 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorInputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorInput;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class HMACSecretAuthenticatorInputDeserializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Test
     void shouldDeserializeHMACCreateSecret() {
@@ -41,8 +43,8 @@ class HMACSecretAuthenticatorInputDeserializerTest {
         String json = "{\"hmac-secret\": true }";
 
         //When
-        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> createExtensions = 
-            jsonConverter.readValue(json, new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){});
+        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> createExtensions =
+                jsonMapper.readValue(json, new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){});
 
         //Then
         assertThat(createExtensions.getHMACCreateSecret()).isTrue();
@@ -54,8 +56,8 @@ class HMACSecretAuthenticatorInputDeserializerTest {
         String json = "{\"hmac-secret\": {} }";
 
         //When
-        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> getExtensions = 
-            jsonConverter.readValue(json, new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){});
+        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> getExtensions =
+                jsonMapper.readValue(json, new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){});
 
         //Then
         assertThat(getExtensions.getHMACGetSecret()).isNotNull();
@@ -67,15 +69,15 @@ class HMACSecretAuthenticatorInputDeserializerTest {
         String invalidJson = "{invalid-json}";
 
         //Then
-        assertThatThrownBy(() -> jsonConverter.readValue(invalidJson, 
+        assertThatThrownBy(() -> jsonMapper.readValue(invalidJson,
             new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){}))
-                .isInstanceOf(DataConversionException.class);
+                .isInstanceOf(StreamReadException.class);
     }
 
     @Test
     void shouldThrowExceptionForNullInput() {
         //Then
-        assertThatThrownBy(() -> jsonConverter.readValue((String)null, 
+        assertThatThrownBy(() -> jsonMapper.readValue((String)null,
             new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){}))
                 .isInstanceOf(IllegalArgumentException.class);
     }

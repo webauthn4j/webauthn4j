@@ -16,18 +16,18 @@
 
 package com.webauthn4j.metadata.data;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.data.statement.AuthenticatorGetInfo;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.statement.VerificationMethodDescriptor;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MetadataBLOBPayloadEntryTest {
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @SuppressWarnings({"java:S5976", "java:S5961"})
     @Test
@@ -266,7 +266,7 @@ class MetadataBLOBPayloadEntryTest {
                 "      ],\n" +
                 "      \"timeOfLastStatusChange\": \"2019-01-04\"\n" +
                 "    }\n";
-        return jsonConverter.readValue(entryJson, MetadataBLOBPayloadEntry.class);
+        return jsonMapper.readValue(entryJson, MetadataBLOBPayloadEntry.class);
     }
 
 }

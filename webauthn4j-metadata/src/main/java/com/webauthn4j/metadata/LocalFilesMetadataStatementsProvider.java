@@ -43,7 +43,7 @@ public class LocalFilesMetadataStatementsProvider implements MetadataStatementsP
     public @NotNull List<MetadataStatement> provide() {
         return Arrays.stream(paths).map(path ->{
             try (InputStream inputStream = Files.newInputStream(path)) {
-                return objectConverter.getJsonConverter().readValue(inputStream, MetadataStatement.class);
+                return objectConverter.getJsonMapper().readValue(inputStream, MetadataStatement.class);
             } catch (IOException e) {
                 throw new UncheckedIOException("Failed to load a MetadataStatements file", e);
             }

@@ -43,7 +43,7 @@ public class DeviceCheckAssertionManager {
     private final AuthenticatorDataConverter authenticatorDataConverter;
 
     private final DCAssertionDataVerifier dcAssertionDataValidator;
-    private final CborConverter cborConverter;
+    private final ObjectConverter objectConverter;
 
     public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationVerifier> customAuthenticationValidators, @NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
@@ -51,7 +51,7 @@ public class DeviceCheckAssertionManager {
 
         dcAssertionDataValidator = new DCAssertionDataVerifier(customAuthenticationValidators);
         authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
-        cborConverter = objectConverter.getCborConverter();
+        this.objectConverter = objectConverter;
     }
 
     public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationVerifier> customAuthenticationValidators) {
@@ -67,7 +67,7 @@ public class DeviceCheckAssertionManager {
         AssertUtil.notNull(dcAssertionRequest, "dcAssertionRequest must not be null");
 
         byte[] credentialId = dcAssertionRequest.getKeyId();
-        DCAssertion assertion = cborConverter.readValue(dcAssertionRequest.getAssertion(), DCAssertion.class);
+        DCAssertion assertion = objectConverter.getCborMapper().readValue(dcAssertionRequest.getAssertion(), DCAssertion.class);
         byte[] authenticatorDataBytes = assertion == null ? null : assertion.getAuthenticatorData();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataBytes == null ? null : authenticatorDataConverter.convert(authenticatorDataBytes);
         byte[] clientDataHash = dcAssertionRequest.getClientDataHash();

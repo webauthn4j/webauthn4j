@@ -26,35 +26,35 @@ import tools.jackson.databind.JacksonModule;
 import tools.jackson.databind.exc.InvalidDefinitionException;
 import tools.jackson.databind.exc.MismatchedInputException;
 import tools.jackson.databind.exc.ValueInstantiationException;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.io.InputStream;
 
 /**
  * A utility class for JSON serialization/deserialization
  */
+@Deprecated
 public class JsonConverter {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    private JsonMapper jsonMapper;
+    private final ObjectConverter objectConverter;
 
-    JsonConverter(@NotNull JsonMapper jsonMapper) {
-        AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
+    JsonConverter(@NotNull ObjectConverter objectConverter) {
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        this.jsonMapper = jsonMapper;
+        this.objectConverter = objectConverter;
     }
 
-    //TODO: deprecate
+    @Deprecated
     public void registerModule(JacksonModule module){
-        this.jsonMapper = jsonMapper.rebuild()
+        objectConverter.jsonMapper = objectConverter.getJsonMapper().rebuild()
                 .addModule(module)
                 .build();
     }
 
     public <T> @Nullable T readValue(@NotNull String src, @NotNull Class<T> valueType) {
         try {
-            return jsonMapper.readValue(src, valueType);
+            return objectConverter.getJsonMapper().readValue(src, valueType);
         } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
@@ -62,7 +62,7 @@ public class JsonConverter {
 
     public <T> @Nullable T readValue(@NotNull InputStream src, @NotNull Class<T> valueType) {
         try {
-            return jsonMapper.readValue(src, valueType);
+            return objectConverter.getJsonMapper().readValue(src, valueType);
         } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
@@ -70,7 +70,7 @@ public class JsonConverter {
 
     public <T> @Nullable T readValue(@NotNull String src, @NotNull TypeReference<T> valueTypeRef) {
         try {
-            return jsonMapper.readValue(src, valueTypeRef);
+            return objectConverter.getJsonMapper().readValue(src, valueTypeRef);
         } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
@@ -78,7 +78,7 @@ public class JsonConverter {
 
     public <T> @Nullable T readValue(@NotNull InputStream src, @NotNull TypeReference<T> valueTypeRef) {
         try {
-            return jsonMapper.readValue(src, valueTypeRef);
+            return objectConverter.getJsonMapper().readValue(src, valueTypeRef);
         } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
@@ -86,7 +86,7 @@ public class JsonConverter {
 
     public @NotNull byte[] writeValueAsBytes(@Nullable Object value) {
         try {
-            return jsonMapper.writeValueAsBytes(value);
+            return objectConverter.getJsonMapper().writeValueAsBytes(value);
         } catch (InvalidDefinitionException e) {
             throw new DataConversionException(e);
         }
@@ -94,7 +94,7 @@ public class JsonConverter {
 
     public @NotNull String writeValueAsString(@Nullable Object value) {
         try {
-            return jsonMapper.writeValueAsString(value);
+            return objectConverter.getJsonMapper().writeValueAsString(value);
         } catch (InvalidDefinitionException e) {
             throw new DataConversionException(e);
         }

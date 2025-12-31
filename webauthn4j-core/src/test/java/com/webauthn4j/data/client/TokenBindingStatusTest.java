@@ -19,6 +19,7 @@ package com.webauthn4j.data.client;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -26,9 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @SuppressWarnings("ConstantConditions")
 class TokenBindingStatusTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
-
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void create_test() {
@@ -53,14 +52,14 @@ class TokenBindingStatusTest {
 
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"status\":\"present\"}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"status\":\"present\"}", TestDTO.class);
         assertThat(dto.status).isEqualTo(TokenBindingStatus.PRESENT);
     }
 
     @Test
     void fromString_test_with_unknown_value() {
         assertThatCode(
-                () -> jsonConverter.readValue("{\"status\":\"unknown\"}", TestDTO.class)
+                () -> jsonMapper.readValue("{\"status\":\"unknown\"}", TestDTO.class)
         ).doesNotThrowAnyException();
     }
 

@@ -19,12 +19,12 @@ package com.webauthn4j.converter.util;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
-import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
 import tools.jackson.databind.ser.std.StdSerializer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Deprecated
 class JsonConverterIntegrationTest {
 
     @Test
@@ -32,12 +32,11 @@ class JsonConverterIntegrationTest {
         //Given
         SimpleModule module = new SimpleModule();
         module.addSerializer(TestData.class, new TestDataSerializer());
-        JsonMapper jsonMapper = JsonMapper.builder()
-                .addModule(module)
-                .build();
+        ObjectConverter objectConverter = new ObjectConverter();
 
         //When
-        JsonConverter jsonConverter = new JsonConverter(jsonMapper);
+        objectConverter.getJsonConverter().registerModule(module);
+        JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
         //Then
         assertThat(jsonConverter.writeValueAsString(new TestData())).isEqualTo("\"serialized by TestDataSerializer\"");

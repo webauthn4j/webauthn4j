@@ -19,6 +19,7 @@ package com.webauthn4j.data.client;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -26,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ClientDataTypeTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void create_test() {
@@ -43,14 +43,14 @@ class ClientDataTypeTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"client_data_type\":\"webauthn.create\"}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"client_data_type\":\"webauthn.create\"}", TestDTO.class);
         assertThat(dto.client_data_type).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
     }
 
     @Test
     void fromString_test_with_unknown_value() {
         assertThatCode(
-                () -> jsonConverter.readValue("{\"client_data_type\":\"unknown\"}", TestDTO.class)
+                () -> jsonMapper.readValue("{\"client_data_type\":\"unknown\"}", TestDTO.class)
         ).doesNotThrowAnyException();
     }
 

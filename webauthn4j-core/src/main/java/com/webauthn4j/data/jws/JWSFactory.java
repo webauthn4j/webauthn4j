@@ -49,8 +49,8 @@ public class JWSFactory {
         AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(privateKey, "privateKey must not be null");
 
-        String headerString = Base64UrlUtil.encodeToString(objectConverter.getJsonConverter().writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
-        String payloadString = Base64UrlUtil.encodeToString(objectConverter.getJsonConverter().writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
+        String headerString = Base64UrlUtil.encodeToString(objectConverter.getJsonMapper().writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
+        String payloadString = Base64UrlUtil.encodeToString(objectConverter.getJsonMapper().writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         String signedData = headerString + "." + payloadString;
         if (header.getAlg() == null) {
             throw new IllegalArgumentException("alg must not be null");
@@ -72,8 +72,8 @@ public class JWSFactory {
         AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(signature, "signature must not be null");
 
-        String headerString = Base64UrlUtil.encodeToString(objectConverter.getJsonConverter().writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
-        String payloadString = Base64UrlUtil.encodeToString(objectConverter.getJsonConverter().writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
+        String headerString = Base64UrlUtil.encodeToString(objectConverter.getJsonMapper().writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
+        String payloadString = Base64UrlUtil.encodeToString(objectConverter.getJsonMapper().writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }
 
@@ -88,8 +88,8 @@ public class JWSFactory {
         String headerString = data[0];
         String payloadString = data[1];
         String signatureString = data[2];
-        JWSHeader header = objectConverter.getJsonConverter().readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
-        T payload = objectConverter.getJsonConverter().readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
+        JWSHeader header = objectConverter.getJsonMapper().readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
+        T payload = objectConverter.getJsonMapper().readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
         byte[] signature = Base64UrlUtil.decode(signatureString);
 
         AssertUtil.notNull(header, HEADER_MUST_NOT_BE_NULL);

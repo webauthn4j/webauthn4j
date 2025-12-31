@@ -47,6 +47,6 @@ public class LocalFilesMetadataStatementsAsyncProvider implements MetadataStatem
         CompletableFuture<Void> joinedFuture = CompletableFuture.allOf(completionStages.toArray(CompletableFuture[]::new));
         return joinedFuture
                 .thenApply(unused -> completionStages.stream().map(loadedByte -> loadedByte.toCompletableFuture().join()))
-                .thenApply(stream -> stream.map(item -> objectConverter.getJsonConverter().readValue(new ByteArrayInputStream(item), MetadataStatement.class)).collect(Collectors.toList()));
+                .thenApply(stream -> stream.map(item -> objectConverter.getJsonMapper().readValue(new ByteArrayInputStream(item), MetadataStatement.class)).collect(Collectors.toList()));
     }
 }

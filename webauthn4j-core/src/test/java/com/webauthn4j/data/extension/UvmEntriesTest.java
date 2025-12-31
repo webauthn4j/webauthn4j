@@ -22,6 +22,7 @@ import com.webauthn4j.data.KeyProtectionType;
 import com.webauthn4j.data.MatcherProtectionType;
 import com.webauthn4j.data.UserVerificationMethod;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Collections;
 
@@ -29,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class UvmEntriesTest {
 
-    final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void serialize_test() {
@@ -37,7 +38,7 @@ class UvmEntriesTest {
         UvmEntry uvmEntry = new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);
         UvmEntries uvmEntries = new UvmEntries(Collections.singletonList(uvmEntry));
 
-        String json = jsonConverter.writeValueAsString(uvmEntries);
+        String json = jsonMapper.writeValueAsString(uvmEntries);
         assertThat(json).isEqualTo("[[2,1,2]]");
     }
 

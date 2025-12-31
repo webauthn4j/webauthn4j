@@ -19,12 +19,13 @@ package com.webauthn4j.data;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.UserVerificationMethodFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.UserVerificationMethodToStringSerializer;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class UserVerificationMethodTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Test
     void create_test() {
@@ -72,33 +73,33 @@ class UserVerificationMethodTest {
         void serialize_test(){
             UserVerificationMethodTest.IntSerializationTestDTO dto = new UserVerificationMethodTest.IntSerializationTestDTO();
             dto.userVerificationMethod = UserVerificationMethod.FINGERPRINT_INTERNAL;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"userVerificationMethod\":2}");
         }
 
         @Test
         void deserialize_test() {
-            UserVerificationMethodTest.IntSerializationTestDTO dto = jsonConverter.readValue("{\"userVerificationMethod\":2}", UserVerificationMethodTest.IntSerializationTestDTO.class);
+            UserVerificationMethodTest.IntSerializationTestDTO dto = jsonMapper.readValue("{\"userVerificationMethod\":2}", UserVerificationMethodTest.IntSerializationTestDTO.class);
             assertThat(dto.userVerificationMethod).isEqualTo(UserVerificationMethod.FINGERPRINT_INTERNAL);
         }
 
         @Test
         void deserialize_test_with_out_of_range_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"userVerificationMethod\": \"-1\"}", UserVerificationMethodTest.IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"userVerificationMethod\": \"-1\"}", UserVerificationMethodTest.IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"userVerificationMethod\": \"\"}", UserVerificationMethodTest.IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"userVerificationMethod\": \"\"}", UserVerificationMethodTest.IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            UserVerificationMethodTest.IntSerializationTestDTO data = jsonConverter.readValue("{\"userVerificationMethod\":null}", UserVerificationMethodTest.IntSerializationTestDTO.class);
+            UserVerificationMethodTest.IntSerializationTestDTO data = jsonMapper.readValue("{\"userVerificationMethod\":null}", UserVerificationMethodTest.IntSerializationTestDTO.class);
             assertThat(data.userVerificationMethod).isNull();
         }
     }
@@ -115,26 +116,26 @@ class UserVerificationMethodTest {
         void serialize_test(){
             UserVerificationMethodTest.StringSerializationTestDTO dto = new UserVerificationMethodTest.StringSerializationTestDTO();
             dto.userVerificationMethod = UserVerificationMethod.FINGERPRINT_INTERNAL;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"userVerificationMethod\":\"fingerprint_internal\"}");
         }
 
         @Test
         void deserialize_test() {
-            UserVerificationMethodTest.StringSerializationTestDTO dto = jsonConverter.readValue("{\"userVerificationMethod\":\"fingerprint_internal\"}", UserVerificationMethodTest.StringSerializationTestDTO.class);
+            UserVerificationMethodTest.StringSerializationTestDTO dto = jsonMapper.readValue("{\"userVerificationMethod\":\"fingerprint_internal\"}", UserVerificationMethodTest.StringSerializationTestDTO.class);
             assertThat(dto.userVerificationMethod).isEqualTo(UserVerificationMethod.FINGERPRINT_INTERNAL);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"userVerificationMethod\": \"\"}", UserVerificationMethodTest.StringSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"userVerificationMethod\": \"\"}", UserVerificationMethodTest.StringSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            UserVerificationMethodTest.StringSerializationTestDTO data = jsonConverter.readValue("{\"userVerificationMethod\":null}", UserVerificationMethodTest.StringSerializationTestDTO.class);
+            UserVerificationMethodTest.StringSerializationTestDTO data = jsonMapper.readValue("{\"userVerificationMethod\":null}", UserVerificationMethodTest.StringSerializationTestDTO.class);
             assertThat(data.userVerificationMethod).isNull();
         }
     }

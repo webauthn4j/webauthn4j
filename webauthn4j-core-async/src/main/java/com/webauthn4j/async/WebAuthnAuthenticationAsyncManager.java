@@ -65,7 +65,7 @@ public class WebAuthnAuthenticationAsyncManager {
     @SuppressWarnings("squid:S1130")
     public CompletionStage<AuthenticationData> parse(String authenticationResponseJSON) {
         return CompletionStageUtil
-                .supply(()-> objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput>>() {}))
+                .supply(()-> objectConverter.getJsonMapper().readValue(authenticationResponseJSON, new TypeReference<PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput>>() {}))
                 .thenApply( publicKeyCredential -> {
             byte[] credentialId = publicKeyCredential.getRawId();
             byte[] userHandle = publicKeyCredential.getResponse().getUserHandle();

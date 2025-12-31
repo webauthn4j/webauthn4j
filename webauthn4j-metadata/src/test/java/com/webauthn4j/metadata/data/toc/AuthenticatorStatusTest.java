@@ -20,6 +20,8 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AuthenticatorStatusTest {
 
-    final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void create_test() {
@@ -61,14 +63,14 @@ class AuthenticatorStatusTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"authenticator_status\":\"REVOKED\"}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"authenticator_status\":\"REVOKED\"}", TestDTO.class);
         assertThat(dto.authenticatorStatus).isEqualTo(AuthenticatorStatus.REVOKED);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"authenticator_status\":\"FIDO_CERTIFIED_L2PLUS\"}", TestDTO.class)
+        assertThrows(InvalidFormatException.class,
+                () -> jsonMapper.readValue("{\"authenticator_status\":\"FIDO_CERTIFIED_L2PLUS\"}", TestDTO.class)
         );
     }
 

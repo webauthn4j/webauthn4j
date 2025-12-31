@@ -21,6 +21,9 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,8 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @SuppressWarnings("ConstantConditions")
 class COSEAlgorithmIdentifierTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void create_test() {
@@ -98,34 +100,34 @@ class COSEAlgorithmIdentifierTest {
 
     @Test
     void deserialize_test() {
-        TestDTO dto = jsonConverter.readValue("{\"cose_alg_id\":-257}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"cose_alg_id\":-257}", TestDTO.class);
         assertThat(dto.cose_alg_id).isEqualTo(COSEAlgorithmIdentifier.RS256);
     }
 
     @Test
     void deserialize_test_with_non_predefined_value() {
         assertDoesNotThrow(
-                () -> jsonConverter.readValue("{\"cose_alg_id\":0}", TestDTO.class)
+                () -> jsonMapper.readValue("{\"cose_alg_id\":0}", TestDTO.class)
         );
     }
 
     @Test
     void deserialize_test_with_empty_string_value() {
         assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"cose_alg_id\": \"\"}", TestDTO.class)
-        ).isInstanceOf(DataConversionException.class);
+                () -> jsonMapper.readValue("{\"cose_alg_id\": \"\"}", TestDTO.class)
+        ).isInstanceOf(InvalidFormatException.class);
     }
 
     @Test
     void deserialize_test_with_invalid_value() {
         assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"cose_alg_id\": \"invalid\"}", TestDTO.class)
-        ).isInstanceOf(DataConversionException.class);
+                () -> jsonMapper.readValue("{\"cose_alg_id\": \"invalid\"}", TestDTO.class)
+        ).isInstanceOf(InvalidFormatException.class);
     }
 
     @Test
     void deserialize_test_with_null() {
-        TestDTO data = jsonConverter.readValue("{\"cose_alg_id\":null}", TestDTO.class);
+        TestDTO data = jsonMapper.readValue("{\"cose_alg_id\":null}", TestDTO.class);
         assertThat(data.cose_alg_id).isNull();
     }
 

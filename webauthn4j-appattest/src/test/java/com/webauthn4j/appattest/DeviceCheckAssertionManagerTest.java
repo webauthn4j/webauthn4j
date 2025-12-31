@@ -35,7 +35,6 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 class DeviceCheckAssertionManagerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final CborConverter cborConverter = objectConverter.getCborConverter();
     private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
 
     @Test
@@ -50,7 +49,7 @@ class DeviceCheckAssertionManagerTest {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] keyId = new byte[64];
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
-        byte[] assertion = cborConverter.writeValueAsBytes(new DCAssertion(new byte[32], authenticatorDataBytes));
+        byte[] assertion = objectConverter.getCborMapper().writeValueAsBytes(new DCAssertion(new byte[32], authenticatorDataBytes));
         byte[] clientDataHash = new byte[32];
         DCAssertionData dcAssertionData = deviceCheckAssertionManager.parse(new DCAssertionRequest(keyId, assertion, clientDataHash));
 

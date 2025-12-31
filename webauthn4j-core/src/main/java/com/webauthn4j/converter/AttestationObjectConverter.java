@@ -18,7 +18,6 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.JacksonUtil;
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.AssertUtil;
@@ -36,14 +35,14 @@ public class AttestationObjectConverter {
 
     // ~ Instance fields
     // ================================================================================================
-    private final CborConverter cborConverter;
+    private final ObjectConverter objectConverter;
 
     // ~ Constructors
     // ================================================================================================
 
     public AttestationObjectConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
-        this.cborConverter = objectConverter.getCborConverter();
+        this.objectConverter = objectConverter;
     }
 
     // ~ Methods
@@ -74,7 +73,7 @@ public class AttestationObjectConverter {
     public @Nullable AttestationObject convert(@NotNull byte[] source) {
         try {
             AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
-            return cborConverter.readValue(source, AttestationObject.class);
+            return objectConverter.getCborMapper().readValue(source, AttestationObject.class);
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
@@ -89,7 +88,7 @@ public class AttestationObjectConverter {
     public @NotNull byte[] convertToBytes(@NotNull AttestationObject source) {
         try {
             AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
-            return cborConverter.writeValueAsBytes(source);
+            return objectConverter.getCborMapper().writeValueAsBytes(source);
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
@@ -118,7 +117,7 @@ public class AttestationObjectConverter {
      */
     public @Nullable byte[] extractAuthenticatorData(@NotNull byte[] attestationObject) {
         AssertUtil.notNull(attestationObject, "attestationObject must not be null");
-        JsonNode authData = cborConverter.readTree(attestationObject).get("authData");
+        JsonNode authData = objectConverter.getCborMapper().readTree(attestationObject).get("authData");
         return JacksonUtil.binaryValue(authData);
     }
 
@@ -130,8 +129,8 @@ public class AttestationObjectConverter {
      */
     public @Nullable byte[] extractAttestationStatement(@NotNull byte[] attestationObject) {
         AssertUtil.notNull(attestationObject, "attestationObject must not be null");
-        JsonNode attStmt = cborConverter.readTree(attestationObject).get("attStmt");
-        return cborConverter.writeValueAsBytes(attStmt);
+        JsonNode attStmt = objectConverter.getCborMapper().readTree(attestationObject).get("attStmt");
+        return objectConverter.getCborMapper().writeValueAsBytes(attStmt);
     }
 
 

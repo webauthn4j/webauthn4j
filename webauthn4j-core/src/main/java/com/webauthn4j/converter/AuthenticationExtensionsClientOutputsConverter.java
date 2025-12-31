@@ -36,7 +36,7 @@ public class AuthenticationExtensionsClientOutputsConverter {
 
     // ~ Instance fields
     // ================================================================================================
-    private final JsonConverter jsonConverter;
+    private final ObjectConverter objectConverter;
 
     // ~ Constructors
     // ================================================================================================
@@ -49,7 +49,7 @@ public class AuthenticationExtensionsClientOutputsConverter {
      */
     public AuthenticationExtensionsClientOutputsConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
-        this.jsonConverter = objectConverter.getJsonConverter();
+        this.objectConverter = objectConverter;
     }
 
     // ~ Methods
@@ -66,7 +66,7 @@ public class AuthenticationExtensionsClientOutputsConverter {
     public <T extends ExtensionClientOutput> @Nullable AuthenticationExtensionsClientOutputs<T> convert(@NotNull String value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
-            return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientOutputs<T>>() {
+            return objectConverter.getJsonMapper().readValue(value, new TypeReference<AuthenticationExtensionsClientOutputs<T>>() {
             });
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
@@ -84,7 +84,7 @@ public class AuthenticationExtensionsClientOutputsConverter {
     public <T extends ExtensionClientOutput> @NotNull String convertToString(@NotNull AuthenticationExtensionsClientOutputs<T> value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
-            return jsonConverter.writeValueAsString(value);
+            return objectConverter.getJsonMapper().writeValueAsString(value);
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }

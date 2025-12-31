@@ -23,6 +23,8 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.exc.MismatchedInputException;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AttestationStatementDeserializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final CborConverter cborConverter = objectConverter.getCborConverter();
+    private final CBORMapper cborMapper = objectConverter.getCborMapper();
 
     @Test
     void shouldDeserializeAttestationStatement() {
@@ -42,8 +44,8 @@ class AttestationStatementDeserializerTest {
         AttestationStatement source = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
 
         //When
-        byte[] data = cborConverter.writeValueAsBytes(source);
-        AttestationStatement obj = cborConverter.readValue(data, FIDOU2FAttestationStatement.class);
+        byte[] data = cborMapper.writeValueAsBytes(source);
+        AttestationStatement obj = cborMapper.readValue(data, FIDOU2FAttestationStatement.class);
 
         //Then
         assertAll(
@@ -58,14 +60,14 @@ class AttestationStatementDeserializerTest {
         byte[] invalidCbor = new byte[]{0x00, 0x01, 0x02}; // Invalid CBOR data
 
         //Then
-        assertThatThrownBy(() -> cborConverter.readValue(invalidCbor, FIDOU2FAttestationStatement.class))
-                .isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> cborMapper.readValue(invalidCbor, FIDOU2FAttestationStatement.class))
+                .isInstanceOf(MismatchedInputException.class);
     }
 
     @Test
     void shouldThrowExceptionForNullInput() {
         //Then
-        assertThatThrownBy(() -> cborConverter.readValue((byte[])null, FIDOU2FAttestationStatement.class))
+        assertThatThrownBy(() -> cborMapper.readValue((byte[])null, FIDOU2FAttestationStatement.class))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

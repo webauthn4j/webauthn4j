@@ -21,6 +21,9 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,8 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings("ConstantConditions")
 class JWAIdentifierTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
 
     @Test
@@ -69,14 +71,14 @@ class JWAIdentifierTest {
 
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"jwa_id\":\"ES256\"}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"jwa_id\":\"ES256\"}", TestDTO.class);
         assertThat(dto.jwa_id).isEqualTo(JWAIdentifier.ES256);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"jwa_id\":\"ES521\"}", TestDTO.class)
+        assertThrows(InvalidFormatException.class,
+                () -> jsonMapper.readValue("{\"jwa_id\":\"ES521\"}", TestDTO.class)
         );
     }
 

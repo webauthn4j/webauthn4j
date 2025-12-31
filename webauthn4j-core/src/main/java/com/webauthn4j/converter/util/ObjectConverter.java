@@ -28,10 +28,12 @@ import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.dataformat.cbor.CBORMapper;
 
 /**
- * A set of object converter classes
+ * A set of JSON mapper and CBOR mapper classes specialized for WebAuthn serialization/deserialization
  */
 public class ObjectConverter {
 
+    JsonMapper jsonMapper;
+    CBORMapper cborMapper;
     private final JsonConverter jsonConverter;
     private final CborConverter cborConverter;
 
@@ -39,11 +41,11 @@ public class ObjectConverter {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
 
-        JsonMapper initializedJsonMapper = initializeJsonMapper(jsonMapper, this);
-        CBORMapper initializedCborMapper = initializeCborMapper(cborMapper, this);
+        this.jsonMapper = reconfigureJsonMapper(jsonMapper, this);
+        this.cborMapper = reconfigureCborMapper(cborMapper, this);
 
-        this.jsonConverter = new JsonConverter(initializedJsonMapper);
-        this.cborConverter = new CborConverter(initializedCborMapper);
+        this.jsonConverter = new JsonConverter(this);
+        this.cborConverter = new CborConverter(this);
     }
 
     public ObjectConverter() {
@@ -51,9 +53,9 @@ public class ObjectConverter {
     }
 
     /**
-     * Initialize a {@link ObjectMapper} for WebAuthn JSON type processing
+     * Reconfigure a {@link ObjectMapper} for WebAuthn JSON type processing
      */
-    private static JsonMapper initializeJsonMapper(@NotNull JsonMapper jsonMapper, @NotNull ObjectConverter objectConverter) {
+    private static JsonMapper reconfigureJsonMapper(@NotNull JsonMapper jsonMapper, @NotNull ObjectConverter objectConverter) {
         return jsonMapper.rebuild()
                 .addModule(new WebAuthnJSONModule(objectConverter))
                 .configure(DeserializationFeature.WRAP_EXCEPTIONS, false)
@@ -66,10 +68,10 @@ public class ObjectConverter {
                 .build();
     }
 
-    /**y
-     * Initialize a {@link ObjectMapper} for WebAuthn CBOR type processing
+    /**
+     * Reconfigure a {@link ObjectMapper} for WebAuthn CBOR type processing
      */
-    private static CBORMapper initializeCborMapper(@NotNull CBORMapper cborMapper, @NotNull ObjectConverter objectConverter) {
+    private static CBORMapper reconfigureCborMapper(@NotNull CBORMapper cborMapper, @NotNull ObjectConverter objectConverter) {
         return cborMapper.rebuild()
                 .addModule(new WebAuthnCBORModule(objectConverter))
                 .configure(DeserializationFeature.WRAP_EXCEPTIONS, false)
@@ -82,14 +84,34 @@ public class ObjectConverter {
                 .build();
     }
 
-    //TODO: deprecate
+    /**
+     * @deprecated Use {@link #getJsonMapper()} instead.
+     * The {@link JsonConverter} was a thin wrapper around {@link ObjectMapper} and wrapped checked exceptions into unchecked ones.
+     * It also specified at the type level whether it was a JSON or CBOR converter.
+     * However, since Jackson 3 introduced {@link JsonMapper} specifically for JSON and it no longer throws checked exceptions, {@link JsonConverter} has been deprecated.
+     */
+    @Deprecated
     public @NotNull JsonConverter getJsonConverter() {
         return jsonConverter;
     }
 
-    //TODO: deprecate
+    /**
+     * @deprecated Use {@link #getCborMapper()} instead.
+     * The {@link CborConverter} was a thin wrapper around {@link ObjectMapper} and wrapped checked exceptions into unchecked ones.
+     * It also specified at the type level whether it was a JSON or CBOR converter.
+     * However, since Jackson 3 introduced {@link CBORMapper} specifically for CBOR and it no longer throws checked exceptions, {@link CborConverter} has been deprecated.
+     */
+    @Deprecated
     public @NotNull CborConverter getCborConverter() {
         return cborConverter;
+    }
+
+    public @NotNull JsonMapper getJsonMapper() {
+        return jsonMapper;
+    }
+
+    public @NotNull CBORMapper getCborMapper() {
+        return cborMapper;
     }
 
 }

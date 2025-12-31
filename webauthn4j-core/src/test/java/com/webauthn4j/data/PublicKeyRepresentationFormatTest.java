@@ -3,12 +3,14 @@ package com.webauthn4j.data;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.PublicKeyRepresentationFormatFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.PublicKeyRepresentationFormatToStringSerializer;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class PublicKeyRepresentationFormatTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Test
     void create_test() {
@@ -52,33 +54,33 @@ class PublicKeyRepresentationFormatTest {
         void serialize_test(){
             PublicKeyRepresentationFormatTest.IntSerializationTestDTO dto = new PublicKeyRepresentationFormatTest.IntSerializationTestDTO();
             dto.publicKeyRepresentationFormat = PublicKeyRepresentationFormat.ECC_X962_RAW;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"publicKeyRepresentationFormat\":256}");
         }
 
         @Test
         void deserialize_test() {
-            PublicKeyRepresentationFormatTest.IntSerializationTestDTO dto = jsonConverter.readValue("{\"publicKeyRepresentationFormat\":256}", PublicKeyRepresentationFormatTest.IntSerializationTestDTO.class);
+            PublicKeyRepresentationFormatTest.IntSerializationTestDTO dto = jsonMapper.readValue("{\"publicKeyRepresentationFormat\":256}", PublicKeyRepresentationFormatTest.IntSerializationTestDTO.class);
             assertThat(dto.publicKeyRepresentationFormat).isEqualTo(PublicKeyRepresentationFormat.ECC_X962_RAW);
         }
 
         @Test
         void deserialize_test_with_out_of_range_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"publicKeyRepresentationFormat\": \"-1\"}", PublicKeyRepresentationFormatTest.IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"publicKeyRepresentationFormat\": \"-1\"}", PublicKeyRepresentationFormatTest.IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"publicKeyRepresentationFormat\": \"\"}", PublicKeyRepresentationFormatTest.IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"publicKeyRepresentationFormat\": \"\"}", PublicKeyRepresentationFormatTest.IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            PublicKeyRepresentationFormatTest.IntSerializationTestDTO data = jsonConverter.readValue("{\"publicKeyRepresentationFormat\":null}", PublicKeyRepresentationFormatTest.IntSerializationTestDTO.class);
+            PublicKeyRepresentationFormatTest.IntSerializationTestDTO data = jsonMapper.readValue("{\"publicKeyRepresentationFormat\":null}", PublicKeyRepresentationFormatTest.IntSerializationTestDTO.class);
             assertThat(data.publicKeyRepresentationFormat).isNull();
         }
     }
@@ -95,26 +97,26 @@ class PublicKeyRepresentationFormatTest {
         void serialize_test(){
             PublicKeyRepresentationFormatTest.StringSerializationTestDTO dto = new PublicKeyRepresentationFormatTest.StringSerializationTestDTO();
             dto.publicKeyRepresentationFormat = PublicKeyRepresentationFormat.ECC_X962_RAW;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"publicKeyRepresentationFormat\":\"ecc_x962_raw\"}");
         }
 
         @Test
         void deserialize_test() {
-            PublicKeyRepresentationFormatTest.StringSerializationTestDTO dto = jsonConverter.readValue("{\"publicKeyRepresentationFormat\":\"ecc_x962_raw\"}", PublicKeyRepresentationFormatTest.StringSerializationTestDTO.class);
+            PublicKeyRepresentationFormatTest.StringSerializationTestDTO dto = jsonMapper.readValue("{\"publicKeyRepresentationFormat\":\"ecc_x962_raw\"}", PublicKeyRepresentationFormatTest.StringSerializationTestDTO.class);
             assertThat(dto.publicKeyRepresentationFormat).isEqualTo(PublicKeyRepresentationFormat.ECC_X962_RAW);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"publicKeyRepresentationFormat\": \"\"}", PublicKeyRepresentationFormatTest.StringSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"publicKeyRepresentationFormat\": \"\"}", PublicKeyRepresentationFormatTest.StringSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            PublicKeyRepresentationFormatTest.StringSerializationTestDTO data = jsonConverter.readValue("{\"publicKeyRepresentationFormat\":null}", PublicKeyRepresentationFormatTest.StringSerializationTestDTO.class);
+            PublicKeyRepresentationFormatTest.StringSerializationTestDTO data = jsonMapper.readValue("{\"publicKeyRepresentationFormat\":null}", PublicKeyRepresentationFormatTest.StringSerializationTestDTO.class);
             assertThat(data.publicKeyRepresentationFormat).isNull();
         }
     }
