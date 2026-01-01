@@ -60,7 +60,6 @@ public class ObjectConverter {
                 .addModule(new WebAuthnJSONModule(objectConverter))
                 .configure(DeserializationFeature.WRAP_EXCEPTIONS, false)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, true) //TODO: revert to Jackson2 behavior, but this need to be removed before release
                 .changeDefaultPropertyInclusion(incl -> incl
                         .withValueInclusion(JsonInclude.Include.NON_NULL)
                         .withContentInclusion(JsonInclude.Include.NON_NULL))
@@ -75,7 +74,6 @@ public class ObjectConverter {
                 .addModule(new WebAuthnCBORModule(objectConverter))
                 .configure(DeserializationFeature.WRAP_EXCEPTIONS, false)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, true) //TODO: revert to Jackson2 behavior, but this need to be removed before release
                 .changeDefaultPropertyInclusion(incl -> incl
                         .withValueInclusion(JsonInclude.Include.NON_NULL)
                         .withContentInclusion(JsonInclude.Include.NON_NULL))

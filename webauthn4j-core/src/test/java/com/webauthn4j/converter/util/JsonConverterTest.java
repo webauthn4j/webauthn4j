@@ -53,18 +53,6 @@ class JsonConverterTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenSerializingInvalidObject() {
-        //Given
-        ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
-        converterTestInvalidDto.setValue(new Object());
-
-        //When/Then
-        assertThrows(DataConversionException.class, () ->
-                jsonConverter.writeValueAsString(converterTestInvalidDto)
-        );
-    }
-
-    @Test
     void shouldSerializeObjectToBytes() {
         //Given
         ConverterTestDto converterTestDto = new ConverterTestDto();
@@ -86,18 +74,6 @@ class JsonConverterTest {
 
         //Then
         assertThat(result).isEqualTo("null");
-    }
-
-    @Test
-    void shouldThrowExceptionWhenSerializingInvalidObjectToBytes() {
-        //Given
-        ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
-        converterTestInvalidDto.setValue(new Object());
-
-        //When/Then
-        assertThrows(DataConversionException.class, () ->
-                jsonConverter.writeValueAsBytes(converterTestInvalidDto)
-        );
     }
 
     @Test

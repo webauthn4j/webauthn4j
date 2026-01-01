@@ -54,18 +54,6 @@ class JsonMapperTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenSerializingInvalidObject() {
-        //Given
-        ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
-        converterTestInvalidDto.setValue(new Object());
-
-        //When/Then
-        assertThrows(InvalidDefinitionException.class, () ->
-                jsonMapper.writeValueAsString(converterTestInvalidDto)
-        );
-    }
-
-    @Test
     void shouldSerializeObjectToBytes() {
         //Given
         ConverterTestDto converterTestDto = new ConverterTestDto();
@@ -87,18 +75,6 @@ class JsonMapperTest {
 
         //Then
         assertThat(result).isEqualTo("null");
-    }
-
-    @Test
-    void shouldThrowExceptionWhenSerializingInvalidObjectToBytes() {
-        //Given
-        ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
-        converterTestInvalidDto.setValue(new Object());
-
-        //When/Then
-        assertThrows(InvalidDefinitionException.class, () ->
-                jsonMapper.writeValueAsBytes(converterTestInvalidDto)
-        );
     }
 
     @Test
