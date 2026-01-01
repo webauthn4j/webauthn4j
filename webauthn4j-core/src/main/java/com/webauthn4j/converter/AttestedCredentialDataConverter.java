@@ -27,6 +27,8 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.io.*;
 import java.nio.Buffer;
@@ -167,7 +169,10 @@ public class AttestedCredentialDataConverter {
     @NotNull COSEKeyEnvelope convertToCredentialPublicKey(@NotNull InputStream inputStream) {
         AssertUtil.notNull(inputStream, "inputStream must not be null");
         //noinspection ConstantConditions as input stream is not null
-        return objectConverter.getCborMapper().readValue(inputStream, COSEKeyEnvelope.class);
+        CBORMapper adjustedCborMapper = objectConverter.getCborMapper().rebuild()
+                .configure(DeserializationFeature.FAIL_ON_TRAILING_TOKENS, false)
+                .build();
+        return adjustedCborMapper.readValue(inputStream, COSEKeyEnvelope.class);
     }
 
     @NotNull byte[] convert(@NotNull COSEKey coseKey) {
