@@ -181,7 +181,7 @@ class EdDSACOSEKeyTest {
 
     @Test
     void decode_test(){
-        COSEKey coseKey = new ObjectConverter().getCborMapper().readValue(HexUtil.decode("A4010103272006215820789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87AA16B6372656450726F7465637402"), COSEKey.class);
+        COSEKey coseKey = new ObjectConverter().getCborMapper().readValue(HexUtil.decode("A4010103272006215820789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A"), COSEKey.class);
         assertThat(coseKey).isInstanceOf(EdDSACOSEKey.class);
         EdDSACOSEKey edDSACOSEKey = (EdDSACOSEKey) coseKey;
         assertThat(edDSACOSEKey.getX()).isEqualTo(HexUtil.decode("789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A"));
@@ -202,7 +202,7 @@ class EdDSACOSEKeyTest {
 
     @Test
     void toString_test(){
-        COSEKey coseKey = new ObjectConverter().getCborMapper().readValue(HexUtil.decode("A4010103272006215820789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87AA16B6372656450726F7465637402"), COSEKey.class);
+        COSEKey coseKey = new ObjectConverter().getCborMapper().readValue(HexUtil.decode("A4010103272006215820789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A"), COSEKey.class);
         assertThat(coseKey).isInstanceOf(EdDSACOSEKey.class);
         EdDSACOSEKey edDSACOSEKey = (EdDSACOSEKey) coseKey;
         assertThat(edDSACOSEKey).hasToString("EdDSACOSEKey(keyId=null, alg=EdDSA, curve=ED25519, x=789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A, d=null)");
