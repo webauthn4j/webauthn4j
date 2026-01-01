@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.UserVerificationMethodFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.UserVerificationMethodToStringSerializer;
 import com.webauthn4j.converter.util.ObjectConverter;

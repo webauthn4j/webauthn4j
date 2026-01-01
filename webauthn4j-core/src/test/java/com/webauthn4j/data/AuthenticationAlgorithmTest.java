@@ -1,13 +1,10 @@
 package com.webauthn4j.data;
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.AuthenticationAlgorithmFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.AuthenticationAlgorithmToStringSerializer;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 import tools.jackson.databind.exc.InvalidFormatException;

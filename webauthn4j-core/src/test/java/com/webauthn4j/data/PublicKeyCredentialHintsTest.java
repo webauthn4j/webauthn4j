@@ -14,13 +14,13 @@ class PublicKeyCredentialHintsTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void test() throws IOException {
+    void test() {
         TestDto testDto = objectMapper.readValue("{\"hints\": [\"security-key\"]}", TestDto.class);
         assertThat(testDto.getHints()).containsExactly(PublicKeyCredentialHints.SECURITY_KEY);
     }
 
     @Test
-    void null_test() throws IOException {
+    void null_test() {
         TestDto testDto = objectMapper.readValue("{\"hints\": null}", TestDto.class);
         assertThat(testDto.getHints()).isNull();
     }

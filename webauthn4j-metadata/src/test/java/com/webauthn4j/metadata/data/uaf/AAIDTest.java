@@ -16,7 +16,6 @@
 
 package com.webauthn4j.metadata.data.uaf;
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.exc.InvalidFormatException;

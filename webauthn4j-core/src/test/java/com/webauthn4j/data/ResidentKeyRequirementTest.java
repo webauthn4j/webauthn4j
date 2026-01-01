@@ -56,7 +56,7 @@ class ResidentKeyRequirementTest {
     }
 
     @Test
-    void deserialize_test() throws IOException {
+    void deserialize_test() {
         ResidentKeyRequirementTest.TestDTO dto = objectMapper.readValue("{\"residentKey\": \"required\"}", ResidentKeyRequirementTest.TestDTO.class);
         assertThat(dto.residentKey).isEqualTo(ResidentKeyRequirement.REQUIRED);
     }

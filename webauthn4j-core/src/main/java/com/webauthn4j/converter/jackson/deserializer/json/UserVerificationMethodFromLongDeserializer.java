@@ -23,8 +23,6 @@ import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.deser.std.StdDeserializer;
 import tools.jackson.databind.exc.InvalidFormatException;
 
-import java.io.IOException;
-
 public class UserVerificationMethodFromLongDeserializer extends StdDeserializer<UserVerificationMethod> {
 
     public UserVerificationMethodFromLongDeserializer() {

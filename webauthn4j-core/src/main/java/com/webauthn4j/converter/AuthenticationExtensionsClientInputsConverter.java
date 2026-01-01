@@ -17,7 +17,6 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.ExtensionClientInput;

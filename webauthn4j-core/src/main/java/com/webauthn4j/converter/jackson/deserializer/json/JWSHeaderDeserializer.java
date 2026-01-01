@@ -26,7 +26,6 @@ import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.deser.std.StdDeserializer;
 
-import java.io.IOException;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class JWSHeaderDeserializer extends StdDeserializer<JWSHeader> {
         JsonNode x5cNode = jsonNode.get("x5c");
         List<X509Certificate> certificates = new ArrayList<>();
         for (JsonNode node : x5cNode) {
-            certificates.add(CertificateUtil.generateX509Certificate(Base64Util.decode(node.asText())));
+            certificates.add(CertificateUtil.generateX509Certificate(Base64Util.decode(node.asString())));
         }
         CertPath x5c = CertificateUtil.generateCertPath(certificates);
         return new JWSHeader(alg, x5c);

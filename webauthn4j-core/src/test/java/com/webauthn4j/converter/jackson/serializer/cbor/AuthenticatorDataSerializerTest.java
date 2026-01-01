@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;

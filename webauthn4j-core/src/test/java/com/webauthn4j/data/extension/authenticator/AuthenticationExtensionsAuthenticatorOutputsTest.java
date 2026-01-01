@@ -17,7 +17,6 @@
 package com.webauthn4j.data.extension.authenticator;
 
 import com.webauthn4j.converter.jackson.deserializer.cbor.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.KeyProtectionType;
 import com.webauthn4j.data.MatcherProtectionType;

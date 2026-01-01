@@ -56,7 +56,7 @@ class AuthenticatorAttachmentTest {
     }
 
     @Test
-    void deserialize_test() throws IOException {
+    void deserialize_test() {
         TestDTO dto = objectMapper.readValue("{\"attachment\": \"platform\"}", TestDTO.class);
         assertThat(dto.attachment).isEqualTo(AuthenticatorAttachment.PLATFORM);
     }

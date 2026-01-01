@@ -22,8 +22,6 @@ import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ser.std.StdSerializer;
 
-import java.io.IOException;
-
 public class CredentialProtectionPolicySerializer extends StdSerializer<CredentialProtectionPolicy> {
 
     public CredentialProtectionPolicySerializer() {

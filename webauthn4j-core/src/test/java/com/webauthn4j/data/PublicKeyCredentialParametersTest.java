@@ -19,8 +19,6 @@ package com.webauthn4j.data;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.junit.jupiter.api.Test;
-import tools.jackson.core.exc.StreamReadException;
-import tools.jackson.databind.exc.MismatchedInputException;
 import tools.jackson.databind.exc.ValueInstantiationException;
 import tools.jackson.databind.json.JsonMapper;
 

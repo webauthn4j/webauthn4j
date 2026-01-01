@@ -18,7 +18,6 @@ package com.webauthn4j.converter.jackson.serializer.json;
 
 import com.webauthn4j.data.PublicKeyRepresentationFormat;
 import org.jetbrains.annotations.NotNull;
-import tools.jackson.core.JacksonException;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ser.std.StdSerializer;

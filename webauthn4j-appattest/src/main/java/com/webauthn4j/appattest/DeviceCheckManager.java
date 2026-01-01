@@ -34,6 +34,7 @@ import tools.jackson.dataformat.cbor.CBORMapper;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("squid:S6466")
 public class DeviceCheckManager {
 
     // ~ Instance fields

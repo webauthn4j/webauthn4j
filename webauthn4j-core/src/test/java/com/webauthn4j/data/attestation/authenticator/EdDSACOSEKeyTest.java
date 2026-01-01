@@ -6,8 +6,6 @@ import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
-import org.junit.jupiter.api.condition.JRE;
 import test.EdDSAUtil;
 
 import java.security.KeyPair;

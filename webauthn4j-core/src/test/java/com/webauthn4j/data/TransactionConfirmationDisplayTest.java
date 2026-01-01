@@ -1,6 +1,5 @@
 package com.webauthn4j.data;
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.TransactionConfirmationDisplayFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.TransactionConfirmationDisplayToStringSerializer;
 import com.webauthn4j.converter.util.ObjectConverter;

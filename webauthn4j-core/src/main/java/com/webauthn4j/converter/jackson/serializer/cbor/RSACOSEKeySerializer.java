@@ -22,7 +22,6 @@ import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.jsontype.TypeSerializer;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class RSACOSEKeySerializer extends AbstractCtapCanonicalCborSerializer<RSACOSEKey> {

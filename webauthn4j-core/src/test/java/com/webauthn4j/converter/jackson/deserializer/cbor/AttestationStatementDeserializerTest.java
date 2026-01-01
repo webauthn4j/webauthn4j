@@ -16,8 +16,6 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;

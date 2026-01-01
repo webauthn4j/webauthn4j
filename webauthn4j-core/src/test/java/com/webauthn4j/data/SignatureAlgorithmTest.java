@@ -117,11 +117,11 @@ class SignatureAlgorithmTest {
     void override_serialized_value_by_adding_custom_serializer_test() {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(new CustomSignatureAlgorithmSerializer());
-        JsonMapper jsonMapper = JsonMapper.builder()
+        JsonMapper customizedJsonMapper = jsonMapper.rebuild()
                 .addModule(simpleModule)
                 .build();
         CBORMapper cborMapper = new CBORMapper();
-        ObjectConverter objectConverter = new ObjectConverter(jsonMapper, cborMapper);
+        ObjectConverter objectConverter = new ObjectConverter(customizedJsonMapper, cborMapper);
 
         String string = objectConverter.getJsonMapper().writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
         assertThat(string).isEqualTo("{\"alg\":-7}");

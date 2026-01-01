@@ -1,7 +1,6 @@
 package com.webauthn4j.converter.jackson;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.TPMISTAttest;
 import org.junit.jupiter.api.Test;

@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

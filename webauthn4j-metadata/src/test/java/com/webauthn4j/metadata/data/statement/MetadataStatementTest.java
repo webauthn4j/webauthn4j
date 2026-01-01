@@ -16,7 +16,6 @@
 
 package com.webauthn4j.metadata.data.statement;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;

@@ -16,8 +16,6 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorInputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorInput;

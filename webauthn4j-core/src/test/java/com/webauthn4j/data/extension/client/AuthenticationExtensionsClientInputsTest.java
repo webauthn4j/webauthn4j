@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.extension.client;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.HMACGetSecretInput;

@@ -20,7 +20,6 @@ import com.webauthn4j.appattest.data.DCAssertion;
 import com.webauthn4j.appattest.data.DCAssertionData;
 import com.webauthn4j.appattest.data.DCAssertionRequest;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;

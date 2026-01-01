@@ -16,12 +16,9 @@
 
 package com.webauthn4j.data.jws;
 
-import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
-import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.exc.InvalidFormatException;
 import tools.jackson.databind.json.JsonMapper;
 
