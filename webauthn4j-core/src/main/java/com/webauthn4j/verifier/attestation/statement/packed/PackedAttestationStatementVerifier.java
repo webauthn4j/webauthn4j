@@ -16,7 +16,6 @@
 
 package com.webauthn4j.verifier.attestation.statement.packed;
 
-import com.webauthn4j.data.MessageDigestAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -37,10 +36,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.cert.X509Certificate;
-import java.security.spec.MGF1ParameterSpec;
-import java.security.spec.PSSParameterSpec;
 import java.util.Objects;
 
 /**

@@ -16,14 +16,14 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.jws.JWSHeader;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
-import java.io.IOException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 
@@ -34,11 +34,11 @@ public class JWSHeaderSerializer extends StdSerializer<JWSHeader> {
     }
 
     @Override
-    public void serialize(JWSHeader value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull JWSHeader value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         try {
             gen.writeStartObject();
-            gen.writeObjectField("alg", value.getAlg());
-            gen.writeFieldName("x5c");
+            gen.writePOJOProperty("alg", value.getAlg());
+            gen.writeName("x5c");
             gen.writeStartArray();
             if (value.getX5c() != null) {
                 for (Certificate certificate : value.getX5c().getCertificates()) {

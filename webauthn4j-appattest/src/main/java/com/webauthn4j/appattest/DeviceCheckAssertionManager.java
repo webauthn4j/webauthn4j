@@ -23,7 +23,6 @@ import com.webauthn4j.appattest.data.DCAssertionRequest;
 import com.webauthn4j.appattest.verifier.DCAssertionDataVerifier;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
@@ -43,7 +42,7 @@ public class DeviceCheckAssertionManager {
     private final AuthenticatorDataConverter authenticatorDataConverter;
 
     private final DCAssertionDataVerifier dcAssertionDataValidator;
-    private final CborConverter cborConverter;
+    private final ObjectConverter objectConverter;
 
     public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationVerifier> customAuthenticationValidators, @NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
@@ -51,7 +50,7 @@ public class DeviceCheckAssertionManager {
 
         dcAssertionDataValidator = new DCAssertionDataVerifier(customAuthenticationValidators);
         authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
-        cborConverter = objectConverter.getCborConverter();
+        this.objectConverter = objectConverter;
     }
 
     public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationVerifier> customAuthenticationValidators) {
@@ -67,7 +66,7 @@ public class DeviceCheckAssertionManager {
         AssertUtil.notNull(dcAssertionRequest, "dcAssertionRequest must not be null");
 
         byte[] credentialId = dcAssertionRequest.getKeyId();
-        DCAssertion assertion = cborConverter.readValue(dcAssertionRequest.getAssertion(), DCAssertion.class);
+        DCAssertion assertion = objectConverter.getCborMapper().readValue(dcAssertionRequest.getAssertion(), DCAssertion.class);
         byte[] authenticatorDataBytes = assertion == null ? null : assertion.getAuthenticatorData();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataBytes == null ? null : authenticatorDataConverter.convert(authenticatorDataBytes);
         byte[] clientDataHash = dcAssertionRequest.getClientDataHash();

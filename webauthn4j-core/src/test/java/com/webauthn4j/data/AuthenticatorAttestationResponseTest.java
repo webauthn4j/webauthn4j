@@ -36,7 +36,7 @@ class AuthenticatorAttestationResponseTest {
     void easilyAccessingCredentialData_test(){
         byte[] clientDataJSONBytes = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        byte[] attestationObjectBytes = objectConverter.getCborConverter().writeValueAsBytes(attestationObject);
+        byte[] attestationObjectBytes = objectConverter.getCborMapper().writeValueAsBytes(attestationObject);
         AuthenticatorAttestationResponse instance = new AuthenticatorAttestationResponse(clientDataJSONBytes, attestationObjectBytes);
         byte[] authenticatorData = instance.getAuthenticatorData();
         byte[] publicKey = instance.getPublicKey();

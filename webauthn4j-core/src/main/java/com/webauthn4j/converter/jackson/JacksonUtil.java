@@ -1,16 +1,13 @@
 package com.webauthn4j.converter.jackson;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.exc.MismatchedInputException;
 
 public class JacksonUtil {
 
@@ -25,19 +22,13 @@ public class JacksonUtil {
 
         try {
             return objectMapper.readTree(bytes);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public static @Nullable byte[] binaryValue(@Nullable JsonNode jsonNode) {
-        try {
-            return jsonNode == null ? null : jsonNode.binaryValue();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return jsonNode == null ? null : jsonNode.binaryValue();
     }
 
 }

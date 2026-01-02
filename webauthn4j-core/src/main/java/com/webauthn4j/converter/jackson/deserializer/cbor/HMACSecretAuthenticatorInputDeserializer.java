@@ -16,12 +16,11 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.data.extension.authenticator.HMACGetSecretAuthenticatorInput;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class HMACSecretAuthenticatorInputDeserializer extends StdDeserializer<Object> {
@@ -31,7 +30,7 @@ public class HMACSecretAuthenticatorInputDeserializer extends StdDeserializer<Ob
     }
 
     @Override
-    public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public Object deserialize(JsonParser p, DeserializationContext ctxt) {
         String value = p.getValueAsString();
         if (Objects.equals(value, "true")) {
             return true;
@@ -39,6 +38,6 @@ public class HMACSecretAuthenticatorInputDeserializer extends StdDeserializer<Ob
         else if (Objects.equals(value, "false")) {
             return false;
         }
-        return p.getCodec().readValue(p, HMACGetSecretAuthenticatorInput.class);
+        return p.objectReadContext().readValue(p, HMACGetSecretAuthenticatorInput.class);
     }
 }

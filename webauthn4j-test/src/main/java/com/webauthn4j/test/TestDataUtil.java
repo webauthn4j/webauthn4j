@@ -16,8 +16,6 @@
 
 package com.webauthn4j.test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
 import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.appattest.verifier.DCRegistrationObject;
@@ -50,6 +48,8 @@ import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelExcepti
 import com.webauthn4j.util.*;
 import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.RegistrationObject;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -81,9 +81,10 @@ public class TestDataUtil {
     private static final AuthenticatorDataConverter authenticatorDataConverter;
 
     static {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        cborMapper.registerModule(new DeviceCheckCBORModule());
+        JsonMapper jsonMapper = new JsonMapper();
+        CBORMapper cborMapper = CBORMapper.builder()
+                .addModule(new DeviceCheckCBORModule())
+                .build();
         objectConverter = new ObjectConverter(jsonMapper, cborMapper);
         collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
         attestationObjectConverter = new AttestationObjectConverter(objectConverter);

@@ -1,14 +1,14 @@
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.AuthenticationAlgorithmFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.AuthenticationAlgorithmToStringSerializer;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AuthenticationAlgorithmTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
+
 
     @Nested
     class BasicOperations {
@@ -138,33 +139,33 @@ class AuthenticationAlgorithmTest {
         void shouldSerializeToJson() {
             IntSerializationTestDTO dto = new IntSerializationTestDTO();
             dto.authenticationAlgorithm = AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"authenticationAlgorithm\":1}");
         }
 
         @Test
         void shouldDeserializeFromJson() {
-            IntSerializationTestDTO dto = jsonConverter.readValue("{\"authenticationAlgorithm\":1}", IntSerializationTestDTO.class);
+            IntSerializationTestDTO dto = jsonMapper.readValue("{\"authenticationAlgorithm\":1}", IntSerializationTestDTO.class);
             assertThat(dto.authenticationAlgorithm).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW);
         }
 
         @Test
         void shouldThrowExceptionWhenDeserializingOutOfRangeValue() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"authenticationAlgorithm\": \"-1\"}", IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"authenticationAlgorithm\": \"-1\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void shouldThrowExceptionWhenDeserializingInvalidValue() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"authenticationAlgorithm\": \"\"}", IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"authenticationAlgorithm\": \"\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void shouldDeserializeNullToNull() {
-            IntSerializationTestDTO data = jsonConverter.readValue("{\"authenticationAlgorithm\":null}", IntSerializationTestDTO.class);
+            IntSerializationTestDTO data = jsonMapper.readValue("{\"authenticationAlgorithm\":null}", IntSerializationTestDTO.class);
             assertThat(data.authenticationAlgorithm).isNull();
         }
     }
@@ -181,26 +182,26 @@ class AuthenticationAlgorithmTest {
         void shouldSerializeToJsonString() {
             StringSerializationTestDTO dto = new StringSerializationTestDTO();
             dto.authenticationAlgorithm = AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"authenticationAlgorithm\":\"secp256r1_ecdsa_sha256_raw\"}");
         }
 
         @Test
         void shouldDeserializeFromJsonString() {
-            StringSerializationTestDTO dto = jsonConverter.readValue("{\"authenticationAlgorithm\": \"secp256r1_ecdsa_sha256_raw\"}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonMapper.readValue("{\"authenticationAlgorithm\": \"secp256r1_ecdsa_sha256_raw\"}", StringSerializationTestDTO.class);
             assertThat(dto.authenticationAlgorithm).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW);
         }
 
         @Test
         void shouldThrowExceptionWhenDeserializingInvalidString() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"authenticationAlgorithm\": \"invalid\"}", StringSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"authenticationAlgorithm\": \"invalid\"}", StringSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void shouldDeserializeNullToNull() {
-            StringSerializationTestDTO data = jsonConverter.readValue("{\"authenticationAlgorithm\":null}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO data = jsonMapper.readValue("{\"authenticationAlgorithm\":null}", StringSerializationTestDTO.class);
             assertThat(data.authenticationAlgorithm).isNull();
         }
     }

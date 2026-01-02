@@ -16,15 +16,15 @@
 
 package com.webauthn4j.metadata.data.toc;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class StatusReportTest {
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void getter_test(){
@@ -58,7 +58,7 @@ class StatusReportTest {
                 "          \"certificationPolicyVersion\": \"1.0.1\",\n" +
                 "          \"certificationRequirementsVersion\": \"1.0.1\"\n" +
                 "        }\n";
-        return jsonConverter.readValue(statusReportJson, StatusReport.class);
+        return jsonMapper.readValue(statusReportJson, StatusReport.class);
     }
 
 }

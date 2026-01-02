@@ -71,7 +71,7 @@ class AuthenticationResponseJSONVerificationTest {
         );
 
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
-        String authenticationResponseJSON = objectConverter.getJsonConverter().writeValueAsString(credential);
+        String authenticationResponseJSON = objectConverter.getJsonMapper().writeValueAsString(credential);
 
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -109,7 +109,7 @@ class AuthenticationResponseJSONVerificationTest {
         );
 
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
-        byte[] authenticationResponseJSON = objectConverter.getJsonConverter().writeValueAsBytes(credential);
+        byte[] authenticationResponseJSON = objectConverter.getJsonMapper().writeValueAsBytes(credential);
 
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);

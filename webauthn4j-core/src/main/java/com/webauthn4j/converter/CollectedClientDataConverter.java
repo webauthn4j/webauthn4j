@@ -17,7 +17,6 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.util.AssertUtil;
@@ -34,14 +33,14 @@ public class CollectedClientDataConverter {
 
     //~ Instance fields
     // ================================================================================================
-    private final JsonConverter jsonConverter;
+    private final ObjectConverter objectConverter;
 
     //~ Constructors
     // ================================================================================================
 
     public CollectedClientDataConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
-        this.jsonConverter = objectConverter.getJsonConverter();
+        this.objectConverter = objectConverter;
     }
 
     //~ Methods
@@ -74,7 +73,7 @@ public class CollectedClientDataConverter {
         try {
             AssertUtil.notNull(source, "source must not be null");
             String jsonString = new String(source, StandardCharsets.UTF_8);
-            return jsonConverter.readValue(jsonString, CollectedClientData.class);
+            return objectConverter.getJsonMapper().readValue(jsonString, CollectedClientData.class);
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
@@ -89,7 +88,7 @@ public class CollectedClientDataConverter {
     public @NotNull byte[] convertToBytes(@NotNull CollectedClientData source) {
         try {
             AssertUtil.notNull(source, "source must not be null");
-            return jsonConverter.writeValueAsBytes(source);
+            return objectConverter.getJsonMapper().writeValueAsBytes(source);
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }

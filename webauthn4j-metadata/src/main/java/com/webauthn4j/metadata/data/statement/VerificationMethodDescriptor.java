@@ -18,12 +18,12 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.json.UserVerificationMethodFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.UserVerificationMethodToStringSerializer;
 import com.webauthn4j.data.UserVerificationMethod;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Objects;
 

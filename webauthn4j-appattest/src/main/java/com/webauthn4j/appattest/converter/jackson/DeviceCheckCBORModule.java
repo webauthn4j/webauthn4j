@@ -16,10 +16,10 @@
 
 package com.webauthn4j.appattest.converter.jackson;
 
-import com.fasterxml.jackson.databind.jsontype.NamedType;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.appattest.converter.jackson.serializer.AppleAppAttestAttestationStatementSerializer;
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
+import tools.jackson.databind.jsontype.NamedType;
+import tools.jackson.databind.module.SimpleModule;
 
 public class DeviceCheckCBORModule extends SimpleModule {
 

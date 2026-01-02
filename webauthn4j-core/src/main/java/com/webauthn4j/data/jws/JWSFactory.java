@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.jws;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -34,11 +33,11 @@ public class JWSFactory {
     private static final String HEADER_MUST_NOT_BE_NULL = "header must not be null";
     private static final String PAYLOAD_MUST_NOT_BE_NULL = "payload must not be null";
 
-    private final JsonConverter jsonConverter;
+    private final ObjectConverter objectConverter;
 
     public JWSFactory(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
-        this.jsonConverter = objectConverter.getJsonConverter();
+        this.objectConverter = objectConverter;
     }
 
     public JWSFactory() {
@@ -50,8 +49,8 @@ public class JWSFactory {
         AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(privateKey, "privateKey must not be null");
 
-        String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
-        String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
+        String headerString = Base64UrlUtil.encodeToString(objectConverter.getJsonMapper().writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
+        String payloadString = Base64UrlUtil.encodeToString(objectConverter.getJsonMapper().writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         String signedData = headerString + "." + payloadString;
         if (header.getAlg() == null) {
             throw new IllegalArgumentException("alg must not be null");
@@ -73,8 +72,8 @@ public class JWSFactory {
         AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(signature, "signature must not be null");
 
-        String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
-        String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
+        String headerString = Base64UrlUtil.encodeToString(objectConverter.getJsonMapper().writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
+        String payloadString = Base64UrlUtil.encodeToString(objectConverter.getJsonMapper().writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }
 
@@ -89,8 +88,8 @@ public class JWSFactory {
         String headerString = data[0];
         String payloadString = data[1];
         String signatureString = data[2];
-        JWSHeader header = jsonConverter.readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
-        T payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
+        JWSHeader header = objectConverter.getJsonMapper().readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
+        T payload = objectConverter.getJsonMapper().readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
         byte[] signature = Base64UrlUtil.decode(signatureString);
 
         AssertUtil.notNull(header, HEADER_MUST_NOT_BE_NULL);

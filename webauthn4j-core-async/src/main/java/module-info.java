@@ -2,7 +2,8 @@ module com.webauthn4j.core.async {
     requires transitive com.webauthn4j.core;
 
     requires org.slf4j;
-    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.annotation;
+    requires tools.jackson.databind;
 
     requires static org.jetbrains.annotations;
 

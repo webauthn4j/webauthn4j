@@ -76,7 +76,7 @@ class RegistrationResponseJSONVerificationTest {
     @Test
     void test_with_registrationResponseJSON_as_string() {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = createCredential();
-        String registrationResponseJSON = objectConverter.getJsonConverter().writeValueAsString(credential);
+        String registrationResponseJSON = objectConverter.getJsonMapper().writeValueAsString(credential);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         List<PublicKeyCredentialParameters> pubKeyCredParams = null;
         RegistrationParameters registrationParameters = new RegistrationParameters(
@@ -96,7 +96,7 @@ class RegistrationResponseJSONVerificationTest {
     @Test
     void test_with_registrationResponseJSON_as_InputStream() {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = createCredential();
-        byte[] registrationResponseJSON = objectConverter.getJsonConverter().writeValueAsBytes(credential);
+        byte[] registrationResponseJSON = objectConverter.getJsonMapper().writeValueAsBytes(credential);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         List<PublicKeyCredentialParameters> pubKeyCredParams = null;
         RegistrationParameters registrationParameters = new RegistrationParameters(

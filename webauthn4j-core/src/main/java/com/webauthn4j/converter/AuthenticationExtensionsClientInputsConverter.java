@@ -16,15 +16,14 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.ExtensionClientInput;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.core.type.TypeReference;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientInputs}
@@ -36,7 +35,7 @@ public class AuthenticationExtensionsClientInputsConverter {
 
     // ~ Instance fields
     // ================================================================================================
-    private final JsonConverter jsonConverter;
+    private final ObjectConverter objectConverter;
 
     // ~ Constructors
     // ================================================================================================
@@ -49,7 +48,7 @@ public class AuthenticationExtensionsClientInputsConverter {
      */
     public AuthenticationExtensionsClientInputsConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
-        this.jsonConverter = objectConverter.getJsonConverter();
+        this.objectConverter = objectConverter;
     }
 
     // ~ Methods
@@ -66,7 +65,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     public <T extends ExtensionClientInput> @Nullable AuthenticationExtensionsClientInputs<T> convert(@NotNull String value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
-            return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientInputs<T>>() {
+            return objectConverter.getJsonMapper().readValue(value, new TypeReference<AuthenticationExtensionsClientInputs<T>>() {
             });
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
@@ -85,7 +84,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     public <T extends ExtensionClientInput> @NotNull String convertToString(@NotNull AuthenticationExtensionsClientInputs<T> value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
-            return jsonConverter.writeValueAsString(value);
+            return objectConverter.getJsonMapper().writeValueAsString(value);
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }

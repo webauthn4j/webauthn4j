@@ -1,8 +1,8 @@
 package com.webauthn4j.converter.jackson;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.json.ByteArrayBase64Deserializer;
 import com.webauthn4j.converter.jackson.serializer.json.ByteArrayBase64Serializer;
+import tools.jackson.databind.module.SimpleModule;
 
 public class ByteArrayBase64ConverterModule extends SimpleModule {
 

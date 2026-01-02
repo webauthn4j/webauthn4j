@@ -16,13 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.client.Origin;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 /**
  * Jackson Serializer for {@link Origin}
@@ -36,7 +34,7 @@ public class OriginSerializer extends StdSerializer<Origin> {
      * {@inheritDoc}
      */
     @Override
-    public void serialize(@NotNull Origin value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull Origin value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeString(value.toString());
     }
 }
