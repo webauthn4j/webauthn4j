@@ -17,7 +17,6 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.PublicKeyCredentialDescriptor;
 import com.webauthn4j.data.PublicKeyCredentialParameters;
@@ -42,6 +41,7 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.RSAUtil;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -55,7 +55,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
@@ -64,7 +63,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     private static final SecureRandom secureRandom = new SecureRandom();
     // converter
     protected final ObjectConverter objectConverter;
-    private final CborConverter cborConverter;
+    private final CBORMapper cborMapper;
     // property
     private final AAGUID aaguid;
     private final KeyPair attestationKeyPair;
@@ -94,7 +93,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.counter = counter;
         this.capableOfUserVerification = capableOfUserVerification;
         this.objectConverter = objectConverter;
-        this.cborConverter = objectConverter.getCborConverter();
+        this.cborMapper = objectConverter.getCborMapper();
         this.authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
         this.credentialEncryptionKey = new byte[32];
         secureRandom.nextBytes(this.credentialEncryptionKey);
@@ -126,7 +125,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
         try {
             byte[] cbor = CipherUtil.decrypt(credentialId, credentialEncryptionKey);
-            PublicKeyCredentialSource src = cborConverter.readValue(cbor, PublicKeyCredentialSource.class);
+            PublicKeyCredentialSource src = cborMapper.readValue(cbor, PublicKeyCredentialSource.class);
             src.setId(credentialId);
             return src;
         } catch (RuntimeException e) {
@@ -272,7 +271,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
                 // Let credentialId be the result of serializing and encrypting credentialSource
                 // so that only this authenticator can decrypt it.
 
-                byte[] data = cborConverter.writeValueAsBytes(credentialSource);
+                byte[] data = cborMapper.writeValueAsBytes(credentialSource);
                 credentialId = CipherUtil.encrypt(data, credentialEncryptionKey);
             }
         }

@@ -16,13 +16,11 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public class AAGUIDDeserializer extends StdDeserializer<AAGUID> {
 
@@ -31,7 +29,7 @@ public class AAGUIDDeserializer extends StdDeserializer<AAGUID> {
     }
 
     @Override
-    public @NotNull AAGUID deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
+    public @NotNull AAGUID deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         return new AAGUID(p.getBinaryValue());
     }
 }

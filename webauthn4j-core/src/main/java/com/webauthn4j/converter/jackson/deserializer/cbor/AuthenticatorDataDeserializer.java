@@ -16,17 +16,15 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 /**
  * Jackson Deserializer for {@link AuthenticatorData}
@@ -47,7 +45,7 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
      * {@inheritDoc}
      */
     @Override
-    public @NotNull AuthenticatorData<? extends ExtensionAuthenticatorOutput> deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
+    public @NotNull AuthenticatorData<? extends ExtensionAuthenticatorOutput> deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         byte[] value = p.getBinaryValue();
         return new AuthenticatorDataConverter(objectConverter).convert(value);
     }

@@ -16,14 +16,10 @@
 
 package com.webauthn4j.converter.jackson;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.exception.DataConversionException;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,35 +29,14 @@ import static org.mockito.Mockito.when;
 class JacksonUtilTest {
 
     @Test
-    void shouldWrapIOExceptionInUncheckedIOExceptionWhenReadingTree() throws IOException {
+    void shouldWrapJsonParseExceptionInDataConversionExceptionWhenReadingTree() {
         //Given
         ObjectMapper objectMapper = mock(ObjectMapper.class);
-        when(objectMapper.readTree((byte[]) any())).thenThrow(IOException.class);
-        byte[] value = new byte[0];
-
-        //When/Then
-        assertThatThrownBy(() -> JacksonUtil.readTree(objectMapper, value)).isInstanceOf(UncheckedIOException.class);
-    }
-
-    @Test
-    void shouldWrapJsonParseExceptionInDataConversionExceptionWhenReadingTree() throws IOException {
-        //Given
-        ObjectMapper objectMapper = mock(ObjectMapper.class);
-        when(objectMapper.readTree((byte[]) any())).thenThrow(JsonParseException.class);
+        when(objectMapper.readTree((byte[]) any())).thenThrow(StreamReadException.class);
         byte[] value = new byte[0];
 
         //When/Then
         assertThatThrownBy(() -> JacksonUtil.readTree(objectMapper, value)).isInstanceOf(DataConversionException.class);
-    }
-
-    @Test
-    void shouldWrapIOExceptionInUncheckedIOExceptionWhenGettingBinaryValue() throws IOException {
-        //Given
-        JsonNode jsonNode = mock(JsonNode.class);
-        when(jsonNode.binaryValue()).thenThrow(IOException.class);
-
-        //When/Then
-        assertThatThrownBy(() -> JacksonUtil.binaryValue(jsonNode)).isInstanceOf(UncheckedIOException.class);
     }
 
 }

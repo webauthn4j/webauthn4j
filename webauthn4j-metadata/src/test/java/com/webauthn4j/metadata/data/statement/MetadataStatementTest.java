@@ -16,17 +16,17 @@
 
 package com.webauthn4j.metadata.data.statement;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MetadataStatementTest {
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @SuppressWarnings("java:S5961")
     @Test
@@ -204,7 +204,7 @@ class MetadataStatementTest {
                 "          \"firmwareVersion\": 5\n" +
                 "        }\n" +
                 "      }";
-        return jsonConverter.readValue(metadataStatementString, MetadataStatement.class);
+        return jsonMapper.readValue(metadataStatementString, MetadataStatement.class);
     }
 
 }

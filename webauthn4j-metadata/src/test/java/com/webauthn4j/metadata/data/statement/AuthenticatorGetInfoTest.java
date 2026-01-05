@@ -16,17 +16,17 @@
 
 package com.webauthn4j.metadata.data.statement;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticatorGetInfoTest {
 
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void test(){
@@ -80,7 +80,7 @@ class AuthenticatorGetInfoTest {
                 "      \"defaultCredProtect\": 2,\n" +
                 "      \"firmwareVersion\": 5\n" +
                 "  }";
-        return jsonConverter.readValue(authenticatorGetInfoString, AuthenticatorGetInfo.class);
+        return jsonMapper.readValue(authenticatorGetInfoString, AuthenticatorGetInfo.class);
     }
 
 }

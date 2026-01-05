@@ -34,8 +34,8 @@ class AttestationStatementTest {
     void serialize_deserialize_with_envelope_class() {
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createBasicPackedAttestationStatement();
         AttestationStatementEnvelope envelope = new AttestationStatementEnvelope(attestationStatement);
-        byte[] bytes = objectConverter.getCborConverter().writeValueAsBytes(envelope);
-        AttestationStatementEnvelope deserializedEnvelope = objectConverter.getCborConverter().readValue(bytes, AttestationStatementEnvelope.class);
+        byte[] bytes = objectConverter.getCborMapper().writeValueAsBytes(envelope);
+        AttestationStatementEnvelope deserializedEnvelope = objectConverter.getCborMapper().readValue(bytes, AttestationStatementEnvelope.class);
         AttestationStatement deserializedAttestationStatement = deserializedEnvelope.getAttestationStatement();
         assertThat(deserializedAttestationStatement).isEqualTo(attestationStatement);
     }

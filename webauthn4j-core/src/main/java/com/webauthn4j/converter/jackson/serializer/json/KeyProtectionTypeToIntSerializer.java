@@ -16,12 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.KeyProtectionType;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class KeyProtectionTypeToIntSerializer extends StdSerializer<KeyProtectionType> {
     public KeyProtectionTypeToIntSerializer() {
@@ -29,7 +28,7 @@ public class KeyProtectionTypeToIntSerializer extends StdSerializer<KeyProtectio
     }
 
     @Override
-    public void serialize(KeyProtectionType value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull KeyProtectionType value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeNumber(value.getValue());
     }
 }

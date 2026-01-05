@@ -16,13 +16,12 @@
 
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.PublicKeyRepresentationFormat;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 public class PublicKeyRepresentationFormatFromStringDeserializer extends StdDeserializer<PublicKeyRepresentationFormat> {
 
@@ -31,7 +30,7 @@ public class PublicKeyRepresentationFormatFromStringDeserializer extends StdDese
     }
 
     @Override
-    public PublicKeyRepresentationFormat deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public PublicKeyRepresentationFormat deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         String value = p.getValueAsString();
         try {
             return PublicKeyRepresentationFormat.create(value);

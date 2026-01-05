@@ -16,12 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.UserVerificationMethod;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class UserVerificationMethodToStringSerializer extends StdSerializer<UserVerificationMethod> {
     public UserVerificationMethodToStringSerializer() {
@@ -29,7 +28,7 @@ public class UserVerificationMethodToStringSerializer extends StdSerializer<User
     }
 
     @Override
-    public void serialize(UserVerificationMethod value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull UserVerificationMethod value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeString(value.toString());
     }
 }

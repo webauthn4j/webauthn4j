@@ -16,12 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.AuthenticationAlgorithm;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class AuthenticationAlgorithmToIntSerializer extends StdSerializer<AuthenticationAlgorithm> {
 
@@ -30,7 +29,7 @@ public class AuthenticationAlgorithmToIntSerializer extends StdSerializer<Authen
     }
 
     @Override
-    public void serialize(AuthenticationAlgorithm value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull AuthenticationAlgorithm value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeNumber(value.getValue());
     }
 }

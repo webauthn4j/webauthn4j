@@ -16,7 +16,6 @@
 
 package com.webauthn4j;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorTransportConverter;
@@ -47,6 +46,7 @@ import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.type.TypeReference;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -216,7 +216,7 @@ public class WebAuthnRegistrationManager {
      * @return the parsed registration data
      */
     public @NotNull RegistrationData parse(@NotNull String registrationResponseJSON) {
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<>() {});
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonMapper().readValue(registrationResponseJSON, new TypeReference<>() {});
         return toRegistrationData(publicKeyCredential);
     }
 
@@ -227,7 +227,7 @@ public class WebAuthnRegistrationManager {
      * @return the parsed registration data
      */
     public @NotNull RegistrationData parse(@NotNull InputStream registrationResponseJSON) {
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<>() {});
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = objectConverter.getJsonMapper().readValue(registrationResponseJSON, new TypeReference<>() {});
         return toRegistrationData(publicKeyCredential);
     }
 

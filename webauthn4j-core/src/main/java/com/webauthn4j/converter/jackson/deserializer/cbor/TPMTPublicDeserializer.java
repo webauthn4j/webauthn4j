@@ -16,16 +16,15 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.exc.InvalidFormatException;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -38,7 +37,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
     }
 
     @Override
-    public @NotNull TPMTPublic deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
+    public @NotNull TPMTPublic deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         byte[] value = p.getBinaryValue();
         try {
             return deserialize(value);

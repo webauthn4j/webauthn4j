@@ -16,14 +16,13 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.dataformat.cbor.CBORGenerator;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -38,7 +37,7 @@ public abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializ
     }
 
     @Override
-    public void serialize(@NotNull T value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull T value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         List<KeyValue> nonNullValues =
                 rules.stream()
                         .map(rule -> {
@@ -48,16 +47,16 @@ public abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializ
                         .filter(item -> item.value != null)
                         .collect(Collectors.toList());
 
-        ((CBORGenerator) gen).writeStartObject(nonNullValues.size()); // This is important to write finite length map
+        ((CBORGenerator) gen).writeStartObject(null, nonNullValues.size()); // This is important to write finite length map
 
         for (KeyValue nonNullValue : nonNullValues) {
             if (nonNullValue.name instanceof String) {
-                gen.writeFieldName((String) nonNullValue.name);
+                gen.writeName((String) nonNullValue.name);
             }
             else {
-                gen.writeFieldId((int) nonNullValue.name);
+                gen.writePropertyId((int) nonNullValue.name);
             }
-            gen.writeObject(nonNullValue.value);
+            gen.writePOJO(nonNullValue.value);
         }
 
         gen.writeEndObject();

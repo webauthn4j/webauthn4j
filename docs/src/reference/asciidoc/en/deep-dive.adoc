@@ -42,10 +42,10 @@ Since the envelope class itself is not provided by the WebAuthn4J library, pleas
 ----
 //serialize
 AttestationStatementEnvelope envelope = new AttestationStatementEnvelope(attestationStatement);
-byte[] serializedEnvelope = objectConverter.getCborConverter().writeValueAsBytes(envelope);
+byte[] serializedEnvelope = objectConverter.getCborMapper().writeValueAsBytes(envelope);
 
 //deserialize
-AttestationStatementEnvelope deserializedEnvelope = objectConverter.getCborConverter().readValue(serializedEnvelope, AttestationStatementEnvelope.class);
+AttestationStatementEnvelope deserializedEnvelope = objectConverter.getCborMapper().readValue(serializedEnvelope, AttestationStatementEnvelope.class);
 AttestationStatement deserializedAttestationStatement = deserializedEnvelope.getAttestationStatement();
 ----
 
@@ -83,7 +83,7 @@ If you would like to persist as JSON `String`, use `ObjectConverter`.
 
 [source,java]
 ----
-String serializedTransports = objectConverter.getJsonConverter().writeValueAsString(transports);
+String serializedTransports = objectConverter.getJsonMapper().writeValueAsString(transports);
 ----
 
 ==== counter
@@ -98,7 +98,7 @@ If you would like to persist as `String`, use `Base64UrlUtil` to convert from `b
 
 [source,java]
 ----
-byte[] serializedAuthenticatorExtensions = objectConverter.getCborConverter().writeValueAsBytes(authenticatorExtensions);
+byte[] serializedAuthenticatorExtensions = objectConverter.getCborMapper().writeValueAsBytes(authenticatorExtensions);
 ----
 
 ==== clientExtensions
@@ -107,14 +107,14 @@ This member can be serialized as JSON as it is originally JSON data.
 
 [source,java]
 ----
-String serializedClientExtensions = objectConverter.getJsonConverter().writeValueAsString(clientExtensions);
+String serializedClientExtensions = objectConverter.getJsonMapper().writeValueAsString(clientExtensions);
 ----
 
 === DCAppleDevice serialization and deserialization
 
-When you use `webauthn4j-appattest`, you need to persist `DCAppleDevice` instead of `CredentialRecord` interface between attestation and assertion.
-In general, you can serialize and deserialize it by the method explained in <<CredentialRecord serialization and deserialization>>, but `ObjectConverter` must be the one with `DeviceCheckCBORModule` registered.
-A `ObjectConverter` with a `DeviceCheckCBORModule` can be obtained with `DeviceCheckManager.createObjectConverter` static method.
+When you use `webauthn4j-appattest`, you need to persist an instance implementing the `DCAppleDevice` interface between attestation and assertion verification.
+In general, you can serialize and deserialize it by the method explained in <<CredentialRecord serialization and deserialization>>, but there is one important consideration: to serialize and deserialize webauthn4j-appattest specific classes (e.g. `AppleAppAttestAttestationStatement`), the `ObjectConverter` must be one with `DeviceCheckCBORModule` registered.
+An `ObjectConverter` with `DeviceCheckCBORModule` registered can be obtained with `DeviceCheckManager#createObjectConverter` static method.
 
 
 === Alternative to Unsupported JSON Serialization APIs in Safari
@@ -167,7 +167,7 @@ const authenticationResponseJSONStr = JSON.stringify(authenticationResponseJSON)
 
 === Modules
 
-WebAuthn4J consists of the following four modules.
+WebAuthn4J consists of the following modules.
 
 ==== Core: webauthn4j-core.jar
 
@@ -278,13 +278,14 @@ via its constructor's `customRegistrationVerifiers` and `customAuthenticationVer
 
 === Custom converter implementation
 
-WebAuthn4J uses Jackson library for JSON and CBOR serialization and deserialization.
-If you would like to custom serialization or deserialization, register custom serializer or deserializer to the underlying Jackson `ObjectMapper`.
+WebAuthn4J uses Jackson 3 library for JSON and CBOR serialization and deserialization.
+If you would like to perform custom serialization or deserialization for Client Extensions or Authenticator Extensions data, you need to pass Jackson 3's `JsonMapper` and `CBORMapper` with custom serializers and deserializers registered to WebAuthn4J.
 
 ==== Custom converter registration
 
-Since WebAuthn4J wraps `ObjectMapper` with `ObjectConverter`, inject your customized `ObjectMapper` through `ObjectConverter`
-constructor and specify the `ObjectConverter` instance to the `WebAuthnManager` instance creation parameter.
+WebAuthn4J receives a set of Jackson 3's `JsonMapper` and `CBORMapper` through an instance of the `ObjectConverter` class.
+Inject the `JsonMapper` and `CBORMapper` with custom serializers and deserializers registered through the constructor when creating an `ObjectConverter` instance,
+and specify the `ObjectConverter` as a parameter when creating a `WebAuthnManager` instance.
 
 
 === Classes
@@ -316,7 +317,8 @@ WebAuthn$J Spring Security also provides `CertFileResourcesTrustAnchorProvider` 
 
 ==== Exceptions
 
-If some verification fails, WebAuthn4J throws an exception class inheriting `VerificationException`.
+If data conversion fails, a subclass of `DataConversionException` is thrown.
+If data verification fails, a subclass of `VerificationException` is thrown.
 
 
 === Using FIDO CTAP2 Security key in your own application other than WebAuthn
@@ -339,6 +341,7 @@ WebAuthn4J can verify the assertion with `CoreAuthenticationVerifier` class.
 
 Implementing the above flow will provide authentication feature, but if the entity that calls the FIDO CTAP2 security key (client) and the entity that verifies the attestation and the assertion are separated, in some cases, an application specific client data is needed to be verified at the server at registration and authentication.
 The client data itself can be sent together with the attestation and assertion, but in order to protect the client data from MITM attacks, it need to be signed and protected.
-In FIDO CTAP2 specification, there is a parameter named `clientDataHash` that is common to https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] method used at registration and https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] method used at authentication.
-Since the security key generates a signature from data that contains `clientDataHash`, an application can verify its specific client data by setting `clientDataHash` to the hash of the client data and validating the signature.
+
+In FIDO CTAP2 specification, there is a parameter named `clientDataHash` that is common to both the https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] method used at registration and the https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] method used at authentication.
+Since the security key generates a signature from data that contains the received `clientDataHash` parameter, an application can obtain a hash of the application-specific client data it wants to protect with a signature and set it to `clientDataHash`, allowing the server side to verify whether the application-specific client data is authentic and has not been tampered with.
 
