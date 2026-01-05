@@ -44,7 +44,8 @@ public class DeviceCheckAttestationManager {
             @NotNull CertPathTrustworthinessVerifier certPathTrustworthinessVerifier,
             @NotNull List<CustomCoreRegistrationVerifier> customRegistrationValidators,
             @NotNull ObjectConverter objectConverter) {
-        AssertUtil.notNull(certPathTrustworthinessVerifier, "certPathTrustworthinessValidator must not be null");
+        AssertUtil.notNull(certPathTrustworthinessVerifier, "certPathTrustworthinessVerifier must not be null");
+        AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
         dcAttestationDataValidator = new DCAttestationDataVerifier(

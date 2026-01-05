@@ -38,8 +38,8 @@ public abstract class CertPathTrustworthinessVerifierBase implements CertPathTru
 
     public void verify(@NotNull AAGUID aaguid, @NotNull CertificateBaseAttestationStatement attestationStatement, @NotNull Instant timestamp) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
-        AssertUtil.notNull(aaguid, "attestationStatement must not be null");
-        AssertUtil.notNull(aaguid, "timestamp must not be null");
+        AssertUtil.notNull(attestationStatement, "attestationStatement must not be null");
+        AssertUtil.notNull(timestamp, "timestamp must not be null");
 
         //noinspection ConstantConditions as null check is already done in caller
         CertPath certPath = attestationStatement.getX5c().createCertPath();

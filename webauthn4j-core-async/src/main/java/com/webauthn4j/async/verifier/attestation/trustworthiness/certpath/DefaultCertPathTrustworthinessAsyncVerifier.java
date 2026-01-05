@@ -52,8 +52,8 @@ public class DefaultCertPathTrustworthinessAsyncVerifier implements CertPathTrus
     public CompletionStage<Void> verify(@NotNull AAGUID aaguid, @NotNull CertificateBaseAttestationStatement attestationStatement, @NotNull Instant timestamp) {
         return CompletionStageUtil.compose(()->{
             AssertUtil.notNull(aaguid, "aaguid must not be null");
-            AssertUtil.notNull(aaguid, "attestationStatement must not be null");
-            AssertUtil.notNull(aaguid, "timestamp must not be null");
+            AssertUtil.notNull(attestationStatement, "attestationStatement must not be null");
+            AssertUtil.notNull(timestamp, "timestamp must not be null");
 
             if(attestationStatement instanceof FIDOU2FAttestationStatement){
                 FIDOU2FAttestationStatement fidou2fAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
