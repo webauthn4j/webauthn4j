@@ -262,7 +262,7 @@ public class CoreAuthenticationDataVerifier {
     }
 
     public void setMaliciousCounterValueHandler(@NotNull CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler) {
-        AssertUtil.notNull(coreMaliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
+        AssertUtil.notNull(coreMaliciousCounterValueHandler, "coreMaliciousCounterValueHandler must not be null");
         this.coreMaliciousCounterValueHandler = coreMaliciousCounterValueHandler;
     }
 
