@@ -37,7 +37,7 @@ NOTE: FIDO2 Test ToolsはFIDO2 Transport Binding ProfileのREST API経由でテ�
 
 ==== ポータビリティ
 
-WebAuthn4JはSLF4JとJacksonにのみ依存しており、非常に高いポータビリティを持っています。
+WebAuthn4JはSLF4JとJackson3にのみ依存しており、非常に高いポータビリティを持っています。
 あなたのJavaアプリケーションにほぼ制約なく組み込めるでしょう。
 
 === 要件
