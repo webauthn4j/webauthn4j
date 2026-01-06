@@ -46,7 +46,7 @@ WebAuthn4J only depends on SLF4J and Jackson, offering very high portability. Th
 
 ==== Language & Framework
 
-- Java 11 or later (Java 17 or later if using EdDSA)
+- Java 17 or later
 
 ==== Environment
 
