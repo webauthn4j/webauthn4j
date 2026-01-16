@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported matcher protection type(s).
  *
- * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#matcher-protection-types">§3.3 Matcher Protection Types</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#matcher-protection-types">§3.3 Matcher Protection Types</a>
  */
 public enum MatcherProtectionType {
 

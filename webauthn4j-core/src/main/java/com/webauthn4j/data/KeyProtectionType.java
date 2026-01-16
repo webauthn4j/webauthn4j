@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported key protection type(s).
  *
- * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#key-protection-types">§3.2 Key Protection Types</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#key-protection-types">§3.2 Key Protection Types</a>
  */
 public enum KeyProtectionType {
 
