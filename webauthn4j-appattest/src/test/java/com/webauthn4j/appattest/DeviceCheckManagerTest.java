@@ -139,7 +139,7 @@ class DeviceCheckManagerTest {
         byte[] attestedCredentialDataBytes = authenticatorDataConverter.extractAttestedCredentialData(authenticatorDataBytes);
         AttestedCredentialData attestedCredentialData = attestedCredentialDataConverter.convert(attestedCredentialDataBytes);
         byte[] attestationStatementBytes = attestationObjectConverter.extractAttestationStatement(attestationObjectBytes);
-        AppleAppAttestAttestationStatement attestationStatement = objectConverter.getCborConverter().readValue(attestationStatementBytes, AppleAppAttestAttestationStatement.class);
+        AppleAppAttestAttestationStatement attestationStatement = objectConverter.getCborMapper().readValue(attestationStatementBytes, AppleAppAttestAttestationStatement.class);
         long counter = authenticatorData.getSignCount();
 
         DCAppleDevice dcAppleDevice = new DCAppleDeviceImpl(attestedCredentialData, attestationStatement, counter, new AuthenticationExtensionsAuthenticatorOutputs<>());

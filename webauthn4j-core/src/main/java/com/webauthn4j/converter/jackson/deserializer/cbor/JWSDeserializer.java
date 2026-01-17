@@ -16,18 +16,17 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.exc.InvalidFormatException;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -47,7 +46,7 @@ public class JWSDeserializer extends StdDeserializer<JWS<?>> {
     }
 
     @Override
-    public @NotNull JWS<?> deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
+    public @NotNull JWS<?> deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
 
         byte[] value = p.getBinaryValue();
         String str = new String(value, StandardCharsets.UTF_8);

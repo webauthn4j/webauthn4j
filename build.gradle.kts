@@ -1,10 +1,10 @@
+import com.webauthn4j.gradle.BuildUtils
+import com.webauthn4j.gradle.VersionUtils
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jreleaser.model.Active
 import java.net.URI
 import java.nio.charset.StandardCharsets
-import com.webauthn4j.gradle.BuildUtils
-import com.webauthn4j.gradle.VersionUtils
 
 plugins {
     id("java-library")
@@ -38,8 +38,8 @@ subprojects {
     apply(plugin = "org.jreleaser")
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11 // Although webauthn4j uses JDK 15+ API to support EdDSA, keep target version 11 to support JDK11 users who don't need EdDSA.
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
 
         withSourcesJar()
         withJavadocJar()

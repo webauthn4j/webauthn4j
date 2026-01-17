@@ -16,8 +16,6 @@
 
 package com.webauthn4j.verifier;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.jackson.JacksonUtil;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
@@ -25,6 +23,7 @@ import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -32,7 +31,7 @@ import java.util.Objects;
 
 public class CoreRegistrationObject {
 
-    private static final ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+    private static final CBORMapper cborMapper = new CBORMapper();
 
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;

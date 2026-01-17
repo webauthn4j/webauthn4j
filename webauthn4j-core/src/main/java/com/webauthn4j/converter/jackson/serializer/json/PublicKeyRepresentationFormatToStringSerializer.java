@@ -16,12 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.PublicKeyRepresentationFormat;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class PublicKeyRepresentationFormatToStringSerializer extends StdSerializer<PublicKeyRepresentationFormat> {
 
@@ -30,7 +29,7 @@ public class PublicKeyRepresentationFormatToStringSerializer extends StdSerializ
     }
 
     @Override
-    public void serialize(PublicKeyRepresentationFormat value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull PublicKeyRepresentationFormat value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeString(value.toString());
     }
 }

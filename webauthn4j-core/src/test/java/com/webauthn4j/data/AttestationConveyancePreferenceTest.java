@@ -16,10 +16,10 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AttestationConveyancePreferenceTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Nested
     class BasicOperations {
@@ -103,13 +103,13 @@ class AttestationConveyancePreferenceTest {
         @SuppressWarnings("ConstantConditions")
         @Test
         void should_deserialize_from_json() {
-            TestDTO dto = jsonConverter.readValue("{\"preference\":\"none\"}", TestDTO.class);
+            TestDTO dto = jsonMapper.readValue("{\"preference\":\"none\"}", TestDTO.class);
             assertThat(dto.preference).isEqualTo(AttestationConveyancePreference.NONE);
         }
 
         @Test
         void should_handle_unknown_value_in_deserialization() {
-            assertThatCode(() -> jsonConverter.readValue("{\"preference\":\"unknown\"}", TestDTO.class))
+            assertThatCode(() -> jsonMapper.readValue("{\"preference\":\"unknown\"}", TestDTO.class))
                     .doesNotThrowAnyException();
         }
         
@@ -117,13 +117,13 @@ class AttestationConveyancePreferenceTest {
         void should_serialize_to_json() {
             TestDTO dto = new TestDTO();
             dto.preference = AttestationConveyancePreference.DIRECT;
-            String json = jsonConverter.writeValueAsString(dto);
+            String json = jsonMapper.writeValueAsString(dto);
             assertThat(json).isEqualTo("{\"preference\":\"direct\"}");
         }
         
         @Test
         void should_deserialize_null_to_null() {
-            TestDTO dto = jsonConverter.readValue("{\"preference\":null}", TestDTO.class);
+            TestDTO dto = jsonMapper.readValue("{\"preference\":null}", TestDTO.class);
             assertThat(dto.preference).isNull();
         }
     }

@@ -16,12 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.util.Base64UrlUtil;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class ByteArrayBase64UrlSerializer extends StdSerializer<byte[]> {
 
@@ -30,7 +29,7 @@ public class ByteArrayBase64UrlSerializer extends StdSerializer<byte[]> {
     }
 
     @Override
-    public void serialize(byte[] value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull byte[] value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeString(Base64UrlUtil.encodeToString(value));
     }
 }

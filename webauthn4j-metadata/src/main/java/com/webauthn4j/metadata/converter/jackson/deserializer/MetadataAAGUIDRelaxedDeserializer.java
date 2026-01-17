@@ -16,14 +16,12 @@
 
 package com.webauthn4j.metadata.converter.jackson.deserializer;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.Base64Util;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public class MetadataAAGUIDRelaxedDeserializer extends StdDeserializer<AAGUID> {
 
@@ -32,7 +30,7 @@ public class MetadataAAGUIDRelaxedDeserializer extends StdDeserializer<AAGUID> {
     }
 
     @Override
-    public @NotNull AAGUID deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
+    public @NotNull AAGUID deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         String value = p.getValueAsString();
         if(value.length() == 32){
             value = String.format("%s-%s-%s-%s-%s", value.substring(0, 8), value.substring(8, 12), value.substring(12, 16), value.substring(16, 20), value.substring(20, 32));

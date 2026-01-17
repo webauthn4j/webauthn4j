@@ -17,26 +17,21 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.util.CertificateUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.KeyStore;
 import java.security.cert.TrustAnchor;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-
-import com.webauthn4j.util.CertificateUtil;
-
-import java.nio.file.Files;
-import java.security.KeyStore;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Test class for {@link KeyStoreTrustAnchorRepository}

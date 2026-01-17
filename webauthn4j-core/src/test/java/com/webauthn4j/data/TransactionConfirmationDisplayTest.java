@@ -1,14 +1,14 @@
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.TransactionConfirmationDisplayFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.TransactionConfirmationDisplayToStringSerializer;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class TransactionConfirmationDisplayTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Test
     void create_test() {
@@ -52,33 +52,33 @@ class TransactionConfirmationDisplayTest {
         void serialize_test(){
             IntSerializationTestDTO dto = new IntSerializationTestDTO();
             dto.transactionConfirmationDisplay = TransactionConfirmationDisplay.ANY;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"transactionConfirmationDisplay\":1}");
         }
 
         @Test
         void deserialize_test() {
-            IntSerializationTestDTO dto = jsonConverter.readValue("{\"transactionConfirmationDisplay\":1}", IntSerializationTestDTO.class);
+            IntSerializationTestDTO dto = jsonMapper.readValue("{\"transactionConfirmationDisplay\":1}", IntSerializationTestDTO.class);
             assertThat(dto.transactionConfirmationDisplay).isEqualTo(TransactionConfirmationDisplay.ANY);
         }
 
         @Test
         void deserialize_test_with_out_of_range_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"transactionConfirmationDisplay\": \"-1\"}", IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"transactionConfirmationDisplay\": \"-1\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"transactionConfirmationDisplay\": \"\"}", IntSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"transactionConfirmationDisplay\": \"\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            TransactionConfirmationDisplayTest.IntSerializationTestDTO data = jsonConverter.readValue("{\"transactionConfirmationDisplay\":null}", IntSerializationTestDTO.class);
+            TransactionConfirmationDisplayTest.IntSerializationTestDTO data = jsonMapper.readValue("{\"transactionConfirmationDisplay\":null}", IntSerializationTestDTO.class);
             assertThat(data.transactionConfirmationDisplay).isNull();
         }
 
@@ -96,26 +96,26 @@ class TransactionConfirmationDisplayTest {
         void serialize_test(){
             StringSerializationTestDTO dto = new StringSerializationTestDTO();
             dto.transactionConfirmationDisplay = TransactionConfirmationDisplay.ANY;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"transactionConfirmationDisplay\":\"any\"}");
         }
 
         @Test
         void deserialize_test() {
-            StringSerializationTestDTO dto = jsonConverter.readValue("{\"transactionConfirmationDisplay\":\"any\"}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonMapper.readValue("{\"transactionConfirmationDisplay\":\"any\"}", StringSerializationTestDTO.class);
             assertThat(dto.transactionConfirmationDisplay).isEqualTo(TransactionConfirmationDisplay.ANY);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"transactionConfirmationDisplay\": \"invalid\"}", StringSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"transactionConfirmationDisplay\": \"invalid\"}", StringSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            TransactionConfirmationDisplayTest.StringSerializationTestDTO data = jsonConverter.readValue("{\"transactionConfirmationDisplay\":null}", StringSerializationTestDTO.class);
+            TransactionConfirmationDisplayTest.StringSerializationTestDTO data = jsonMapper.readValue("{\"transactionConfirmationDisplay\":null}", StringSerializationTestDTO.class);
             assertThat(data.transactionConfirmationDisplay).isNull();
         }
 

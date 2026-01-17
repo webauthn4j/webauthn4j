@@ -34,10 +34,10 @@ AttestedCredentialData deserialized = attestedCredentialDataConverter.convert(se
 ----
 //serialize
 AttestationStatementEnvelope envelope = new AttestationStatementEnvelope(attestationStatement);
-byte[] serializedEnvelope = objectConverter.getCborConverter().writeValueAsBytes(envelope);
+byte[] serializedEnvelope = objectConverter.getCborMapper().writeValueAsBytes(envelope);
 
 //deserialize
-AttestationStatementEnvelope deserializedEnvelope = objectConverter.getCborConverter().readValue(serializedEnvelope, AttestationStatementEnvelope.class);
+AttestationStatementEnvelope deserializedEnvelope = objectConverter.getCborMapper().readValue(serializedEnvelope, AttestationStatementEnvelope.class);
 AttestationStatement deserializedAttestationStatement = deserializedEnvelope.getAttestationStatement();
 ----
 
@@ -75,7 +75,7 @@ JSON文字列として保存したい場合は `ObjectConverter` が使用でき
 
 [source,java]
 ----
-String serializedTransports = objectConverter.getJsonConverter().writeValueAsString(transports);
+String serializedTransports = objectConverter.getJsonMapper().writeValueAsString(transports);
 ----
 
 ==== counter
@@ -89,7 +89,7 @@ authenticatorExtensionsは元来CBORデータの為、CBOR byte配列に変換�
 
 [source,java]
 ----
-byte[] serializedAuthenticatorExtensions = objectConverter.getCborConverter().writeValueAsBytes(authenticatorExtensions);
+byte[] serializedAuthenticatorExtensions = objectConverter.getCborMapper().writeValueAsBytes(authenticatorExtensions);
 ----
 
 ==== clientExtensions
@@ -98,7 +98,7 @@ clientExtensionsは元来JSONデータの為、JSON文字列に変換できま�
 
 [source,java]
 ----
-String serializedClientExtensions = objectConverter.getJsonConverter().writeValueAsString(clientExtensions);
+String serializedClientExtensions = objectConverter.getJsonMapper().writeValueAsString(clientExtensions);
 ----
 
 === DCAppleDeviceのシリアライズ、デシリアライズ
@@ -263,12 +263,13 @@ WebAuthn4Jでは、カスタムな検証ロジックを実装し、追加する�
 
 === カスタムなデータ変換ロジックの実装
 
-WebAuthn4Jでは、JSONやCBORのシリアライズ、デシリアライズ処理にJacksonライブラリを使用しています。 Client ExtensionやAuthenticator Extensionのデータ変換でカスタムな変換を行いたい場合、WebAuthn4Jが内部で使用している Jacksonの `ObjectMapper` にカスタムなシリアライザ、デシリアライザを登録することで実現できます。
+WebAuthn4Jでは、JSONやCBORのシリアライズ、デシリアライズ処理にJackson3ライブラリを使用しています。 Client ExtensionやAuthenticator Extensionのデータ変換でカスタムな変換を行いたい場合、カスタムなシリアライザ、デシリアライザを登録したJackson3の `JsonMapper` 、 `CBORMapper` をWebAuthn4Jに渡す必要があｒます。
 
 ==== カスタムなデータ変換ロジックの登録
 
-WebAuthn4Jは、Jacksonの `ObjectMapper` を `ObjectConverter` というクラスでラップして使用しており、 カスタムなシリアライザ、デシリアライザを登録した `ObjectMapper` を `ObjectConverter` インスタンス作成時にコンストラクタから インジェクトし、その `ObjectConverter` を `WebAuthnManager` のインスタンス作成時にパラメータとして指定してください。
-
+WebAuthn4Jは、Jackson3の `JsonMapper`, `CBORMapper` のセットを、 `ObjectConverter` というクラスのインスタンスを通じて受け取ります。
+カスタムなシリアライザ、デシリアライザを登録した `JsonMapper`, `CBORMapper` を `ObjectConverter` インスタンス作成時にコンストラクタからインジェクトし、
+その `ObjectConverter` を `WebAuthnManager` のインスタンス作成時にパラメータとして指定してください。
 
 === クラス
 
@@ -278,7 +279,7 @@ WebAuthn4Jは、Jacksonの `ObjectMapper` を `ObjectConverter` というクラ�
 
 ==== Converter, WebAuthnModule
 
-データパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。 一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 `converter` パッケージ配下に集約されています。 カスタムシリアライザ、デシリアライザは `WebAuthnJSONModule` と `WebAuthnCBORModule` というJacksonのModuleにまとめられています。 WebAuthn4Jは内部で使用するJacksonの `ObjectMapper` に自動で `WebAuthnModule` を適用しますが、`WebAuthnManager` の外部で WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合は、Jacksonの `ObjectMapper` に `WebAuthnJSONModule` と `WebAuthnCBORModule` を登録すると 良いでしょう。
+データパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。 一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 `converter` パッケージ配下に集約されています。 カスタムシリアライザ、デシリアライザは `WebAuthnJSONModule` と `WebAuthnCBORModule` というJacksonのModuleにまとめられています。 WebAuthn4Jは内部で使用するJacksonの `JsonMapper`, `CBORMapper` に自動で `WebAuthnJSONModule` と `WebAuthnCBORModule` を適用しますが、`WebAuthnManager` の外部で WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合は、Jacksonの `JsonMapper`, `CBORMapper` に `WebAuthnJSONModule` と `WebAuthnCBORModule` を登録すると良いでしょう。
 
 ==== TrustAnchorsResolver
 

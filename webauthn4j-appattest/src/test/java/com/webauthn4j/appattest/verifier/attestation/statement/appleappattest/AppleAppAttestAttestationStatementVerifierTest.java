@@ -16,13 +16,8 @@
 
 package com.webauthn4j.appattest.verifier.attestation.statement.appleappattest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
 import com.webauthn4j.appattest.verifier.DCRegistrationObject;
-import com.webauthn4j.converter.AttestationObjectConverter;
-import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
@@ -39,7 +34,6 @@ import static org.mockito.Mockito.mock;
 class AppleAppAttestAttestationStatementVerifierTest {
 
     private final AppleAppAttestAttestationStatementVerifier target = new AppleAppAttestAttestationStatementVerifier();
-    private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(createObjectConverter());
 
     @Test
     void verify_test() {
@@ -79,14 +73,6 @@ class AppleAppAttestAttestationStatementVerifierTest {
         //noinspection ConstantConditions
         X509Certificate nonAppleAppAttestAttestationCertificate = TestAttestationStatementUtil.createBasicPackedAttestationStatement().getX5c().getEndEntityAttestationCertificate().getCertificate();
         assertThatThrownBy(() -> target.extractNonce(nonAppleAppAttestAttestationCertificate)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-
-    private ObjectConverter createObjectConverter() {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        cborMapper.registerModule(new DeviceCheckCBORModule());
-        return new ObjectConverter(jsonMapper, cborMapper);
     }
 
 

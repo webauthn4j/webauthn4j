@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter.jackson;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.json.*;
 import com.webauthn4j.converter.jackson.serializer.json.*;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -26,6 +25,7 @@ import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.jws.JWSHeader;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.module.SimpleModule;
 
 import java.security.cert.X509Certificate;
 

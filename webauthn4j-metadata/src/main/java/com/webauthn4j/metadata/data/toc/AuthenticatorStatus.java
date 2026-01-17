@@ -18,8 +18,8 @@ package com.webauthn4j.metadata.data.toc;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 /**
  * This enumeration describes the status of an authenticator webauthn as identified by its AAID and potentially some additional information (such as a specific attestation key).

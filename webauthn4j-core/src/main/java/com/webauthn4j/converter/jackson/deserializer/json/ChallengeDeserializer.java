@@ -16,15 +16,13 @@
 
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 /**
  * Jackson Deserializer for {@link Challenge}
@@ -39,7 +37,7 @@ public class ChallengeDeserializer extends StdDeserializer<Challenge> {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Challenge deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
+    public @NotNull Challenge deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         String str = p.getValueAsString();
         try {
             return new DefaultChallenge(str);

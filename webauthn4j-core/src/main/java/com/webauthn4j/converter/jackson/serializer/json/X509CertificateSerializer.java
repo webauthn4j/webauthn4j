@@ -16,14 +16,13 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
-import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
@@ -40,7 +39,7 @@ public class X509CertificateSerializer extends StdSerializer<X509Certificate> {
      * {@inheritDoc}
      */
     @Override
-    public void serialize(@NotNull X509Certificate value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull X509Certificate value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         try {
             String str= Base64Util.encodeToString(value.getEncoded());
             gen.writeString(str);

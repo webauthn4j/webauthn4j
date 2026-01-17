@@ -17,8 +17,6 @@
 package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.json.*;
 import com.webauthn4j.converter.jackson.serializer.json.*;
 import com.webauthn4j.data.*;
@@ -27,6 +25,8 @@ import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataX509Certif
 import com.webauthn4j.metadata.data.uaf.AAID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.security.cert.X509Certificate;
 import java.util.List;

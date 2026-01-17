@@ -16,11 +16,11 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.exc.MismatchedInputException;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
@@ -37,17 +37,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class X509CertificateDeserializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final CborConverter cborConverter = objectConverter.getCborConverter();
+    private final CBORMapper cborMapper = objectConverter.getCborMapper();
 
     @Test
     void shouldDeserializeX509Certificate() throws CertificateEncodingException {
         //Given
         Map<String, byte[]> source = new HashMap<>();
         source.put("certificate", TestAttestationUtil.load2tierTestAuthenticatorAttestationCertificate().getEncoded());
-        byte[] input = cborConverter.writeValueAsBytes(source);
+        byte[] input = cborMapper.writeValueAsBytes(source);
 
         //When
-        X509CertificateDeserializerTestData result = cborConverter.readValue(input, X509CertificateDeserializerTestData.class);
+        X509CertificateDeserializerTestData result = cborMapper.readValue(input, X509CertificateDeserializerTestData.class);
 
         //Then
         assertThat(result.getCertificate()).isInstanceOf(X509Certificate.class);
@@ -58,10 +58,10 @@ class X509CertificateDeserializerTest {
         //Given
         Map<String, byte[]> source = new HashMap<>();
         source.put("certificate", new byte[0]);
-        byte[] input = cborConverter.writeValueAsBytes(source);
+        byte[] input = cborMapper.writeValueAsBytes(source);
 
         //When
-        X509CertificateDeserializerTestData result = cborConverter.readValue(input, X509CertificateDeserializerTestData.class);
+        X509CertificateDeserializerTestData result = cborMapper.readValue(input, X509CertificateDeserializerTestData.class);
 
         //Then
         assertThat(result.getCertificate()).isNull();
@@ -73,14 +73,14 @@ class X509CertificateDeserializerTest {
         byte[] invalidCbor = new byte[]{0x00, 0x01, 0x02}; // Invalid CBOR data
 
         //Then
-        assertThatThrownBy(() -> cborConverter.readValue(invalidCbor, X509CertificateDeserializerTestData.class))
-                .isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> cborMapper.readValue(invalidCbor, X509CertificateDeserializerTestData.class))
+                .isInstanceOf(MismatchedInputException.class);
     }
 
     @Test
     void shouldThrowExceptionForNullInput() {
         //Then
-        assertThatThrownBy(() -> cborConverter.readValue((byte[])null, X509CertificateDeserializerTestData.class))
+        assertThatThrownBy(() -> cborMapper.readValue((byte[])null, X509CertificateDeserializerTestData.class))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

@@ -17,65 +17,94 @@
 package com.webauthn4j.converter.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.jackson.WebAuthnCBORModule;
 import com.webauthn4j.converter.jackson.WebAuthnJSONModule;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 /**
- * A set of object converter classes
+ * A set of JSON mapper and CBOR mapper classes specialized for WebAuthn serialization/deserialization
  */
 public class ObjectConverter {
 
+    JsonMapper jsonMapper;
+    CBORMapper cborMapper;
     private final JsonConverter jsonConverter;
     private final CborConverter cborConverter;
 
-    public ObjectConverter(@NotNull ObjectMapper jsonMapper, @NotNull ObjectMapper cborMapper) {
+    public ObjectConverter(@NotNull JsonMapper jsonMapper, @NotNull CBORMapper cborMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
-        AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
-        AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
-        this.jsonConverter = new JsonConverter(jsonMapper);
-        this.cborConverter = new CborConverter(cborMapper);
+        this.jsonMapper = reconfigureJsonMapper(jsonMapper, this);
+        this.cborMapper = reconfigureCborMapper(cborMapper, this);
 
-        initializeJsonMapper(jsonMapper, this);
-        initializeCborMapper(cborMapper, this);
+        this.jsonConverter = new JsonConverter(this);
+        this.cborConverter = new CborConverter(this);
     }
 
     public ObjectConverter() {
-        this(new ObjectMapper(), new ObjectMapper(new CBORFactory()));
+        this(new JsonMapper(), new CBORMapper());
     }
 
     /**
-     * Initialize a {@link ObjectMapper} for WebAuthn JSON type processing
+     * Reconfigure a {@link ObjectMapper} for WebAuthn JSON type processing
      */
-    private static void initializeJsonMapper(@NotNull ObjectMapper jsonMapper, @NotNull ObjectConverter objectConverter) {
-        jsonMapper.registerModule(new WebAuthnJSONModule(objectConverter));
-        jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    private static JsonMapper reconfigureJsonMapper(@NotNull JsonMapper jsonMapper, @NotNull ObjectConverter objectConverter) {
+        return jsonMapper.rebuild()
+                .addModule(new WebAuthnJSONModule(objectConverter))
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .changeDefaultPropertyInclusion(incl -> incl
+                        .withValueInclusion(JsonInclude.Include.NON_NULL)
+                )
+                .build();
     }
 
     /**
-     * Initialize a {@link ObjectMapper} for WebAuthn CBOR type processing
+     * Reconfigure a {@link ObjectMapper} for WebAuthn CBOR type processing
      */
-    private static void initializeCborMapper(@NotNull ObjectMapper cborMapper, @NotNull ObjectConverter objectConverter) {
-        cborMapper.registerModule(new WebAuthnCBORModule(objectConverter));
-        cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-        cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    private static CBORMapper reconfigureCborMapper(@NotNull CBORMapper cborMapper, @NotNull ObjectConverter objectConverter) {
+        return cborMapper.rebuild()
+                .addModule(new WebAuthnCBORModule(objectConverter))
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .changeDefaultPropertyInclusion(incl -> incl
+                        .withValueInclusion(JsonInclude.Include.NON_NULL)
+                )
+                .build();
     }
 
+    /**
+     * @deprecated Use {@link #getJsonMapper()} instead.
+     * The {@link JsonConverter} was a thin wrapper around {@link ObjectMapper} and wrapped checked exceptions into unchecked ones.
+     * It also specified at the type level whether it was a JSON or CBOR converter.
+     * However, since Jackson 3 introduced {@link JsonMapper} specifically for JSON and it no longer throws checked exceptions, {@link JsonConverter} has been deprecated.
+     */
+    @Deprecated
     public @NotNull JsonConverter getJsonConverter() {
         return jsonConverter;
     }
 
+    /**
+     * @deprecated Use {@link #getCborMapper()} instead.
+     * The {@link CborConverter} was a thin wrapper around {@link ObjectMapper} and wrapped checked exceptions into unchecked ones.
+     * It also specified at the type level whether it was a JSON or CBOR converter.
+     * However, since Jackson 3 introduced {@link CBORMapper} specifically for CBOR and it no longer throws checked exceptions, {@link CborConverter} has been deprecated.
+     */
+    @Deprecated
     public @NotNull CborConverter getCborConverter() {
         return cborConverter;
+    }
+
+    public @NotNull JsonMapper getJsonMapper() {
+        return jsonMapper;
+    }
+
+    public @NotNull CBORMapper getCborMapper() {
+        return cborMapper;
     }
 
 }

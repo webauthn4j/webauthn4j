@@ -16,9 +16,9 @@
 
 package com.webauthn4j.metadata.data.uaf;
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -58,7 +58,7 @@ class AAIDTest {
 
     @Test
     void deserialize_with_invalid_value_test() {
-        assertThatThrownBy(() -> objectConverter.getJsonConverter().readValue("{\"aaid\": \"invalid_value\"}", AAIDTest.TestDTO.class)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> objectConverter.getJsonMapper().readValue("{\"aaid\": \"invalid_value\"}", AAIDTest.TestDTO.class)).isInstanceOf(InvalidFormatException.class);
     }
 
     static class TestDTO {

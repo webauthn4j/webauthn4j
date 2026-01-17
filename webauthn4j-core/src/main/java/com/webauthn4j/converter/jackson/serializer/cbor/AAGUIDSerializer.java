@@ -16,14 +16,12 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class AAGUIDSerializer extends StdSerializer<AAGUID> {
 
@@ -32,7 +30,7 @@ public class AAGUIDSerializer extends StdSerializer<AAGUID> {
     }
 
     @Override
-    public void serialize(@NotNull AAGUID value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull AAGUID value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         AssertUtil.notNull(value, "value is null");
         gen.writeBinary(value.getBytes());
     }
