@@ -51,6 +51,7 @@ class PublicKeyCredentialCreationOptionsTest {
                         UserVerificationRequirement.REQUIRED);
         List<PublicKeyCredentialHints> hints = Collections.singletonList(PublicKeyCredentialHints.SECURITY_KEY);
         AttestationConveyancePreference attestation = AttestationConveyancePreference.DIRECT;
+        List<String> attestationFormats = Collections.singletonList("packed");
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 rp,
@@ -62,6 +63,7 @@ class PublicKeyCredentialCreationOptionsTest {
                 authenticatorSelectionCriteria,
                 hints,
                 attestation,
+                attestationFormats,
                 extensions
         );
 
@@ -76,6 +78,7 @@ class PublicKeyCredentialCreationOptionsTest {
                 () -> assertThat(credentialCreationOptions.getAuthenticatorSelection()).isEqualTo(authenticatorSelectionCriteria),
                 () -> assertThat(credentialCreationOptions.getHints()).isEqualTo(hints),
                 () -> assertThat(credentialCreationOptions.getAttestation()).isEqualTo(attestation),
+                () -> assertThat(credentialCreationOptions.getAttestationFormats()).isEqualTo(attestationFormats),
                 () -> assertThat(credentialCreationOptions.getExtensions()).isEqualTo(extensions)
         );
     }
@@ -91,7 +94,7 @@ class PublicKeyCredentialCreationOptionsTest {
                 challenge,
                 Collections.singletonList(new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256))
         );
-        assertThat(target).hasToString("PublicKeyCredentialCreationOptions(rp=PublicKeyCredentialRpEntity(id=example.com, name=example.com), user=PublicKeyCredentialUserEntity(id=0000000000000000000000000000000000000000000000000000000000000000, displayName=displayName), challenge=F23EA2BB2171405F8E13D60358B2D683, pubKeyCredParams=[PublicKeyCredentialParameters(type=public-key, alg=ES256)], timeout=null, excludeCredentials=[], authenticatorSelection=null, hints=null, attestation=null, extensions=null)");
+        assertThat(target).hasToString("PublicKeyCredentialCreationOptions(rp=PublicKeyCredentialRpEntity(id=example.com, name=example.com), user=PublicKeyCredentialUserEntity(id=0000000000000000000000000000000000000000000000000000000000000000, displayName=displayName), challenge=F23EA2BB2171405F8E13D60358B2D683, pubKeyCredParams=[PublicKeyCredentialParameters(type=public-key, alg=ES256)], timeout=null, excludeCredentials=[], authenticatorSelection=null, hints=null, attestation=null, attestationFormats=null, extensions=null)");
     }
 
 
