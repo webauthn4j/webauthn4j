@@ -70,3 +70,82 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: if [ "$SONAR_TOKEN" != "" ]; then ./gradlew jacocoTestReport check sonar -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io ; fi
+
+  jitpack-comment:
+    name: Comment with JitPack info
+    needs: [build, matrix-test, code-analysis]
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const repoOwner = context.repo.owner;
+            const repoName = context.repo.repo;
+            const branch = context.payload.pull_request.head.ref;
+            const version = `${branch}-SNAPSHOT`;
+            
+            const body = `## 📦 JitPack Build
+            
+            The build and tests passed! You can test this Pull Request using [JitPack](https://jitpack.io).
+            
+            ### Maven
+            
+            \`\`\`xml
+            <repositories>
+                <repository>
+                    <id>jitpack.io</id>
+                    <url>https://jitpack.io</url>
+                </repository>
+            </repositories>
+            
+            <dependency>
+                <groupId>com.github.${repoOwner}.${repoName}</groupId>
+                <artifactId>webauthn4j-core</artifactId>
+                <version>${version}</version>
+            </dependency>
+            \`\`\`
+            
+            ### Gradle
+            
+            \`\`\`groovy
+            repositories {
+                maven { url 'https://jitpack.io' }
+            }
+            
+            dependencies {
+                implementation 'com.github.${repoOwner}.${repoName}:webauthn4j-core:${version}'
+            }
+            \`\`\`
+            
+            You can verify the build status on [JitPack](https://jitpack.io/#${repoOwner}/${repoName}/${version}).
+            `;
+            
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: repoOwner,
+              repo: repoName,
+              issue_number: prNumber,
+            });
+            
+            const botComment = comments.find(c => c.body.includes("## 📦 JitPack Build") && c.user.type === 'Bot');
+            
+            if (botComment) {
+               await github.rest.issues.updateComment({
+                 owner: repoOwner,
+                 repo: repoName,
+                 comment_id: botComment.id,
+                 body: body
+               });
+            } else {
+               await github.rest.issues.createComment({
+                 owner: repoOwner,
+                 repo: repoName,
+                 issue_number: prNumber,
+                 body: body
+               });
+            }
