@@ -80,8 +80,8 @@ public class DCAttestationDataVerifier extends CoreRegistrationDataVerifier {
     @Override
     protected @NotNull CoreRegistrationObject createCoreRegistrationObject(@NotNull CoreRegistrationData registrationData, @NotNull CoreRegistrationParameters registrationParameters) {
 
-        AssertUtil.notNull(registrationData, "authenticationData must not be null");
-        AssertUtil.notNull(registrationData, "authenticationParameters must not be null");
+        AssertUtil.notNull(registrationData, "registrationData must not be null");
+        AssertUtil.notNull(registrationParameters, "registrationParameters must not be null");
 
         DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
         //noinspection ConstantConditions null check is already done in caller

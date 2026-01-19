@@ -42,7 +42,7 @@ public class DCAssertionDataVerifier extends CoreAuthenticationDataVerifier {
     protected @NotNull CoreAuthenticationObject createCoreAuthenticationObject(@NotNull CoreAuthenticationData authenticationData, @NotNull CoreAuthenticationParameters authenticationParameters) {
 
         AssertUtil.notNull(authenticationData, "authenticationData must not be null");
-        AssertUtil.notNull(authenticationData, "authenticationParameters must not be null");
+        AssertUtil.notNull(authenticationParameters, "authenticationParameters must not be null");
 
         byte[] credentialId = authenticationData.getCredentialId();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
