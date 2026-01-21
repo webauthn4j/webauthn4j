@@ -81,8 +81,7 @@ self-contained bootstrap mechanism for the build.
 
 ### Prerequisites
 
-Java17 or later is required to build WebAuthn4J.
-To use WebAuthn4J library, JDK11 is OK if you don't need EdDSA support.
+Java17 or later is required to use WebAuthn4J.
 
 ### Checkout sources
 
