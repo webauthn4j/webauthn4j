@@ -17,6 +17,7 @@ jreleaser = "1.20.0"
 # Test dependencies
 
 spring-boot-bom = "4.0.1"
+spring-dependency-management = "1.1.7"
 sonarqube = "7.2.2.6593"
 
 [libraries]
@@ -41,3 +42,5 @@ spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies"
 jreleaser = { id = "org.jreleaser", version.ref = "jreleaser" }
 asciidoctor = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor"}
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-bom" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
