@@ -19,8 +19,6 @@ package com.webauthn4j.data;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.*;
 
 
