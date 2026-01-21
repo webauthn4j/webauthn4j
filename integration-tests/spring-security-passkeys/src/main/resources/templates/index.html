@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Security Passkeys Test</title>
+</head>
+<body>
+    <h1>Welcome, <span th:text="${username}">User</span>!</h1>
+    <p>You have successfully logged in.</p>
+    <a href="/webauthn/register">Register new Passkey</a>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
