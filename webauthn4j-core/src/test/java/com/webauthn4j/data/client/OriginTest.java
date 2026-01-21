@@ -16,9 +16,9 @@
 
 package com.webauthn4j.data.client;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -31,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings("ConstantConditions")
 class OriginTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void getter_test() {
@@ -274,19 +273,19 @@ class OriginTest {
 
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"origin\":\"https://example.com\"}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"origin\":\"https://example.com\"}", TestDTO.class);
         assertThat(dto.origin).isEqualTo(new Origin("https://example.com"));
     }
 
     @Test
     void apk_key_hash_fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"origin\":\"android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck\"}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"origin\":\"android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck\"}", TestDTO.class);
         assertThat(dto.origin).isEqualTo(new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck"));
     }
 
     @Test
     void apk_key_hash_sha256_fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"origin\":\"android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=\"}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"origin\":\"android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=\"}", TestDTO.class);
         assertThat(dto.origin).isEqualTo(new Origin("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo="));
     }
 
@@ -294,7 +293,7 @@ class OriginTest {
     @Test
     void fromString_test_with_invalid_value() {
         // invalid scheme is to be handled by validator
-        assertThatCode(() -> jsonConverter.readValue("{\"origin\":\"file://example.com\"}", TestDTO.class)).doesNotThrowAnyException();
+        assertThatCode(() -> jsonMapper.readValue("{\"origin\":\"file://example.com\"}", TestDTO.class)).doesNotThrowAnyException();
     }
 
     static class TestDTO {

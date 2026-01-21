@@ -1,6 +1,5 @@
 package com.webauthn4j.async;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.async.verifier.CustomRegistrationAsyncVerifier;
 import com.webauthn4j.async.verifier.RegistrationDataAsyncVerifier;
 import com.webauthn4j.async.verifier.attestation.statement.AttestationStatementAsyncVerifier;
@@ -30,6 +29,7 @@ import com.webauthn4j.util.CompletionStageUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.type.TypeReference;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -155,7 +155,7 @@ public class WebAuthnRegistrationAsyncManager {
     @SuppressWarnings("squid:S1130")
     public @NotNull CompletionStage<RegistrationData> parse(String registrationResponseJSON) {
         return CompletionStageUtil
-                .supply(()-> objectConverter.getJsonConverter().readValue(registrationResponseJSON, new TypeReference<PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput>>() {}))
+                .supply(()-> objectConverter.getJsonMapper().readValue(registrationResponseJSON, new TypeReference<PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput>>() {}))
                 .thenApply(publicKeyCredential -> {
                     byte[] attestationObjectBytes = publicKeyCredential.getResponse().getAttestationObject();
                     AttestationObject attestationObject = attestationObjectBytes == null ? null : attestationObjectConverter.convert(attestationObjectBytes);

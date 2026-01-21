@@ -16,16 +16,16 @@
 
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.data.jws.JWAIdentifier;
 import com.webauthn4j.data.jws.JWSHeader;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.CertificateUtil;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
-import java.io.IOException;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -39,13 +39,13 @@ public class JWSHeaderDeserializer extends StdDeserializer<JWSHeader> {
     }
 
     @Override
-    public JWSHeader deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        JsonNode jsonNode = p.getCodec().readTree(p);
-        JWAIdentifier alg = p.getCodec().treeToValue(jsonNode.get("alg"), JWAIdentifier.class);
+    public JWSHeader deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
+        JsonNode jsonNode = ctxt.readTree(p);
+        JWAIdentifier alg = ctxt.readTreeAsValue(jsonNode.get("alg"), JWAIdentifier.class);
         JsonNode x5cNode = jsonNode.get("x5c");
         List<X509Certificate> certificates = new ArrayList<>();
         for (JsonNode node : x5cNode) {
-            certificates.add(CertificateUtil.generateX509Certificate(Base64Util.decode(node.asText())));
+            certificates.add(CertificateUtil.generateX509Certificate(Base64Util.decode(node.asString())));
         }
         CertPath x5c = CertificateUtil.generateCertPath(certificates);
         return new JWSHeader(alg, x5c);

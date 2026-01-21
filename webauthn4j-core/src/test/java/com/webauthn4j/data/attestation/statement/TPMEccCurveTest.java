@@ -16,12 +16,12 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static com.webauthn4j.data.attestation.statement.TPMEccCurve.TPM_ECC_NIST_P192;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,8 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMEccCurveTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void create_test() {
@@ -68,14 +67,14 @@ class TPMEccCurveTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"tpm_ecc_curve\":3}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"tpm_ecc_curve\":3}", TestDTO.class);
         assertThat(dto.tpm_ecc_curve).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"tpm_ecc_curve\":-1}", TestDTO.class)
+        assertThrows(InvalidFormatException.class,
+                () -> jsonMapper.readValue("{\"tpm_ecc_curve\":-1}", TestDTO.class)
         );
     }
 

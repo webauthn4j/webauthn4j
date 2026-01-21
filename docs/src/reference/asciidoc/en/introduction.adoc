@@ -10,17 +10,17 @@ It is implemented in major browsers, offering an excellent choice for users who 
 
 Passkeys is a user-friendly branding name for WebAuthn Level 3, designed to improve the usability of the WebAuthn specification.
 
-=== WebAuthn4J
+=== What is WebAuthn4J?
 
-WebAuthn4J is a Java library for WebAuthn and Apple App Attest server side verification.
-It can be used not only for server-side verification of WebAuthn/Passkeys, but also for custom applications that use Apple App Attest or FIDO CTAP2 security keys.
+WebAuthn4J is a Java library for server-side verification based on the Web Authentication specification.
+It can be used not only for server-side verification of WebAuthn/Passkeys, but also for Apple App Attest and custom applications that use FIDO CTAP2 security keys.
 It is a portable library that supports all attestation statement formats defined in the Web Authentication specification while keeping external dependencies to a minimum.
 
-=== Feature
+=== Features
 
 ==== Supported Attestation Statement Formats
 
-All attestation statement formats are supported:
+WebAuthn4J supports all attestation statement formats:
 
 - Packed attestation
 - FIDO U2F attestation
@@ -28,29 +28,30 @@ All attestation statement formats are supported:
 - Android SafetyNet attestation
 - TPM attestation
 - Apple Anonymous attestation
-- Apple App Attest attestation
 - None attestation
+- Apple App Attest attestation
 
 ==== Conformance
 
-All mandatory test cases and optional Android Key attestation test cases of https://fidoalliance.org/certification/functional-certification/conformance/[FIDO2 Test Tools provided by FIDO Alliance]
-are passed.
+All mandatory test cases and optional Android Key attestation test cases of the https://fidoalliance.org/certification/functional-certification/conformance/[FIDO2 Test Tools provided by FIDO Alliance]
+have been passed.
 
-NOTE: Since FIDO2 Test Tools runs the test via the REST API of FIDO2 Transport Binding Profile, it is executed through the REST API implementation provided by WebAuthn4j Spring Security.
+NOTE: Since FIDO2 Test Tools runs tests via the REST API of the FIDO2 Transport Binding Profile, verification is performed against the REST API implementation of the FIDO2 Transport Binding Profile provided by WebAuthn4J Spring Security.
 
 ==== Portability
 
-WebAuthn4J only depends on SLF4J and Jackson, offering very high portability. There should be almost no barriers to introducing webauthn4j into your Java application.
+WebAuthn4J only depends on SLF4J and Jackson 3, offering very high portability.
+You should be able to integrate it into your Java application with almost no constraints.
 
 === Requirements
 
-==== Language & Framework
+==== Language
 
 - Java 17 or later
 
-==== Environment
+=== Environment
 
-- SecureContext (https or the localhost)
+- SecureContext (site accessed via HTTPS or localhost. This is a requirement of the WebAuthn specification)
 
 === Getting from Maven Central
 
@@ -86,10 +87,10 @@ git clone git@github.com:webauthn4j/webauthn4j.git
 
 === License
 
-WebAuthn4J is an open source software licensed under https://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 License].
+WebAuthn4J is open source software licensed under the https://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 License].
 
 === Contributing
 
-Thank you for your interest in WebAuthn4J. Your participation is much appreciated!
-Please feel free to open issues and send pull-requests.
+Thank you for your interest in WebAuthn4J. WebAuthn4J is developed on GitHub.
+Please feel free to submit issues and pull requests.
 

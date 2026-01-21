@@ -16,17 +16,17 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.exc.MismatchedInputException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MessageDigestAlgorithmTest {
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void test() {
@@ -36,8 +36,8 @@ class MessageDigestAlgorithmTest {
     @Test
     void deserialize_test_with_invalid_value() {
         assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"alg\": -1}", MessageDigestAlgorithmTest.TestDTO.class)
-        ).isInstanceOf(DataConversionException.class);
+                () -> jsonMapper.readValue("{\"alg\": -1}", MessageDigestAlgorithmTest.TestDTO.class)
+        ).isInstanceOf(MismatchedInputException.class);
     }
 
     static class TestDTO {

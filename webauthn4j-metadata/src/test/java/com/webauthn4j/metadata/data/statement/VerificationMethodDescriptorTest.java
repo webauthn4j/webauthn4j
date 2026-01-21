@@ -16,16 +16,16 @@
 
 package com.webauthn4j.metadata.data.statement;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.UserVerificationMethod;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class VerificationMethodDescriptorTest {
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
 
     @Test
     void test(){
@@ -60,7 +60,7 @@ class VerificationMethodDescriptorTest {
                 "                \"minLength\": 4\n" +
                 "              }\n" +
                 "            }";
-        return jsonConverter.readValue(uvmString, VerificationMethodDescriptor.class);
+        return jsonMapper.readValue(uvmString, VerificationMethodDescriptor.class);
     }
 
 }

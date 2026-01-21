@@ -16,17 +16,15 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorInput;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 /**
  * Jackson Serializer for {@link AuthenticatorData}
@@ -47,7 +45,7 @@ public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData
      * {@inheritDoc}
      */
     @Override
-    public void serialize(@NotNull AuthenticatorData<? extends ExtensionAuthenticatorInput> value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull AuthenticatorData<? extends ExtensionAuthenticatorInput> value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeBinary(new AuthenticatorDataConverter(objectConverter).convert(value));
     }
 

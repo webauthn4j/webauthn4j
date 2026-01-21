@@ -16,16 +16,16 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.MatcherProtectionTypeFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.MatcherProtectionTypeToStringSerializer;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MatcherProtectionTypeTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
 
     @Test
     void create_test() {
@@ -66,33 +66,33 @@ class MatcherProtectionTypeTest {
         void serialize_test(){
             StringSerializationTestDTO dto = new StringSerializationTestDTO();
             dto.matcherProtectionType = MatcherProtectionType.TEE;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"matcherProtectionType\":2}");
         }
 
         @Test
         void deserialize_test() {
-            StringSerializationTestDTO dto = jsonConverter.readValue("{\"matcherProtectionType\":2}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonMapper.readValue("{\"matcherProtectionType\":2}", StringSerializationTestDTO.class);
             assertThat(dto.matcherProtectionType).isEqualTo(MatcherProtectionType.TEE);
         }
 
         @Test
         void deserialize_test_with_out_of_range_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"matcherProtectionType\": \"-1\"}", StringSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"matcherProtectionType\": \"-1\"}", StringSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"matcherProtectionType\": \"\"}", StringSerializationTestDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"matcherProtectionType\": \"\"}", StringSerializationTestDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            StringSerializationTestDTO data = jsonConverter.readValue("{\"matcherProtectionType\":null}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO data = jsonMapper.readValue("{\"matcherProtectionType\":null}", StringSerializationTestDTO.class);
             assertThat(data.matcherProtectionType).isNull();
         }
 
@@ -110,26 +110,26 @@ class MatcherProtectionTypeTest {
         void serialize_test(){
             IntSerializationDTO dto = new IntSerializationDTO();
             dto.matcherProtectionType = MatcherProtectionType.TEE;
-            String string = jsonConverter.writeValueAsString(dto);
+            String string = jsonMapper.writeValueAsString(dto);
             assertThat(string).isEqualTo("{\"matcherProtectionType\":\"tee\"}");
         }
 
         @Test
         void deserialize_test() {
-            IntSerializationDTO dto = jsonConverter.readValue("{\"matcherProtectionType\":\"tee\"}", IntSerializationDTO.class);
+            IntSerializationDTO dto = jsonMapper.readValue("{\"matcherProtectionType\":\"tee\"}", IntSerializationDTO.class);
             Assertions.assertThat(dto.matcherProtectionType).isEqualTo(MatcherProtectionType.TEE);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"matcherProtectionType\": \"invalid\"}", IntSerializationDTO.class)
-            ).isInstanceOf(DataConversionException.class);
+                    () -> jsonMapper.readValue("{\"matcherProtectionType\": \"invalid\"}", IntSerializationDTO.class)
+            ).isInstanceOf(InvalidFormatException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            IntSerializationDTO data = jsonConverter.readValue("{\"matcherProtectionType\":null}", IntSerializationDTO.class);
+            IntSerializationDTO data = jsonMapper.readValue("{\"matcherProtectionType\":null}", IntSerializationDTO.class);
             Assertions.assertThat(data.matcherProtectionType).isNull();
         }
 

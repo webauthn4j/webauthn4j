@@ -16,12 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.MatcherProtectionType;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class MatcherProtectionTypeToIntSerializer extends StdSerializer<MatcherProtectionType> {
     public MatcherProtectionTypeToIntSerializer() {
@@ -29,7 +28,7 @@ public class MatcherProtectionTypeToIntSerializer extends StdSerializer<MatcherP
     }
 
     @Override
-    public void serialize(MatcherProtectionType value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull MatcherProtectionType value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeNumber(value.getValue());
     }
 }

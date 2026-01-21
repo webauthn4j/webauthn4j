@@ -25,6 +25,7 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.UserVerificationMethodExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;
+import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,10 +45,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AuthenticatorDataConverterTest {
 
     // Common test data
-    private static final String BASIC_AUTH_DATA = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
-    private static final String APPLE_APP_ATTEST_DATA = "MGACygVeBsWIpS7GqlSC9TaOAq8wh7Hp0wnQQMr12VpAAAAAAQ";
-    private static final String ATTESTED_CREDENTIAL_DATA = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NBAAAARlUOS1SqR0CfmpUat2wTATEAIHEiziyGohCFUc_hJJZGdtSu9ThnEb74K6NZC3U-KbwgpQECAyYgASFYICw4xPmHIvquDRz2KUzyyQlZFhZMbi-mc_YylL1o55jPIlggGQI5ESYAOfR8QM6quTQSoyhjZET806A3yOoCUe2AWJE";
-    private static final String EXTRACTED_ATTESTED_CREDENTIAL_DATA = "VQ5LVKpHQJ-alRq3bBMBMQAgcSLOLIaiEIVRz-EklkZ21K71OGcRvvgro1kLdT4pvCClAQIDJiABIVggLDjE-Yci-q4NHPYpTPLJCVkWFkxuL6Zz9jKUvWjnmM8iWCAZAjkRJgA59HxAzqq5NBKjKGNkRPzToDfI6gJR7YBYkQ";
+    private static final String BASIC_AUTHENTICATOR_DATA = "49960DE5880E8C687434170F6476605B8FE4AEB9A28632C7995CF3BA831D97630100000145";
+    private static final String APPLE_APP_ATTEST_DATA = "306002CA055E06C588A52EC6AA5482F5368E02AF3087B1E9D309D040CAF5D95A4000000001";
+    private static final String AUTHENTICATOR_DATA = "49960DE5880E8C687434170F6476605B8FE4AEB9A28632C7995CF3BA831D97634100000046550E4B54AA47409F9A951AB76C13013100207122CE2C86A2108551CFE124964676D4AEF5386711BEF82BA3590B753E29BC20A50102032620012158202C38C4F98722FAAE0D1CF6294CF2C9095916164C6E2FA673F63294BD68E798CF22582019023911260039F47C40CEAAB93412A328636444FCD3A037C8EA0251ED805891";
+    private static final String EXTRACTED_ATTESTED_CREDENTIAL_DATA = "550E4B54AA47409F9A951AB76C13013100207122CE2C86A2108551CFE124964676D4AEF5386711BEF82BA3590B753E29BC20A50102032620012158202C38C4F98722FAAE0D1CF6294CF2C9095916164C6E2FA673F63294BD68E798CF22582019023911260039F47C40CEAAB93412A328636444FCD3A037C8EA0251ED805891";
+    private static final String AUTHENTICATOR_DATA_WITH_EXTENSION = "49960DE5880E8C687434170F6476605B8FE4AEB9A28632C7995CF3BA831D9763C5000000A295442B2EF15E4DEFB270EFB106FACB4E0024E256FFBC2076ACF614753F25DF5DE7B6597C61B3305770C6330306457346B1E600C03030A5010203262001215820CE747EDE833BBAC106014F16DF34BFD22E1162AA028E9C763AE2F0517EC4ED2422582099AE06E6F6B99286E838F89F4D495FBED88B6DEF81E4A0602E1DBE9562B9ECC8A16B6372656450726F7465637402";
 
     private ObjectConverter objectConverter;
     private AuthenticatorDataConverter target;
@@ -61,9 +63,9 @@ class AuthenticatorDataConverterTest {
     @Nested
     class ConversionTests {
         @Test
-        void shouldConvertBase64UrlToAuthenticatorData() {
+        void shouldConvertToAuthenticatorData() {
             // Given
-            byte[] input = Base64UrlUtil.decode(BASIC_AUTH_DATA);
+            byte[] input = HexUtil.decode(BASIC_AUTHENTICATOR_DATA);
 
             // When
             AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = target.convert(input);
@@ -78,9 +80,14 @@ class AuthenticatorDataConverterTest {
         }
 
         @Test
+        void shouldConvertFromAuthenticatorDataWithExtensionBytesToAuthenticatorData(){
+            target.convert(HexUtil.decode(AUTHENTICATOR_DATA_WITH_EXTENSION));
+        }
+
+        @Test
         void shouldHandleAppleAppAttestAuthenticatorData() {
             // Given
-            byte[] authenticatorDataBytes = Base64UrlUtil.decode(APPLE_APP_ATTEST_DATA);
+            byte[] authenticatorDataBytes = HexUtil.decode(APPLE_APP_ATTEST_DATA);
             
             // When
             AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = target.convert(authenticatorDataBytes);
@@ -127,7 +134,7 @@ class AuthenticatorDataConverterTest {
         @Test
         void shouldThrowExceptionWhenDeserializingDataWithSurplusBytes() {
             // Given
-            byte[] data = Base64UrlUtil.decode(BASIC_AUTH_DATA);
+            byte[] data = HexUtil.decode(BASIC_AUTHENTICATOR_DATA);
             byte[] bytes = Arrays.copyOf(data, data.length + 1);  // Add extra byte
             
             // When/Then
@@ -167,19 +174,19 @@ class AuthenticatorDataConverterTest {
         @Test
         void shouldExtractAttestedCredentialDataFromAuthenticatorData() {
             // Given
-            byte[] authenticatorData = Base64UrlUtil.decode(ATTESTED_CREDENTIAL_DATA);
+            byte[] authenticatorData = HexUtil.decode(AUTHENTICATOR_DATA);
             
             // When
             byte[] result = target.extractAttestedCredentialData(authenticatorData);
 
             // Then
-            assertThat(result).isEqualTo(Base64UrlUtil.decode(EXTRACTED_ATTESTED_CREDENTIAL_DATA));
+            assertThat(result).isEqualTo(HexUtil.decode(EXTRACTED_ATTESTED_CREDENTIAL_DATA));
         }
 
         @Test
         void shouldExtractSignCountFromAuthenticatorData() {
             // Given
-            byte[] authenticatorData = Base64UrlUtil.decode(ATTESTED_CREDENTIAL_DATA);
+            byte[] authenticatorData = HexUtil.decode(AUTHENTICATOR_DATA);
             
             // When
             long signCount = target.extractSignCount(authenticatorData);

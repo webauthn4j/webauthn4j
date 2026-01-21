@@ -222,7 +222,7 @@ class AttestationObjectConverterTest {
 
         // When
         byte[] bytes = target.extractAttestationStatement(source);
-        AndroidKeyAttestationStatement attestationStatement = objectConverter.getCborConverter().readValue(bytes, AndroidKeyAttestationStatement.class);
+        AndroidKeyAttestationStatement attestationStatement = objectConverter.getCborMapper().readValue(bytes, AndroidKeyAttestationStatement.class);
 
         // Then
         assertThat(attestationStatement).isInstanceOf(AndroidKeyAttestationStatement.class);

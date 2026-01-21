@@ -16,13 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.attestation.statement.TPMTPublic;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 /**
  * Jackson Serializer for {@link TPMTPublic}
@@ -34,7 +32,7 @@ public class TPMTPublicSerializer extends StdSerializer<TPMTPublic> {
     }
 
     @Override
-    public void serialize(@NotNull TPMTPublic value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull TPMTPublic value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeBinary(value.getBytes());
     }
 

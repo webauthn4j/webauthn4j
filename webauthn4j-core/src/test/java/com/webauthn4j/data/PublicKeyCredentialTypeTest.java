@@ -16,8 +16,8 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
@@ -30,13 +30,13 @@ class PublicKeyCredentialTypeTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void test() throws IOException {
+    void test() {
         TestDto testDto = objectMapper.readValue("{\"type\": \"public-key\"}", TestDto.class);
         assertThat(testDto.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
     }
 
     @Test
-    void null_test() throws IOException {
+    void null_test() {
         TestDto testDto = objectMapper.readValue("{\"type\": null}", TestDto.class);
         assertThat(testDto.getType()).isNull();
     }

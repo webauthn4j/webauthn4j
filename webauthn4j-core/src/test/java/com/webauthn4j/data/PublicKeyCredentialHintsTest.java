@@ -1,8 +1,8 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,13 +14,13 @@ class PublicKeyCredentialHintsTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void test() throws IOException {
+    void test() {
         TestDto testDto = objectMapper.readValue("{\"hints\": [\"security-key\"]}", TestDto.class);
         assertThat(testDto.getHints()).containsExactly(PublicKeyCredentialHints.SECURITY_KEY);
     }
 
     @Test
-    void null_test() throws IOException {
+    void null_test() {
         TestDto testDto = objectMapper.readValue("{\"hints\": null}", TestDto.class);
         assertThat(testDto.getHints()).isNull();
     }

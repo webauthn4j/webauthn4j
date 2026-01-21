@@ -16,15 +16,13 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.converter.AttestedCredentialDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public class AttestedCredentialDataDeserializer extends StdDeserializer<AttestedCredentialData> {
 
@@ -36,7 +34,7 @@ public class AttestedCredentialDataDeserializer extends StdDeserializer<Attested
     }
 
     @Override
-    public @NotNull AttestedCredentialData deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
+    public @NotNull AttestedCredentialData deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         byte[] value = p.getBinaryValue();
         return attestedCredentialDataConverter.convert(value);
     }

@@ -16,12 +16,12 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.nio.charset.StandardCharsets;
 
@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AuthenticatorDataSerializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final CborConverter cborConverter = objectConverter.getCborConverter();
+    private final CBORMapper cborMapper = objectConverter.getCborMapper();
 
     @Test
     void shouldSerializeAndDeserializeAuthenticatorData() {
@@ -52,8 +52,8 @@ class AuthenticatorDataSerializerTest {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(rpIdHash, flags, counter, attestationData);
 
         //When
-        byte[] result = cborConverter.writeValueAsBytes(authenticatorData);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> restored = cborConverter.readValue(result, new TypeReference<AuthenticatorData<RegistrationExtensionAuthenticatorOutput>>() {
+        byte[] result = cborMapper.writeValueAsBytes(authenticatorData);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> restored = cborMapper.readValue(result, new TypeReference<AuthenticatorData<RegistrationExtensionAuthenticatorOutput>>() {
         });
 
         //Then

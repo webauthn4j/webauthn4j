@@ -16,16 +16,15 @@
 
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.webauthn4j.util.CertificateUtil;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.ObjectReadContext;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.node.ArrayNode;
 
-import java.io.IOException;
 import java.security.cert.CertPath;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
@@ -45,13 +44,13 @@ public class CertPathDeserializer extends StdDeserializer<CertPath> {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull CertPath deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
+    public @NotNull CertPath deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
 
-        ObjectCodec oc = p.getCodec();
-        ArrayNode node = oc.readTree(p);
+        ObjectReadContext objectReadContext = p.objectReadContext();
+        ArrayNode node = objectReadContext.readTree(p);
         List<Certificate> list = new ArrayList<>();
         for (JsonNode item : node) {
-            X509Certificate certificate = oc.treeToValue(item, X509Certificate.class);
+            X509Certificate certificate = ctxt.readTreeAsValue(item, X509Certificate.class);
             list.add(certificate);
         }
         return CertificateUtil.generateCertPath(list);

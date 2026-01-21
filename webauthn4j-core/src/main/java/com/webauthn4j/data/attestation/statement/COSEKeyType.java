@@ -18,8 +18,8 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 public enum COSEKeyType {
     OKP(1), // https://tools.ietf.org/html/rfc8152#section-13

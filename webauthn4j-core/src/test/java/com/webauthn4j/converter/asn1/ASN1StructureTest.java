@@ -4,12 +4,10 @@ import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class ASN1StructureTest {

@@ -16,14 +16,12 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorInputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorInput;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,15 +34,15 @@ public class AuthenticationExtensionsAuthenticatorInputsSerializer extends StdSe
     }
 
     @Override
-    public void serialize(AuthenticationExtensionsAuthenticatorInputs<? extends ExtensionAuthenticatorInput> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(AuthenticationExtensionsAuthenticatorInputs<? extends ExtensionAuthenticatorInput> value, JsonGenerator gen, SerializationContext provider) {
 
         List<String> keys = value.getKeys().stream().sorted(Comparator.comparing(String::length).thenComparing(String::compareTo)).collect(Collectors.toList());
 
-        ((CBORGenerator) gen).writeStartObject(keys.size()); // This is important to write finite length map
+        gen.writeStartObject(null, keys.size()); // This is important to write finite length map
 
         for (String key : keys) {
-            gen.writeFieldName(key);
-            gen.writeObject(value.getValue(key));
+            gen.writeName(key);
+            gen.writePOJO(value.getValue(key));
         }
 
         gen.writeEndObject();

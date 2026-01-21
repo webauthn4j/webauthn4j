@@ -16,10 +16,10 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.security.cert.CertPath;
 import java.security.cert.Certificate;
@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 class CertPathSerializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
-    private final CborConverter cborConverter = objectConverter.getCborConverter();
+    private final CBORMapper cborMapper = objectConverter.getCborMapper();
 
     @SuppressWarnings("ConstantConditions")
     @Test
@@ -48,8 +48,8 @@ class CertPathSerializerTest {
         CertPath certPath = certificateFactory.generateCertPath(Arrays.asList(cert1, cert2));
 
         //When
-        byte[] result = cborConverter.writeValueAsBytes(certPath);
-        CertPath restored = cborConverter.readValue(result, CertPath.class);
+        byte[] result = cborMapper.writeValueAsBytes(certPath);
+        CertPath restored = cborMapper.readValue(result, CertPath.class);
 
         //Then
         assertThat(restored.getCertificates().toArray()).containsExactly(cert1, cert2);
@@ -62,7 +62,7 @@ class CertPathSerializerTest {
         testDto.setCertPath(null);
 
         //When/Then
-        assertThatCode(() -> cborConverter.writeValueAsBytes(testDto)).doesNotThrowAnyException();
+        assertThatCode(() -> cborMapper.writeValueAsBytes(testDto)).doesNotThrowAnyException();
     }
 
     static class TestDto {

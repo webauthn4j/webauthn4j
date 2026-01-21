@@ -1,6 +1,5 @@
 package com.webauthn4j.async;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.async.verifier.AuthenticationDataAsyncVerifier;
 import com.webauthn4j.async.verifier.CustomAuthenticationAsyncVerifier;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
@@ -20,6 +19,7 @@ import com.webauthn4j.verifier.exception.VerificationException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.type.TypeReference;
 
 import java.util.Collections;
 import java.util.List;
@@ -65,7 +65,7 @@ public class WebAuthnAuthenticationAsyncManager {
     @SuppressWarnings("squid:S1130")
     public CompletionStage<AuthenticationData> parse(String authenticationResponseJSON) {
         return CompletionStageUtil
-                .supply(()-> objectConverter.getJsonConverter().readValue(authenticationResponseJSON, new TypeReference<PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput>>() {}))
+                .supply(()-> objectConverter.getJsonMapper().readValue(authenticationResponseJSON, new TypeReference<PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput>>() {}))
                 .thenApply( publicKeyCredential -> {
             byte[] credentialId = publicKeyCredential.getRawId();
             byte[] userHandle = publicKeyCredential.getResponse().getUserHandle();

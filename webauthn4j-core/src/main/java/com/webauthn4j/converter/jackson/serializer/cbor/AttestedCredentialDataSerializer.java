@@ -16,15 +16,13 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.converter.AttestedCredentialDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class AttestedCredentialDataSerializer extends StdSerializer<AttestedCredentialData> {
 
@@ -36,7 +34,7 @@ public class AttestedCredentialDataSerializer extends StdSerializer<AttestedCred
     }
 
     @Override
-    public void serialize(@NotNull AttestedCredentialData value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull AttestedCredentialData value, @NotNull JsonGenerator gen, @NotNull SerializationContext provider) {
         gen.writeBinary(attestedCredentialDataConverter.convert(value));
     }
 }

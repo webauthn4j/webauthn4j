@@ -16,96 +16,87 @@
 
 package com.webauthn4j.converter.util;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.exc.InvalidDefinitionException;
+import tools.jackson.databind.exc.MismatchedInputException;
+import tools.jackson.databind.exc.ValueInstantiationException;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 
 /**
  * A utility class for JSON serialization/deserialization
  */
+@Deprecated
 public class JsonConverter {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    private final ObjectMapper jsonMapper;
+    private final ObjectConverter objectConverter;
 
-    JsonConverter(@NotNull ObjectMapper jsonMapper) {
-        AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
-        AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
+    JsonConverter(@NotNull ObjectConverter objectConverter) {
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        this.jsonMapper = jsonMapper;
+        this.objectConverter = objectConverter;
     }
 
-    public void registerModule(Module module){
-        this.jsonMapper.registerModule(module);
+    @Deprecated
+    public void registerModule(JacksonModule module){
+        objectConverter.jsonMapper = objectConverter.getJsonMapper().rebuild()
+                .addModule(module)
+                .build();
     }
 
     public <T> @Nullable T readValue(@NotNull String src, @NotNull Class<T> valueType) {
         try {
-            return jsonMapper.readValue(src, valueType);
-        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
+            return objectConverter.getJsonMapper().readValue(src, valueType);
+        } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public <T> @Nullable T readValue(@NotNull InputStream src, @NotNull Class<T> valueType) {
         try {
-            return jsonMapper.readValue(src, valueType);
-        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
+            return objectConverter.getJsonMapper().readValue(src, valueType);
+        } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public <T> @Nullable T readValue(@NotNull String src, @NotNull TypeReference<T> valueTypeRef) {
         try {
-            return jsonMapper.readValue(src, valueTypeRef);
-        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
+            return objectConverter.getJsonMapper().readValue(src, valueTypeRef);
+        } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public <T> @Nullable T readValue(@NotNull InputStream src, @NotNull TypeReference<T> valueTypeRef) {
         try {
-            return jsonMapper.readValue(src, valueTypeRef);
-        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
+            return objectConverter.getJsonMapper().readValue(src, valueTypeRef);
+        } catch (MismatchedInputException | ValueInstantiationException | StreamReadException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
     }
 
     public @NotNull byte[] writeValueAsBytes(@Nullable Object value) {
         try {
-            return jsonMapper.writeValueAsBytes(value);
-        } catch (JsonProcessingException e) {
-            throw new UncheckedIOException(e);
+            return objectConverter.getJsonMapper().writeValueAsBytes(value);
+        } catch (InvalidDefinitionException e) {
+            throw new DataConversionException(e);
         }
     }
 
     public @NotNull String writeValueAsString(@Nullable Object value) {
         try {
-            return jsonMapper.writeValueAsString(value);
-        } catch (JsonProcessingException e) {
-            throw new UncheckedIOException(e);
+            return objectConverter.getJsonMapper().writeValueAsString(value);
+        } catch (InvalidDefinitionException e) {
+            throw new DataConversionException(e);
         }
     }
 

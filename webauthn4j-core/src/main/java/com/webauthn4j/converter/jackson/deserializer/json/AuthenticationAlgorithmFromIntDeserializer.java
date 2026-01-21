@@ -1,12 +1,11 @@
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.AuthenticationAlgorithm;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 public class AuthenticationAlgorithmFromIntDeserializer extends StdDeserializer<AuthenticationAlgorithm> {
 
@@ -15,7 +14,7 @@ public class AuthenticationAlgorithmFromIntDeserializer extends StdDeserializer<
     }
 
     @Override
-    public AuthenticationAlgorithm deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public AuthenticationAlgorithm deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
         int value = p.getValueAsInt();
         try {
             return AuthenticationAlgorithm.create(value);
