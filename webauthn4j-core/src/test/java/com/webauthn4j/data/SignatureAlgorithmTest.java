@@ -93,7 +93,6 @@ class SignatureAlgorithmTest {
 
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_15)
     void ed25519_test(){
         assertThatCode(()->{
             SignatureUtil.createSignature(SignatureAlgorithm.Ed25519);
