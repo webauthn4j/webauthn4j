@@ -22,5 +22,6 @@ include("webauthn4j-appattest")
 include("webauthn4j-test")
 include("webauthn4j-util")
 include("integration-tests:spring-security-passkeys")
+include("integration-tests:quarkus-security-webauthn")
 
 rootProject.name = "webauthn4j"

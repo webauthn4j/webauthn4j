@@ -32,10 +32,7 @@ allprojects {
 
 subprojects {
     apply(plugin = "java-library")
-    apply(plugin = "signing")
-    apply(plugin = "maven-publish")
     apply(plugin = "jacoco")
-    apply(plugin = "org.jreleaser")
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -70,12 +67,18 @@ subprojects {
         }
     }
 
-
     tasks.jacocoTestReport {
         reports {
             xml.required = true
         }
     }
+
+}
+
+configure(subprojects.filter { it.name.startsWith("webauthn4j-") }) {
+    apply(plugin = "signing")
+    apply(plugin = "maven-publish")
+    apply(plugin = "org.jreleaser")
 
     val githubUrl = "https://github.com/webauthn4j/webauthn4j"
     val mavenCentralUser = BuildUtils.getVariable(project, "MAVEN_CENTRAL_USER", "mavenCentralUser")
