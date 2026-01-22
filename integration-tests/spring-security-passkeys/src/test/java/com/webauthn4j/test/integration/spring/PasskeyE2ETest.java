@@ -91,17 +91,24 @@ public class PasskeyE2ETest {
             if (context != null) {
                 context.close();
             }
-        } catch (Exception ignored) { }
+        }
+        catch (Exception ignored) {
+            //nop
+        }
         try {
             if (browser != null) {
                 browser.close();
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+            //nop
+        }
         try {
             if (playwright != null) {
                 playwright.close();
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+            //nop
+        }
     }
 
     @Test

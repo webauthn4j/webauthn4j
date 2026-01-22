@@ -20,6 +20,11 @@ spring-boot-bom = "4.0.1"
 spring-dependency-management = "1.1.7"
 sonarqube = "7.2.2.6593"
 
+quarkus = "3.30.7"
+selenium = "4.27.0"
+assertj = "3.26.3"
+playwright = "1.44.0"
+
 [libraries]
 # Third-party libraries
 
@@ -37,6 +42,11 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "j
 # test dependencies
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot-bom" }
 
+quarkus-bom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
+selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version.ref = "selenium" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
+
 
 [plugins]
 jreleaser = { id = "org.jreleaser", version.ref = "jreleaser" }
@@ -44,3 +54,4 @@ asciidoctor = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor"}
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-bom" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+quarkus = { id = "io.quarkus", version.ref = "quarkus" }

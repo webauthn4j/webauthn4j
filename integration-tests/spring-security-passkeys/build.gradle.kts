@@ -35,7 +35,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2") //Added for now as Spring Security implicitly depends on Jackson2
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("com.microsoft.playwright:playwright:1.44.0")
+    testImplementation(libs.playwright)
     testImplementation("com.google.code.gson:gson:2.11.0")
 
     implementation("ch.qos.logback:logback-classic")
@@ -44,4 +44,8 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testCompileOnly(libs.jetbrains.annotations)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+sonarqube {
+    isSkipProject = true
 }

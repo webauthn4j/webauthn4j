@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="/q/webauthn/webauthn.js" type="text/javascript" charset="UTF-8"></script>
+    <style>
+     .container {
+      display: grid;
+      grid-template-columns: auto auto auto;
+     }
+     button, input {
+      margin: 5px 0;
+     }
+     .item {
+      padding: 20px;
+     }
+     nav > ul {
+       list-style-type: none;
+       margin: 0;
+       padding: 0;
+       overflow: hidden;
+       background-color: #333;
+     }
+
+     nav > ul > li {
+       float: left;
+     }
+
+     nav > ul > li > a {
+       display: block;
+       color: white;
+       text-align: center;
+       padding: 14px 16px;
+       text-decoration: none;
+     }
+
+     nav > ul > li > a:hover {
+       background-color: #111;
+     }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+     <ul>
+      <li><a href="/api/public">Public API</a></li>
+      <li><a href="/api/users/me">User API</a></li>
+      <li><a href="/api/admin">Admin API</a></li>
+      <li><a href="/q/webauthn/logout">Logout</a></li>
+     </ul>
+    </nav>
+    <div class="container">
+     <div class="item">
+      <h1>Status</h1>
+      <div id="result"></div>
+     </div>
+     <div class="item">
+      <h1>Login</h1>
+      <p>
+       <button id="login">Login</button>
+      </p>
+     </div>
+     <div class="item">
+      <h1>Register</h1>
+      <p>
+       <input id="usernameRegister" placeholder="User name"/><br/>
+       <input id="firstName" placeholder="First name"/><br/>
+       <input id="lastName" placeholder="Last name"/><br/>
+       <button id="register">Register</button>
+      </p>
+     </div>
+    </div>
+    <script type="text/javascript">
+      const webAuthn = new WebAuthn();
+
+      const result = document.getElementById('result');
+
+      fetch('/api/public/me')
+        .then(response => response.text())
+        .then(username => result.append("User: "+username));
+
+      const loginButton = document.getElementById('login');
+
+      loginButton.addEventListener("click", (e) => {
+        result.replaceChildren();
+        webAuthn.login()
+          .then(x => fetch('/api/public/me'))
+          .then(response => response.text())
+          .then(username => {
+            result.append("User: "+username);
+          })
+          .catch(err => {
+            result.append("Login failed: "+err);
+          });
+        return false;
+      });
+
+      const registerButton = document.getElementById('register');
+
+      registerButton.addEventListener("click", (e) => {
+        var username = document.getElementById('usernameRegister').value;
+        var firstName = document.getElementById('firstName').value;
+        var lastName = document.getElementById('lastName').value;
+        result.replaceChildren();
+        webAuthn.register({ username: username, displayName: firstName + " " + lastName })
+          .then(body => {
+            result.append("User: "+username);
+          })
+          .catch(err => {
+            result.append("Registration failed: "+err);
+          });
+        return false;
+      });
+    </script>
+  </body>
+</html>
