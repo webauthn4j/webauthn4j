@@ -1,138 +1,144 @@
 package com.webauthn4j.test.integration.spring;
 
+import com.microsoft.playwright.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
-import org.openqa.selenium.logging.LoggingPreferences;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.virtualauthenticator.HasVirtualAuthenticator;
-import org.openqa.selenium.virtualauthenticator.VirtualAuthenticatorOptions;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
-import java.util.logging.Level;
+import java.util.List;
+import java.util.regex.Pattern;
+import com.google.gson.JsonObject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class PasskeyE2ETest {
 
+    private static final Logger logger = LoggerFactory.getLogger(PasskeyE2ETest.class);
+
     @LocalServerPort
     private int port;
 
-    private WebDriver driver;
+    private Playwright playwright;
+    private Browser browser;
+    private BrowserContext context;
+    private Page page;
+    private CDPSession cdp;
 
     @BeforeEach
     void setup() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
+        playwright = Playwright.create();
+        BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
+                .setHeadless(true)
+                .setArgs(List.of("--no-sandbox", "--disable-dev-shm-usage"));
+        browser = playwright.chromium().launch(launchOptions);
 
-        LoggingPreferences logPrefs = new LoggingPreferences();
-        logPrefs.enable(LogType.BROWSER, Level.ALL);
-        options.setCapability("goog:loggingPrefs", logPrefs);
-        
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        context = browser.newContext(new Browser.NewContextOptions());
+        page = context.newPage();
 
-        VirtualAuthenticatorOptions authOptions = new VirtualAuthenticatorOptions()
-                .setTransport(VirtualAuthenticatorOptions.Transport.INTERNAL)
-                .setProtocol(VirtualAuthenticatorOptions.Protocol.CTAP2)
-                .setHasResidentKey(true)
-                .setHasUserVerification(true)
-                .setIsUserVerified(true);
-        
-        ((HasVirtualAuthenticator) driver).addVirtualAuthenticator(authOptions);
+        // Log browser-side issues to CI output via logger
+        page.onConsoleMessage(msg -> {
+            String type = String.valueOf(msg.type());
+            String text = msg.text();
+            if ("error".equalsIgnoreCase(type)) {
+                logger.error("BROWSER: {}", text);
+            } else if ("warning".equalsIgnoreCase(type) || "warn".equalsIgnoreCase(type)) {
+                logger.warn("BROWSER: {}", text);
+            } else {
+                logger.info("BROWSER [{}]: {}", type, text);
+            }
+        });
+        page.onPageError(error -> {
+            logger.error("PAGE ERROR: {}", error);
+        });
+        context.onRequestFailed(request -> {
+            logger.error("REQUEST FAILED: {} {}", request.method(), request.url());
+        });
+        context.onResponse(response -> {
+            int status = response.status();
+            if (status >= 500) {
+                logger.error("HTTP {} {}", status, response.url());
+            } else if (status >= 400) {
+                logger.warn("HTTP {} {}", status, response.url());
+            }
+        });
+
+        // Enable WebAuthn and add a virtual authenticator (CTAP2 + internal)
+        cdp = context.newCDPSession(page);
+        JsonObject enableParams = new JsonObject();
+        cdp.send("WebAuthn.enable", enableParams);
+
+        JsonObject options = new JsonObject();
+        options.addProperty("protocol", "ctap2");
+        options.addProperty("transport", "internal");
+        options.addProperty("hasResidentKey", true);
+        options.addProperty("hasUserVerification", true);
+        options.addProperty("isUserVerified", true);
+        options.addProperty("automaticPresenceSimulation", true);
+
+        JsonObject params = new JsonObject();
+        params.add("options", options);
+        cdp.send("WebAuthn.addVirtualAuthenticator", params);
     }
 
     @AfterEach
     void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        try {
+            if (context != null) {
+                context.close();
+            }
+        } catch (Exception ignored) { }
+        try {
+            if (browser != null) {
+                browser.close();
+            }
+        } catch (Exception ignored) { }
+        try {
+            if (playwright != null) {
+                playwright.close();
+            }
+        } catch (Exception ignored) { }
     }
 
     @Test
     void testPasskeyRegistrationAndLogin() {
         String baseUrl = "http://localhost:" + port;
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         // 1. Login with password first to register a passkey
-        driver.get(baseUrl + "/login");
-        driver.findElement(By.name("username")).sendKeys("user");
-        driver.findElement(By.name("password")).sendKeys("password");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        page.navigate(baseUrl + "/login");
+        page.fill("input[name='username']", "user");
+        page.fill("input[name='password']", "password");
+        page.click("button[type='submit']");
+        page.waitForURL(baseUrl + "/");
 
-        try {
-            // Wait for login to complete (title change or h1 element)
-            wait.until(ExpectedConditions.titleIs("Spring Security Passkeys Test"));
-        } catch (Exception e) {
-            System.out.println("Login Failed. Page Source: " + driver.getPageSource());
-            printBrowserLogs();
-            throw e;
-        }
-
-        assertThat(driver.getTitle()).isEqualTo("Spring Security Passkeys Test");
-        assertThat(driver.findElement(By.tagName("h1")).getText()).contains("user");
+        assertThat(page.title()).isEqualTo("Spring Security Passkeys Test");
+        assertThat(page.locator("h1").textContent()).contains("user");
 
         // 2. Register a passkey
-        driver.get(baseUrl + "/webauthn/register");
-        driver.findElement(By.id("label")).sendKeys("My Passkey");
+        page.navigate(baseUrl + "/webauthn/register");
+        page.fill("#label", "My Passkey");
+        page.click("button");
 
-        // Wait for page to be fully loaded and ready
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+        // Wait for registration to complete: "/" or any URL containing "success"
+        Pattern done = Pattern.compile("(^" + Pattern.quote(baseUrl) + "/$)|success");
+        page.waitForURL(done);
 
-        WebElement registerButton = driver.findElement(By.cssSelector("button"));
-        wait.until(ExpectedConditions.elementToBeClickable(registerButton));
-        registerButton.click();
-        
-        // Wait for registration completion
-        try {
-            wait.until(d -> d.getCurrentUrl().equals(baseUrl + "/") || d.getCurrentUrl().contains("success"));
-        } catch (Exception e) {
-            System.out.println("Registration Failed. Current URL: " + driver.getCurrentUrl());
-            System.out.println("Page Source: " + driver.getPageSource());
-            printBrowserLogs();
-            throw e;
-        }
-
-        // 3. Logout
-        if (!driver.getCurrentUrl().equals(baseUrl + "/")) {
-             driver.get(baseUrl + "/");
-        }
-        driver.findElement(By.cssSelector("form[action='/logout'] button")).click();
+        // 3. Logout (go to home to ensure logout button exists, then click)
+        page.navigate(baseUrl + "/");
+        page.click("form[action='/logout'] button");
 
         // 4. Login with Passkey
-        driver.get(baseUrl + "/login");
-        driver.findElement(By.id("passkey-signin")).click();
-        
+        page.navigate(baseUrl + "/login");
+        page.click("#passkey-signin");
+        page.waitForURL(baseUrl + "/");
+
         // 5. Verify successful login
-        wait.until(ExpectedConditions.urlToBe(baseUrl + "/"));
-        
-        assertThat(driver.getTitle()).isEqualTo("Spring Security Passkeys Test");
-        assertThat(driver.findElement(By.tagName("h1")).getText()).contains("user");
+        assertThat(page.title()).isEqualTo("Spring Security Passkeys Test");
+        assertThat(page.locator("h1").textContent()).contains("user");
     }
 
-    private void printBrowserLogs() {
-        try {
-            LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
-            for (LogEntry entry : logEntries) {
-                System.out.println("BROWSER LOG: " + entry.getLevel() + " " + entry.getMessage());
-            }
-        } catch (Exception e) {
-            System.out.println("Failed to retrieve browser logs: " + e.getMessage());
-        }
-    }
 }
