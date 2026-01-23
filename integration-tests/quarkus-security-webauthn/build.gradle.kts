@@ -26,7 +26,7 @@ dependencies {
 
     // Playwright for E2E UI tests + JSON helper + logger API
     testImplementation(libs.playwright)
-    testImplementation("com.google.code.gson:gson:2.11.0")
+    testImplementation("com.google.code.gson:gson:2.13.2")
     testImplementation(libs.slf4j.api)
 }
 
