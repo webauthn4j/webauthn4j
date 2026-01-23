@@ -23,7 +23,7 @@ sonarqube = "7.2.2.6593"
 quarkus = "3.30.8"
 selenium = "4.27.0"
 assertj = "3.27.6"
-playwright = "1.44.0"
+playwright = "1.57.0"
 
 [libraries]
 # Third-party libraries
