@@ -26,7 +26,8 @@ public class HMACGetSecretAuthenticatorInputSerializer extends AbstractCtapCanon
         super(HMACGetSecretAuthenticatorInput.class, Arrays.asList(
                 new FieldSerializationRule<>(1, HMACGetSecretAuthenticatorInput::getKeyAgreement),
                 new FieldSerializationRule<>(2, HMACGetSecretAuthenticatorInput::getSaltEnc),
-                new FieldSerializationRule<>(3, HMACGetSecretAuthenticatorInput::getSaltAuth)
+                new FieldSerializationRule<>(3, HMACGetSecretAuthenticatorInput::getSaltAuth),
+                new FieldSerializationRule<>(4, HMACGetSecretAuthenticatorInput::getPinUvAuthProtocol)
         ));
     }
 }
