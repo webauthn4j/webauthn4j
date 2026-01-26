@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata.data.statement;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
@@ -45,7 +46,7 @@ class AuthenticatorGetInfoTest {
             )
         );
         assertThat(authenticatorGetInfo.getMaxMsgSize()).isEqualTo(1200);
-        assertThat(authenticatorGetInfo.getPinUvAuthProtocols()).containsExactly(AuthenticatorGetInfo.PinProtocolVersion.VERSION_1);
+        assertThat(authenticatorGetInfo.getPinUvAuthProtocols()).containsExactly(PinProtocolVersion.VERSION_1);
     }
 
     private AuthenticatorGetInfo createAuthenticatorGetInfo(){
