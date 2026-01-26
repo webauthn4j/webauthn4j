@@ -44,7 +44,7 @@ public class HMACSecretAuthenticationExtensionAuthenticatorOutput extends Single
         boolean ctap20AllowedLength = getValue().length == 32 || getValue().length == 64;
         boolean additionalCtap21AllowedLength = getValue().length == 48 || getValue().length == 80;
         if (!ctap20AllowedLength && !additionalCtap21AllowedLength) {
-            throw new ConstraintViolationException("saltAuth must be 32, 48, 64 or 80 bytes length");
+            throw new ConstraintViolationException("hmac-secret output must be 32, 48, 64 or 80 bytes length");
         }
     }
 }
