@@ -18,6 +18,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
 import org.jetbrains.annotations.NotNull;
@@ -413,35 +414,6 @@ public class AuthenticatorGetInfo {
             public int hashCode() {
                 return Objects.hash(value);
             }
-        }
-    }
-
-    public static class PinProtocolVersion {
-
-        public static final PinProtocolVersion VERSION_1 = new PinProtocolVersion(1);
-
-        private final int value;
-
-        @JsonCreator
-        public PinProtocolVersion(int value){
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            PinProtocolVersion that = (PinProtocolVersion) o;
-            return value == that.value;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(value);
         }
     }
 
