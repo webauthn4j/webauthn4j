@@ -41,8 +41,10 @@ public class HMACSecretAuthenticationExtensionAuthenticatorOutput extends Single
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
-        if (getValue().length != 32 && getValue().length != 64) {
-            throw new ConstraintViolationException("saltAuth must be 32 bytes length or 64 bytes length");
+        boolean ctap20AllowedLength = getValue().length == 32 || getValue().length == 64;
+        boolean additionalCtap21AllowedLength = getValue().length == 48 || getValue().length == 80;
+        if (!ctap20AllowedLength && !additionalCtap21AllowedLength) {
+            throw new ConstraintViolationException("saltAuth must be 32, 48, 64 or 80 bytes length");
         }
     }
 }

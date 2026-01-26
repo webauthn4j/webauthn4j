@@ -27,7 +27,9 @@ class HMACSecretAuthenticationExtensionAuthenticatorOutputTest {
     @Test
     void validate_test(){
         assertThatCode(new HMACSecretAuthenticationExtensionAuthenticatorOutput(new byte[32])::validate).doesNotThrowAnyException();
+        assertThatCode(new HMACSecretAuthenticationExtensionAuthenticatorOutput(new byte[48])::validate).doesNotThrowAnyException();
         assertThatCode(new HMACSecretAuthenticationExtensionAuthenticatorOutput(new byte[64])::validate).doesNotThrowAnyException();
+        assertThatCode(new HMACSecretAuthenticationExtensionAuthenticatorOutput(new byte[80])::validate).doesNotThrowAnyException();
         assertThatThrownBy(new HMACSecretAuthenticationExtensionAuthenticatorOutput(null)::validate).isInstanceOf(ConstraintViolationException.class);
         assertThatThrownBy(new HMACSecretAuthenticationExtensionAuthenticatorOutput(new byte[16])::validate).isInstanceOf(ConstraintViolationException.class);
     }
