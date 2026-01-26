@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
+import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.jetbrains.annotations.NotNull;
@@ -51,11 +52,30 @@ public class HMACSecretAuthenticationExtensionAuthenticatorInput extends SingleV
         if (getValue().getSaltEnc() == null) {
             throw new ConstraintViolationException("saltEnc must not be null");
         }
-        if (getValue().getSaltAuth().length != 32) {
-            throw new ConstraintViolationException("saltAuth must be 32 bytes length");
-        }
-        if (getValue().getSaltEnc().length != 32) {
-            throw new ConstraintViolationException("saltEnc must be 32 bytes length");
+
+        getValue().getKeyAgreement().validate();
+
+        PinProtocolVersion protocol = getValue().getPinUvAuthProtocol();
+        byte[] saltAuth = getValue().getSaltAuth();
+        byte[] saltEnc = getValue().getSaltEnc();
+
+
+        if (PinProtocolVersion.VERSION_1.equals(protocol) || protocol == null) {
+            if (saltAuth.length != 16) {
+                throw new ConstraintViolationException("saltAuth must be 16 bytes length for Protocol 1");
+            }
+            if (saltEnc.length != 32 && saltEnc.length != 64) {
+                throw new ConstraintViolationException("saltEnc must be 32 or 64 bytes length for Protocol 1");
+            }
+        } else if (PinProtocolVersion.VERSION_2.equals(protocol)) {
+            if (saltAuth.length != 32) {
+                throw new ConstraintViolationException("saltAuth must be 32 bytes length for Protocol 2");
+            }
+            if (saltEnc.length != 48 && saltEnc.length != 80) {
+                throw new ConstraintViolationException("saltEnc must be 48 or 80 bytes length for Protocol 2");
+            }
+        } else {
+            throw new IllegalStateException("unknown protocol version: " + protocol);
         }
     }
 }
