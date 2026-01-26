@@ -18,9 +18,11 @@ package com.webauthn4j.data.extension.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -30,15 +32,25 @@ public class HMACGetSecretAuthenticatorInput {
     private final COSEKey keyAgreement;
     private final byte[] saltEnc;
     private final byte[] saltAuth;
+    private final PinProtocolVersion pinUvAuthProtocol;
 
     @JsonCreator
     public HMACGetSecretAuthenticatorInput(
             @NotNull @JsonProperty("1") COSEKey keyAgreement,
             @NotNull @JsonProperty("2") byte[] saltEnc,
-            @NotNull @JsonProperty("3") byte[] saltAuth) {
+            @NotNull @JsonProperty("3") byte[] saltAuth,
+            @Nullable @JsonProperty("4") PinProtocolVersion pinUvAuthProtocol) {
         this.keyAgreement = keyAgreement;
         this.saltEnc = ArrayUtil.clone(saltEnc);
         this.saltAuth = ArrayUtil.clone(saltAuth);
+        this.pinUvAuthProtocol = pinUvAuthProtocol;
+    }
+
+    public HMACGetSecretAuthenticatorInput(
+            @NotNull COSEKey keyAgreement,
+            @NotNull byte[] saltEnc,
+            @NotNull byte[] saltAuth) {
+        this(keyAgreement, saltEnc, saltAuth, null);
     }
 
     public @NotNull COSEKey getKeyAgreement() {
@@ -53,17 +65,21 @@ public class HMACGetSecretAuthenticatorInput {
         return ArrayUtil.clone(saltAuth);
     }
 
+    public @Nullable PinProtocolVersion getPinUvAuthProtocol() {
+        return pinUvAuthProtocol;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HMACGetSecretAuthenticatorInput that = (HMACGetSecretAuthenticatorInput) o;
-        return Objects.equals(keyAgreement, that.keyAgreement) && Arrays.equals(saltEnc, that.saltEnc) && Arrays.equals(saltAuth, that.saltAuth);
+        return Objects.equals(keyAgreement, that.keyAgreement) && Arrays.equals(saltEnc, that.saltEnc) && Arrays.equals(saltAuth, that.saltAuth) && Objects.equals(pinUvAuthProtocol, that.pinUvAuthProtocol);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(keyAgreement);
+        int result = Objects.hash(keyAgreement, pinUvAuthProtocol);
         result = 31 * result + Arrays.hashCode(saltEnc);
         result = 31 * result + Arrays.hashCode(saltAuth);
         return result;
