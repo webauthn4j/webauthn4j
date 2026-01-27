@@ -30,14 +30,22 @@ class AttestationObjectTest {
 
     @Test
     void getFormat_with_attestationStatement_test() {
+        // Given
         AttestationObject instance = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+
+        // When
+        // Then
         assertThat(instance.getFormat()).isEqualTo("fido-u2f");
     }
 
     @Test
     void equals_hashCode_test() {
+        // Given
         AttestationObject instanceA = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         AttestationObject instanceB = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+
+        // When
+        // Then
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
@@ -46,7 +54,11 @@ class AttestationObjectTest {
 
     @Test
     void toString_test() {
+        // Given
         AttestationObject instance = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+
+        // When
+        // Then
         assertThatCode(instance::toString).doesNotThrowAnyException();
     }
 }

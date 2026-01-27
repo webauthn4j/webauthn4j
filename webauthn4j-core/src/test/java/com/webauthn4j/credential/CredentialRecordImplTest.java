@@ -33,6 +33,9 @@ class CredentialRecordImplTest {
 
     @Test
     void shouldCreateCredentialRecordWithValidParameters() {
+        // Given
+
+        // When
         CredentialRecord credentialRecord = new CredentialRecordImpl(
                 attestationObject,
                 clientData,
@@ -40,6 +43,7 @@ class CredentialRecordImplTest {
                 transports
         );
 
+        // Then
         assertThat(credentialRecord.getClientData()).isEqualTo(clientData);
         assertThat(credentialRecord.getClientExtensions()).isEqualTo(clientExtensions);
         assertThat(credentialRecord.getTransports()).isEqualTo(transports);
@@ -47,18 +51,24 @@ class CredentialRecordImplTest {
 
     @Test
     void shouldCreateCredentialRecordWithEmptyTransports() {
+        // Given
+        Set<AuthenticatorTransport> emptyTransports = new HashSet<>();
+
+        // When
         CredentialRecord credentialRecord = new CredentialRecordImpl(
                 attestationObject,
                 clientData,
                 clientExtensions,
-                new HashSet<>()
+                emptyTransports
         );
 
+        // Then
         assertThat(credentialRecord.getTransports()).isEmpty();
     }
 
     @Test
     void shouldBeEqualWhenAllPropertiesAreEqual() {
+        // Given
         CredentialRecord instanceA = new CredentialRecordImpl(
                 attestationObject,
                 clientData,
@@ -72,6 +82,8 @@ class CredentialRecordImplTest {
                 transports
         );
 
+        // When
+        // Then
         assertThat(instanceA)
                 .isEqualTo(instanceB)
                 .hasSameHashCodeAs(instanceB);
@@ -79,6 +91,7 @@ class CredentialRecordImplTest {
 
     @Test
     void shouldNotBeEqualWhenClientDataDiffers() {
+        // Given
         CredentialRecord instanceA = new CredentialRecordImpl(
                 attestationObject,
                 clientData,
@@ -92,15 +105,22 @@ class CredentialRecordImplTest {
                 transports
         );
 
+        // When
+        // Then
         assertThat(instanceA).isNotEqualTo(instanceB);
     }
 
     @Test
     void shouldHandleNullClientExtensions() {
+        // Given
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> nullExtensions = null;
+
+        // When
+        // Then
         assertThatCode(() -> new CredentialRecordImpl(
                 attestationObject,
                 clientData,
-                null,
+                nullExtensions,
                 transports
         )).doesNotThrowAnyException();
     }

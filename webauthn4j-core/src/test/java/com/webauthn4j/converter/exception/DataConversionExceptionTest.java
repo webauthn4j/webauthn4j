@@ -23,23 +23,38 @@ class DataConversionExceptionTest {
 
     @Test
     void shouldCreateExceptionWithCause() {
+        // Given
         RuntimeException cause = new RuntimeException();
+
+        // When
         DataConversionException exception = new DataConversionException(cause);
+
+        // Then
         Assertions.assertThat(exception.getCause()).isEqualTo(cause);
     }
 
     @Test
     void shouldCreateExceptionWithMessage() {
+        // Given
         String message = "test message";
+
+        // When
         DataConversionException exception = new DataConversionException(message);
+
+        // Then
         Assertions.assertThat(exception.getMessage()).isEqualTo(message);
     }
 
     @Test
     void shouldCreateExceptionWithMessageAndCause() {
+        // Given
         String message = "test message";
         RuntimeException cause = new RuntimeException();
+
+        // When
         DataConversionException exception = new DataConversionException(message, cause);
+
+        // Then
         Assertions.assertThat(exception.getMessage()).isEqualTo(message);
         Assertions.assertThat(exception.getCause()).isEqualTo(cause);
     }

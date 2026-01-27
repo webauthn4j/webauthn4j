@@ -10,9 +10,14 @@ class AAGUIDTest {
 
     @Test
     void constructor_for_string_test() {
-        AAGUID aaguid = new AAGUID("f1ff13a4-2e00-4984-97e2-def33de3ddf8");
+        // Given
+        String uuidString = "f1ff13a4-2e00-4984-97e2-def33de3ddf8";
+
+        // When
+        AAGUID aaguid = new AAGUID(uuidString);
         AAGUID aaguidFromNull = new AAGUID((String) null);
 
+        // Then
         assertAll(
                 () -> assertThat(aaguid).isNotNull(),
                 () -> assertThat(aaguidFromNull).isNotNull(),
@@ -22,9 +27,14 @@ class AAGUIDTest {
 
     @Test
     void constructor_for_bytes_test() {
-        AAGUID aaguid = new AAGUID(new byte[16]);
+        // Given
+        byte[] bytes = new byte[16];
+
+        // When
+        AAGUID aaguid = new AAGUID(bytes);
         AAGUID aaguidFromNull = new AAGUID((String) null);
 
+        // Then
         assertAll(
                 () -> assertThat(aaguid).isNotNull(),
                 () -> assertThat(aaguidFromNull).isNotNull(),
@@ -34,14 +44,20 @@ class AAGUIDTest {
 
     @Test
     void getValue_test() {
+        // When
+        // Then
         assertThat(AAGUID.ZERO.getValue()).isEqualTo(UUIDUtil.fromBytes(new byte[16]));
     }
 
     @Test
     void equals_hashCode_test() {
-        AAGUID instanceA = new AAGUID("f1ff13a4-2e00-4984-97e2-def33de3ddf8");
-        AAGUID instanceB = new AAGUID("f1ff13a4-2e00-4984-97e2-def33de3ddf8");
+        // Given
+        String uuidString = "f1ff13a4-2e00-4984-97e2-def33de3ddf8";
+        AAGUID instanceA = new AAGUID(uuidString);
+        AAGUID instanceB = new AAGUID(uuidString);
 
+        // When
+        // Then
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)

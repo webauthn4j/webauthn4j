@@ -39,20 +39,31 @@ class FIDOU2FAttestationStatementTest {
 
     @Test
     void constructor_with_null_x5c_test() {
+        // When
+        // Then
         assertThatThrownBy(() -> new FIDOU2FAttestationStatement(null, new byte[0])).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void constructor_with_null_signature_test() {
+        // Given
         AttestationCertificatePath attestationCertificatePath = TestAttestationUtil.load2tierTestAttestationCertificatePath();
+
+        // When
+        // Then
         assertThatThrownBy(() -> new FIDOU2FAttestationStatement(attestationCertificatePath, null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void getter_setter_test() {
+        // Given
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(Collections.emptyList());
         byte[] signature = new byte[32];
+
+        // When
         FIDOU2FAttestationStatement target = new FIDOU2FAttestationStatement(attestationCertificatePath, signature);
+
+        // Then
         assertAll(
                 () -> assertThat(target.getX5c()).isEqualTo(attestationCertificatePath),
                 () -> assertThat(target.getSig()).isEqualTo(signature)
@@ -61,21 +72,29 @@ class FIDOU2FAttestationStatementTest {
 
     @Test
     void getFormat_test() {
+        // Given
         FIDOU2FAttestationStatement target = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
+
+        // When
+        // Then
         assertThat(target.getFormat()).isEqualTo("fido-u2f");
     }
 
 
     @Test
     void equals_test() {
+        // Given
         FIDOU2FAttestationStatement instanceA = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
 
+        // When
+        // Then
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     void equals_test_with_not_equal_certificates() {
+        // Given
         FIDOU2FAttestationStatement instanceA = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(
                 new AttestationCertificatePath(Collections.singletonList(TestAttestationUtil.loadFirefoxSWTokenAttestationCertificate()))
         );
@@ -83,36 +102,52 @@ class FIDOU2FAttestationStatementTest {
                 new AttestationCertificatePath(Collections.singletonList(TestAttestationUtil.load2tierTestAuthenticatorAttestationCertificate()))
         );
 
+        // When
+        // Then
         assertThat(instanceA).isNotEqualTo(instanceB);
     }
 
     @Test
     void hashCode_test() {
+        // Given
         FIDOU2FAttestationStatement instanceA = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
 
+        // When
+        // Then
         assertThat(instanceA).hasSameHashCodeAs(instanceB);
     }
 
     @Test
     void hashCode_test_with_not_equal_certificates() {
+        // Given
         FIDOU2FAttestationStatement instanceA = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(
                 new AttestationCertificatePath(Collections.singletonList(TestAttestationUtil.loadFeitianU2FTokenAttestationCertificate()))
         );
 
+        // When
+        // Then
         assertThat(instanceA.hashCode()).isNotEqualTo(instanceB.hashCode());
     }
 
     @Test
     void validate_test() {
+        // Given
         FIDOU2FAttestationStatement instance = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
+
+        // When
+        // Then
         instance.validate();
     }
 
     @Test
     void validate_with_empty_x5c_test() {
+        // Given
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(new AttestationCertificatePath(Collections.emptyList()), new byte[0]);
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 instance::validate
         );
@@ -120,11 +155,15 @@ class FIDOU2FAttestationStatementTest {
 
     @Test
     void validate_with_two_certificates_x5c_test() {
+        // Given
         FIDOU2FAttestationStatement instance =
                 new FIDOU2FAttestationStatement(
                         new AttestationCertificatePath(Arrays.asList(mock(X509Certificate.class), mock(X509Certificate.class))),
                         new byte[0]
                 );
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 instance::validate
         );

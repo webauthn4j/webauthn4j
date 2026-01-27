@@ -37,36 +37,37 @@ class HMACSecretAuthenticatorInputDeserializerTest {
 
     @Test
     void shouldDeserializeHMACCreateSecret() {
-        //Given
+        // Given
         String json = "{\"hmac-secret\": true }";
 
-        //When
+        // When
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> createExtensions =
                 jsonMapper.readValue(json, new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){});
 
-        //Then
+        // Then
         assertThat(createExtensions.getHMACCreateSecret()).isTrue();
     }
 
     @Test
     void shouldDeserializeHMACGetSecret() {
-        //Given
+        // Given
         String json = "{\"hmac-secret\": {} }";
 
-        //When
+        // When
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> getExtensions =
                 jsonMapper.readValue(json, new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){});
 
-        //Then
+        // Then
         assertThat(getExtensions.getHMACGetSecret()).isNotNull();
     }
 
     @Test
     void shouldThrowExceptionForInvalidInput() {
-        //Given
+        // Given
         String invalidJson = "{invalid-json}";
 
-        //Then
+        // When
+        // Then
         assertThatThrownBy(() -> jsonMapper.readValue(invalidJson,
             new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){}))
                 .isInstanceOf(StreamReadException.class);
@@ -74,8 +75,12 @@ class HMACSecretAuthenticatorInputDeserializerTest {
 
     @Test
     void shouldThrowExceptionForNullInput() {
-        //Then
-        assertThatThrownBy(() -> jsonMapper.readValue((String)null,
+        // Given
+        String input = null;
+
+        // When
+        // Then
+        assertThatThrownBy(() -> jsonMapper.readValue(input,
             new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>(){}))
                 .isInstanceOf(IllegalArgumentException.class);
     }

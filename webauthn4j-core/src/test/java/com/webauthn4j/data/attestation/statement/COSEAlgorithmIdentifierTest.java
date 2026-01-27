@@ -34,6 +34,8 @@ class COSEAlgorithmIdentifierTest {
 
     @Test
     void create_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.create(-257)).isEqualTo(COSEAlgorithmIdentifier.RS256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-258)).isEqualTo(COSEAlgorithmIdentifier.RS384),
@@ -51,6 +53,8 @@ class COSEAlgorithmIdentifierTest {
 
     @Test
     void create_with_SignatureAlgorithm_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS1)).isEqualTo(COSEAlgorithmIdentifier.RS1),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS256)).isEqualTo(COSEAlgorithmIdentifier.RS256),
@@ -68,6 +72,8 @@ class COSEAlgorithmIdentifierTest {
 
     @Test
     void toString_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.RS1).hasToString("RS1"),
                 () -> assertThat(COSEAlgorithmIdentifier.RS256).hasToString("RS256"),
@@ -85,46 +91,79 @@ class COSEAlgorithmIdentifierTest {
 
     @Test
     void getValue_test() {
+        // When
+        // Then
         assertThat(COSEAlgorithmIdentifier.RS256.getValue()).isEqualTo(-257);
     }
 
 
     @Test
     void invalid_data_toSignatureAlgorithm_test() {
+        // Given
         COSEAlgorithmIdentifier coseAlgorithmIdentifier = COSEAlgorithmIdentifier.create(-16);
+
+        // When
+        // Then
         assertThatThrownBy(coseAlgorithmIdentifier::toSignatureAlgorithm).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void deserialize_test() {
-        TestDTO dto = jsonMapper.readValue("{\"cose_alg_id\":-257}", TestDTO.class);
+        // Given
+        String json = "{\"cose_alg_id\":-257}";
+
+        // When
+        TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
+
+        // Then
         assertThat(dto.cose_alg_id).isEqualTo(COSEAlgorithmIdentifier.RS256);
     }
 
     @Test
     void deserialize_test_with_non_predefined_value() {
+        // Given
+        String json = "{\"cose_alg_id\":0}";
+
+        // When
+        // Then
         assertDoesNotThrow(
-                () -> jsonMapper.readValue("{\"cose_alg_id\":0}", TestDTO.class)
+                () -> jsonMapper.readValue(json, TestDTO.class)
         );
     }
 
     @Test
     void deserialize_test_with_empty_string_value() {
+        // Given
+        String json = "{\"cose_alg_id\": \"\"}";
+
+        // When
+        // Then
         assertThatThrownBy(
-                () -> jsonMapper.readValue("{\"cose_alg_id\": \"\"}", TestDTO.class)
+                () -> jsonMapper.readValue(json, TestDTO.class)
         ).isInstanceOf(InvalidFormatException.class);
     }
 
     @Test
     void deserialize_test_with_invalid_value() {
+        // Given
+        String json = "{\"cose_alg_id\": \"invalid\"}";
+
+        // When
+        // Then
         assertThatThrownBy(
-                () -> jsonMapper.readValue("{\"cose_alg_id\": \"invalid\"}", TestDTO.class)
+                () -> jsonMapper.readValue(json, TestDTO.class)
         ).isInstanceOf(InvalidFormatException.class);
     }
 
     @Test
     void deserialize_test_with_null() {
-        TestDTO data = jsonMapper.readValue("{\"cose_alg_id\":null}", TestDTO.class);
+        // Given
+        String json = "{\"cose_alg_id\":null}";
+
+        // When
+        TestDTO data = jsonMapper.readValue(json, TestDTO.class);
+
+        // Then
         assertThat(data.cose_alg_id).isNull();
     }
 

@@ -40,6 +40,9 @@ class CoreCredentialRecordImplTest {
 
     @Test
     void shouldCreateCoreCredentialRecordWithExplicitParameters() {
+        // Given
+
+        // When
         CoreCredentialRecord coreCredentialRecord = new CoreCredentialRecordImpl(
                 attestationStatement,
                 flagUV,
@@ -50,6 +53,7 @@ class CoreCredentialRecordImplTest {
                 extensions
         );
 
+        // Then
         assertAll(
                 () -> assertThat(coreCredentialRecord.isUvInitialized()).isEqualTo(flagUV),
                 () -> assertThat(coreCredentialRecord.isBackupEligible()).isEqualTo(flagBE),
@@ -62,8 +66,12 @@ class CoreCredentialRecordImplTest {
 
     @Test
     void shouldCreateCoreCredentialRecordFromAttestationObject() {
+        // Given
+
+        // When
         CoreCredentialRecord coreCredentialRecord = new CoreCredentialRecordImpl(attestationObject);
 
+        // Then
         assertAll(
                 () -> assertThat(coreCredentialRecord.isUvInitialized()).isEqualTo(flagUV),
                 () -> assertThat(coreCredentialRecord.isBackupEligible()).isEqualTo(flagBE),
@@ -76,13 +84,16 @@ class CoreCredentialRecordImplTest {
 
     @Test
     void shouldUpdatePropertiesViaSetters() {
+        // Given
         CoreCredentialRecord coreCredentialRecord = new CoreCredentialRecordImpl(attestationObject);
 
+        // When
         coreCredentialRecord.setUvInitialized(true);
         coreCredentialRecord.setBackupEligible(true);
         coreCredentialRecord.setBackedUp(true);
         coreCredentialRecord.setCounter(100);
 
+        // Then
         assertAll(
                 () -> assertThat(coreCredentialRecord.isUvInitialized()).isTrue(),
                 () -> assertThat(coreCredentialRecord.isBackupEligible()).isTrue(),
@@ -93,9 +104,12 @@ class CoreCredentialRecordImplTest {
 
     @Test
     void shouldBeEqualWhenConstructedFromSameAttestationObject() {
+        // Given
         CoreCredentialRecord instanceA = new CoreCredentialRecordImpl(attestationObject);
         CoreCredentialRecord instanceB = new CoreCredentialRecordImpl(attestationObject);
 
+        // When
+        // Then
         assertThat(instanceA)
                 .isEqualTo(instanceB)
                 .hasSameHashCodeAs(instanceB);

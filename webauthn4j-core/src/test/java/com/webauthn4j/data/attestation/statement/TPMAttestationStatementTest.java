@@ -30,12 +30,14 @@ class TPMAttestationStatementTest {
 
     @Test
     void constructor_test() {
-
+        // Given
         RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
 
+        // When
         TPMAttestationStatement tpmAttestationStatement = new TPMAttestationStatement(source.getAlg(), source.getX5c(), source.getSig(), source.getCertInfo(), source.getPubArea());
 
+        // Then
         assertAll(
                 () -> assertThat(tpmAttestationStatement.getAlg()).isEqualTo(source.getAlg()),
                 () -> assertThat(tpmAttestationStatement.getX5c()).isEqualTo(source.getX5c()),
@@ -47,21 +49,26 @@ class TPMAttestationStatementTest {
 
     @Test
     void validate_test() {
-
+        // Given
         RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
         TPMAttestationStatement tpmAttestationStatement = new TPMAttestationStatement(source.getAlg(), new AttestationCertificatePath(), source.getSig(), source.getCertInfo(), source.getPubArea());
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class, tpmAttestationStatement::validate);
     }
 
     @Test
     void equals_hashCode_test() {
-
+        // Given
         RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement instanceA = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
         RegistrationObject registrationObjectB = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement instanceB = (TPMAttestationStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
 
+        // When
+        // Then
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)

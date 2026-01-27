@@ -32,6 +32,8 @@ class TPMIAlgPublicTest {
 
     @Test
     void create_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(TPMIAlgPublic.create(0x0)).isEqualTo(TPMIAlgPublic.TPM_ALG_ERROR),
                 () -> assertThat(TPMIAlgPublic.create(0x1)).isEqualTo(TPMIAlgPublic.TPM_ALG_RSA),
@@ -43,20 +45,33 @@ class TPMIAlgPublicTest {
 
     @Test
     void create_with_invalid_value_test() {
+        // When
+        // Then
         assertThatThrownBy(() -> TPMIAlgPublic.create(0x2)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonMapper.readValue("{\"tpmi_alg_pub\":24}", TestDTO.class);
+        // Given
+        String json = "{\"tpmi_alg_pub\":24}";
+
+        // When
+        TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
+
+        // Then
         assertThat(dto.tpmi_alg_pub).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
+        // Given
+        String json = "{\"tpmi_alg_pub\":-1}";
+
+        // When
+        // Then
         assertThrows(InvalidFormatException.class,
-                () -> jsonMapper.readValue("{\"tpmi_alg_pub\":-1}", TestDTO.class)
+                () -> jsonMapper.readValue(json, TestDTO.class)
         );
     }
 

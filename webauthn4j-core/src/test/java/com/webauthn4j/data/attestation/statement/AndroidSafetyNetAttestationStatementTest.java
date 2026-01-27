@@ -35,6 +35,8 @@ class AndroidSafetyNetAttestationStatementTest {
 
     @Test
     void constructor_test(@Mock JWS<Response> jwsMock) {
+        // When
+        // Then
         assertAll(
                 () -> assertThatThrownBy(() -> new AndroidSafetyNetAttestationStatement("dummy", null)).isInstanceOf(IllegalArgumentException.class),
                 () -> assertThatThrownBy(() -> new AndroidSafetyNetAttestationStatement(null, jwsMock)).isInstanceOf(IllegalArgumentException.class),
@@ -44,27 +46,38 @@ class AndroidSafetyNetAttestationStatementTest {
 
     @Test
     void validate_test(@Mock JWS<Response> jwsMock, @Mock JWSHeader header) {
+        // Given
         when(jwsMock.getHeader()).thenReturn(header);
         AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement("dummy", jwsMock);
+
+        // When
+        // Then
         assertThatThrownBy(attestationStatement::validate).isInstanceOf(ConstraintViolationException.class);
     }
 
     @SuppressWarnings("unchecked")
     @Test
     void getX5c_with_x5cHeader_x5c_null_test() {
+        // Given
         JWS<Response> jws = mock(JWS.class);
         JWSHeader jwsHeader = mock(JWSHeader.class);
         when(jws.getHeader()).thenReturn(jwsHeader);
         when(jwsHeader.getX5c()).thenReturn(null);
         AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement("dummy", jws);
+
+        // When
+        // Then
         assertThat(attestationStatement.getX5c()).isNull();
     }
 
     @Test
     void equals_hashCode_test(@Mock JWS<Response> jwsMock) {
+        // Given
         AndroidSafetyNetAttestationStatement instanceA = new AndroidSafetyNetAttestationStatement("dummy", jwsMock);
         AndroidSafetyNetAttestationStatement instanceB = new AndroidSafetyNetAttestationStatement("dummy", jwsMock);
 
+        // When
+        // Then
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)

@@ -14,7 +14,7 @@ class ByteArrayBase64ConverterModuleTest {
 
     @Test
     void shouldConvertBase64EncodedByteArray(){
-        //Given
+        // Given
         ObjectConverter objectConverter = new ObjectConverter();
         JsonMapper jsonMapper = objectConverter.getJsonMapper().rebuild()
                 .addModule(new ByteArrayBase64ConverterModule())
@@ -22,7 +22,8 @@ class ByteArrayBase64ConverterModuleTest {
         byte[] source = TPMISTAttest.TPM_ST_ATTEST_CERTIFY.getValue();
         String json = "{\"tpmi_st_attest\":\"" + Base64.getEncoder().encodeToString(source) + "\"}";
 
-        //When/Then
+        // When
+        // Then
         assertThatCode(() -> jsonMapper.readValue(json, TestDTO.class)).doesNotThrowAnyException();
     }
 

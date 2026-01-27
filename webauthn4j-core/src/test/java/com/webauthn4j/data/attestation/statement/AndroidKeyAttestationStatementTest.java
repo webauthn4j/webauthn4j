@@ -29,8 +29,13 @@ class AndroidKeyAttestationStatementTest {
 
     @Test
     void constructor_test() {
+        // Given
         AttestationCertificatePath certificatePath = new AttestationCertificatePath();
+
+        // When
         new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], certificatePath).validate();
+
+        // Then
         assertAll(
                 () -> assertThatThrownBy(() -> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null)).isInstanceOf(IllegalArgumentException.class),
                 () -> assertThatThrownBy(() -> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, null, certificatePath)).isInstanceOf(IllegalArgumentException.class),
@@ -40,11 +45,14 @@ class AndroidKeyAttestationStatementTest {
 
     @Test
     void equals_hashCode_test() {
+        // Given
         RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         AndroidKeyAttestationStatement instanceA = (AndroidKeyAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
         RegistrationObject registrationObjectB = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         AndroidKeyAttestationStatement instanceB = (AndroidKeyAttestationStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
 
+        // When
+        // Then
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)

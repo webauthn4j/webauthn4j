@@ -32,6 +32,8 @@ class COSEKeyTypeTest {
 
     @Test
     void create_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(COSEKeyType.create(0)).isEqualTo(COSEKeyType.RESERVED),
                 () -> assertThat(COSEKeyType.create(1)).isEqualTo(COSEKeyType.OKP),
@@ -44,20 +46,33 @@ class COSEKeyTypeTest {
 
     @Test
     void getValueTest() {
+        // When
+        // Then
         assertThat(COSEKeyType.OKP.getValue()).isEqualTo(1);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonMapper.readValue("{\"cose_key_type\":0}", TestDTO.class);
+        // Given
+        String json = "{\"cose_key_type\":0}";
+
+        // When
+        TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
+
+        // Then
         assertThat(dto.cose_key_type).isEqualTo(COSEKeyType.RESERVED);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
+        // Given
+        String json = "{\"cose_key_type\":-1}";
+
+        // When
+        // Then
         assertThrows(InvalidFormatException.class,
-                () -> jsonMapper.readValue("{\"cose_key_type\":-1}", TestDTO.class)
+                () -> jsonMapper.readValue(json, TestDTO.class)
         );
     }
 

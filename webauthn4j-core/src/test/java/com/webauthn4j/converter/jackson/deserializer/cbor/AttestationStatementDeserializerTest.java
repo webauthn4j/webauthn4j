@@ -38,14 +38,14 @@ class AttestationStatementDeserializerTest {
 
     @Test
     void shouldDeserializeAttestationStatement() {
-        //Given
+        // Given
         AttestationStatement source = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
 
-        //When
+        // When
         byte[] data = cborMapper.writeValueAsBytes(source);
         AttestationStatement obj = cborMapper.readValue(data, FIDOU2FAttestationStatement.class);
 
-        //Then
+        // Then
         assertAll(
                 () -> assertThat(obj).isInstanceOf(FIDOU2FAttestationStatement.class),
                 () -> assertThat(obj).isEqualTo(source)
@@ -54,18 +54,23 @@ class AttestationStatementDeserializerTest {
 
     @Test
     void shouldThrowExceptionForInvalidInput() {
-        //Given
+        // Given
         byte[] invalidCbor = new byte[]{0x00, 0x01, 0x02}; // Invalid CBOR data
 
-        //Then
+        // When
+        // Then
         assertThatThrownBy(() -> cborMapper.readValue(invalidCbor, FIDOU2FAttestationStatement.class))
                 .isInstanceOf(MismatchedInputException.class);
     }
 
     @Test
     void shouldThrowExceptionForNullInput() {
-        //Then
-        assertThatThrownBy(() -> cborMapper.readValue((byte[])null, FIDOU2FAttestationStatement.class))
+        // Given
+        byte[] input = null;
+
+        // When
+        // Then
+        assertThatThrownBy(() -> cborMapper.readValue(input, FIDOU2FAttestationStatement.class))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

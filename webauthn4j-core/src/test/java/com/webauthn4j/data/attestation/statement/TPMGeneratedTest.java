@@ -32,6 +32,8 @@ class TPMGeneratedTest {
 
     @Test
     void create() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(TPMGenerated.create(new byte[]{(byte) 0xff, (byte) 0x54, (byte) 0x43, (byte) 0x47})).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE),
                 () -> assertThrows(IllegalArgumentException.class,
@@ -42,15 +44,25 @@ class TPMGeneratedTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
+        // Given
         byte[] source = new byte[]{(byte) 0xff, (byte) 0x54, (byte) 0x43, (byte) 0x47};
-        TestDTO dto = jsonMapper.readValue("{\"tpm_generated\":\"" + Base64UrlUtil.encodeToString(source) + "\"}", TestDTO.class);
+        String json = "{\"tpm_generated\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
+
+        // When
+        TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
+
+        // Then
         assertThat(dto.tpm_generated).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
+        // Given
         byte[] source = new byte[]{(byte) 0xff, (byte) 0xaa, (byte) 0xff, (byte) 0xaa};
         String sourceString = "{\"tpm_generated\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
+
+        // When
+        // Then
         assertThrows(InvalidFormatException.class,
                 () -> jsonMapper.readValue(sourceString, TestDTO.class)
         );

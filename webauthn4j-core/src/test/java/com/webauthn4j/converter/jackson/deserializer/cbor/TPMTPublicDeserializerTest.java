@@ -34,24 +34,25 @@ class TPMTPublicDeserializerTest {
 
     @Test
     void shouldDeserializeTPMTPublic() {
-        //Given
+        // Given
         String input = "AAEACwAGBHIAIJ3/y/NsODrmmfuYaNxty4nXFTiEvigDkiwSQVi/rSKuABAAEAgAAAAAAAEAxdpvTZNXveIC9cVYzQoxVtJU8uCtmrV5MfmCa3R94axPKdYHCHTc5XkQ4ZhESZ2OQkcDObFw0CK1AauI6cL07TAuRxnHDevohCQD7ZvfwicwphobcPYWxfG3AMrPeEYTfcSy1Gmo4VqrT62GVwhAItKPRNkHUyMSa3AHyYGTn99yTK9PvkdQQEMaTqBkQwvLLPrX0Fvbn2S1sOCVLs+GeSc9bG36gWAfFFAzFqE9B4LDGj5r3e09e8Rrwfqb7w3/g7ferxRrWCxGRIIaPGLtuqa+QivwTkPtr1/TeDCGFT1zYaIDBhpimKsm4TN8ocntBnQaWQVHeYjnIDBOrhidfw";
         byte[] inputBytes = Base64Util.decode(input);
 
-        //When
+        // When
         TPMTPublic value = deserializer.deserialize(inputBytes);
 
-        //Then
+        // Then
         assertThat(value.getBytes()).isEqualTo(inputBytes);
     }
 
     @Disabled
     @Test
     void shouldThrowExceptionForInvalidInput() {
-        //Given
+        // Given
         byte[] invalidBytes = new byte[]{0x00, 0x01, 0x02}; // Invalid data
 
-        //Then
+        // When
+        // Then
         assertThatThrownBy(() -> deserializer.deserialize(invalidBytes))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -59,8 +60,12 @@ class TPMTPublicDeserializerTest {
     @Disabled
     @Test
     void shouldThrowExceptionForNullInput() {
-        //Then
-        assertThatThrownBy(() -> deserializer.deserialize(null))
+        // Given
+        byte[] input = null;
+
+        // When
+        // Then
+        assertThatThrownBy(() -> deserializer.deserialize(input))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

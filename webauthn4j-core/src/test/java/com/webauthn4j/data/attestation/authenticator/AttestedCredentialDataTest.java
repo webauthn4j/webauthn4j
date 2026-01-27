@@ -32,7 +32,11 @@ class AttestedCredentialDataTest {
      */
     @Test
     void constructor_test() {
+        // Given
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
+
+        // When
+        // Then
         assertAll(
                 () -> assertThat(attestedCredentialData.getCredentialId()).isNotNull(),
                 () -> assertThat(attestedCredentialData.getAaguid()).isNotNull(),
@@ -42,8 +46,12 @@ class AttestedCredentialDataTest {
 
     @Test
     void equals_hashCode_test() {
+        // Given
         AttestedCredentialData instanceA = TestDataUtil.createAttestedCredentialData();
         AttestedCredentialData instanceB = TestDataUtil.createAttestedCredentialData();
+
+        // When
+        // Then
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)

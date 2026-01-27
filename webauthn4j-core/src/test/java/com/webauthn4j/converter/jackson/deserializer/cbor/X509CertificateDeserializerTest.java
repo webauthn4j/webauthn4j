@@ -41,46 +41,51 @@ class X509CertificateDeserializerTest {
 
     @Test
     void shouldDeserializeX509Certificate() throws CertificateEncodingException {
-        //Given
+        // Given
         Map<String, byte[]> source = new HashMap<>();
         source.put("certificate", TestAttestationUtil.load2tierTestAuthenticatorAttestationCertificate().getEncoded());
         byte[] input = cborMapper.writeValueAsBytes(source);
 
-        //When
+        // When
         X509CertificateDeserializerTestData result = cborMapper.readValue(input, X509CertificateDeserializerTestData.class);
 
-        //Then
+        // Then
         assertThat(result.getCertificate()).isInstanceOf(X509Certificate.class);
     }
 
     @Test
     void shouldReturnNullForEmptyByteArray() {
-        //Given
+        // Given
         Map<String, byte[]> source = new HashMap<>();
         source.put("certificate", new byte[0]);
         byte[] input = cborMapper.writeValueAsBytes(source);
 
-        //When
+        // When
         X509CertificateDeserializerTestData result = cborMapper.readValue(input, X509CertificateDeserializerTestData.class);
 
-        //Then
+        // Then
         assertThat(result.getCertificate()).isNull();
     }
 
     @Test
     void shouldThrowExceptionForInvalidInput() {
-        //Given
+        // Given
         byte[] invalidCbor = new byte[]{0x00, 0x01, 0x02}; // Invalid CBOR data
 
-        //Then
+        // When
+        // Then
         assertThatThrownBy(() -> cborMapper.readValue(invalidCbor, X509CertificateDeserializerTestData.class))
                 .isInstanceOf(MismatchedInputException.class);
     }
 
     @Test
     void shouldThrowExceptionForNullInput() {
-        //Then
-        assertThatThrownBy(() -> cborMapper.readValue((byte[])null, X509CertificateDeserializerTestData.class))
+        // Given
+        byte[] input = null;
+
+        // When
+        // Then
+        assertThatThrownBy(() -> cborMapper.readValue(input, X509CertificateDeserializerTestData.class))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

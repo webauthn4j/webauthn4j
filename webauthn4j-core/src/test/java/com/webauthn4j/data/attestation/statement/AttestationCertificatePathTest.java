@@ -26,14 +26,22 @@ class AttestationCertificatePathTest {
 
     @Test
     void getEndEntityCertificate_test() {
+        // Given
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(TestAttestationUtil.load2tierTestAttestationCertificatePath());
+
+        // When
+        // Then
         assertThat(attestationCertificatePath.getEndEntityAttestationCertificate()).isEqualTo(attestationCertificatePath.getEndEntityAttestationCertificate());
     }
 
     @Test
     void getEndEntityCertificate_test_with_no_certificates() {
+        // Given
         //noinspection MismatchedQueryAndUpdateOfCollection
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath();
+
+        // When
+        // Then
         assertThrows(IllegalStateException.class,
                 attestationCertificatePath::getEndEntityAttestationCertificate
         );
