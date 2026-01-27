@@ -35,7 +35,11 @@ class AttestationCertificateTest {
 
     @Test
     void getter_test() {
+        // Given
         AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
+
+        // When
+        // Then
         assertAll(
                 () -> assertThat(attestationCertificate.getSubjectCountry()).isEqualTo("JP"),
                 () -> assertThat(attestationCertificate.getSubjectOrganization()).isEqualTo("SharpLab."),
@@ -46,7 +50,11 @@ class AttestationCertificateTest {
 
     @Test
     void getter_with_illegal_data_authenticator_test() {
+        // Given
         AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.loadEWBMGoldengateG310Certificate());
+
+        // When
+        // Then
         assertThat(attestationCertificate.getSubjectCountry()).isEqualTo("KR");
         assertThat(attestationCertificate.getSubjectOrganization()).isEqualTo("eWBM Co., Ltd.");
         assertThat(attestationCertificate.getSubjectOrganizationUnit()).isEqualTo("Authenticator Attestation");
@@ -55,21 +63,33 @@ class AttestationCertificateTest {
 
     @Test
     void getValue_with_invalid_subjectDN_test() {
+        // Given
         AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
+
+        // When
+        // Then
         assertThat(attestationCertificate.getValue("Invalid DN")).isNull();
     }
 
     @Test
     void validate_test() {
+        // Given
         AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
+
+        // When
+        // Then
         attestationCertificate.validate();
     }
 
     @Test
     void validate_with_invalid_version_certificate_test() {
+        // Given
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(2); //v2
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
+
+        // When
+        // Then
         assertThrows(CertificateException.class,
                 attestationCertificate::validate
         );
@@ -84,10 +104,14 @@ class AttestationCertificateTest {
             "OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, C=JP"
     })
     void validate_with_invalid_certificate_parameterized_test(String principal) {
+        // Given
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
         when(certificate.getSubjectX500Principal()).thenReturn(new X500Principal(principal));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
+
+        // When
+        // Then
         assertThrows(CertificateException.class,
                 attestationCertificate::validate
         );
@@ -95,14 +119,15 @@ class AttestationCertificateTest {
 
     @Test
     void equals_hashCode_test() {
+        // Given
         AttestationCertificate attestationCertificateA = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
         AttestationCertificate attestationCertificateB = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
 
+        // When
+        // Then
         assertAll(
                 () -> assertThat(attestationCertificateA).isEqualTo(attestationCertificateB),
                 () -> assertThat(attestationCertificateA).hasSameHashCodeAs(attestationCertificateB)
         );
     }
-
-
 }

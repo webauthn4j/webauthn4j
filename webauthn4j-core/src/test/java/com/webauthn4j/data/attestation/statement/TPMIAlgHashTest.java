@@ -31,6 +31,8 @@ class TPMIAlgHashTest {
 
     @Test
     void create_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(TPMIAlgHash.create(0x0)).isEqualTo(TPMIAlgHash.TPM_ALG_ERROR),
                 () -> assertThat(TPMIAlgHash.create(0x04)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA1),
@@ -43,6 +45,8 @@ class TPMIAlgHashTest {
 
     @Test
     void create_with_invalid_value_test() {
+        // When
+        // Then
         //noinspection ResultOfMethodCallIgnored
         assertThrows(IllegalArgumentException.class,
                 () -> TPMIAlgHash.create(0x2)
@@ -52,14 +56,25 @@ class TPMIAlgHashTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonMapper.readValue("{\"tpmi_alg_hash\":11}", TestDTO.class);
+        // Given
+        String json = "{\"tpmi_alg_hash\":11}";
+
+        // When
+        TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
+
+        // Then
         assertThat(dto.tpmi_alg_hash).isEqualTo(TPMIAlgHash.TPM_ALG_SHA256);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
+        // Given
+        String json = "{\"tpmi_alg_hash\":-1}";
+
+        // When
+        // Then
         assertThrows(InvalidFormatException.class,
-                () -> jsonMapper.readValue("{\"tpmi_alg_hash\":-1}", TestDTO.class)
+                () -> jsonMapper.readValue(json, TestDTO.class)
         );
     }
 

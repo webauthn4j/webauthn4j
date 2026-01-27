@@ -35,6 +35,8 @@ class TPMEccCurveTest {
 
     @Test
     void create_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(TPMEccCurve.create(0x0000)).isEqualTo(TPMEccCurve.TPM_ECC_NONE),
                 () -> assertThat(TPMEccCurve.create(0x0001)).isEqualTo(TPM_ECC_NIST_P192),
@@ -50,36 +52,55 @@ class TPMEccCurveTest {
 
     @Test
     void create_with_invalid_value_test() {
+        // When
+        // Then
         //noinspection ResultOfMethodCallIgnored
         assertThatThrownBy(() -> TPMEccCurve.create(0xFFFF)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void getBytes_test() {
+        // When
+        // Then
         assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getBytes()).isEqualTo(new byte[]{0x00, 0x03});
     }
 
     @Test
     void getValue_test() {
+        // When
+        // Then
         assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getValue()).isEqualTo(3);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonMapper.readValue("{\"tpm_ecc_curve\":3}", TestDTO.class);
+        // Given
+        String json = "{\"tpm_ecc_curve\":3}";
+
+        // When
+        TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
+
+        // Then
         assertThat(dto.tpm_ecc_curve).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
+        // Given
+        String json = "{\"tpm_ecc_curve\":-1}";
+
+        // When
+        // Then
         assertThrows(InvalidFormatException.class,
-                () -> jsonMapper.readValue("{\"tpm_ecc_curve\":-1}", TestDTO.class)
+                () -> jsonMapper.readValue(json, TestDTO.class)
         );
     }
 
     @Test
     void getEllipticCurve() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getEllipticCurve()).isEqualTo(ECUtil.P_256_SPEC.getCurve()),
                 () -> assertThat(TPMEccCurve.TPM_ECC_NIST_P384.getEllipticCurve()).isEqualTo(ECUtil.P_384_SPEC.getCurve()),

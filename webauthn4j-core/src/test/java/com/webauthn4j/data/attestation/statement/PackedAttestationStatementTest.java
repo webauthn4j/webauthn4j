@@ -26,14 +26,22 @@ class PackedAttestationStatementTest {
 
     @Test
     void validate_test() {
+        // Given
         PackedAttestationStatement packedAttestationStatement = TestAttestationStatementUtil.createBasicPackedAttestationStatement();
+
+        // When
+        // Then
         packedAttestationStatement.validate();
     }
 
     @Test
     void equals_and_hashCode_test() {
+        // Given
         PackedAttestationStatement packedAttestationStatementA = TestAttestationStatementUtil.createBasicPackedAttestationStatement();
         PackedAttestationStatement packedAttestationStatementB = TestAttestationStatementUtil.createBasicPackedAttestationStatement();
+
+        // When
+        // Then
         assertAll(
                 () -> assertThat(packedAttestationStatementA).isEqualTo(packedAttestationStatementB),
                 () -> assertThat(packedAttestationStatementA).hasSameHashCodeAs(packedAttestationStatementB)

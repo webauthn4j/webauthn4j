@@ -32,6 +32,8 @@ class COSEKeyOperationTest {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void create_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(COSEKeyOperation.create(1)).isEqualTo(COSEKeyOperation.SIGN),
                 () -> assertThat(COSEKeyOperation.create(2)).isEqualTo(COSEKeyOperation.VERIFY),
@@ -54,20 +56,33 @@ class COSEKeyOperationTest {
 
     @Test
     void getValueTest() {
+        // When
+        // Then
         assertThat(COSEKeyOperation.SIGN.getValue()).isEqualTo(1);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonMapper.readValue("{\"cose_key_op\":1}", TestDTO.class);
+        // Given
+        String json = "{\"cose_key_op\":1}";
+
+        // When
+        TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
+
+        // Then
         assertThat(dto.cose_key_op).isEqualTo(COSEKeyOperation.SIGN);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
+        // Given
+        String json = "{\"cose_key_op\":0}";
+
+        // When
+        // Then
         assertThrows(InvalidFormatException.class,
-                () -> jsonMapper.readValue("{\"cose_key_op\":0}", TestDTO.class)
+                () -> jsonMapper.readValue(json, TestDTO.class)
         );
     }
 

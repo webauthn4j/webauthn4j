@@ -30,12 +30,13 @@ class JacksonUtilTest {
 
     @Test
     void shouldWrapJsonParseExceptionInDataConversionExceptionWhenReadingTree() {
-        //Given
+        // Given
         ObjectMapper objectMapper = mock(ObjectMapper.class);
         when(objectMapper.readTree((byte[]) any())).thenThrow(StreamReadException.class);
         byte[] value = new byte[0];
 
-        //When/Then
+        // When
+        // Then
         assertThatThrownBy(() -> JacksonUtil.readTree(objectMapper, value)).isInstanceOf(DataConversionException.class);
     }
 

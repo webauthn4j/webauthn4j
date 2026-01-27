@@ -35,6 +35,8 @@ class CurveTest {
 
     @Test
     void create_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1),
                 () -> assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1),
@@ -46,14 +48,21 @@ class CurveTest {
 
     @Test
     void deserialize_with_invalid_value_test() {
+        // Given
+        String input = "{\"value\": -1}";
+
+        // When
+        // Then
         assertThrows(InvalidFormatException.class,
-                () -> jsonMapper.readValue("{\"value\": -1}", CurveDto.class)
+                () -> jsonMapper.readValue(input, CurveDto.class)
         );
     }
 
     @SuppressWarnings("Since15")
     @Test
     void getParameterSpec_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(Curve.SECP256R1.getParameterSpec()).isEqualTo(ECUtil.P_256_SPEC),
                 () -> assertThat(Curve.SECP384R1.getParameterSpec()).isEqualTo(ECUtil.P_384_SPEC),
@@ -64,6 +73,8 @@ class CurveTest {
 
     @Test
     void toString_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(Curve.SECP256R1).hasToString("SECP256R1"),
                 () -> assertThat(Curve.SECP384R1).hasToString("SECP384R1"),

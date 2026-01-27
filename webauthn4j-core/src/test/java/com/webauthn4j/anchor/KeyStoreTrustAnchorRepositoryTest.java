@@ -52,44 +52,56 @@ class KeyStoreTrustAnchorRepositoryTest {
 
     @Test
     void shouldReturnAllTrustAnchorsRegardlessOfSearchParameters() {
-        // AAGUID-based lookup
-        Set<TrustAnchor> trustAnchorsFromAAGUID = target.find(new AAGUID(UUID.randomUUID()));
-        
-        // Key-identifier-based lookup
-        Set<TrustAnchor> trustAnchorsFromKeyId = target.find(new byte[32]);
-        
+        // Given
+        AAGUID aaguid = new AAGUID(UUID.randomUUID());
+        byte[] keyId = new byte[32];
+
+        // When
+        Set<TrustAnchor> trustAnchorsFromAAGUID = target.find(aaguid);
+        Set<TrustAnchor> trustAnchorsFromKeyId = target.find(keyId);
+
+        // Then
         assertAll(
-            () -> assertThat(trustAnchorsFromAAGUID).hasSize(1),
-            () -> assertThat(trustAnchorsFromKeyId).hasSize(1),
-            // All the results should be identical since this implementation returns all anchors
-            () -> assertThat(trustAnchorsFromAAGUID).isEqualTo(trustAnchorsFromKeyId)
+                () -> assertThat(trustAnchorsFromAAGUID).hasSize(1),
+                () -> assertThat(trustAnchorsFromKeyId).hasSize(1),
+                // All the results should be identical since this implementation returns all anchors
+                () -> assertThat(trustAnchorsFromAAGUID).isEqualTo(trustAnchorsFromKeyId)
         );
     }
 
     @Test
     void shouldCreateRepositoryFromKeyStoreObject() throws Exception {
+        // Given
         KeyStore keyStore = CertificateUtil.createKeyStore();
         keyStore.load(Files.newInputStream(keyStorePath), password.toCharArray());
-        
+
+        // When
         KeyStoreTrustAnchorRepository repository = new KeyStoreTrustAnchorRepository(keyStore);
         Set<TrustAnchor> trustAnchors = repository.find(new AAGUID(UUID.randomUUID()));
-        
+
+        // Then
         assertThat(trustAnchors).hasSize(1);
     }
 
     @Test
     void shouldThrowExceptionWhenKeyStoreFilePathIsInvalid() {
+        // Given
         Path invalidPath = Paths.get("invalid/path/to/keystore.jks");
-        
-        assertThatThrownBy(() -> 
-            KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(invalidPath, password)
+
+        // When/Then
+        assertThatThrownBy(() ->
+                KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(invalidPath, password)
         ).isInstanceOf(KeyStoreException.class);
     }
 
     @Test
     void shouldThrowExceptionWhenPasswordIsIncorrect() {
-        assertThatThrownBy(() -> 
-            KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(keyStorePath, "wrongPassword")
+        // Given
+        String wrongPassword = "wrongPassword";
+
+        // When/Then
+        assertThatThrownBy(() ->
+                KeyStoreTrustAnchorRepository.createFromKeyStoreFilePath(keyStorePath, wrongPassword)
         ).isInstanceOf(KeyStoreException.class);
     }
 

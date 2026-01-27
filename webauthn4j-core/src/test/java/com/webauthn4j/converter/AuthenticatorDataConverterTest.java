@@ -36,6 +36,7 @@ import java.util.Arrays;
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_ED;
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_UP;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -81,7 +82,7 @@ class AuthenticatorDataConverterTest {
 
         @Test
         void shouldConvertFromAuthenticatorDataWithExtensionBytesToAuthenticatorData(){
-            target.convert(HexUtil.decode(AUTHENTICATOR_DATA_WITH_EXTENSION));
+            assertThatCode(()->target.convert(HexUtil.decode(AUTHENTICATOR_DATA_WITH_EXTENSION))).doesNotThrowAnyException();
         }
 
         @Test

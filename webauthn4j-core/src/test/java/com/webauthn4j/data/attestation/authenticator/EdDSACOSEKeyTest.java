@@ -20,8 +20,13 @@ class EdDSACOSEKeyTest {
 
     @Test
     void publicKey_test(){
+        // Given
         KeyPair keyPair = EdDSAUtil.createKeyPair();
+
+        // When
         COSEKey coseKey = EdDSACOSEKey.create((EdECPublicKey) keyPair.getPublic());
+
+        // Then
         assertThat(coseKey.hasPublicKey()).isTrue();
         assertThat(coseKey.hasPrivateKey()).isFalse();
         assertThat(coseKey.getPublicKey()).isNotNull();
@@ -31,8 +36,13 @@ class EdDSACOSEKeyTest {
 
     @Test
     void privateKey_test(){
+        // Given
         KeyPair keyPair = EdDSAUtil.createKeyPair();
+
+        // When
         COSEKey coseKey = EdDSACOSEKey.create((EdECPrivateKey) keyPair.getPrivate());
+
+        // Then
         assertThat(coseKey.hasPublicKey()).isFalse();
         assertThat(coseKey.hasPrivateKey()).isTrue();
         assertThat(coseKey.getPublicKey()).isNull();
@@ -42,8 +52,13 @@ class EdDSACOSEKeyTest {
 
     @Test
     void keyPair_test(){
+        // Given
         KeyPair keyPair = EdDSAUtil.createKeyPair();
+
+        // When
         COSEKey coseKey = EdDSACOSEKey.create(keyPair);
+
+        // Then
         assertThat(coseKey.hasPublicKey()).isTrue();
         assertThat(coseKey.hasPrivateKey()).isTrue();
         assertThat(coseKey.getPublicKey()).isNotNull();
@@ -54,19 +69,28 @@ class EdDSACOSEKeyTest {
 
     @Test
     void getKeyType_test() {
+        // Given
         EdDSACOSEKey target = EdDSACOSEKey.create(EdDSAUtil.createKeyPair());
+
+        // When
+        // Then
         assertThat(target.getKeyType()).isEqualTo(COSEKeyType.OKP);
     }
 
     @Test
     void validate_test() {
+        // Given
         EdDSACOSEKey target = EdDSACOSEKey.create(EdDSAUtil.createKeyPair());
+
+        // When
+        // Then
         target.validate();
     }
 
 
     @Test
     void validate_with_null_curve_test() {
+        // Given
         EdDSACOSEKey instance = EdDSACOSEKey.create((EdECPublicKey) EdDSAUtil.createKeyPair().getPublic());
         EdDSACOSEKey target = new EdDSACOSEKey(
                 null,
@@ -76,6 +100,9 @@ class EdDSACOSEKeyTest {
                 instance.getX(),
                 instance.getD()
         );
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -83,6 +110,7 @@ class EdDSACOSEKeyTest {
 
     @Test
     void validate_with_non_Ed25519_curve_test() {
+        // Given
         EdDSACOSEKey instance = EdDSACOSEKey.create((EdECPublicKey) EdDSAUtil.createKeyPair().getPublic());
         EdDSACOSEKey target = new EdDSACOSEKey(
                 null,
@@ -92,6 +120,9 @@ class EdDSACOSEKeyTest {
                 instance.getX(),
                 instance.getD()
         );
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -99,6 +130,7 @@ class EdDSACOSEKeyTest {
 
     @Test
     void validate_with_null_x_and_null_d_test() {
+        // Given
         EdDSACOSEKey instance = EdDSACOSEKey.create((EdECPublicKey) EdDSAUtil.createKeyPair().getPublic());
         EdDSACOSEKey target = new EdDSACOSEKey(
                 null,
@@ -108,6 +140,9 @@ class EdDSACOSEKeyTest {
                 null,
                 null
         );
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -115,6 +150,7 @@ class EdDSACOSEKeyTest {
 
     @Test
     void validate_with_null_x_test() { //TODO: revisit
+        // Given
         EdDSACOSEKey instance = EdDSACOSEKey.create((EdECPublicKey) EdDSAUtil.createKeyPair().getPublic());
         EdDSACOSEKey target = new EdDSACOSEKey(
                 null,
@@ -124,6 +160,9 @@ class EdDSACOSEKeyTest {
                 null,
                 instance.getD()
         );
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -131,6 +170,7 @@ class EdDSACOSEKeyTest {
 
     @Test
     void validate_with_null_algorithm_test() {
+        // Given
         EdDSACOSEKey instance = EdDSACOSEKey.create((EdECPublicKey) EdDSAUtil.createKeyPair().getPublic());
         EdDSACOSEKey target = new EdDSACOSEKey(
                 null,
@@ -140,11 +180,15 @@ class EdDSACOSEKeyTest {
                 instance.getX(),
                 instance.getD()
         );
+
+        // When
+        // Then
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
     void validate_with_new_instance_EdDSA_algorithm_test() {
+        // Given
         EdDSACOSEKey instance = EdDSACOSEKey.create((EdECPublicKey) EdDSAUtil.createKeyPair().getPublic());
         EdDSACOSEKey target = new EdDSACOSEKey(
                 null,
@@ -154,11 +198,15 @@ class EdDSACOSEKeyTest {
                 instance.getX(),
                 instance.getD()
         );
+
+        // When
+        // Then
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
     void validate_with_non_EdDSA_algorithm_test() {
+        // Given
         EdDSACOSEKey instance = EdDSACOSEKey.create((EdECPublicKey) EdDSAUtil.createKeyPair().getPublic());
         EdDSACOSEKey target = new EdDSACOSEKey(
             null,
@@ -168,6 +216,9 @@ class EdDSACOSEKeyTest {
                 instance.getX(),
                 instance.getD()
         );
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -176,12 +227,20 @@ class EdDSACOSEKeyTest {
 
     @Test
     void getCurve_not_supported_curve_test(){
+        // When
+        // Then
         assertThatThrownBy(()->EdDSACOSEKey.getCurve(NamedParameterSpec.X25519)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void decode_test(){
-        COSEKey coseKey = new ObjectConverter().getCborMapper().readValue(HexUtil.decode("A4010103272006215820789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A"), COSEKey.class);
+        // Given
+        byte[] encoded = HexUtil.decode("A4010103272006215820789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A");
+
+        // When
+        COSEKey coseKey = new ObjectConverter().getCborMapper().readValue(encoded, COSEKey.class);
+
+        // Then
         assertThat(coseKey).isInstanceOf(EdDSACOSEKey.class);
         EdDSACOSEKey edDSACOSEKey = (EdDSACOSEKey) coseKey;
         assertThat(edDSACOSEKey.getX()).isEqualTo(HexUtil.decode("789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A"));
@@ -192,9 +251,13 @@ class EdDSACOSEKeyTest {
 
     @Test
     void equals_hashCode_test(){
+        // Given
         KeyPair keyPair = EdDSAUtil.createKeyPair();
         COSEKey instanceA = EdDSACOSEKey.create(keyPair);
         COSEKey instanceB = EdDSACOSEKey.create(keyPair);
+
+        // When
+        // Then
         assertThat(instanceA)
                 .isEqualTo(instanceB)
                 .hasSameHashCodeAs(instanceB);
@@ -202,7 +265,13 @@ class EdDSACOSEKeyTest {
 
     @Test
     void toString_test(){
-        COSEKey coseKey = new ObjectConverter().getCborMapper().readValue(HexUtil.decode("A4010103272006215820789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A"), COSEKey.class);
+        // Given
+        byte[] encoded = HexUtil.decode("A4010103272006215820789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A");
+
+        // When
+        COSEKey coseKey = new ObjectConverter().getCborMapper().readValue(encoded, COSEKey.class);
+
+        // Then
         assertThat(coseKey).isInstanceOf(EdDSACOSEKey.class);
         EdDSACOSEKey edDSACOSEKey = (EdDSACOSEKey) coseKey;
         assertThat(edDSACOSEKey).hasToString("EdDSACOSEKey(keyId=null, alg=EdDSA, curve=ED25519, x=789A234CA91653BF7FB573C9FA519C27C09F1156C1779634E58C8888E304F87A, d=null)");

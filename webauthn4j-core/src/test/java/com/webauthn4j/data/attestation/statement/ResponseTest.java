@@ -29,7 +29,13 @@ class ResponseTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void error_test() {
-        Response response = jsonMapper.readValue("{\"error\": \"message\"}", Response.class);
+        // Given
+        String json = "{\"error\": \"message\"}";
+
+        // When
+        Response response = jsonMapper.readValue(json, Response.class);
+
+        // Then
         assertThat(response.getError()).isEqualTo("message");
     }
 

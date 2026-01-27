@@ -51,66 +51,102 @@ class EC2COSEKeyTest {
 
     @Test
     void create_with_alg_test() {
-        EC2COSEKey key;
-        key = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate(), COSEAlgorithmIdentifier.ES256);
-        assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ES256);
-        key = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic(), COSEAlgorithmIdentifier.ES256);
-        assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ES256);
-        key = EC2COSEKey.create(ECUtil.createKeyPair(), COSEAlgorithmIdentifier.ES256);
-        assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ES256);
+        // Given
+        KeyPair keyPair = ECUtil.createKeyPair();
+
+        // When
+        EC2COSEKey key1 = EC2COSEKey.create((ECPrivateKey) keyPair.getPrivate(), COSEAlgorithmIdentifier.ES256);
+        EC2COSEKey key2 = EC2COSEKey.create((ECPublicKey) keyPair.getPublic(), COSEAlgorithmIdentifier.ES256);
+        EC2COSEKey key3 = EC2COSEKey.create(keyPair, COSEAlgorithmIdentifier.ES256);
+
+        // Then
+        assertThat(key1.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ES256);
+        assertThat(key2.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ES256);
+        assertThat(key3.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ES256);
     }
 
     @Test
     void create_with_null_keyPair_test() {
+        // When
+        // Then
         assertThatThrownBy(() -> EC2COSEKey.create((KeyPair) null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void createFromUncompressedECCKey_test() {
+        // Given
         byte[] bytes = Base64UrlUtil.decode("BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+        // When
         EC2COSEKey key = EC2COSEKey.createFromUncompressedECCKey(bytes);
+
+        // Then
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
     }
 
     @Test
     void createFromUncompressedECCKey_with_invalid_length_input_test() {
+        // Given
+        byte[] invalidBytes = new byte[64];
+
+        // When
+        // Then
         assertThrows(IllegalArgumentException.class,
-                () -> EC2COSEKey.createFromUncompressedECCKey(new byte[64])
+                () -> EC2COSEKey.createFromUncompressedECCKey(invalidBytes)
         );
     }
 
     @Test
     void equals_test() {
+        // Given
         EC2COSEKey instanceA = TestDataUtil.createEC2COSEPublicKey();
         EC2COSEKey instanceB = TestDataUtil.createEC2COSEPublicKey();
+
+        // When
+        // Then
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     void cbor_serialize_deserialize_test() {
+        // Given
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
+
+        // When
         byte[] serialized = cborMapper.writeValueAsBytes(original);
         COSEKey result = cborMapper.readValue(serialized, COSEKey.class);
+
+        // Then
         assertThat(result).usingRecursiveComparison().isEqualTo(original);
     }
 
     @Test
     void json_serialize_deserialize_test() {
+        // Given
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
+
+        // When
         String serialized = jsonMapper.writeValueAsString(original);
         COSEKey result = jsonMapper.readValue(serialized, COSEKey.class);
+
+        // Then
         assertThat(result).usingRecursiveComparison().isEqualTo(original);
     }
 
     @Test
     void validate_test() {
+        // Given
         EC2COSEKey target = TestDataUtil.createEC2COSEPublicKey();
+
+        // When
+        // Then
         target.validate();
     }
 
     @Test
     void validate_with_invalid_algorithm_test() {
+        // Given
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         EC2COSEKey target = new EC2COSEKey(
                 null,
@@ -120,6 +156,9 @@ class EC2COSEKeyTest {
                 original.getX(),
                 original.getY()
         );
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -127,6 +166,7 @@ class EC2COSEKeyTest {
 
     @Test
     void validate_with_invalid_curve_test() {
+        // Given
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         EC2COSEKey target = new EC2COSEKey(
                 null,
@@ -136,6 +176,9 @@ class EC2COSEKeyTest {
                 original.getX(),
                 original.getY()
         );
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -143,7 +186,11 @@ class EC2COSEKeyTest {
 
     @Test
     void validate_with_invalid_x_test() {
+        // Given
         EC2COSEKey target = createNullXKey();
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -152,7 +199,11 @@ class EC2COSEKeyTest {
 
     @Test
     void validate_with_invalid_y_test() {
+        // Given
         EC2COSEKey target = createNullYKey();
+
+        // When
+        // Then
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -160,6 +211,7 @@ class EC2COSEKeyTest {
 
     @Test
     void validate_from_generated_key_01() throws Exception {
+        // Given
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
         keyPairGenerator.initialize(ECUtil.P_256_SPEC);
 
@@ -168,12 +220,16 @@ class EC2COSEKeyTest {
 
             PublicKey publicKey = keyPair.getPublic();
             EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) publicKey);
+
+            // When
+            // Then
             ec2CredentialPublicKey.validate();
         }
     }
 
     @Test
     void validate_from_generated_key_02() throws Exception {
+        // Given
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
         keyPairGenerator.initialize(ECUtil.P_384_SPEC);
 
@@ -182,12 +238,16 @@ class EC2COSEKeyTest {
 
             PublicKey publicKey = keyPair.getPublic();
             EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) publicKey);
+
+            // When
+            // Then
             ec2CredentialPublicKey.validate();
         }
     }
 
     @Test
     void validate_from_generated_key_03() throws Exception {
+        // Given
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
         keyPairGenerator.initialize(ECUtil.P_521_SPEC);
 
@@ -196,15 +256,22 @@ class EC2COSEKeyTest {
 
             PublicKey publicKey = keyPair.getPublic();
             EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) publicKey);
+
+            // When
+            // Then
             ec2CredentialPublicKey.validate();
         }
     }
 
     @Test
     void hasPublicKey_test() {
+        // Given
         EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
         EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
         EC2COSEKey publicKey = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic());
+
+        // When
+        // Then
         assertThat(keyPair.hasPublicKey()).isTrue();
         assertThat(privateKey.hasPublicKey()).isFalse();
         assertThat(publicKey.hasPublicKey()).isTrue();
@@ -212,9 +279,13 @@ class EC2COSEKeyTest {
 
     @Test
     void hasPrivateKey_test() {
+        // Given
         EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
         EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
         EC2COSEKey publicKey = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic());
+
+        // When
+        // Then
         assertThat(keyPair.hasPrivateKey()).isTrue();
         assertThat(privateKey.hasPrivateKey()).isTrue();
         assertThat(publicKey.hasPrivateKey()).isFalse();
@@ -222,21 +293,33 @@ class EC2COSEKeyTest {
 
     @Test
     void hasPublicKey_with_invalid_x_test() {
+        // Given
         EC2COSEKey target = createNullXKey();
+
+        // When
+        // Then
         assertThat(target.hasPublicKey()).isFalse();
     }
 
     @Test
     void hasPublicKey_with_invalid_y_test() {
+        // Given
         EC2COSEKey target = createNullYKey();
+
+        // When
+        // Then
         assertThat(target.hasPublicKey()).isFalse();
     }
 
     @Test
     void getPublicKey_test() {
+        // Given
         EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
         EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
         EC2COSEKey publicKey = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic());
+
+        // When
+        // Then
         assertThat(keyPair.getPublicKey()).isNotNull();
         assertThat(privateKey.getPublicKey()).isNull();
         assertThat(publicKey.getPublicKey()).isNotNull();
@@ -244,9 +327,13 @@ class EC2COSEKeyTest {
 
     @Test
     void getPrivateKey_test() {
+        // Given
         EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
         EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
         EC2COSEKey publicKey = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic());
+
+        // When
+        // Then
         assertThat(keyPair.getPrivateKey()).isNotNull();
         assertThat(privateKey.getPrivateKey()).isNotNull();
         assertThat(publicKey.getPrivateKey()).isNull();
@@ -254,6 +341,7 @@ class EC2COSEKeyTest {
 
     @Test
     void getPrivateKey_with_null_curve_test() {
+        // Given
         EC2COSEKey original = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
         EC2COSEKey ec2COSEKey = new EC2COSEKey(
                 original.getKeyId(),
@@ -264,17 +352,25 @@ class EC2COSEKeyTest {
                 original.getY(),
                 original.getD()
         );
+
+        // When
+        // Then
         assertThatThrownBy(ec2COSEKey::getPrivateKey).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     void getPublicKey_with_invalid_key_test() {
+        // Given
         EC2COSEKey target = createNullXKey();
+
+        // When
+        // Then
         assertThat(target.getPublicKey()).isNull();
     }
 
     @Test
     void getPublicKey_with_null_curve_test() {
+        // Given
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         EC2COSEKey ec2COSEKey = new EC2COSEKey(
                 original.getKeyId(),
@@ -284,18 +380,27 @@ class EC2COSEKeyTest {
                 original.getX(),
                 original.getY()
         );
+
+        // When
+        // Then
         assertThatThrownBy(ec2COSEKey::getPublicKey).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     void equals_hashCode_test() {
+        // Given
         EC2COSEKey instanceA = TestDataUtil.createEC2COSEPublicKey();
         EC2COSEKey instanceB = TestDataUtil.createEC2COSEPublicKey();
+
+        // When
+        // Then
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     void getCurve_test() {
+        // When
+        // Then
         assertThat(EC2COSEKey.getCurve(ECUtil.P_256_SPEC)).isEqualTo(Curve.SECP256R1);
         assertThat(EC2COSEKey.getCurve(ECUtil.P_384_SPEC)).isEqualTo(Curve.SECP384R1);
         assertThat(EC2COSEKey.getCurve(ECUtil.P_521_SPEC)).isEqualTo(Curve.SECP521R1);

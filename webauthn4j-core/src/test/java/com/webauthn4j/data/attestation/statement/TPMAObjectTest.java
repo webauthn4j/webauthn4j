@@ -26,7 +26,11 @@ class TPMAObjectTest {
 
     @Test
     void getter_test() {
+        // Given
         TPMAObject tpmaObject = new TPMAObject(394354);
+
+        // When
+        // Then
         assertAll(
                 () -> assertThat(tpmaObject.isFixedTPM()).isTrue(),
                 () -> assertThat(tpmaObject.isStClear()).isFalse(),

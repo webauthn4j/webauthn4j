@@ -22,7 +22,11 @@ class NoneAttestationStatementTest {
 
     @Test
     void validate_test() {
+        // Given
         NoneAttestationStatement noneAttestationStatement = new NoneAttestationStatement();
+
+        // When
+        // Then
         noneAttestationStatement.validate();
     }
 }

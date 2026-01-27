@@ -14,9 +14,13 @@ class ASN1StructureTest {
 
     @Test
     void shouldParseX509Certificate() throws CertificateEncodingException {
+        // Given
         X509Certificate attestationCertificate = TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate();
+
+        // When
         ASN1Structure structure = ASN1Structure.parse(attestationCertificate.getEncoded());
 
+        // Then
         // Verify the structure is not null and has expected properties
         assertThat(structure).isNotNull();
         assertThat(structure.size()).isGreaterThan(0);
@@ -27,7 +31,10 @@ class ASN1StructureTest {
 
     @Test
     void shouldThrowExceptionWhenParsingInvalidData() {
+        // Given
         byte[] invalidData = new byte[]{0x00, 0x01, 0x02};
+
+        // When/Then
         assertThatThrownBy(() -> ASN1Structure.parse(invalidData))
                 .isInstanceOf(IllegalArgumentException.class);
     }

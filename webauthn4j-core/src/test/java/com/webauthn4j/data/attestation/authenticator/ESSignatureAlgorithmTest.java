@@ -27,6 +27,8 @@ class ESSignatureAlgorithmTest {
 
     @Test
     void create_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-35)).isEqualTo(COSEAlgorithmIdentifier.ES384),
@@ -36,11 +38,15 @@ class ESSignatureAlgorithmTest {
 
     @Test
     void create_with_not_predefined_value_test() {
+        // When
+        // Then
         assertDoesNotThrow(() -> COSEAlgorithmIdentifier.create(0));
     }
 
     @Test
     void equals_test() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.ES256).isEqualTo(COSEAlgorithmIdentifier.ES256),
                 () -> assertThat(COSEAlgorithmIdentifier.ES384).isNotEqualTo(COSEAlgorithmIdentifier.ES512)

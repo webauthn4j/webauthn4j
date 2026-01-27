@@ -32,6 +32,8 @@ class TPMISTAttestTest {
 
     @Test
     void create() {
+        // When
+        // Then
         assertAll(
                 () -> assertThat(TPMISTAttest.create(new byte[]{(byte) 0x80, (byte) 0x17})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY),
                 () -> assertThat(TPMISTAttest.create(new byte[]{(byte) 0x80, (byte) 0x18})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_QUOTE),
@@ -45,23 +47,35 @@ class TPMISTAttestTest {
 
     @Test
     void create_with_invalid_value() {
+        // When
+        // Then
         assertThrows(IllegalArgumentException.class,
-                () -> TPMISTAttest.create(new byte[]{})
+                () -> TPMISTAttest.create(new byte[]{}) 
         );
     }
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
+        // Given
         byte[] source = new byte[]{(byte) 0x80, (byte) 0x17};
-        TestDTO dto = jsonMapper.readValue("{\"tpmi_st_attest\":\"" + Base64UrlUtil.encodeToString(source) + "\"}", TestDTO.class);
+        String json = "{\"tpmi_st_attest\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
+
+        // When
+        TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
+
+        // Then
         assertThat(dto.tpmi_st_attest).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
+        // Given
         byte[] source = new byte[]{(byte) 0xff, (byte) 0xaa};
         String sourceString = "{\"tpmi_st_attest\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
+
+        // When
+        // Then
         assertThrows(InvalidFormatException.class,
                 () -> jsonMapper.readValue(sourceString, TestDTO.class)
         );

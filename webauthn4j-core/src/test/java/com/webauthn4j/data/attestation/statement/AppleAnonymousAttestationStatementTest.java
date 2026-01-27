@@ -27,22 +27,31 @@ class AppleAnonymousAttestationStatementTest {
 
     @Test
     void constructor_x5c_null() {
+        // When
+        // Then
         assertThatThrownBy(() -> new AppleAnonymousAttestationStatement(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void validate() {
+        // Given
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         AppleAnonymousAttestationStatement instance = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+
+        // When
+        // Then
         assertThatCode(instance::validate).doesNotThrowAnyException();
     }
 
 
     @Test
     void getter_test() {
+        // Given
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         AppleAnonymousAttestationStatement instance = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
+        // When
+        // Then
         assertThat(instance.getFormat()).isEqualTo(AppleAnonymousAttestationStatement.FORMAT);
         assertThat(instance.getX5c()).hasSize(2);
     }
@@ -50,11 +59,14 @@ class AppleAnonymousAttestationStatementTest {
 
     @Test
     void equals_hashCode_test() {
+        // Given
         RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         AppleAnonymousAttestationStatement instanceA = (AppleAnonymousAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
         RegistrationObject registrationObjectB = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         AppleAnonymousAttestationStatement instanceB = (AppleAnonymousAttestationStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
 
+        // When
+        // Then
         assertThat(instanceA)
                 .isEqualTo(instanceB)
                 .hasSameHashCodeAs(instanceB);
