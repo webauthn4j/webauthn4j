@@ -20,7 +20,7 @@ spring-boot-bom = "4.0.2"
 spring-dependency-management = "1.1.7"
 sonarqube = "7.2.2.6593"
 
-quarkus = "3.30.8"
+quarkus = "3.31.1"
 selenium = "4.40.0"
 assertj = "3.27.7"
 playwright = "1.58.0"
