@@ -35,6 +35,7 @@ to declare nullability explicitly.
 ### Projects using WebAuthn4J
 
 * [Keycloak](https://www.keycloak.org/) and [Red Hat build of Keycloak](https://access.redhat.com/products/red-hat-build-of-keycloak) 
+* [Quarkus Security](https://quarkus.io/guides/security-webauthn)
 * [Spring Security](https://docs.spring.io/spring-security/reference/servlet/authentication/passkeys.html)
   * `spring-security-web` module provides passkeys support
   * maintained by Spring Security project
