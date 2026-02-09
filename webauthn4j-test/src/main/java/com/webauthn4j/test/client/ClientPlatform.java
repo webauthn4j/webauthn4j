@@ -19,13 +19,29 @@ package com.webauthn4j.test.client;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.*;
+import com.webauthn4j.data.AttestationConveyancePreference;
+import com.webauthn4j.data.AuthenticatorAssertionResponse;
+import com.webauthn4j.data.AuthenticatorAttestationResponse;
+import com.webauthn4j.data.PublicKeyCredential;
+import com.webauthn4j.data.PublicKeyCredentialCreationOptions;
+import com.webauthn4j.data.PublicKeyCredentialRequestOptions;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.data.client.*;
+import com.webauthn4j.data.client.ClientDataType;
+import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.client.Origin;
+import com.webauthn4j.data.client.TokenBinding;
+import com.webauthn4j.data.client.TokenBindingStatus;
 import com.webauthn4j.data.client.challenge.Challenge;
-import com.webauthn4j.data.extension.client.*;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.extension.client.CredentialPropertiesExtensionClientOutput;
+import com.webauthn4j.data.extension.client.CredentialPropertiesOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
@@ -33,6 +49,8 @@ import com.webauthn4j.test.authenticator.webauthn.AttestationOption;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.verifier.exception.VerificationException;
+
+import java.util.Optional;
 
 @WIP
 public class ClientPlatform {
@@ -63,40 +81,20 @@ public class ClientPlatform {
     public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> create(
             PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
             RegistrationEmulationOption registrationEmulationOption,
-            AttestationOption attestationOption
-    ) {
-        CollectedClientData collectedClientData;
-        if (registrationEmulationOption.isCollectedClientDataOverrideEnabled()) {
-            collectedClientData = registrationEmulationOption.getCollectedClientData();
-        }
-        else {
-            collectedClientData = createCollectedClientData(ClientDataType.WEBAUTHN_CREATE, publicKeyCredentialCreationOptions.getChallenge());
-        }
+            AttestationOption attestationOption) {
+
+        CollectedClientData collectedClientData = this.getCollectedClientData(publicKeyCredentialCreationOptions, registrationEmulationOption);
 
         if (authenticatorAdaptor == null) {
             throw new NoAuthenticatorSuccessException();
         }
-        CredentialCreationResponse credentialCreationResponse =
-                authenticatorAdaptor.register(publicKeyCredentialCreationOptions, collectedClientData, registrationEmulationOption, attestationOption);
+
+        CredentialCreationResponse credentialCreationResponse = authenticatorAdaptor
+                .register(publicKeyCredentialCreationOptions, collectedClientData, registrationEmulationOption, attestationOption);
 
         AttestationObject attestationObject = credentialCreationResponse.getAttestationObject();
-        AttestationStatement attestationStatement = credentialCreationResponse.getAttestationObject().getAttestationStatement();
-        AttestationConveyancePreference attestationConveyancePreference = publicKeyCredentialCreationOptions.getAttestation();
-        if (attestationConveyancePreference == null) {
-            attestationConveyancePreference = AttestationConveyancePreference.NONE;
-        }
-        if (AttestationConveyancePreference.DIRECT.equals(attestationConveyancePreference)) {
-            // nop
-        }
-        else if (AttestationConveyancePreference.INDIRECT.equals(attestationConveyancePreference)) {
-            throw new NotImplementedException();
-        }
-        else if (AttestationConveyancePreference.NONE.equals(attestationConveyancePreference)) {
-            attestationStatement = new NoneAttestationStatement();
-        }
-        else {
-            throw new NotImplementedException();
-        }
+        AttestationStatement attestationStatement = getAttestationStatement(publicKeyCredentialCreationOptions, credentialCreationResponse);
+
         attestationObject = new AttestationObject(attestationObject.getAuthenticatorData(), attestationStatement);
         byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
 
@@ -110,10 +108,40 @@ public class ClientPlatform {
         );
     }
 
+    private CollectedClientData getCollectedClientData(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+                                                       RegistrationEmulationOption registrationEmulationOption) {
+
+        if (registrationEmulationOption.isCollectedClientDataOverrideEnabled()) {
+            return registrationEmulationOption.getCollectedClientData();
+        }
+
+        return createCollectedClientData(ClientDataType.WEBAUTHN_CREATE, publicKeyCredentialCreationOptions.getChallenge());
+    }
+
+    private static AttestationStatement getAttestationStatement(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+                                                                CredentialCreationResponse credentialCreationResponse) {
+
+        AttestationStatement attestationStatement = credentialCreationResponse.getAttestationObject().getAttestationStatement();
+
+        AttestationConveyancePreference attestationConveyancePreference = Optional
+                .ofNullable(publicKeyCredentialCreationOptions.getAttestation())
+                .orElse(AttestationConveyancePreference.NONE);
+
+        if (AttestationConveyancePreference.DIRECT == attestationConveyancePreference) {
+            return attestationStatement;
+        }
+
+        if (AttestationConveyancePreference.NONE == attestationConveyancePreference) {
+            return new NoneAttestationStatement();
+        }
+
+        throw new NotImplementedException();
+    }
+
     public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> create(
             PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
-            RegistrationEmulationOption registrationEmulationOption
-    ) {
+            RegistrationEmulationOption registrationEmulationOption) {
+
         return create(publicKeyCredentialCreationOptions, registrationEmulationOption, null);
     }
 
@@ -195,12 +223,12 @@ public class ClientPlatform {
     }
 
     public CollectedClientData createCollectedClientData(ClientDataType type, Challenge challenge) {
-        if(topOrigin == null){
+
+        if (topOrigin == null) {
             return new CollectedClientData(type, challenge, origin, null);
         }
-        else {
-            return new CollectedClientData(type, challenge, origin, true, topOrigin, null);
-        }
+
+        return new CollectedClientData(type, challenge, origin, true, topOrigin, null);
     }
 
     public CollectedClientData createCollectedClientData(ClientDataType type, Challenge challenge, byte[] tokenBindingId) {
@@ -223,4 +251,5 @@ public class ClientPlatform {
     public void setAuthenticatorAdaptor(AuthenticatorAdaptor authenticatorAdaptor) {
         this.authenticatorAdaptor = authenticatorAdaptor;
     }
+
 }
