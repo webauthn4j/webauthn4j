@@ -32,7 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.security:spring-security-webauthn")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2") //Added for now as Spring Security implicitly depends on Jackson2
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.1") //Added for now as Spring Security implicitly depends on Jackson2
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation(libs.playwright)
