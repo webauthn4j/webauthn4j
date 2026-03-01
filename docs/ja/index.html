@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>WebAuthn4J Reference</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>WebAuthn4J Reference</h1>
+<div class="details">
+<span id="revnumber">version 0.31.2-SNAPSHOT</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#導入">1. 導入</a>
+<ul class="sectlevel2">
+<li><a href="#web-authenticationとは">1.1. Web Authenticationとは</a></li>
+<li><a href="#passkeysとは">1.2. Passkeysとは</a></li>
+<li><a href="#webauthn4jとは">1.3. WebAuthn4Jとは</a></li>
+<li><a href="#特徴">1.4. 特徴</a></li>
+<li><a href="#要件">1.5. 要件</a></li>
+<li><a href="#動作環境">1.6. 動作環境</a></li>
+<li><a href="#maven-centralからの取得">1.7. Maven Centralからの取得</a></li>
+<li><a href="#ソースコード">1.8. ソースコード</a></li>
+<li><a href="#ライセンス">1.9. ライセンス</a></li>
+<li><a href="#開発への参加">1.10. 開発への参加</a></li>
+</ul>
+</li>
+<li><a href="#クイックスタート">2. クイックスタート</a>
+<ul class="sectlevel2">
+<li><a href="#webauthn認証の処理概要">2.1. WebAuthn認証の処理概要</a></li>
+<li><a href="#webauthn4jのスコープ">2.2. WebAuthn4Jのスコープ</a></li>
+<li><a href="#webauthn4jを利用した登録処理の実装">2.3. WebAuthn4Jを利用した登録処理の実装</a></li>
+<li><a href="#webauthn4jを利用した認証処理の実装">2.4. WebAuthn4Jを利用した認証処理の実装</a></li>
+<li><a href="#apple-app-attestの検証">2.5. Apple App Attestの検証</a></li>
+</ul>
+</li>
+<li><a href="#設定">3. 設定</a>
+<ul class="sectlevel2">
+<li><a href="#構成証明ステートメントの検証">3.1. 構成証明ステートメントの検証</a></li>
+<li><a href="#ログ">3.2. ログ</a></li>
+</ul>
+</li>
+<li><a href="#詳細">4. 詳細</a>
+<ul class="sectlevel2">
+<li><a href="#クレデンシャル情報の表現">4.1. クレデンシャル情報の表現</a></li>
+<li><a href="#credentialrecordのシリアライズデシリアライズ">4.2. CredentialRecordのシリアライズ、デシリアライズ</a></li>
+<li><a href="#dcappledeviceのシリアライズデシリアライズ">4.3. DCAppleDeviceのシリアライズ、デシリアライズ</a></li>
+<li><a href="#safariで未サポートなjson-serialization-apisの代替">4.4. Safariで未サポートなJSON serialization APIsの代替</a></li>
+<li><a href="#モジュール構成">4.5. モジュール構成</a></li>
+<li><a href="#origin検証">4.6. Origin検証</a></li>
+<li><a href="#カスタムな検証ロジックの実装">4.7. カスタムな検証ロジックの実装</a></li>
+<li><a href="#カスタムなデータ変換ロジックの実装">4.8. カスタムなデータ変換ロジックの実装</a></li>
+<li><a href="#クラス">4.9. クラス</a></li>
+<li><a href="#webauthn以外のfido-ctap2セキュリティキーを用いた独自アプリケーションでの利用">4.10. WebAuthn以外のFIDO CTAP2セキュリティキーを用いた独自アプリケーションでの利用</a></li>
+</ul>
+</li>
+<li><a href="#faq">5. FAQ</a>
+<ul class="sectlevel2">
+<li><a href="#publickeycredentialcreationoptions-の-excludecredentials-に何を指定すべきか">5.1. <code>PublicKeyCredentialCreationOptions</code> の <code>excludeCredentials</code> に何を指定すべきか</a></li>
+<li><a href="#publickeycredentialrequestoptions-の-allowcredentials-に何を指定すべきか">5.2. <code>PublicKeyCredentialRequestOptions</code> の <code>allowCredentials</code> に何を指定すべきか</a></li>
+<li><a href="#webauthnmanager-クラス責務が多すぎでは">5.3. <code>WebAuthnManager</code> クラス、責務が多すぎでは？</a></li>
+</ul>
+</li>
+<li><a href="#既知の問題">6. 既知の問題</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="導入"><a class="anchor" href="#導入"></a>1. 導入</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="web-authenticationとは"><a class="anchor" href="#web-authenticationとは"></a>1.1. Web Authenticationとは</h3>
+<div class="paragraph">
+<p>Web Authenticationは、W3Cで2019年3月に勧告になった、Webアプリケーションの新しいセキュアな認証方式仕様です。 WebAuthnという略称で表記されることもあります。ローカル認証や公開鍵認証、Origin別の鍵管理を組み合わせることで、フィッシングなど認証プロセスに対する攻撃に対して堅固で便利な認証を実現しています。
+主要ブラウザで実装されており、セキュリティ、利便性を重視するユーザーに対して優れた選択肢を提供します。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="passkeysとは"><a class="anchor" href="#passkeysとは"></a>1.2. Passkeysとは</h3>
+<div class="paragraph">
+<p>Passkeysは、WebAuthn仕様の使いやすさを向上させたWebAuthn Level3仕様に対するわかりやすいブランディング名です。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webauthn4jとは"><a class="anchor" href="#webauthn4jとは"></a>1.3. WebAuthn4Jとは</h3>
+<div class="paragraph">
+<p>WebAuthn4Jは、Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。WebAuthn/Passkeysだけでなく、Apple App Attestや、FIDO CTAP2セキュリティキーを用いた独自アプリケーションのサーバーサイド検証に用いることも可能です。 Web Authentication仕様で定められた全ての構成証明ステートメント（Attestation）をサポートしながら、外部ライブラリへの依存関係は最小限に抑えたポータブルなライブラリです。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="特徴"><a class="anchor" href="#特徴"></a>1.4. 特徴</h3>
+<div class="sect3">
+<h4 id="サポートする構成証明ステートメントフォーマット"><a class="anchor" href="#サポートする構成証明ステートメントフォーマット"></a>1.4.1. サポートする構成証明ステートメントフォーマット</h4>
+<div class="paragraph">
+<p>WebAuthn4Jでは、以下の通り全ての構成証明ステートメントフォーマットをサポートしています。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Packed attestation</p>
+</li>
+<li>
+<p>FIDO U2F attestation</p>
+</li>
+<li>
+<p>Android Key attestation</p>
+</li>
+<li>
+<p>Android SafetyNet attestation</p>
+</li>
+<li>
+<p>TPM attestation</p>
+</li>
+<li>
+<p>Apple Anonymous attestation</p>
+</li>
+<li>
+<p>None attestation</p>
+</li>
+<li>
+<p>Apple App Attest attestation</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="準拠状況"><a class="anchor" href="#準拠状況"></a>1.4.2. 準拠状況</h4>
+<div class="paragraph">
+<p><a href="https://fidoalliance.org/certification/functional-certification/conformance/">FIDO Allianceが提供するFIDO2 Test Tools</a>
+で必須のテストケースに加え、オプションのAndroid Key attestationのテストケースを全て合格しています。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+FIDO2 Test ToolsはFIDO2 Transport Binding ProfileのREST API経由でテストを実行する為、WebAuthn4J Spring Securityが 提供するFIDO2 Transport Binding ProfileのREST API実装に対して実行して検証を行っています。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ポータビリティ"><a class="anchor" href="#ポータビリティ"></a>1.4.3. ポータビリティ</h4>
+<div class="paragraph">
+<p>WebAuthn4JはSLF4JとJackson3にのみ依存しており、非常に高いポータビリティを持っています。
+あなたのJavaアプリケーションにほぼ制約なく組み込めるでしょう。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="要件"><a class="anchor" href="#要件"></a>1.5. 要件</h3>
+<div class="sect3">
+<h4 id="言語"><a class="anchor" href="#言語"></a>1.5.1. 言語</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Java17以降</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="動作環境"><a class="anchor" href="#動作環境"></a>1.6. 動作環境</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>SecureContext（サイトがHTTPS接続か、localhost。WebAuthn仕様上の要件）</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="maven-centralからの取得"><a class="anchor" href="#maven-centralからの取得"></a>1.7. Maven Centralからの取得</h3>
+<div class="paragraph">
+<p>Mavenを使用している場合、webauthn4jを依存関係として追加して使用してください：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;properties&gt;
+  ...
+  &lt;!-- Use the latest version whenever possible. --&gt;
+  &lt;webauthn4j.version&gt;0.31.1.RELEASE&lt;/webauthn4j.version&gt;
+  ...
+&lt;/properties&gt;
+
+&lt;dependencies&gt;
+  ...
+  &lt;dependency&gt;
+    &lt;groupId&gt;com.webauthn4j&lt;/groupId&gt;
+    &lt;artifactId&gt;webauthn4j-core&lt;/artifactId&gt;
+    &lt;version&gt;${webauthn4j.version}&lt;/version&gt;
+  &lt;/dependency&gt;
+  ...
+&lt;/dependencies&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ソースコード"><a class="anchor" href="#ソースコード"></a>1.8. ソースコード</h3>
+<div class="paragraph">
+<p>ソースコードは <a href="https://github.com/webauthn4j/webauthn4j">Github</a> で管理されています。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>git clone git@github.com:webauthn4j/webauthn4j.git</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ライセンス"><a class="anchor" href="#ライセンス"></a>1.9. ライセンス</h3>
+<div class="paragraph">
+<p>WebAuthn4jは <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 License</a> の オープンソースソフトウェアです。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="開発への参加"><a class="anchor" href="#開発への参加"></a>1.10. 開発への参加</h3>
+<div class="paragraph">
+<p>WebAuthn4Jに興味を持って頂きありがとうございます。WebAuthn4JはGitHub上で開発を進めています。 お気軽にIssueやPull Requestをお寄せ下さい。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="クイックスタート"><a class="anchor" href="#クイックスタート"></a>2. クイックスタート</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このクイックスタートでは、まずWebAuthn認証の処理の概要を紹介し、その後、WebAuthn4Jライブラリがカバーする範囲や制限、およびWebAuthn4Jを利用したWebAuthn認証の実装方法を説明します。</p>
+</div>
+<div class="sect2">
+<h3 id="webauthn認証の処理概要"><a class="anchor" href="#webauthn認証の処理概要"></a>2.1. WebAuthn認証の処理概要</h3>
+<div class="sect3">
+<h4 id="認証のフロー"><a class="anchor" href="#認証のフロー"></a>2.1.1. 認証のフロー</h4>
+<div class="paragraph">
+<p>WebAuthn認証は、端的に言えば、ウェブでの利用にあわせて設計された公開鍵認証です。
+予め鍵ペアを作成し、サーバー側に公開鍵、認証デバイス側に秘密鍵を保存しておき、
+認証時は認証デバイスで秘密鍵で署名を行い、署名をサーバー側に送信して公開鍵で署名を検証することで認証を行う方式です。</p>
+</div>
+<div class="paragraph">
+<p>署名対象のデータは、クライアントのデータや、認証デバイスのデータです。クライアントのデータには、予めサーバー側で生成したチャレンジや、表示しているサイトのドメイン（origin）等、サーバー側に関連するデータも含まれます。
+署名の検証だけでなく、チャレンジの一致もサーバー側で検証しているため、リプレイ攻撃を防止できます。
+他にも様々なクライアントのデータや、認証デバイスのデータが署名対象データに含まれており、サーバー側での検証の対象となっています。
+認証時のデータの流れを図にすると以下の通りです。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="authentication%20sequence.svg" alt="authentication sequence" width="1142" height="678">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="登録のフロー"><a class="anchor" href="#登録のフロー"></a>2.1.2. 登録のフロー</h4>
+<div class="paragraph">
+<p>WebAuthnの新しいクレデンシャル登録処理とは、クライアントが認証デバイスに対して新しい鍵ペアの生成を要求し、
+認証デバイスからクライアントに返却された公開鍵等をクレデンシャルとしてサーバーに登録する処理です。
+実は、新しいクレデンシャル登録時も認証時と類似したフローであり、
+まずサーバーから送信されたチャレンジを含むクライアントデータと、認証デバイスのデータに対して
+認証デバイスが署名して返却し、これをクライアント経由で受け取ったサーバーは署名検証を実施、
+成功した場合、クレデンシャルレコードとして登録する、という流れになっています。
+但し、登録時の場合、署名対象の認証デバイスのデータに、生成された新しい鍵ペアの公開鍵が含まれます。
+サーバーにはこの公開鍵が登録され、認証時の署名検証で使用されることになります。</p>
+</div>
+<div class="paragraph">
+<p>図にしますと以下の通りです。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="registration%20sequence.svg" alt="registration sequence" width="1174" height="765">
+</div>
+</div>
+<div class="paragraph">
+<p>前のセクションで説明した通り、認証時はクレデンシャルの秘密鍵で署名されているので、署名をクレデンシャルの公開鍵で検証する仕組となっていますが、
+それでは公開鍵登録時に認証デバイスのデータとクライアントのデータに署名する際に使用される秘密鍵は何なのでしょうか。また、この署名を検証する公開鍵をサーバーはどうやって入手するのでしょうか。
+通常、実はこの秘密鍵は認証デバイスのモデル毎に固有の鍵で、認証デバイスにあらかじめ焼きこまれています。
+検証に使用する公開鍵に関しては、予め信頼する認証デバイスの公開鍵をサーバーに構成しておくか、 FIDO Metadata Serviceのように、認証デバイスのモデル毎の公開鍵を公開しているレジストリから取得することが可能です。</p>
+</div>
+<div class="paragraph">
+<p>このように、クレデンシャルの公開鍵登録のメッセージを認証デバイスのモデル固有の秘密鍵で署名することで、
+登録しようとしている認証デバイスが特定のモデルであることを証明する"Attestation"（構成証明）という仕組がWebAuthnには備わっており、
+このデバイスの構成証明情報を含んだデータ構造は、構成証明ステートメント（Attestation Statement）と呼ばれます。
+ただし、ユーザーがどのモデルの認証デバイスを使っているかという構成証明ステートメントは、ユーザートラッキングにも使われうる情報です。
+そのため、デフォルトの構成では、認証デバイスが構成証明ステートメントを返却してもクライアントによって破棄され、サーバー側には送信されません。
+構成証明ステートメントを送信するようオプションで明示的に指定した場合にのみ、エンドユーザーの同意を得たうえで構成証明ステートメントは開示されます。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webauthn4jのスコープ"><a class="anchor" href="#webauthn4jのスコープ"></a>2.2. WebAuthn4Jのスコープ</h3>
+<div class="paragraph">
+<p>WebAuthn4Jは特定のWebアプリケーションフレームワークに依存しないポータビリティを実現する為、WebAuthnの登録時、認証時のサーバー側の検証に意図的に機能を絞り込んでいます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="webauthn4j%20scope.svg" alt="webauthn4j scope" width="1142" height="709">
+</div>
+</div>
+<div class="paragraph">
+<p>そのため、HTTPリクエストからのパラメータの取出、チャレンジのセッションへの保存、 フロントエンド側への返却、
+生成された公開鍵などをクレデンシャルレコードとして保存する処理、認証時にクレデンシャルレコードをロードする処理、といった機能は具備していません。
+それらの処理は、利用しているフレームワークにあわせて実装する必要があるためです。
+ご利用のフレームワークで、それらをケアしてくれるWebAuthn4Jのラッパーライブラリが存在する場合は、そちらを利用すると良いでしょう。
+例えば、</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Quarkus Security WebAuthn</p>
+</li>
+<li>
+<p>Spring Security Passkeys</p>
+</li>
+<li>
+<p>Vert.x Auth WebAuthn4J</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>といったラッパーライブラリが提供されています。
+ラッパーライブラリが存在しない場合は、自前でそれらの処理を実装頂く必要があります。次のセクションで説明していきます。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webauthn4jを利用した登録処理の実装"><a class="anchor" href="#webauthn4jを利用した登録処理の実装"></a>2.3. WebAuthn4Jを利用した登録処理の実装</h3>
+<div class="sect3">
+<h4 id="webauthnの鍵ペアの生成"><a class="anchor" href="#webauthnの鍵ペアの生成"></a>2.3.1. WebAuthnの鍵ペアの生成</h4>
+<div class="paragraph">
+<p>WebAuthnの鍵ペアの生成において中心となるAPIは、ブラウザの <code>navigator.credentials.create</code> メソッドです。
+このAPIを呼び出すことで、WebAuthnの鍵ペアが認証デバイスによって生成され、公開鍵を含むWebAuthnのクレデンシャルが戻り値として返却されます。</p>
+</div>
+<div class="paragraph">
+<p><code>navigator.credentials.create</code> メソッドの呼出時には、様々なオプションが指定出来ます。
+そのオプションの一つに、 <code>challenge</code> が存在します。前述の通り、チャレンジはリプレイ攻撃を防止するためのパラメータであり、サーバー側で生成した値をパラメータとして指定し、また、同じ値をセッション等に保存しておく必要があります。
+登録のフローの図の通り、まずバックエンドサーバーでチャレンジを生成してセッションに保存し、それをクライアントに渡す必要があります。
+バックエンドサーバーからフロントエンドへのチャレンジの受け渡し方法はWebAuthn仕様では特に定められていません。
+HTMLページに埋め込んでも良いですし、チャレンジを返却するRESTエンドポイントを用意することも可能です。
+<code>navigator.credentials.create</code> メソッドのパラメータである、 <code>PublicKeyCredentialCreationOptions</code> 全体を返却するエンドポイントを用意するのも良いアイデアでしょう。
+WebAuthnのJava Script APIには、 <code>PublicKeyCredential.parseCreationOptionsFromJSON</code> というメソッドが用意されており、JSONとしてシリアライズされた <code>PublicKeyCredentialCreationOptions</code> をパースすることが可能です。
+但し、SafariではSafari 18.4以降でしか <code>PublicKeyCredential.parseCreationOptionsFromJSON</code> が利用できません。代替策については、<a href="./deep-dive.html#Safariで未サポートなJSON serialization APIsの代替">Safariで未サポートなJSON serialization APIsの代替</a> を参照してください。</p>
+</div>
+<div class="paragraph">
+<p>WebAuthn4Jは <code>PublicKeyCredentialCreationOptions</code> を表現するJavaのクラスを提供しており、バックエンドサーバー側でJSONを組み立てる際にご活用頂けます。</p>
+</div>
+<div class="listingblock">
+<div class="title">例 1: <code>PublicKeyCredentialCreationOptions</code> 全体をREST Endpointから取得して <code>navigator.credentials.create</code> を呼出</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="javascript">const response = await fetch("/passkeys/attestationOptions") //fetch PublicKeyCredentialCreationOptions as JSON string
+const publicKeyCredentialCreationOptionsJSON = await response.json() // convert to JSONObject
+const credentialCreationOptions = PublicKeyCredential.parseCreationOptionsFromJSON(publicKeyCredentialCreationOptionsJSON); // convert to PublicKeyCredentialCreationOptions
+const publicKeyCredential = await navigator.credentials.create({ publicKey: credentialCreationOptions}); // create PublicKeyCredential</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>いずれにせよ、バックエンドサーバー側でチャレンジを生成し、セッションに保存した上で、何らかの方法でフロントエンド側に引き渡した上で、
+フロントエンド側のJava Scriptで <code>navigator.credentials.create</code> メソッドを呼び出してWebAuthnクレデンシャルを生成して下さい。
+<code>navigator.credentials.create</code> メソッドに指定できるその他のオプションに関しては、 <a href="https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create">MDN: CredentialsContainer: create() メソッド</a>を参照下さい。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="webauthnの公開鍵のサーバーへの登録"><a class="anchor" href="#webauthnの公開鍵のサーバーへの登録"></a>2.3.2. WebAuthnの公開鍵のサーバーへの登録</h4>
+<div class="paragraph">
+<p>生成されたWebAuthnクレデンシャルは、何らかの方法でバックエンドサーバー側に送信する必要があります。
+バックエンドサーバー側にどのようなフォーマットで送信するかについてもWebAuthn仕様では定義されていません。
+但し、WebAuthnクレデンシャルである <code>PublicKeyCredential</code> というJavaScriptの型には、 <code>toJSON</code> というメソッドが用意されており、
+こちらと <code>JSON.stringify</code> を利用してシリアライズしたデータを送信するのが一つのベストプラクティスです。
+但し、この <code>toJSON</code> メソッドもSafariでは利用できませんが、代替策については、<a href="./deep-dive.html#Safariで未サポートなJSON serialization APIsの代替">Safariで未サポートなJSON serialization APIsの代替</a> を参照してください。</p>
+</div>
+<div class="listingblock">
+<div class="title">例 2: <code>PublicKeyCredential</code> の送信</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="javascript">const registrationResponseJSON = publicKeyCredential.toJSON(); // convert to JSONObject
+await fetch("/register", {
+    method : 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+        'username': document.getElementById('username').value,
+        'registrationResponseJSON': JSON.stringify(registrationResponseJSON) //convert to string
+    })
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>バックエンドサーバー側は受け取ったWebAuthnクレデンシャルを検証した上で、公開鍵を含むWebAuthnクレデンシャルレコードを永続化する必要があります。
+WebAuthn4Jでは、 <code>PublicKeyCredential</code> のJSON表現を <code>WebAuthnManager#verifyRegistrationResponseJSON</code> というメソッドで直接検証することが可能です。
+<code>WebAuthnManager#parseRegistrationResponseJSON</code> は、検証を行わず、<code>PublicKeyCredential</code> のデシリアライズ処理のみを行います。
+検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
+<code>WebAuthnManager#parseRegistrationResponseJSON</code> メソッドを用いてパースしたうえで、 得られた <code>RegistrationData</code> のインスタンスを <code>WebAuthnManager#verify</code> メソッドに渡して検証を実行してください。</p>
+</div>
+<div class="listingblock">
+<div class="title">例 3: <code>PublicKeyCredential</code> のサーバーサイド検証</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">String registrationResponseJSON = "&lt;registrationResponseJSON&gt;"; /* set registrationResponseJSON received from frontend */
+RegistrationData registrationData;
+try {
+    registrationData = webAuthnManager.parseRegistrationResponseJSON(registrationResponseJSON);
+}
+catch (DataConversionException e) {
+    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
+    throw e;
+}
+
+// Server properties
+Origin origin = null /* set origin */;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .build();
+
+// expectations
+List&lt;PublicKeyCredentialParameters&gt; pubKeyCredParams = null;
+boolean userVerificationRequired = false;
+boolean userPresenceRequired = true;
+
+RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, pubKeyCredParams, userVerificationRequired, userPresenceRequired);
+
+try {
+    webAuthnManager.verify(registrationData, registrationParameters);
+} catch (VerificationException e) {
+    // If you would like to handle WebAuthn data verification error, please catch VerificationException
+    throw e;
+}
+
+// please persist CredentialRecord object, which will be used in the authentication process.
+CredentialRecord credentialRecord =
+        new CredentialRecordImpl( // You may create your own CredentialRecord implementation to save friendly authenticator name
+                registrationData.getAttestationObject(),
+                registrationData.getCollectedClientData(),
+                registrationData.getClientExtensions(),
+                registrationData.getTransports()
+        );
+save(credentialRecord); // please persist credentialRecord in your manner</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>RegistrationParameters</code> は、<code>WebAuthnManager#verifyRegistrationResponseJSON</code> メソッドのもう一つの引数であり、 サーバーの状態や検証条件をまとめたパラメータです。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>serverProperty</code> は、サーバーの状態を渡すパラメータです。次の<a href="#ServerProperty">[ServerProperty]</a>を参照して下さい。</p>
+</li>
+<li>
+<p><code>pubKeyCredParams</code> には <code>PublicKeyCredentialCreationOptions</code> で指定した <code>pubKeyCredParams</code> と同じ値を指定して下さい。</p>
+</li>
+<li>
+<p><code>userVerificationRequired</code> は、認証デバイスでのユーザーの生体認証やPIN確認などでの当人認証を必須とするかのパラメータです。</p>
+</li>
+<li>
+<p><code>userPresenceRequired</code> は、認証デバイス側でのユーザーの介在確認を必須とするかのパラメータです。ユーザーによって何らかのジェスチャー入力が行われたことを示すUPフラグを確認します。
+このジェスチャーには、生体認証に限らず、静電容量ボタンのタッチ等、当人認証が行われない操作も含まれます。
+WebAuthnにおいては、UPフラグは基本的に必須ですので <code>true</code> を指定すべきですが、パスワードからパスキーへの自動アップグレード時のクレデンシャル自動生成時のシナリオに限っては <code>false</code> となります。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>サーバーの状態については、 <code>serverProperty</code> としてまとめています。
+<code>ServerProperty</code> のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin</code> には WebAuthn による登録・認証セレモニーの時点でクライアントブラウザ（ユーザーエージェント）が認識していたことを期待する Origin を指定してください。ブラウザは認識した Origin を clientData に書き込み、その内容を含めて署名します。サーバー側では、clientData に記録された Origin が期待値と一致するかを照合することで、想定外のページや別オリジンから不正に起動されたセレモニー（フィッシングやフレーミング誘発）を防ぎます。</p>
+</li>
+<li>
+<p><code>rpId</code> には WebAuthn による認証を提供するサイトの rpId を指定して下さい。rpId は資格情報のスコープを指定するパラメータです。 詳しくは <a href="https://www.w3.org/TR/webauthn-1/#relying-party-identifier">WebAuthnの仕様書のrpIdの項</a> を参照して下さい。</p>
+</li>
+<li>
+<p><code>challenge</code> には発行した Challenge を指定して下さい。<code>challenge</code> はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で <code>challenge</code> としてランダムなバイト列を生成し、フロントエンド側で WebAuthn JS API を実行する際にパラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行した Challenge を検証時まで永続化しておくのは WebAuthn4J ライブラリ呼出側の責務です。セッションなどに格納しておくと良いでしょう。</p>
+</li>
+<li>
+<p>（オプション）<code>topOrigin(&#8230;&#8203;)</code>/<code>topOrigins(&#8230;&#8203;)</code>/<code>topOriginPredicate(&#8230;&#8203;)</code> を使用することで、許容するtop originを指定することが出来ます。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>WebAuthn は同一オリジン制約とクリックジャッキング対策の観点から、原則としてクロスオリジンを許容しません。</p>
+</li>
+<li>
+<p>ただし、認証ウィジェットを別オリジンのサイトに埋め込む、といったユースケースでは、親ページを限定して許容したい場合があります。その場合は <code>topOrigin(&#8230;&#8203;)</code>/<code>topOrigins(&#8230;&#8203;)</code>/<code>topOriginPredicate(&#8230;&#8203;)</code> で許容する親ページ（top-level ドキュメントの Origin）を明示してください。どうしても任意の親ページを許可する必要がある場合は <code>anyTopOrigin()</code> を使用できますが、攻撃面が広がるため慎重な運用が必要です。</p>
+</li>
+<li>
+<p>例（特定の親ページのみ許可）:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .topOrigin(new Origin("https://parent.example.com"))
+    .build();</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>例（任意の親ページを許可）:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .anyTopOrigin()
+    .build();</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>検証に成功した場合は、返却された値から <code>CredentialRecord</code> インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に使用します。
+永続化方法について詳しくは、 <a href="./deep-dive.html#CredentialRecordのシリアライズデシリアライズ">CredentialRecordのシリアライズ、デシリアライズ</a> を参照して下さい。
+検証に失敗した場合は、 <code>VerificationException</code> のサブクラスの例外が発生します。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webauthn4jを利用した認証処理の実装"><a class="anchor" href="#webauthn4jを利用した認証処理の実装"></a>2.4. WebAuthn4Jを利用した認証処理の実装</h3>
+<div class="sect3">
+<h4 id="webauthnのアサーションの生成"><a class="anchor" href="#webauthnのアサーションの生成"></a>2.4.1. WebAuthnのアサーションの生成</h4>
+<div class="paragraph">
+<p>WebAuthnでの認証時において中心となるAPIは、ブラウザの <code>navigator.credentials.get</code> メソッドです。
+認証のフローの図の通り、認証処理においても、まずバックエンドサーバー側でチャレンジを生成し、セッションに保存する一方、クライアントにチャレンジを引き渡す必要があります。
+<code>navigator.credentials.get</code> メソッドのパラメータにも <code>challenge</code> が存在するためです。
+バックエンドサーバーからフロントエンド（クライアント）への認証処理のチャレンジの受け渡し方法もWebAuthn仕様では定められていません。登録処理同様、お好みの方法でチャレンジをフロントエンド側に引き渡して下さい。
+<code>navigator.credentials.get</code> メソッドのパラメータである、 <code>PublicKeyCredentialRequestOptions</code> をパースするJava Script APIは、 <code>PublicKeyCredential.parseCreationGetOptionsFromJSON</code> です。 <code>PublicKeyCredential.parseCreationGetOptionsFromJSON</code> がSafariで利用できない問題の代替案は<a href="./deep-dive.html#Safariで未サポートなJSON serialization APIsの代替">Safariで未サポートなJSON serialization APIsの代替</a> を参照してください。
+<code>navigator.credentials.get</code> メソッドに指定できるその他のオプションに関しては、  <a href="https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get">MDN: CredentialsContainer: get() メソッド</a>を参照下さい。</p>
+</div>
+<div class="listingblock">
+<div class="title">例 4: <code>PublicKeyCredentialRequestOptions</code> 全体をREST Endpointから取得して <code>navigator.credentials.get</code> を呼出</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="javascript">const response = await fetch("/passkeys/assertionOptions");
+const publicKeyCredentialRequestOptionsJSON = await response.json();
+const credentialGetOptions = PublicKeyCredential.parseRequestOptionsFromJSON(publicKeyCredentialRequestOptionsJSON);
+const publicKeyCredential = await navigator.credentials.get({ publicKey: credentialGetOptions});</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="webauthnのアサーションの検証処理および後処理"><a class="anchor" href="#webauthnのアサーションの検証処理および後処理"></a>2.4.2. WebAuthnのアサーションの検証処理、および後処理</h4>
+<div class="paragraph">
+<p><code>navigator.credentials.get</code> メソッドによって生成されたアサーションは、バックエンドサーバー側に送信し、検証する必要があります。登録時同様、<code>toJSON</code> メソッドでシリアライズが可能です。</p>
+</div>
+<div class="listingblock">
+<div class="title">例 5: <code>PublicKeyCredential</code> をサーバーに送信</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="javascript">const authenticationResponseJSON = publicKeyCredential.toJSON();
+console.debug("authenticationResponseJSON: %s", authenticationResponseJSON);
+await fetch("/passkeys/authenticate", {
+    method : 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(authenticationResponseJSON)
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>WebAuthn4Jでは、 <code>PublicKeyCredential</code> のJSON表現を <code>WebAuthnManager#verifyAuthenticationResponseJSON</code> というメソッドで検証することが可能です。
+パースし、検証する2段階を踏む場合は、<code>WebAuthnManager#parseAuthenticationResponseJSON</code> メソッドと <code>WebAuthnManager#verify</code> メソッドをご利用下さい。</p>
+</div>
+<div class="listingblock">
+<div class="title">例 6: <code>PublicKeyCredential</code> のサーバーサイド検証</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">String authenticationResponseJSON = "&lt;authenticationResponseJSON&gt;"; /* set authenticationResponseJSON received from frontend */
+
+AuthenticationData authenticationData;
+try {
+    authenticationData = webAuthnManager.parseAuthenticationResponseJSON(authenticationResponseJSON);
+} catch (DataConversionException e) {
+    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
+    throw e;
+}
+
+// Server properties
+Origin origin = null /* set origin */;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .build();
+
+// expectations
+List&lt;byte[]&gt; allowCredentials = null;
+boolean userVerificationRequired = true;
+boolean userPresenceRequired = true;
+
+CredentialRecord credentialRecord = load(authenticationData.getCredentialId()); // please load authenticator object persisted in the registration process in your manner
+AuthenticationParameters authenticationParameters =
+        new AuthenticationParameters(
+                serverProperty,
+                credentialRecord,
+                allowCredentials,
+                userVerificationRequired,
+                userPresenceRequired
+        );
+
+try {
+    webAuthnManager.verify(authenticationData, authenticationParameters);
+} catch (VerificationException e) {
+    // If you would like to handle WebAuthn data validation error, please catch ValidationException
+    throw e;
+}
+// please update the counter of the authenticator record
+updateCounter(
+        authenticationData.getCredentialId(),
+        authenticationData.getAuthenticatorData().getSignCount()
+);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>WebAuthnManager#verifyAuthenticationResponseJSON</code> メソッドのもう一つの引数である <code>AuthenticationParameters</code> は、サーバーの状態や検証条件をまとめたパラメータです。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>serverProperty</code> は、サーバーの状態を渡すパラメータです。詳しくは<a href="#ServerProperty">[ServerProperty]</a> を参照して下さい。</p>
+</li>
+<li>
+<p><code>userVerificationRequired</code> は認証デバイスでのユーザーの生体認証やPIN確認などでの当人認証を必須とするかのパラメータです。パスワード＋認証デバイスの「所持」による多要素認証を行う場合は、パスワードで本人性の確認が出来ている為 <code>false</code> で良いでしょう。 パスワードレス認証として、認証デバイスによる本人性確認＋「所持」による多要素認証を行う場合は <code>true</code> を指定する必要があります。</p>
+</li>
+<li>
+<p><code>authenticator</code> には、登録時に永続化した <code>CredentialRecord</code> を指定してください。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>検証に成功した場合は、認証に成功したものと見做すことが出来ますので、永続化された <code>CredentialRecord</code> に紐づけたcounterおよび、uvInitialized、backedUpの値を更新してください。
+カウンタは万が一認証デバイスのクローンが 作成されたことを検知するために用意されています。
+カウンタについて詳しくは <a href="https://www.w3.org/TR/webauthn-1/#sign-counter">WebAuthnの仕様書のカウンタの項</a> を参照して下さい。</p>
+</div>
+<div class="paragraph">
+<p>その後、認証済セッションを作成するなど、ユーザー認証成功時の処理を実施下さい。
+検証に失敗した場合は、 <code>VerificationException</code> のサブクラスの例外が発生します。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="apple-app-attestの検証"><a class="anchor" href="#apple-app-attestの検証"></a>2.5. Apple App Attestの検証</h3>
+<div class="paragraph">
+<p>続いて、Apple App Attestの検証方法について解説します。 Apple App Attestは、WebAuthnに類似したデータ構造を持つため、Verifierの設計も、WebAuthn用のVerifierを踏襲しています。 なお、リスクメトリックの評価には対応していません。</p>
+</div>
+<div class="sect3">
+<h4 id="maven-centralからの取得-2"><a class="anchor" href="#maven-centralからの取得-2"></a>2.5.1. Maven Centralからの取得</h4>
+<div class="paragraph">
+<p>Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)とは別の、webauthn4j-appattestというモジュールとして配布されています。 Mavenを使用している場合、以下のようにwebauthn4j-appattestを依存関係として追加してください。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;properties&gt;
+  ...
+  &lt;!-- Use the latest version whenever possible. --&gt;
+  &lt;webauthn4j.version&gt;0.31.1.RELEASE&lt;/webauthn4j.version&gt;
+  ...
+&lt;/properties&gt;
+
+&lt;dependencies&gt;
+  ...
+  &lt;dependency&gt;
+    &lt;groupId&gt;com.webauthn4j&lt;/groupId&gt;
+    &lt;artifactId&gt;webauthn4j-appattest&lt;/artifactId&gt;
+    &lt;version&gt;${webauthn4j.version}&lt;/version&gt;
+  &lt;/dependency&gt;
+  ...
+&lt;/dependencies&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="apple-app-attest構成証明の検証"><a class="anchor" href="#apple-app-attest構成証明の検証"></a>2.5.2. Apple App Attest構成証明の検証</h4>
+<div class="paragraph">
+<p>認証デバイスの登録時に構成証明を検証する際は、<code>DCAttestationRequest</code> を引数に
+<code>DeviceCheckManager#verify</code> メソッドを用いて登録リクエストのパース、検証を行ってください。 登録リクエストの検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
+<code>DeviceCheckManager#parse</code> メソッドを用いて登録リクエストをパースしたうえで、 得られた <code>DCAttestationData</code> のインスタンスを <code>DeviceCheckManager#verify</code> メソッドに渡して実行してください。</p>
+</div>
+<div class="paragraph">
+<p><code>DCAttestationRequest</code> のメンバー はiOS上でDevice Check App Attest APIを実行して取得した値となります。 何らかの方法でiOSデバイス側からサーバー側に伝送し、指定してください。</p>
+</div>
+<div class="paragraph">
+<p><code>DCAttestationParameters</code> は、<code>DeviceCheckManager#verify</code> メソッドのもう一つの引数であり、 サーバーの状態や検証条件をまとめたパラメータです。 サーバーの状態については、 <code>DCServerProperty</code> としてまとめています。
+<code>DCServerProperty</code> のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>teamIdentifier</code> にはiOSアプリ開発時のteam identifierを指定してください。 詳しくは <a href="https://developer.apple.com/documentation/devicecheck/validating_apps_that_connect_to_your_server">Apple Apple Attestのサーバサイド検証手順</a> を参照して下さい。</p>
+</li>
+<li>
+<p><code>cfBundleIdentifier</code> にはiOSアプリ開発時のbundle identifierを指定してください。 詳しくは <a href="https://developer.apple.com/documentation/devicecheck/validating_apps_that_connect_to_your_server">Apple Apple Attestのサーバサイド検証手順</a> を参照して下さい。</p>
+</li>
+<li>
+<p><code>challenge</code> には発行したChallengeを指定して下さい。<code>challenge</code> はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で <code>challenge</code> としてランダムなバイト列を生成し、iOS側でApp Attest APIを実行する際に パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>検証に失敗した場合は、 <code>VerificationException</code> のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から <code>DCAppleDevice</code> インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。</p>
+</div>
+<div class="sect4">
+<h5 id="商用環境か開発環境か"><a class="anchor" href="#商用環境か開発環境か"></a>商用環境か？開発環境か？</h5>
+<div class="paragraph">
+<p>Apple App Attestは、開発中用に開発用の構成証明を返却することが可能です。
+WebAuthn4Jはデフォルトでは商用の構成証明を受け入れる設定となっており、
+開発用の構成証明を利用する場合は、 <code>DCAttestationDataVerifier#setProduction</code> で <code>false</code> を設定する必要があります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">// Client properties
+byte[] keyId = null; /* set keyId */
+byte[] attestationObject = null; /* set attestationObject */
+byte[] challenge = null; /* set challenge */
+byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
+
+// Server properties
+String teamIdentifier = null /* set teamIdentifier */;
+String cfBundleIdentifier = null /* set cfBundleIdentifier */;
+DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
+
+DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(keyId, attestationObject, clientDataHash);
+DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
+DCAttestationData dcAttestationData;
+try {
+    dcAttestationData = deviceCheckManager.parse(dcAttestationRequest);
+} catch (DataConversionException e) {
+    // If you would like to handle Apple App Attest data structure parse error, please catch DataConversionException
+    throw e;
+}
+try {
+    deviceCheckManager.verify(dcAttestationData, dcAttestationParameters);
+} catch (ValidationException e) {
+    // If you would like to handle Apple App Attest data validation error, please catch ValidationException
+    throw e;
+}
+
+// please persist Authenticator object, which will be used in the authentication process.
+DCAppleDevice dcAppleDevice =
+        new DCAppleDeviceImpl( // You may create your own Authenticator implementation to save friendly authenticator name
+                dcAttestationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                dcAttestationData.getAttestationObject().getAttestationStatement(),
+                dcAttestationData.getAttestationObject().getAuthenticatorData().getSignCount(),
+                dcAttestationData.getAttestationObject().getAuthenticatorData().getExtensions()
+        );
+save(dcAppleDevice); // please persist authenticator in your manner</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="apple-app-attestアサーションの検証"><a class="anchor" href="#apple-app-attestアサーションの検証"></a>2.5.3. Apple App Attestアサーションの検証</h4>
+<div class="paragraph">
+<p>認証時にアサーションを検証する際は、<code>DCAssertionRequest</code> を引数に  <code>DeviceCheckManager#verify</code> メソッドを 実行してください。<code>DCAssertionRequest</code> の コンストラクタの引数に指定する、 <code>keyId</code> と <code>assertion</code> 、 <code>clientDataHash</code> は iOS側でApple App Attest APIを実行して取得した値となります。 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
+<code>DeviceCheckManager#verify</code> メソッドのもう一つの引数である <code>DCAssertionParameters</code>  の コンストラクタの引数に指定する、 <code>serverProperty</code> はサーバー側から取得する値をまとめたパラメータです。</p>
+</div>
+<div class="paragraph">
+<p><code>DCAppleDevice</code> には、登録時に永続化した <code>DCAppleDevice</code> を指定してください。</p>
+</div>
+<div class="paragraph">
+<p>検証に失敗した場合は、 <code>VerificationException</code> のサブクラスの例外が発生します。 検証後は、 <code>DCAppleDevice</code> に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
+<a href="https://www.w3.org/TR/webauthn-1/#sign-counter">WebAuthnの仕様書のカウンタの項</a> を参照して下さい。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">// Client properties
+byte[] keyId = null /* set keyId */;
+byte[] assertion = null /* set assertion */;
+byte[] clientDataHash = null /* set clientDataHash */;
+
+// Server properties
+String teamIdentifier = null /* set teamIdentifier */;
+String cfBundleIdentifier = null /* set cfBundleIdentifier */;
+byte[] challenge = null;
+DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
+
+DCAppleDevice dcAppleDevice = load(keyId); // please load authenticator object persisted in the attestation process in your manner
+
+DCAssertionRequest dcAssertionRequest =
+        new DCAssertionRequest(
+                keyId,
+                assertion,
+                clientDataHash
+        );
+DCAssertionParameters dcAssertionParameters =
+        new DCAssertionParameters(
+                dcServerProperty,
+                dcAppleDevice
+        );
+
+DCAssertionData dcAssertionData;
+try {
+    dcAssertionData = deviceCheckManager.parse(dcAssertionRequest);
+} catch (DataConversionException e) {
+    // If you would like to handle Apple App Attest data structure parse error, please catch DataConversionException
+    throw e;
+}
+try {
+    deviceCheckManager.verify(dcAssertionData, dcAssertionParameters);
+} catch (ValidationException e) {
+    // If you would like to handle Apple App Attest data validation error, please catch ValidationException
+    throw e;
+}
+// please update the counter of the authenticator record
+updateCounter(
+        dcAssertionData.getCredentialId(),
+        dcAssertionData.getAuthenticatorData().getSignCount()
+);</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="設定"><a class="anchor" href="#設定"></a>3. 設定</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>WebAuthn4Jを利用する上で中心となるクラスは <code>WebAuthnManager</code> クラスです。
+<code>WebAuthnManager</code> は登録リクエスト検証時の構成証明ステートメントの署名と信頼性の検証を、 それぞれ <code>AttestationStatementVerifier</code> と <code>CertPathTrustworthinessVerifier</code> インタフェースの実装に委譲します。</p>
+</div>
+<div class="paragraph">
+<p>大多数のサイトは厳密な構成証明ステートメントの検証を必要とせず、エンタープライズ用途以外では厳密な構成証明ステートメントの検証は非推奨とされていることから（
+<a href="https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation">WebAuthn仕様書関連個所参照</a> ）、 WebAuthn4Jでは構成証明ステートメントの検証をしないように <code>AttestationStatementVerifier</code> と
+<code>CertPathTrustworthinessVerifier</code> を構成した <code>WebAuthnManager</code> のインスタンスを返却する
+<code>WebAuthnManager.createNonStrictWebAuthnManager</code> ファクトリメソッドを用意しています。</p>
+</div>
+<div class="paragraph">
+<p>もし、エンタープライズなユースケースで、認証デバイスの厳密な検証が要件である場合は、
+<code>WebAuthnManager</code> クラスのコンストラクタを用いて <code>AttestationStatementVerifier</code> と <code>CertPathTrustworthinessVerifier</code>
+の実装をコンストラクタインジェクションして構成して下さい。</p>
+</div>
+<div class="sect2">
+<h3 id="構成証明ステートメントの検証"><a class="anchor" href="#構成証明ステートメントの検証"></a>3.1. 構成証明ステートメントの検証</h3>
+<div class="paragraph">
+<p>構成証明ステートメントの検証は、 <code>AttestationStatementVerifier</code> インタフェースの実装クラスが提供します。 構成証明ステートメント毎に、対応する実装クラスが提供されていますので、必要なVerifierからなるListを
+<code>WebAuthnManager</code> クラスのコンストラクタに指定して下さい。 例えば、 <code>packed</code> のみをサポートする場合は、 <code>PackedAttestationStatementVerifier</code> を唯一の要素とするListとし、 例えば、 <code>packed</code>, <code>tpm</code> をサポートする場合は、 <code>PackedAttestationStatementVerifier</code> と <code>TPMAttestationStatementVerifier</code>
+からなるListを指定して下さい。
+Attestation検証を行わない <code>NoneAttestationStatementVerifier</code> や <code>NullPackedAttestationStatementVerifier</code> と、 他の <code>AttestationStatementVerifier</code> を混在させるのはやめましょう。
+検証を行わない <code>NoneAttestationStatementVerifier</code> などを、他の検証を行う <code>AttestationStatementVerifier</code> と混ぜてしまうと、Attestation検証迂回に使用される抜け穴となります。</p>
+</div>
+<div class="sect3">
+<h4 id="構成証明ステートメントの信頼性の検証"><a class="anchor" href="#構成証明ステートメントの信頼性の検証"></a>3.1.1. 構成証明ステートメントの信頼性の検証</h4>
+<div class="paragraph">
+<p>構成証明ステートメント自体の信頼性の検証は、証明書パスの検証、自己署名のパターンがありますが、 証明書パスの検証は <code>CertPathTrustworthinessVerifier</code> インタフェースの実装に検証が委譲されます。
+WebAuthn4Jは <code>CertPathTrustworthinessVerifier</code> インタフェースの実装として <code>DefaultCertPathTrustworthinessVerifier</code> を提供しています。 <code>DefaultCertPathTrustworthinessVerifier</code> は <code>TrustAnchorRepository</code> インタフェースを通じて取得した <code>TrustAnchor</code> をトラストアンカーとして証明書パスの検証を行うことで構成証明ステートメントの信頼性の検証を行います。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="トラストアンカーの解決"><a class="anchor" href="#トラストアンカーの解決"></a>3.1.2. トラストアンカーの解決</h4>
+<div class="paragraph">
+<p>前節で <code>TrustAnchorRepository</code> インタフェースがトラストアンカーの取得に使用されると述べましたが、 <code>TrustAnchorRepository</code> インタフェースは <code>AAGUID</code> や <code>attestationCertificateKeyIdentifier</code> に基づいて <code>TrustAnchor</code> を返却するインタフェースです。
+<code>webauthn4j-core</code> モジュールでは、 <code>TrustAnchorRepository</code> の実装として、<code>KeyStoreTrustAnchorRepository</code> を提供しています。
+<code>KeyStoreTrustAnchorRepository</code> は、Java Key Storeファイルからトラストアンカーを取得します。なお、 <code>KeyStoreTrustAnchorRepository</code> は <code>AAGUID</code> や <code>attestationCertificateKeyIdentifier</code> に応じて異なる TrustAnchorを返却することはせず、Java Key Storeファイルに登録された証明書を全てトラストアンカーとして扱います。</p>
+</div>
+<div class="sect4">
+<h5 id="fido-metadata-serviceを用いたトラストアンカーの取得"><a class="anchor" href="#fido-metadata-serviceを用いたトラストアンカーの取得"></a>FIDO Metadata Serviceを用いたトラストアンカーの取得</h5>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+FIDO Metadata Statement関連の機能を提供する <code>webauthn4j-metadata</code> モジュールは実験的な提供段階です。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>FIDO Allianceでは、FIDO Metadata Serviceという、認証デバイスのメタデータを配信するサービスを提供しています。
+<code>webauthn4j-metadata</code> モジュールでは、<code>TrustAnchorRepository</code> の実装として <code>MetadataBLOBBasedTrustAnchorRepository</code> を提供しています。
+<code>MetadataBLOBBasedTrustAnchorRepository</code> は <code>FidoMDS3MetadataBLOBAsyncProvider</code> と組み合わせることで
+FIDO Metadata Serviceの公開する情報に基づいてトラストアンカーを構築することが可能です。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ログ"><a class="anchor" href="#ログ"></a>3.2. ログ</h3>
+<div class="paragraph">
+<p>WebAuthn4JはSLF4Jをログインタフェースライブラリとして使用します。 Logbackなどログ実装ライブラリを構成し、ログをお好みのスタイルで出力してください。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="詳細"><a class="anchor" href="#詳細"></a>4. 詳細</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="クレデンシャル情報の表現"><a class="anchor" href="#クレデンシャル情報の表現"></a>4.1. クレデンシャル情報の表現</h3>
+<div class="paragraph">
+<p>クレデンシャル情報を表現するインタフェースとして、 <code>CredentialRecord</code> インタフェースが存在します。 登録時に、 <code>RegistrationData</code> クラスが含む値を用いて <code>CredentialRecord</code> インタフェースの インスタンスを作成し、アプリケーションの作法に則り永続化してください。認証時の検証に必要となります。 なお、永続化する際は、検索する際の利便性を考え、credentialIdをキーに永続化すると良いでしょう。
+<code>CredentialRecord</code> インタフェースの実装クラスを設計する際は、アプリケーションの要件に合わせて拡張すると良いでしょう。 典型的には、 <code>CredentialRecord</code> をユーザーが識別するための名前フィールドの追加などが考えられるでしょう。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="credentialrecordのシリアライズデシリアライズ"><a class="anchor" href="#credentialrecordのシリアライズデシリアライズ"></a>4.2. CredentialRecordのシリアライズ、デシリアライズ</h3>
+<div class="paragraph">
+<p>認証デバイスの登録時、<code>CredentialRecord</code> のインスタンスをデータベース等に永続化し、認証時に利用できるようにするのはアプリケーションの責務ですが、
+<code>CredentialRecord</code> を構成する各メンバをシリアライズ、デシリアライズする際に使用できるクラスをWebAuthn4Jでは用意しています。 アプリケーションで永続化を実装する際の補助としてご利用ください。</p>
+</div>
+<div class="sect3">
+<h4 id="attestedcredentialdata"><a class="anchor" href="#attestedcredentialdata"></a>4.2.1. attestedCredentialData</h4>
+<div class="paragraph">
+<p><code>AttestedCredentialDataConverter</code> で <code>AttestedCredentialData</code> を <code>byte[]</code> に変換したり、その逆の変換を行うことが出来ます。 なお、<code>String</code> として保存したい場合、さらに <code>Base64UrlUtil</code> を用いることで <code>byte[]</code> から Base64Url <code>String</code> に変換することが出来ます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">AttestedCredentialDataConverter attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
+
+// serialize
+byte[] serialized = attestedCredentialDataConverter.convert(attestedCredentialData);
+// deserialize
+AttestedCredentialData deserialized = attestedCredentialDataConverter.convert(serialized);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="attestationstatement"><a class="anchor" href="#attestationstatement"></a>4.2.2. attestationStatement</h4>
+<div class="paragraph">
+<p><code>AttestationStatement</code> はインタフェースであり、<code>PackedAttestationStatement</code> や、<code>AndroidKeyAttestationStatement</code> など、フォーマットにあわせて複数の実装があります。
+<code>AttestationStatement</code> のCBOR表現は具象型が何であるかについて自己記述性を持たない為、フォーマットは別途、別のフィールドとして永続化する必要があります。 そのため、CBORとしてシリアライズする際は、実際のattestationStatementのフィールドと、フォーマットのフィールドを持つエンベロープクラスを用意し、エンベロープクラスをシリアライズしなければなりません。
+エンベロープクラス自体は、WebAuthn4Jライブラリでは提供していないため、以下の例を参考にアプリケーションコード側で実装下さい。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">//serialize
+AttestationStatementEnvelope envelope = new AttestationStatementEnvelope(attestationStatement);
+byte[] serializedEnvelope = objectConverter.getCborMapper().writeValueAsBytes(envelope);
+
+//deserialize
+AttestationStatementEnvelope deserializedEnvelope = objectConverter.getCborMapper().readValue(serializedEnvelope, AttestationStatementEnvelope.class);
+AttestationStatement deserializedAttestationStatement = deserializedEnvelope.getAttestationStatement();</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">class AttestationStatementEnvelope{
+
+    @JsonProperty("attStmt")
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
+            property = "fmt"
+    )
+    private AttestationStatement attestationStatement;
+
+    @JsonCreator
+    public AttestationStatementEnvelope(@JsonProperty("attStmt") AttestationStatement attestationStatement) {
+        this.attestationStatement = attestationStatement;
+    }
+
+    @JsonProperty("fmt")
+    public String getFormat() {
+        return attestationStatement.getFormat();
+    }
+
+    public AttestationStatement getAttestationStatement() {
+        return attestationStatement;
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="transports"><a class="anchor" href="#transports"></a>4.2.3. transports</h4>
+<div class="paragraph">
+<p>JSON文字列として保存したい場合は <code>ObjectConverter</code> が使用できます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">String serializedTransports = objectConverter.getJsonMapper().writeValueAsString(transports);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="counter"><a class="anchor" href="#counter"></a>4.2.4. counter</h4>
+<div class="paragraph">
+<p>このメンバは元々long型の為、特に変換は不要です。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="authenticatorextensions"><a class="anchor" href="#authenticatorextensions"></a>4.2.5. authenticatorExtensions</h4>
+<div class="paragraph">
+<p>authenticatorExtensionsは元来CBORデータの為、CBOR byte配列に変換できます。
+なお、<code>String</code> として保存したい場合、さらに <code>Base64UrlUtil</code> を用いることで <code>byte[]</code> から Base64Url <code>String</code> に変換することが出来ます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">byte[] serializedAuthenticatorExtensions = objectConverter.getCborMapper().writeValueAsBytes(authenticatorExtensions);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="clientextensions"><a class="anchor" href="#clientextensions"></a>4.2.6. clientExtensions</h4>
+<div class="paragraph">
+<p>clientExtensionsは元来JSONデータの為、JSON文字列に変換できます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">String serializedClientExtensions = objectConverter.getJsonMapper().writeValueAsString(clientExtensions);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="dcappledeviceのシリアライズデシリアライズ"><a class="anchor" href="#dcappledeviceのシリアライズデシリアライズ"></a>4.3. DCAppleDeviceのシリアライズ、デシリアライズ</h3>
+<div class="paragraph">
+<p>webauthn4j-appattestでは、<code>CredentialRecord</code> インタフェースの代わりに、<code>DCAppleDevice</code> インタフェースを実装したクラスを、構成証明の検証時とアサーションの検証時の間で永続化する必要があります。 概ね<a href="#credentialrecordのシリアライズデシリアライズ">CredentialRecordのシリアライズ、デシリアライズ</a>で解説した方法でシリアライズ、デシリアライズが可能ですが、一点気を付ける必要がある点として、 webauthn4j-appattest独自のクラス（例えば <code>AppleAppAttestAttestationStatement</code> )のシリアライズ、デシリアライズを行う為に、
+<code>ObjectConverter</code> は <code>DeviceCheckCBORModule</code> が登録されたものを使用する必要があります。
+<code>DeviceCheckCBORModule</code> が登録された <code>ObjectConverter</code> は <code>DeviceCheckManager#createObjectConverter</code> で得ることが出来ます。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="safariで未サポートなjson-serialization-apisの代替"><a class="anchor" href="#safariで未サポートなjson-serialization-apisの代替"></a>4.4. Safariで未サポートなJSON serialization APIsの代替</h3>
+<div class="paragraph">
+<p>クイックスタートでは、 <code>PublicKeyCredentialCreationOptions</code> をパースするAPIとして <code>PublicKeyCredential.parseCreationOptionsFromJSON</code> が、
+<code>PublicKeyCredential</code> をシリアライズするAPIとして <code>PublicKeyCredential#toJSON</code> が存在すると紹介しましたが、Safariでは18.4以降でしか利用できません。
+代わりとして、GitHubが提供するnpmライブラリ、 <a href="https://github.com/github/webauthn-json">github/@webauthn-json</a> が提供する、 pony-fillを利用するのがお勧めです。
+<code>PublicKeyCredential.parseCreationOptionsFromJSON</code> の代わりに、 <code>parseCreationOptionsFromJSON</code> が、
+<code>naviagator.credentials.create</code> の代わりに <code>create</code> が提供されています。</p>
+</div>
+<div class="listingblock">
+<div class="title">例 7: github/@webauthn-jsonを利用したクレデンシャルの作成</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="javascript">import {
+  create,
+  parseCreationOptionsFromJSON,
+} from "@github/webauthn-json/browser-ponyfill";
+
+const response = await fetch("&lt;endpoint path that returns PublicKeyCredentialCreationOptions as JSON&gt;") //fetch PublicKeyCredentialCreationOptions as JSON string
+const publicKeyCredentialCreationOptionsJSON = await response.json() // convert to JSONObject
+const credentialCreationOptions = parseCreationOptionsFromJSON(publicKeyCredentialCreationOptionsJSON); // convert to PublicKeyCredentialCreationOptions
+const publicKeyCredential = await create({ publicKey: credentialCreationOptions}); // create PublicKeyCredential
+const registrationResponseJSON = publicKeyCredential.toJSON() // JSON object of publicKeyCredential
+const registrationResponseJSONStr = JSON.stringify(registrationResponseJSON) // JSON string representation of publicKeyCredential</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このpony-fillの <code>create</code> メソッドを利用して得られた publicKeyCredentialでは、 <code>toJSON</code> メソッドが利用可能です。</p>
+</div>
+<div class="paragraph">
+<p><code>PublicKeyCredential.parseRequestOptionsFromJSON</code> の代わりとしては、 <code>parseRequestOptionsFromJSON</code> が、
+<code>naviagator.credentials.get</code> の代わりに <code>get</code> が提供されています。</p>
+</div>
+<div class="listingblock">
+<div class="title">例 8: github/@webauthn-jsonを利用したクレデンシャルの取得</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="javascript">import {
+  get,
+  parseRequestOptionsFromJSON,
+} from "@github/webauthn-json/browser-ponyfill";
+
+const response = await fetch("&lt;endpoint path that returns PublicKeyCredentialRequestOptions as JSON&gt;");
+const publicKeyCredentialRequestOptionsJSON = await response.json();
+const credentialGetOptions = parseRequestOptionsFromJSON(publicKeyCredentialRequestOptionsJSON);
+const publicKeyCredential = await get({ publicKey: credentialGetOptions});
+const authenticationResponseJSON = publicKeyCredential.toJSON()
+const authenticationResponseJSONStr = JSON.stringify(authenticationResponseJSON)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="モジュール構成"><a class="anchor" href="#モジュール構成"></a>4.5. モジュール構成</h3>
+<div class="paragraph">
+<p>WebAuthn4Jは、以下のModuleから構成されます。</p>
+</div>
+<div class="sect3">
+<h4 id="core-webauthn4j-core-jar"><a class="anchor" href="#core-webauthn4j-core-jar"></a>4.5.1. Core: webauthn4j-core.jar</h4>
+<div class="paragraph">
+<p>WebAuthn Attestation/Assertionの検証機能およびコア機能を提供します。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="metadata-webauthn4j-metadata-jar"><a class="anchor" href="#metadata-webauthn4j-metadata-jar"></a>4.5.2. Metadata: webauthn4j-metadata.jar</h4>
+<div class="paragraph">
+<p>FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能を提供します。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="core-async-webauthn4j-core-async-jar"><a class="anchor" href="#core-async-webauthn4j-core-async-jar"></a>4.5.3. Core-Async: webauthn4j-core-async.jar</h4>
+<div class="paragraph">
+<p>WebAuthn Attestation/Assertionの検証機能およびコア機能の非同期版を提供します。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="metadata-async-webauthn4j-metadata-async-jar"><a class="anchor" href="#metadata-async-webauthn4j-metadata-async-jar"></a>4.5.4. Metadata-Async: webauthn4j-metadata-async.jar</h4>
+<div class="paragraph">
+<p>FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能の非同期バージョンを提供します。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="app-attest-webauthn4j-appattest-jar"><a class="anchor" href="#app-attest-webauthn4j-appattest-jar"></a>4.5.5. App Attest: webauthn4j-appattest.jar</h4>
+<div class="paragraph">
+<p>Apple App Attest Attestation/Assertionの検証機能を提供します。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="test-webauthn4j-test-jar"><a class="anchor" href="#test-webauthn4j-test-jar"></a>4.5.6. Test: webauthn4j-test.jar</h4>
+<div class="paragraph">
+<p>WebAuthn4Jのテストを行うための内部ライブラリです。含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに 破壊的変更が入る場合があります。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="util-webauthn4j-util-jar"><a class="anchor" href="#util-webauthn4j-util-jar"></a>4.5.7. Util: webauthn4j-util.jar</h4>
+<div class="paragraph">
+<p>WebAuthn4Jライブラリで使用されるユーティリティクラスをまとめたライブラリです。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="origin検証"><a class="anchor" href="#origin検証"></a>4.6. Origin検証</h3>
+<div class="paragraph">
+<p>WebAuthn の「Origin 検証」とは、登録・認証の各セレモニー時点でクライアント（ブラウザ）が認識していた Origin が、RP が期待する Origin と一致するかをサーバー側で検証することを指します。
+これは、クライアントが生成する clientData に内包される origin を根拠に、セレモニーが想定したページから正しく開始されたことを確認し、他オリジンからの不正な呼び出しを防止する目的があります。</p>
+</div>
+<div class="paragraph">
+<p>また、iframe 配下でのクロスオリジンな操作（例: <a href="https://example.com" class="bare">https://example.com</a> のページに埋め込まれた <a href="https://rp.example.net" class="bare">https://rp.example.net</a> の iframe 内でWebAuthn認証を実行するような操作）について、WebAuthn は原則として許容しません。
+これは、同一オリジン原則に基づき、クリックジャッキング等のフレーミング攻撃や別オリジンからの恣意的な認証誘発を抑止するためです。</p>
+</div>
+<div class="paragraph">
+<p>一方で、認証ウィジェットを別オリジンのサイトに iframe 埋め込みする構成（自社・パートナーサイトなど）のようなユースケースでは、適切に制約したうえでクロスオリジンの実行を許容したい場合があります。
+Permissions-Policyディレクティブなどを使用して許可を宣言することで、クロスオリジンでのWebAuthnの使用をクライアントに対して許可することが可能ですが、
+サーバーサイドでも適切に検証が必要であり、WebAuthn4J では、ServerProperty のビルダー API により、通常の origin（RP ページ）に対する検証に加えて、topOrigin（親ページ）の許容条件を宣言的に構成できます。
+既定ではクロスオリジンは許可されません。クロスオリジンを許容する必要がある場合は、許容したい親ページを明示する topOrigin(&#8230;&#8203;)/topOrigins(&#8230;&#8203;)/topOriginPredicate(&#8230;&#8203;) もしくは任意許可の anyTopOrigin() を設定してください。</p>
+</div>
+<div class="sect3">
+<h4 id="origin-の検証"><a class="anchor" href="#origin-の検証"></a>4.6.1. origin の検証</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>指定方法</p>
+<div class="ulist">
+<ul>
+<li>
+<p>origin(&#8230;&#8203;), origins(&#8230;&#8203;), originPredicate(&#8230;&#8203;): RP ページの許容オリジンを指定します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>既定の挙動</p>
+<div class="ulist">
+<ul>
+<li>
+<p>指定した条件に一致するオリジンのみを許容します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>使用例</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .build();</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="toporigin-の検証"><a class="anchor" href="#toporigin-の検証"></a>4.6.2. topOrigin の検証</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>目的</p>
+<div class="ulist">
+<ul>
+<li>
+<p>iframe 配下でのクロスオリジンな WebAuthn 操作において、最上位ドキュメント（親ページ）のオリジンを検証し、想定する埋め込み元のみを許容します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>指定方法</p>
+<div class="ulist">
+<ul>
+<li>
+<p>topOrigin(&#8230;&#8203;), topOrigins(&#8230;&#8203;), topOriginPredicate(&#8230;&#8203;): 許可するトップオリジンを限定</p>
+</li>
+<li>
+<p>anyTopOrigin(): すべてのトップオリジンを許可（利便性は高いがセキュリティ境界を広げるため慎重に使用）</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>既定の挙動</p>
+<div class="ulist">
+<ul>
+<li>
+<p>明示的に topOrigin を設定しない場合、クロスオリジンな iframe からの利用は許可されません。</p>
+</li>
+<li>
+<p>クライアントから topOrigin が提供されない場合は、通常の origin 検証のみが行われます。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>使用例（特定のトップオリジンのみ許可）</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .topOrigin(new Origin("https://parent.example.com"))
+    .build();</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>使用例（任意のトップオリジンを許可）</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ServerProperty serverProperty = ServerProperty.builder()
+    .origin(new Origin("https://rp.example.com"))
+    .rpId("rp.example.com")
+    .challenge(challenge)
+    .anyTopOrigin()
+    .build();</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>セキュリティ考慮</p>
+<div class="ulist">
+<ul>
+<li>
+<p>任意許可（anyTopOrigin）は攻撃面の拡大につながる可能性があります。可能な限り topOrigin/topOrigins/topOriginPredicate により許可範囲を限定してください。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>後方互換</p>
+<div class="ulist">
+<ul>
+<li>
+<p>旧来の包括的許可フラグは後方互換のために残されていますが、新規の構成では topOriginPredicate（または anyTopOrigin）を使用してください。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="カスタムな検証ロジックの実装"><a class="anchor" href="#カスタムな検証ロジックの実装"></a>4.7. カスタムな検証ロジックの実装</h3>
+<div class="paragraph">
+<p>WebAuthn4Jでは、カスタムな検証ロジックを実装し、追加することが可能です。 登録時の検証にカスタムロジックを追加する場合は、 <code>CustomRegistrationVerifier</code> を実装してください。 認証時の検証にカスタムロジックを追加する場合は、 <code>CustomAuthenticationVerifier</code> を実装してください。</p>
+</div>
+<div class="sect3">
+<h4 id="カスタム検証ロジックの登録"><a class="anchor" href="#カスタム検証ロジックの登録"></a>4.7.1. カスタム検証ロジックの登録</h4>
+<div class="paragraph">
+<p><code>CustomRegistrationVerifier</code> と <code>CustomAuthenticationVerifier</code> の実装は <code>WebAuthnManager</code> のコンストラクタの
+<code>customRegistrationVerifiers</code> パラメータおよび <code>customAuthenticationVerifiers</code> パラメータを通じて登録することが出来ます。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="カスタムなデータ変換ロジックの実装"><a class="anchor" href="#カスタムなデータ変換ロジックの実装"></a>4.8. カスタムなデータ変換ロジックの実装</h3>
+<div class="paragraph">
+<p>WebAuthn4Jでは、JSONやCBORのシリアライズ、デシリアライズ処理にJackson3ライブラリを使用しています。 Client ExtensionやAuthenticator Extensionのデータ変換でカスタムな変換を行いたい場合、カスタムなシリアライザ、デシリアライザを登録したJackson3の <code>JsonMapper</code> 、 <code>CBORMapper</code> をWebAuthn4Jに渡す必要があｒます。</p>
+</div>
+<div class="sect3">
+<h4 id="カスタムなデータ変換ロジックの登録"><a class="anchor" href="#カスタムなデータ変換ロジックの登録"></a>4.8.1. カスタムなデータ変換ロジックの登録</h4>
+<div class="paragraph">
+<p>WebAuthn4Jは、Jackson3の <code>JsonMapper</code>, <code>CBORMapper</code> のセットを、 <code>ObjectConverter</code> というクラスのインスタンスを通じて受け取ります。
+カスタムなシリアライザ、デシリアライザを登録した <code>JsonMapper</code>, <code>CBORMapper</code> を <code>ObjectConverter</code> インスタンス作成時にコンストラクタからインジェクトし、
+その <code>ObjectConverter</code> を <code>WebAuthnManager</code> のインスタンス作成時にパラメータとして指定してください。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="クラス"><a class="anchor" href="#クラス"></a>4.9. クラス</h3>
+<div class="sect3">
+<h4 id="data-transfer-objects"><a class="anchor" href="#data-transfer-objects"></a>4.9.1. Data transfer Objects</h4>
+<div class="paragraph">
+<p><code>com.webauthn4j.data</code> パッケージ配下のクラスはイミュータブルなDTOとして設計されています。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="converter-webauthnmodule"><a class="anchor" href="#converter-webauthnmodule"></a>4.9.2. Converter, WebAuthnModule</h4>
+<div class="paragraph">
+<p>データパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。 一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 <code>converter</code> パッケージ配下に集約されています。 カスタムシリアライザ、デシリアライザは <code>WebAuthnJSONModule</code> と <code>WebAuthnCBORModule</code> というJacksonのModuleにまとめられています。 WebAuthn4Jは内部で使用するJacksonの <code>JsonMapper</code>, <code>CBORMapper</code> に自動で <code>WebAuthnJSONModule</code> と <code>WebAuthnCBORModule</code> を適用しますが、<code>WebAuthnManager</code> の外部で WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合は、Jacksonの <code>JsonMapper</code>, <code>CBORMapper</code> に <code>WebAuthnJSONModule</code> と <code>WebAuthnCBORModule</code> を登録すると良いでしょう。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="trustanchorsresolver"><a class="anchor" href="#trustanchorsresolver"></a>4.9.3. TrustAnchorsResolver</h4>
+<div class="paragraph">
+<p><code>TrustAnchorsResolver</code> インタフェースは <code>TrustAnchorCertPathTrustworthinessVerifier</code> で構成証明ステートメントの信頼性の 検証を行う際に信頼するルート証明書のセットを探索するために使用されます。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="trustanchorsprovider"><a class="anchor" href="#trustanchorsprovider"></a>4.9.4. TrustAnchorsProvider</h4>
+<div class="paragraph">
+<p><code>TrustAnchorsProvider</code> インタフェースは前述の <code>TrustAnchorsResolver</code> インタフェースの実装である <code>TrustAnchorsResolverImpl</code>
+がTrustAnchorの読込処理を委譲する先のインタフェースです。実装としてJava Key StoreファイルからTrustAnchorを読み込む
+<code>KeyStoreFileTrustAnchorsProvider</code> クラスが提供されている他、WebAuthn4J Spring Securityでは、SpringのResourceから TrustAnchorを読み込む <code>CertFileResourcesTrustAnchorProvider</code> が提供されています。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="例外クラス"><a class="anchor" href="#例外クラス"></a>4.9.5. 例外クラス</h4>
+<div class="paragraph">
+<p>データの変換に失敗した場合、 <code>DataConversionException</code> のサブクラスがスローされます。 データの検証に失敗した場合、 <code>VerificationException</code> のサブクラスがスローされます。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webauthn以外のfido-ctap2セキュリティキーを用いた独自アプリケーションでの利用"><a class="anchor" href="#webauthn以外のfido-ctap2セキュリティキーを用いた独自アプリケーションでの利用"></a>4.10. WebAuthn以外のFIDO CTAP2セキュリティキーを用いた独自アプリケーションでの利用</h3>
+<div class="paragraph">
+<p>FIDO CTAP2セキュリティキーにとって、WebAuthnは一つの応用例でしかなく、セキュアな認証を必要とする独自アプリケーションで セキュリティキーを利用することも可能です。本節では、FIDO CTAP2セキュリティキーを用いた独自アプリケーションにおけるAttestation、Assertion検証でWebAuthn4Jを利用する方法を説明します。</p>
+</div>
+<div class="sect3">
+<h4 id="fido-ctap2セキュリティキーを用いた独自アプリケーションでの登録認証のフロー"><a class="anchor" href="#fido-ctap2セキュリティキーを用いた独自アプリケーションでの登録認証のフロー"></a>4.10.1. FIDO CTAP2セキュリティキーを用いた独自アプリケーションでの登録、認証のフロー</h4>
+<div class="paragraph">
+<p>FIDO CTAP2セキュリティキーを独自アプリケーションで認証に使用する場合、セキュリティキーを登録するために、 アプリからFIDO CTAP2セキュリティキーの <a href="https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential">authenticatorMakeCredential</a> メソッドを呼び出し、公開鍵やデバイスの構成情報を 含むデータ（構成証明、Attestation）を取得し保存します。 取得されたAttestationは、セキュリティキーがアプリとして受け入れ可能なキーか判定するために検証が必要です。 WebAuthn4Jでは、 <code>CoreRegistrationVerifier</code> クラスを用いることで、取得されたAttestationを検証可能です。</p>
+</div>
+<div class="paragraph">
+<p>認証時には、同様にアプリからFIDO CTAP2セキュリティキーの <a href="https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion">authenticatorGetAssertion</a> メソッドを呼び出し、認証時にサーバーに送信される署名を含んだデータ（アサーション、Assertion）を取得します。 取得されたAssertionを検証することで、アプリは認証に用いられたセキュリティキーが、登録時に用いられたセキュリティキーと同一であることを確認し、正当なアクセスか判定することが可能となります。WebAuthn4Jでは、 <code>CoreAuthenticationVerifier</code> クラスを用いることで、取得されたAssertionを検証可能です。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="アプリケーション固有のクライアントデータの真正性の担保検証"><a class="anchor" href="#アプリケーション固有のクライアントデータの真正性の担保検証"></a>4.10.2. アプリケーション固有のクライアントデータの真正性の担保、検証</h4>
+<div class="paragraph">
+<p>上記のフローに従って実装することで、FIDO CTAP2セキュリティキーを用いた安全な認証が実現可能ですが、 FIDO CTAP2セキュリティキーを呼び出す主体（クライアント）と、Attestation、Assertionを検証する主体（サーバー）が分離している場合、クライアントが登録、認証時にアプリケーション固有のクライアントデータを生成し、クライアントデータを追加でサーバーで検証したい場合もあります。クライアントデータ自体はAttestation、Assertionと一緒に送信すれば良いですが、 クライアントデータを中間者攻撃から防御するために、クライアントデータに対して署名を行い、保護する必要があります。</p>
+</div>
+<div class="paragraph">
+<p>さて、FIDO CTAP2では、登録時に利用する <a href="https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential">authenticatorMakeCredential</a> メソッドと認証時に利用する <a href="https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion">authenticatorGetAssertion</a> メソッド 、どちらにも共通するパラメータとして、<code>clientDataHash</code> というパラメータが存在します。セキュリティキーは、受け取った <code>clientDataHash</code> パラメータを署名対象のデータの一部として署名を生成するため、アプリケーションとして署名で保護したいクライアントデータのハッシュを取得し、
+<code>clientDataHash</code> にセットすることで、アプリケーション固有のクライアントデータが改竄されていない真正なデータか、サーバー側で検証することが出来ます。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="faq"><a class="anchor" href="#faq"></a>5. FAQ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="publickeycredentialcreationoptions-の-excludecredentials-に何を指定すべきか"><a class="anchor" href="#publickeycredentialcreationoptions-の-excludecredentials-に何を指定すべきか"></a>5.1. <code>PublicKeyCredentialCreationOptions</code> の <code>excludeCredentials</code> に何を指定すべきか</h3>
+<div class="paragraph">
+<p><code>PublicKeyCredentialCreationOptions</code> の <code>excludeCredentials</code> は登録時に除外したい Authenticator を指定するためのパラメータです。
+アカウントに既に紐付いている Authenticator を新規登録から除外する際に使用します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">// 除外する Authenticator がない場合
+List&lt;PublicKeyCredentialDescriptor&gt; excludeCredentials = null;
+
+// 特定の Authenticator を除外する場合
+List&lt;PublicKeyCredentialDescriptor&gt; excludeCredentials = Collections.singletonList(
+    new PublicKeyCredentialDescriptor(
+        PublicKeyCredentialType.PUBLIC_KEY,
+        existingCredentialId,
+        transports
+    )
+);</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>nullを指定した場合、除外される Authenticator はありません</p>
+</li>
+<li>
+<p>そのユーザーがすでに持っている認証器を excludeCredentials に指定することで、誤って同じ認証器を再登録することを防止できます</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="publickeycredentialrequestoptions-の-allowcredentials-に何を指定すべきか"><a class="anchor" href="#publickeycredentialrequestoptions-の-allowcredentials-に何を指定すべきか"></a>5.2. <code>PublicKeyCredentialRequestOptions</code> の <code>allowCredentials</code> に何を指定すべきか</h3>
+<div class="paragraph">
+<p>PublicKeyCredentialRequestOptions の allowCredentials は認証時に使用可能な Authenticator を指定するためのパラメータです。
+non-discoverable credentialの場合、allowCredentialsにcredentialIdを指定する必要があります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">// 全てのAuthenticatorを許可する場合
+List&lt;PublicKeyCredentialDescriptor&gt; allowCredentials = null;
+
+// 特定のAuthenticatorのみを許可する場合
+List&lt;PublicKeyCredentialDescriptor&gt; allowCredentials = Collections.singletonList(
+    new PublicKeyCredentialDescriptor(
+        PublicKeyCredentialType.PUBLIC_KEY,
+        credentialId,
+        transports
+    )
+);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webauthnmanager-クラス責務が多すぎでは"><a class="anchor" href="#webauthnmanager-クラス責務が多すぎでは"></a>5.3. <code>WebAuthnManager</code> クラス、責務が多すぎでは？</h3>
+<div class="paragraph">
+<p>Q: <code>WebAuthnManager</code> は、登録処理と認証処理という異なる2つの機能を提供しており、
+認証処理だけを必要とするクラスから呼び出す場合も、<code>WebAuthnManager</code> のインスタンス化時に登録処理だけで必要なAttestation関連の設定が必要であり、不便です。</p>
+</div>
+<div class="paragraph">
+<p>A: <code>WebAuthnManager</code> を分割した <code>WebAuthnRegistrationManager</code> と <code>WebAuthnAuthenticationManager</code> を提供していますのでそちらをご利用下さい。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="既知の問題"><a class="anchor" href="#既知の問題"></a>6. 既知の問題</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 0.31.2-SNAPSHOT<br>
+Last updated 2026-03-01 16:22:20 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>
