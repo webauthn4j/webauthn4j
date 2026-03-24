@@ -84,13 +84,13 @@ class AttestationVerifier {
 
         verifyAAGUID(attestationObject);
 
-        //spec| Step23
+        //spec| Step22
         //spec| If validation is successful, obtain a list of acceptable trust anchors (i.e. attestation root certificates)
         //spec| for that attestation type and attestation statement format fmt, from a trusted source or from policy.
         //spec| For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
         //spec| using the aaguid in the attestedCredentialData in authData.
-        //spec| Step24
-        //spec| Assess the attestation trustworthiness using the outputs of the verification procedure in step 19, as follows:
+        //spec| Step23
+        //spec| Assess the attestation trustworthiness using the outputs of the verification procedure in step 21, as follows:
         //spec| If no attestation was provided, verify that None attestation is acceptable under Relying Party policy.
         //      (This is already done in verifyAttestationStatement method)
 
@@ -110,7 +110,7 @@ class AttestationVerifier {
 
             //spec| Otherwise, use the X.509 certificates returned as the attestation trust path from the verification procedure
             //spec| to verify that the attestation public key either correctly chains up to an acceptable root certificate,
-            //spec| or is itself an acceptable certificate (i.e., it and the root certificate obtained in Step 20 may be the same).
+            //spec| or is itself an acceptable certificate (i.e., it and the root certificate obtained in step 22 may be the same).
             case BASIC:
             case ATT_CA:
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {

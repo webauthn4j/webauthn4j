@@ -44,6 +44,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Verifier for WebAuthn registration ceremonies.
+ * <p>
+ * This class implements the verification procedure defined in the WebAuthn specification:
+ * <ul>
+ *   <li>WebAuthn Level 3 (W3C Recommendation):
+ *       <a href="https://www.w3.org/TR/webauthn-3/#sctn-registering-a-new-credential">
+ *       § 7.1 Registering a New Credential</a></li>
+ * </ul>
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/">Web Authentication: An API for accessing Public Key Credentials - Level 3</a>
+ */
 public class RegistrationDataVerifier {
 
     private static final int DEFAULT_MAX_CREDENTIAL_ID_LENGTH = 1023;
@@ -86,11 +98,12 @@ public class RegistrationDataVerifier {
     public void verify(@NotNull RegistrationData registrationData, @NotNull RegistrationParameters registrationParameters) {
 
         //spec| Step1
-        //spec| Let options be a new PublicKeyCredentialCreationOptions structure configured to the Relying Party's needs for the ceremony.
+        //spec| Let options be a new CredentialCreationOptions structure configured to the Relying Party's needs for the ceremony.
+        //spec| Let pkOptions be options.publicKey.
         //      (This step is done on client side and out of WebAuthn4J responsibility.)
 
         //spec| Step2
-        //spec| Call navigator.credentials.create() and pass options as the publicKey option. Let credential be the result of the successfully resolved promise.
+        //spec| Call navigator.credentials.create() and pass options as the argument. Let credential be the result of the successfully resolved promise.
         //spec| If the promise is rejected, abort the ceremony with a user-visible error,
         //spec| or otherwise guide the user experience as might be determinable from the context available in the rejected promise.
         //spec| For example if the promise is rejected with an error code equivalent to "InvalidStateError",
@@ -150,7 +163,7 @@ public class RegistrationDataVerifier {
         }
 
         //spec| Step8
-        //spec| Verify that the value of C.challenge equals the base64url encoding of options.challenge.
+        //spec| Verify that the value of C.challenge equals the base64url encoding of pkOptions.challenge.
         ChallengeVerifier.verify(collectedClientData, serverProperty);
 
         //spec| Step9
@@ -164,101 +177,105 @@ public class RegistrationDataVerifier {
         //noinspection deprecation
         TokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
-        //spec| Step10
+        //spec| Step10 & Step11
+        //spec| If C.crossOrigin is present and set to true,
+        //spec| verify that the Relying Party expects that this credential would have been created within an iframe
+        //spec| that is not same-origin with its ancestors.
         //spec| If C.topOrigin is present:
         //spec|   - Verify that the Relying Party expects that this credential would have been created within an iframe that is not same-origin with its ancestors.
         //spec|   - Verify that the value of C.topOrigin matches the origin of a page that the Relying Party expects to be sub-framed within. See § 13.4.9 Validating the origin of a credential for guidance.
         topOriginVerifier.verify(registrationObject);
 
-        //spec| Step11
+        //spec| Step12
         //spec| Let hash be the result of computing a hash over response.clientDataJSON using SHA-256.
 
-        //spec| Step12
+        //spec| Step13
         //spec| Perform CBOR decoding on the attestationObject field of the AuthenticatorAttestationResponse structure to
         //spec| obtain the attestation statement format fmt, the authenticator data authData, and the attestation statement attStmt.
         //      (This step is done on caller.)
 
-        //spec| Step13
+        //spec| Step14
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
         RpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
 
-        //spec| Step14, 15
-        //spec| Verify that the UP bit of the flags in authData is set.
+        //spec| Step15
+        //spec| If options.mediation is not set to conditional, verify that the UP bit of the flags in authData is set.
+        //      Note: It is caller's responsibility to configure userPresenceRequired parameter based on the mediation type:
+        //      - Set userPresenceRequired=false when using conditional mediation (e.g., autofill UI)
+        //      - Set userPresenceRequired=true for normal registration (modal mediation)
+
+        //spec| Step16
         //spec| If the Relying Party requires user verification for this registration, verify that the UV bit of the flags in authData is set.
         UPUVFlagsVerifier.verify(authenticatorData, registrationParameters.isUserPresenceRequired(), registrationParameters.isUserVerificationRequired());
 
-        //spec| Step16
+        //spec| Step17
         //spec| If the BE bit of the flags in authData is not set, verify that the BS bit is not set.
         BEBSFlagsVerifier.verify(authenticatorData);
 
-        //spec| Step17
-        //spec| If the Relying Party uses the credential’s backup eligibility to inform its user experience flows and/or policies, evaluate the BE bit of the flags in authData.
-        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
-
         //spec| Step18
-        //spec| If the Relying Party uses the credential’s backup state to inform its user experience flows and/or policies, evaluate the BS bit of the flags in authData.
-        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
-
+        //spec| If the Relying Party uses the credential’s backup eligibility to inform its user experience flows and/or policies,
+        //spec| evaluate the BE bit of the flags in authData.
+        //      (This step is out of WebAuthn4J scope. It’s caller’s responsibility.)
 
         //spec| Step19
-        //spec| Verify that the "alg" parameter in the credential public key in authData matches the alg attribute of one of the items in options.pubKeyCredParams.
+        //spec| If the Relying Party uses the credential’s backup state to inform its user experience flows and/or policies,
+        //spec| evaluate the BS bit of the flags in authData.
+        //      (This step is out of WebAuthn4J scope. It’s caller’s responsibility.)
+
+
+        //spec| Step20
+        //spec| Verify that the "alg" parameter in the credential public key in authData
+        //spec| matches the alg attribute of one of the items in pkOptions.pubKeyCredParams.
         COSEAlgorithmIdentifier alg = authenticatorData.getAttestedCredentialData().getCOSEKey().getAlgorithm();
         List<PublicKeyCredentialParameters> pubKeyCredParams = registrationParameters.getPubKeyCredParams();
         COSEAlgorithmIdentifierVerifier.verify(alg, pubKeyCredParams);
 
-        //spec| Step20
-        //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator extension outputs in the extensions in authData are as expected,
-        //spec| considering the client extension input values that were given in options.extensions and any specific policy of the Relying Party regarding unsolicited extensions,
-        //spec| i.e., those that were not specified as part of options.extensions.
-        //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
+        //spec| Step21-23
+        //spec| Determine attestation statement format, verify attestation statement, and assess attestation trustworthiness.
+        attestationVerifier.verify(registrationObject);
+
+        //spec| Step24
+        //spec| Verify that the credentialId is ≤ 1023 bytes. Credential IDs larger than this many bytes SHOULD cause the RP to fail this registration ceremony.
+        CredentialIdLengthVerifier.verify(attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(), maxCredentialIdLength);
+
+        //spec| Step25
+        //spec| Verify that the credentialId is not yet registered for any user. If the credentialId is already known then the Relying Party SHOULD fail this registration ceremony.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
+        //spec| Step26
+        //spec| Let credentialRecord be a new credential record with the following contents:
+        //spec| with contents:
+        //spec| type: credential.type
+        //spec| id: credential.id or credential.rawId, whichever format is preferred by the Relying Party
+        //spec| publicKey: The credential public key in authData
+        //spec| signCount: authData.signCount
+        //spec| uvInitialized: The value of the UV flag in authData
+        //spec| transports: The value returned from response.getTransports()
+        //spec| backupEligible: The value of the BE flag in authData
+        //spec| backupState: The value of the BS flag in authData
+        //spec| The new credential record MAY also include OPTIONAL contents:
+        //spec| attestationObject, attestationClientDataJSON, rpId
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
+        //spec| Step27
+        //spec| Process the client extension outputs in clientExtensionResults and the authenticator extension outputs in the extensions in authData
+        //spec| as required by the Relying Party. Depending on each extension, processing steps may be concretely specified or it may be up to the
+        //spec| Relying Party what to do with extension outputs. The Relying Party MAY ignore any or all extension outputs.
+        //spec| Clients MAY set additional authenticator extensions or client extensions and thus cause values to appear in the authenticator extension
+        //spec| outputs or client extension outputs that were not requested by the Relying Party in pkOptions.extensions.
+        //spec| The Relying Party MUST be prepared to handle such situations, whether by ignoring the unsolicited extensions or by rejecting the attestation.
+        //spec| The Relying Party can make this decision based on local policy and the extensions in use.
+        //spec| Since all extensions are OPTIONAL for both the client and the authenticator, the Relying Party MUST also be prepared to handle cases
+        //spec| where none or not all of the requested extensions were acted upon.
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         clientExtensionVerifier.verify(clientExtensions);
         authenticatorExtensionVerifier.verify(authenticationExtensionsAuthenticatorOutputs);
 
-        //spec| Step21-24, 28
-        attestationVerifier.verify(registrationObject);
-
-        //spec| Step25
-        //spec| Verify that the credentialId is ≤ 1023 bytes. Credential IDs larger than this many bytes SHOULD cause the RP to fail this registration ceremony.
-        CredentialIdLengthVerifier.verify(attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(), maxCredentialIdLength);
-
-        //spec| Step26
-        //spec| Verify that the credentialId is not yet registered for any user. If the credentialId is already known then the Relying Party SHOULD fail this registration ceremony.
-        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
-
-        //spec| Step27
-        //spec| If the attestation statement attStmt verified successfully and is found to be trustworthy,
-        //spec| then create and store a new credential record in the user account that was denoted in options.user,
-        //spec| with the following contents:
-        //spec| type
-        //spec|     credential.type.
-        //spec| id
-        //spec|     credential.id or credential.rawId, whichever format is preferred by the Relying Party.
-        //spec| publicKey
-        //spec|     The credential public key in authData.
-        //spec| signCount
-        //spec|     authData.signCount.
-        //spec| uvInitialized
-        //spec|     The value of the UV flag in authData.
-        //spec| transports
-        //spec|     The value returned from response.getTransports().
-        //spec| backupEligible
-        //spec|     The value of the BE flag in authData.
-        //spec| backupState
-        //spec|     The value of the BS flag in authData.
-        //spec| The new credential record MAY also include the following OPTIONAL contents:
-        //spec| attestationObject
-        //spec|     response.attestationObject.
-        //spec| attestationClientDataJSON
-        //spec|     response.clientDataJSON.
-        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
-
         //spec| Step28
-        //spec| If the attestation statement attStmt successfully verified but is not trustworthy per step 23 above,
-        //spec| the Relying Party SHOULD fail the registration ceremony.
-        //      (This step is implemented in attestationVerifier#verify)
+        //spec| If all the above steps are successful, store credentialRecord in the user account that was denoted in pkOptions.user
+        //spec| and continue the registration ceremony as appropriate. Otherwise, fail the registration ceremony.
 
-        // verify with custom logic
+        //      (Step28 continuation: Custom verification logic)
         for (CustomRegistrationVerifier customRegistrationVerifier : customRegistrationVerifiers) {
             customRegistrationVerifier.verify(registrationObject);
         }

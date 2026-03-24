@@ -27,7 +27,12 @@ import org.jetbrains.annotations.NotNull;
 import java.security.MessageDigest;
 
 /**
- * Verifies the specified {@link Challenge}
+ * Verifies the challenge value.
+ * <p>
+ * Implements WebAuthn Level 3 § 7.2 Step 11 (challenge verification).
+ * Uses constant-time comparison to prevent timing attacks.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">WebAuthn Level 3 § 7.2 Verifying an Authentication Assertion</a>
  */
 public class ChallengeVerifier {
 

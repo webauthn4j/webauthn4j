@@ -12,7 +12,7 @@ public class COSEAlgorithmIdentifierVerifier {
 
     public static void verify(COSEAlgorithmIdentifier alg, List<PublicKeyCredentialParameters> pubKeyCredParams) {
         if(pubKeyCredParams != null && pubKeyCredParams.stream().noneMatch(item -> item.getAlg().equals(alg))){
-            throw new NotAllowedAlgorithmException("alg not listed in options.pubKeyCredParams is used.");
+            throw new NotAllowedAlgorithmException("alg not listed in pkOptions.pubKeyCredParams is used.");
         }
     }
 }

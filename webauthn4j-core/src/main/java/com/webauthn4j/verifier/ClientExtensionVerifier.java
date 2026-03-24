@@ -21,7 +21,13 @@ import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Verifies clientExtensionOutputs
+ * Verifies client extension outputs.
+ * <p>
+ * Implements WebAuthn Level 3 § 7.2 Step 23 (extension processing).
+ * Currently performs no validation as the RP ignores all extension outputs.
+ * Custom extension validation should be implemented via {@link CustomAuthenticationVerifier}.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">WebAuthn Level 3 § 7.2 Verifying an Authentication Assertion</a>
  */
 class ClientExtensionVerifier {
 

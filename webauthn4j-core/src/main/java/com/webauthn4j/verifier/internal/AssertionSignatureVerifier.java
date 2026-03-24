@@ -34,7 +34,13 @@ import java.security.Signature;
 import java.security.SignatureException;
 
 /**
- * Verifies the assertion signature in {@link AuthenticationData} based on {@link COSEKey}
+ * Verifies the assertion signature in {@link AuthenticationData} based on {@link COSEKey}.
+ * <p>
+ * Implements WebAuthn Level 3 § 7.2 Step 20 &amp; 21 (signature verification).
+ * Computes a hash over the client data and verifies the signature over the
+ * concatenation of authenticator data and hash.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">WebAuthn Level 3 § 7.2 Verifying an Authentication Assertion</a>
  */
 public class AssertionSignatureVerifier {
 
