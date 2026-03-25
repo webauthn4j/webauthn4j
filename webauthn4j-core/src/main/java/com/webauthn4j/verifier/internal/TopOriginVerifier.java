@@ -30,6 +30,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ * Verifier for cross-origin authentication.
+ * <p>
+ * Implements WebAuthn Level 3 § 7.2 Step 13 (crossOrigin verification) and Step 14 (topOrigin verification).
+ * While topOrigin verification provides a more detailed allowlist-based validation,
+ * crossOrigin flag verification is also performed for backward compatibility.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">WebAuthn Level 3 § 7.2 Verifying an Authentication Assertion</a>
+ */
 public class TopOriginVerifier {
 
     //~ Instance fields
@@ -61,16 +70,38 @@ public class TopOriginVerifier {
         Origin clientTopOrigin = collectedClientData.getTopOrigin();
         OriginPredicate expectedTopOriginPredicate = serverProperty.getTopOriginPredicate();
 
+        //spec| Registration Step10 & Authentication Step13
+        //spec| If C.crossOrigin is present and set to true,
+        //spec| verify that the Relying Party expects this credential to be used/created within an iframe that is not same-origin with its ancestors.
         if(Objects.equals(clientCrossOrigin, Boolean.TRUE)){
+            // Deprecated API check
             if(forceBlockCrossOrigin){
                 throw new CrossOriginException("Cross-origin request is prohibited. Relax AuthenticationDataVerifier config if necessary.");
             }
+            // Modern API: RP must explicitly allow cross-origin by setting topOriginPredicate and provide valid topOrigin
             if (expectedTopOriginPredicate == null || !expectedTopOriginPredicate.test(clientTopOrigin)) {
                 throw new BadTopOriginException("The collectedClientData topOrigin '" + clientTopOrigin + "' doesn't match any of the preconfigured server topOrigin.");
             }
         }
-        else{ // false or null
-            //nop
+
+        //spec| Registration Step11 & Authentication Step14
+        //spec| If C.topOrigin is present:
+        //spec| - Verify that the Relying Party expects this credential to be used/created within an iframe that is not same-origin with its ancestors.
+        //spec| - Verify that the value of C.topOrigin matches the origin of a page that the Relying Party expects to be sub-framed within.
+        //spec|   See §13.4.9 Validating the origin of a credential for guidance.
+        if(clientTopOrigin != null){
+            // Note: Although well-behaved browsers guarantee crossOrigin=true when topOrigin is present,
+            // we verify RP expectations here independently per the spec structure.
+            // This provides defense-in-depth against clients that might send topOrigin without proper crossOrigin flag.
+
+            // Deprecated API check
+            if(forceBlockCrossOrigin){
+                throw new CrossOriginException("Cross-origin request is prohibited. Relax AuthenticationDataVerifier config if necessary.");
+            }
+            // Modern API: RP must explicitly allow cross-origin by setting topOriginPredicate and provide valid topOrigin
+            if (expectedTopOriginPredicate == null || !expectedTopOriginPredicate.test(clientTopOrigin)) {
+                throw new BadTopOriginException("The collectedClientData topOrigin '" + clientTopOrigin + "' doesn't match any of the preconfigured server topOrigin.");
+            }
         }
     }
 

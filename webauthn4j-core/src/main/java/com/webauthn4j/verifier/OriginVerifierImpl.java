@@ -23,6 +23,13 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.exception.BadOriginException;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Verifier for origin validation.
+ * <p>
+ * Implements WebAuthn Level 3 § 7.2 Step 12 (origin verification).
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">WebAuthn Level 3 § 7.2 Verifying an Authentication Assertion</a>
+ */
 public class OriginVerifierImpl implements OriginVerifier {
 
     //~ Instance fields

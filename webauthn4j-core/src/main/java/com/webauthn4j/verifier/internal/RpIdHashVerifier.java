@@ -27,7 +27,11 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 /**
- * Verifies the specified rpIdHash
+ * Verifies the RP ID hash.
+ * <p>
+ * Implements WebAuthn Level 3 § 7.2 Step 15 (rpIdHash verification).
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">WebAuthn Level 3 § 7.2 Verifying an Authentication Assertion</a>
  */
 public class RpIdHashVerifier {
 

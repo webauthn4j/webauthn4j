@@ -39,6 +39,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Verifier for WebAuthn authentication assertions.
+ * <p>
+ * This class implements the verification procedure defined in the WebAuthn specification:
+ * <ul>
+ *   <li>WebAuthn Level 3 (W3C Recommendation):
+ *       <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">
+ *       § 7.2 Verifying an Authentication Assertion</a></li>
+ * </ul>
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/">Web Authentication: An API for accessing Public Key Credentials - Level 3</a>
+ */
 public class AuthenticationDataVerifier {
 
     private final AssertionSignatureVerifier assertionSignatureVerifier = new AssertionSignatureVerifier();
@@ -60,6 +72,17 @@ public class AuthenticationDataVerifier {
         this.customAuthenticationVerifiers = new ArrayList<>();
     }
 
+    /**
+     * Verifies the authentication data according to WebAuthn specification.
+     * <p>
+     * Implements the verification procedure defined in:
+     * <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">
+     * WebAuthn Level 3 § 7.2 Verifying an Authentication Assertion</a>
+     *
+     * @param authenticationData the authentication data to verify
+     * @param authenticationParameters the parameters for verification
+     * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">WebAuthn Level 3 § 7.2</a>
+     */
     @SuppressWarnings({"ConstantConditions", "java:S1874"}) // as null check is done by BeanAssertUtil#validate
     public void verify(@NotNull AuthenticationData authenticationData, @NotNull AuthenticationParameters authenticationParameters) {
 
@@ -67,26 +90,28 @@ public class AuthenticationDataVerifier {
         AssertUtil.notNull(authenticationParameters, "authenticationParameters must not be null");
 
         //spec| Step1
-        //spec| Let options be a new PublicKeyCredentialRequestOptions structure configured to the Relying Party's needs for the ceremony.
-        //      (This step is done on client slide and out of WebAuthn4J responsibility.)
+        //spec| Let options be a new CredentialRequestOptions structure configured to the Relying Party's needs for the ceremony.
+        //spec| Let pkOptions be options.publicKey.
+        //      (This step is done on client side and out of WebAuthn4J responsibility.)
 
         //spec| Step2
-        //spec| Call navigator.credentials.get() and pass options as the publicKey option. Let credential be the result of the successfully resolved promise.
+        //spec| Call navigator.credentials.get() and pass options as the argument. Let credential be the result of the successfully resolved promise.
         //spec| If the promise is rejected, abort the ceremony with a user-visible error, or otherwise guide the user experience as might be determinable
         //spec| from the context available in the rejected promise. For information on different error contexts and the circumstances leading to them,
         //spec| see § 6.3.3 The authenticatorGetAssertion Operation.
-        //      (This step is done on client slide and out of WebAuthn4J responsibility.)
+        //      (This step is done on client side and out of WebAuthn4J responsibility.)
 
         //spec| Step3
         //spec| Let response be credential.response. If response is not an instance of AuthenticatorAssertionResponse, abort the ceremony with a user-visible error.
-        //      (This step is done on client slide and out of WebAuthn4J responsibility.)
+        //      (This step is done on client side and out of WebAuthn4J responsibility.)
 
         //spec| Step4
         //spec| Let clientExtensionResults be the result of calling credential.getClientExtensionResults().
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = authenticationData.getClientExtensions();
 
         //spec| Step5
-        //spec| If options.allowCredentials is not empty, verify that credential.id identifies one of the public key credentials listed in options.allowCredentials.
+        //spec| If pkOptions.allowCredentials is not empty, verify that credential.id identifies one of the public key credentials
+        //spec| listed in pkOptions.allowCredentials.
         byte[] credentialId = authenticationData.getCredentialId();
         List<byte[]> allowCredentials = authenticationParameters.getAllowCredentials();
         CredentialIdVerifier.verify(credentialId, allowCredentials);
@@ -102,24 +127,16 @@ public class AuthenticationDataVerifier {
         //spec|   contains a credential record whose id equals credential.rawId. Let credentialRecord be that credential record.
         //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
-        // Step7-8 is missing in the WebAuthn Level3 specification
-
-        //spec| Step9
-        //spec| Using credential’s id attribute (or the corresponding rawId, if base64url encoding is inappropriate for your use case),
-        //spec| look up the corresponding credential public key and let credentialPublicKey be that credential public key.
-        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
-
-        //spec| Step9
-        //spec| Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
-        //spec| and signature respectively.
+        //spec| Step7
+        //spec| Let cData, authData and sig denote the value of response’s clientDataJSON, authenticatorData, and signature respectively.
         byte[] cData = authenticationData.getCollectedClientDataBytes();
         byte[] aData = authenticationData.getAuthenticatorDataBytes();
 
-        //spec| Step10
+        //spec| Step8
         //spec| Let JSONtext be the result of running UTF-8 decode on the value of cData.
         //      (This step is done on caller.)
 
-        //spec| Step11
+        //spec| Step9
         //spec| Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.
         //      (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = authenticationData.getCollectedClientData();
@@ -141,21 +158,23 @@ public class AuthenticationDataVerifier {
                 serverProperty, authenticator
         );
 
-        //spec| Step12
+        //spec| Step10
         //spec| Verify that the value of C.type is the string webauthn.get.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.WEBAUTHN_GET)) {
             throw new InconsistentClientDataTypeException("ClientData.type must be 'get' on authentication, but it isn't.");
         }
 
-        //spec| Step13
-        //spec| Verify that the value of C.challenge equals the base64url encoding of options.challenge.
+        //spec| Step11
+        //spec| Verify that the value of C.challenge equals the base64url encoding of pkOptions.challenge.
         ChallengeVerifier.verify(collectedClientData, serverProperty);
 
-        //spec| Step14
+        //spec| Step12
         //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
         originVerifier.verify(authenticationObject);
 
-        //spec| Step15
+        //spec| Step13 & Step14
+        //spec| If C.crossOrigin is present and set to true,
+        //spec| verify that the Relying Party expects this credential to be used within an iframe that is not same-origin with its ancestors.
         //spec| If C.topOrigin is present:
         //spec| - Verify that the Relying Party expects this credential to be used within an iframe that is not same-origin with its ancestors.
         //spec| - Verify that the value of C.topOrigin matches the origin of a page that the Relying Party expects to be sub-framed within.
@@ -169,23 +188,25 @@ public class AuthenticationDataVerifier {
         //noinspection deprecation
         TokenBindingVerifier.verify(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
-        //spec| Step16
+        //spec| Step15
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
         RpIdHashVerifier.verify(authenticatorData.getRpIdHash(), serverProperty);
 
-        //spec| Step17, 18
+        //spec| Step16
         //spec| Verify that the UP bit of the flags in authData is set.
+
+        //spec| Step17
         //spec| Determine whether user verification is required for this assertion.
-        //spec| User verification SHOULD be required if, and only if, options.userVerification is set to required.
+        //spec| User verification SHOULD be required if, and only if, pkOptions.userVerification is set to required.
         //spec| If user verification was determined to be required, verify that the UV bit of the flags in authData is set.
         //spec| Otherwise, ignore the value of the UV flag.
         UPUVFlagsVerifier.verify(authenticatorData, authenticationParameters.isUserPresenceRequired(), authenticationParameters.isUserVerificationRequired());
 
-        //spec| Step19
+        //spec| Step18
         //spec| If the BE bit of the flags in authData is not set, verify that the BS bit is not set.
         BEBSFlagsVerifier.verify(authenticatorData);
 
-        //spec| Step20
+        //spec| Step19
         //spec| If the credential backup state is used as part of Relying Party business logic or policy,
         //spec| let currentBe and currentBs be the values of the BE and BS bits, respectively, of the flags in authData.
         //spec| Compare currentBe and currentBs with credentialRecord.backupEligible and credentialRecord.backupState:
@@ -195,24 +216,13 @@ public class AuthenticationDataVerifier {
         //      (The relying party policy should be implemented as a custom verifier)
         BEFlagVerifier.verify(authenticator, authenticatorData);
 
-        //spec| Step21
-        //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
-        //spec| extension outputs in the extensions in authData are as expected, considering the client extension input
-        //spec| values that were given as the extensions option in the get() call. In particular, any extension identifier
-        //spec| values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
-        //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
-        //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
-        clientExtensionVerifier.verify(clientExtensions);
-        authenticatorExtensionVerifier.verify(authenticationExtensionsAuthenticatorOutputs);
-
-        //spec| Step22
+        //spec| Step20 & Step21
         //spec| Let hash be the result of computing a hash over the cData using SHA-256.
-        //spec| Step23
+        //spec|
         //spec| Using credentialRecord.publicKey, verify that sig is a valid signature over the binary concatenation of authData and hash.
         assertionSignatureVerifier.verify(authenticationData, authenticator.getAttestedCredentialData().getCOSEKey());
 
-        //spec| Step24
+        //spec| Step22
         //spec| If authData.signCount is nonzero or credentialRecord.signCount is nonzero, then run the following sub-step:
         long presentedSignCount = authenticatorData.getSignCount();
         long storedSignCount = authenticator.getCounter();
@@ -225,9 +235,11 @@ public class AuthenticationDataVerifier {
                 //no-op
             }
             //spec| less than or equal to credentialRecord.signCount:
-            //spec| This is a signal that the authenticator may be cloned,
-            //spec| i.e. at least two copies of the credential private key may exist and are being used in parallel.
-            //spec| Relying Parties should incorporate this information into their risk scoring.
+            //spec| This is a signal, but not proof, that the authenticator may be cloned. For example it might mean that:
+            //spec| - Two or more copies of the credential private key may exist and are being used in parallel.
+            //spec| - An authenticator is malfunctioning.
+            //spec| - A race condition exists where the RP is processing assertion responses in an order other than the order they were generated at the authenticator.
+            //spec| Relying Parties should evaluate their own operational characteristics and incorporate this information into their risk scoring.
             //spec| Whether the Relying Party updates credentialRecord.signCount below in this case, or not, or
             //spec| fails the authentication ceremony or not, is Relying Party-specific.
             else {
@@ -235,39 +247,37 @@ public class AuthenticationDataVerifier {
             }
         }
 
-        //spec| Step25
-        //spec| If response.attestationObject is present and the Relying Party wishes to verify the attestation
-        //spec| then perform CBOR decoding on attestationObject to obtain the attestation statement format fmt, and the attestation statement attStmt.
-        //spec| - Verify that the AT bit in the flags field of authData is set, indicating that attested credential data is included.
-        //spec| - Verify that the credentialPublicKey and credentialId fields of the attested credential data in authData match
-        //spec|   credentialRecord.publicKey and credentialRecord.id, respectively.
-        //spec| - Determine the attestation statement format by performing a USASCII case-sensitive match on
-        //spec|   fmt against the set of supported WebAuthn Attestation Statement Format Identifier values.
-        //spec|   An up-to-date list of registered WebAuthn Attestation Statement Format Identifier values is maintained in
-        //spec|   the IANA "WebAuthn Attestation Statement Format Identifiers" registry [IANA-WebAuthn-Registries] established by [RFC8809].
-        //spec| - Verify that attStmt is a correct attestation statement, conveying a valid attestation signature,
-        //spec|   by using the attestation statement format fmt’s verification procedure given attStmt, authData and hash.
-        //TODO: Since Step25 is removed in the latest Editor's draft(as of 2024-04-07, see https://github.com/w3c/webauthn/pull/1997), this step is left not implemented. This step need to be removed when the next draft is released.
+        //spec| Step23
+        //spec| Process the client extension outputs in clientExtensionResults and the authenticator extension outputs in the extensions in authData
+        //spec| as required by the Relying Party. Depending on each extension, processing steps may be concretely specified or it may be up to the
+        //spec| Relying Party what to do with extension outputs. The Relying Party MAY ignore any or all extension outputs.
+        //spec| Clients MAY set additional authenticator extensions or client extensions and thus cause values to appear in the authenticator extension
+        //spec| outputs or client extension outputs that were not requested by the Relying Party in pkOptions.extensions.
+        //spec| The Relying Party MUST be prepared to handle such situations, whether by ignoring the unsolicited extensions or by rejecting the assertion.
+        //spec| The Relying Party can make this decision based on local policy and the extensions in use.
+        //spec| Since all extensions are OPTIONAL for both the client and the authenticator, the Relying Party MUST also be prepared to handle cases
+        //spec| where none or not all of the requested extensions were acted upon.
+        AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
+        clientExtensionVerifier.verify(clientExtensions);
+        authenticatorExtensionVerifier.verify(authenticationExtensionsAuthenticatorOutputs);
 
-        //spec| Step26
+        //spec| Step24
         //spec| Update credentialRecord with new state values:
         //spec| - Update credentialRecord.signCount to the value of authData.signCount.
         //spec| - Update credentialRecord.backupState to the value of currentBs.
-        //spec| - If credentialRecord.uvInitialized is false, update it to the value of the UV bit in the flags in authData. This change SHOULD require authorization by an additional authentication factor equivalent to WebAuthn user verification; if not authorized, skip this step.
+        //spec| - If credentialRecord.uvInitialized is false, update it to the value of the UV bit in the flags in authData.
+        //spec|   This change SHOULD require authorization by an additional authentication factor equivalent to WebAuthn user verification;
+        //spec|   if not authorized, skip this step.
+        //spec| If the Relying Party performs additional security checks beyond these WebAuthn authentication ceremony steps,
+        //spec| the above state updates SHOULD be deferred to after those additional checks are completed successfully.
         updateRecord(authenticator, authenticatorData);
-
-        //spec| - OPTIONALLY, if response.attestationObject is present, update credentialRecord.attestationObject to the value of response.attestationObject and update credentialRecord.attestationClientDataJSON to the value of response.clientDataJSON.
-        //TODO: Since this optional step is removed in the latest Editor's draft(as of 2024-04-07), this step is left not implemented. This step need to be removed when the next draft is released.
-
-        //spec| If the Relying Party performs additional security checks beyond these WebAuthn authentication ceremony steps, the above state updates SHOULD be deferred to after those additional checks are completed successfully.
-        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
         for (CustomAuthenticationVerifier customAuthenticationVerifier : customAuthenticationVerifiers) {
             customAuthenticationVerifier.verify(authenticationObject);
         }
 
-        //spec| Step27
-        //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
+        //spec| Step25
+        //spec| If all the above steps are successful, continue the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
 
 
     }
