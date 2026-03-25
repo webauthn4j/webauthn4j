@@ -2,6 +2,7 @@ name: 'Close stale issues and PRs'
 on:
   schedule:
     - cron: '0 0 * * *' # Run daily at midnight UTC
+  workflow_dispatch: # Allow manual trigger
 
 permissions:
   issues: write
@@ -17,6 +18,10 @@ jobs:
           days-before-stale: 60
           # Number of days of inactivity before a stale issue/PR is closed
           days-before-close: 7
+
+          # Exemption settings
+          exempt-all-milestones: true
+          exempt-all-assignees: true
 
           # Issue configuration
           exempt-issue-labels: 'pinned,security'
