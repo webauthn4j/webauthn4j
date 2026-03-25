@@ -20,6 +20,7 @@ import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
@@ -31,7 +32,9 @@ import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.mock;
 
 class AuthenticationObjectTest {
 
@@ -109,6 +112,60 @@ class AuthenticationObjectTest {
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
         );
+    }
+
+    @Test
+    void getCredentialRecord_with_CredentialRecord_instance_test() {
+        byte[] credentialId = new byte[32];
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE);
+        byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        ServerProperty serverProperty = TestDataUtil.createServerProperty();
+        CredentialRecord credentialRecord = TestDataUtil.createCredentialRecord();
+
+        AuthenticationObject authenticationObject = new AuthenticationObject(
+                credentialId,
+                authenticatorData,
+                authenticatorDataBytes,
+                clientData,
+                clientDataBytes,
+                clientExtensions,
+                serverProperty,
+                credentialRecord
+        );
+
+        assertThat(authenticationObject.getCredentialRecord()).isEqualTo(credentialRecord);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test
+    void getCredentialRecord_with_non_CredentialRecord_instance_throws_IllegalStateException_test() {
+        byte[] credentialId = new byte[32];
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE);
+        byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        ServerProperty serverProperty = TestDataUtil.createServerProperty();
+        // Mock an Authenticator that does NOT implement CredentialRecord
+        Authenticator authenticator = mock(Authenticator.class);
+
+        AuthenticationObject authenticationObject = new AuthenticationObject(
+                credentialId,
+                authenticatorData,
+                authenticatorDataBytes,
+                clientData,
+                clientDataBytes,
+                clientExtensions,
+                serverProperty,
+                authenticator
+        );
+
+        assertThatThrownBy(authenticationObject::getCredentialRecord)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("authenticator is not an instance of CoreCredentialRecord");
     }
 
 }

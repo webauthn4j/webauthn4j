@@ -114,9 +114,28 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
         return (ServerProperty) super.getServerProperty();
     }
 
+    /**
+     * @deprecated Use {@link #getCredentialRecord()} instead. This method will be removed in a future version.
+     */
+    @Deprecated
     @Override
     public @NotNull Authenticator getAuthenticator() {
         return (Authenticator) super.getAuthenticator();
+    }
+
+    /**
+     * Gets the credential record.
+     * <p>
+     * Note: This method assumes that a {@link CredentialRecord} instance has been set via the constructor.
+     * If the deprecated constructor accepting {@link Authenticator} was used with an implementation
+     * that does not implement {@link CredentialRecord}, this method will throw an {@link IllegalStateException}.
+     * It is recommended to use the constructor that accepts {@link CredentialRecord} directly.
+     *
+     * @return the credential record
+     * @throws IllegalStateException if the internal authenticator is not an instance of {@link CredentialRecord}
+     */
+    public @NotNull CredentialRecord getCredentialRecord() {
+        return (CredentialRecord) super.getCredentialRecord();
     }
 
 }

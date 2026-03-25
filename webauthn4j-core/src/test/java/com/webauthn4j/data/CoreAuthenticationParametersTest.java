@@ -17,12 +17,15 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.authenticator.CoreAuthenticator;
+import com.webauthn4j.credential.CoreCredentialRecord;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.CoreServerProperty;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 class CoreAuthenticationParametersTest {
@@ -73,6 +76,52 @@ class CoreAuthenticationParametersTest {
         assertThat(instance.getAuthenticator()).isEqualTo(authenticator);
         assertThat(instance.getAllowCredentials()).isNull();
         assertThat(instance.isUserVerificationRequired()).isFalse();
+    }
+
+    @Test
+    void getCredentialRecord_with_CoreCredentialRecord_instance_test() {
+        // Server properties
+        String rpId = "example.com";
+        Challenge challenge = new DefaultChallenge();
+        CoreServerProperty serverProperty = new CoreServerProperty(rpId, challenge);
+
+        CoreCredentialRecord credentialRecord = mock(CoreCredentialRecord.class);
+
+        CoreAuthenticationParameters instance =
+                new CoreAuthenticationParameters(
+                        serverProperty,
+                        credentialRecord,
+                        null,
+                        false,
+                        true
+                );
+
+        assertThat(instance.getCredentialRecord()).isEqualTo(credentialRecord);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test
+    void getCredentialRecord_with_non_CoreCredentialRecord_instance_throws_IllegalStateException_test() {
+        // Server properties
+        String rpId = "example.com";
+        Challenge challenge = new DefaultChallenge();
+        CoreServerProperty serverProperty = new CoreServerProperty(rpId, challenge);
+
+        // Mock a CoreAuthenticator that does NOT implement CoreCredentialRecord
+        CoreAuthenticator authenticator = mock(CoreAuthenticator.class);
+
+        CoreAuthenticationParameters instance =
+                new CoreAuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        null,
+                        false,
+                        true
+                );
+
+        assertThatThrownBy(instance::getCredentialRecord)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("authenticator is not an instance of CoreCredentialRecord");
     }
 
 }

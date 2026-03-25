@@ -38,6 +38,7 @@ public class DCAssertionDataVerifier extends CoreAuthenticationDataVerifier {
         super(customAuthenticationValidators, new DCAssertionSignatureVerifier());
     }
 
+    @SuppressWarnings("deprecation") // for getAuthenticator()
     @Override
     protected @NotNull CoreAuthenticationObject createCoreAuthenticationObject(@NotNull CoreAuthenticationData authenticationData, @NotNull CoreAuthenticationParameters authenticationParameters) {
 

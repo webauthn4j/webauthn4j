@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
@@ -202,6 +203,54 @@ class AuthenticationParametersTest {
         //noinspection ResultOfMethodCallIgnored
         assertThatCode(instance::toString).doesNotThrowAnyException();
 
+    }
+
+    @Test
+    void getCredentialRecord_with_CredentialRecord_instance_test() {
+        // Server properties
+        Origin origin = Origin.create("https://example.com");
+        String rpId = "example.com";
+        Challenge challenge = new DefaultChallenge();
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+
+        CredentialRecord credentialRecord = mock(CredentialRecord.class);
+
+        AuthenticationParameters instance =
+                new AuthenticationParameters(
+                        serverProperty,
+                        credentialRecord,
+                        null,
+                        false,
+                        true
+                );
+
+        assertThat(instance.getCredentialRecord()).isEqualTo(credentialRecord);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test
+    void getCredentialRecord_with_non_CredentialRecord_instance_throws_IllegalStateException_test() {
+        // Server properties
+        Origin origin = Origin.create("https://example.com");
+        String rpId = "example.com";
+        Challenge challenge = new DefaultChallenge();
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+
+        // Mock an Authenticator that does NOT implement CredentialRecord
+        Authenticator authenticator = mock(Authenticator.class);
+
+        AuthenticationParameters instance =
+                new AuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        null,
+                        false,
+                        true
+                );
+
+        assertThatThrownBy(instance::getCredentialRecord)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("authenticator is not an instance of CoreCredentialRecord");
     }
 
 }
