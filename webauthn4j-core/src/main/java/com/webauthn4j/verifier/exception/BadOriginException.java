@@ -16,6 +16,8 @@
 
 package com.webauthn4j.verifier.exception;
 
+import com.webauthn4j.data.client.Origin;
+import com.webauthn4j.server.OriginPredicate;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,15 +25,53 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("squid:S110")
 public class BadOriginException extends VerificationException {
+
+    private final OriginPredicate expected;
+    private final Origin actual;
+
+    public BadOriginException(@Nullable String message, @Nullable OriginPredicate expected, @Nullable Origin actual, @Nullable Throwable cause) {
+        super(message, cause);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
+    public BadOriginException(@Nullable String message, @Nullable OriginPredicate expected, @Nullable Origin actual) {
+        super(message);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
+    public BadOriginException(@Nullable String message, @Nullable Origin actual) {
+        super(message);
+        this.expected = null;
+        this.actual = actual;
+    }
+
     public BadOriginException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.expected = null;
+        this.actual = null;
     }
 
     public BadOriginException(@Nullable String message) {
         super(message);
+        this.expected = null;
+        this.actual = null;
     }
 
     public BadOriginException(@Nullable Throwable cause) {
         super(cause);
+        this.expected = null;
+        this.actual = null;
+    }
+
+    @Nullable
+    public OriginPredicate getExpected() {
+        return expected;
+    }
+
+    @Nullable
+    public Origin getActual() {
+        return actual;
     }
 }
