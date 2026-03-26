@@ -22,6 +22,7 @@ import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationState
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.exception.CertificateException;
 import com.webauthn4j.verifier.exception.TrustAnchorNotFoundException;
