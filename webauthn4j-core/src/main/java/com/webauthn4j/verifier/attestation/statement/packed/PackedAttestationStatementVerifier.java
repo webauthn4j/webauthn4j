@@ -84,7 +84,7 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
     @SuppressWarnings("SameReturnValue")
     private @NotNull AttestationType verifyX5c(@NotNull CoreRegistrationObject registrationObject, @NotNull PackedAttestationStatement attestationStatement, @NotNull byte[] sig, @NotNull COSEAlgorithmIdentifier alg, @NotNull byte[] attrToBeSigned) {
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.");
+            throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.", attestationStatement);
         }
 
         // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
