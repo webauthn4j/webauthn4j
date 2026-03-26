@@ -60,7 +60,7 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
                 (AndroidSafetyNetAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         verifyAttestationStatementNotNull(attestationStatement);
         if (attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.");
+            throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.", attestationStatement);
         }
 
         /// Given the verification procedure inputs attStmt, authenticatorData and clientDataHash,
@@ -81,30 +81,30 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
         /// Verify that attestationCert is issued to the hostname "attest.android.com" (see SafetyNet online documentation).
         AttestationCertificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate();
         if (!Objects.equals(attestationCertificate.getSubjectCommonName(), "attest.android.com")) {
-            throw new BadAttestationStatementException("The attestation certificate is not issued to 'attest.android.com'.");
+            throw new BadAttestationStatementException("The attestation certificate is not issued to 'attest.android.com'.", attestationStatement);
         }
 
         /// Verify that the ctsProfileMatch attribute in the payload of response is true.
         if (!Objects.equals(response.getCtsProfileMatch(), true)) {
-            throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.");
+            throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.", attestationStatement);
         }
 
         if (response.getTimestampMs() == null) {
-            throw new BadAttestationStatementException("timestampMs is null.");
+            throw new BadAttestationStatementException("timestampMs is null.", attestationStatement);
         }
 
         // Verify the timestampMs doesn't violate backwardThreshold
         if (Instant.ofEpochMilli(response.getTimestampMs()).isBefore(registrationObject.getTimestamp().minus(Duration.ofSeconds(backwardThreshold)))) {
-            throw new BadAttestationStatementException("timestampMs violates backwardThreshold.");
+            throw new BadAttestationStatementException("timestampMs violates backwardThreshold.", attestationStatement);
         }
 
         // Verify the timestampMs doesn't violate forwardThreshold
         if (Instant.ofEpochMilli(response.getTimestampMs()).isAfter(registrationObject.getTimestamp().plus(Duration.ofSeconds(forwardThreshold)))) {
-            throw new BadAttestationStatementException("timestampMs violates forwardThreshold.");
+            throw new BadAttestationStatementException("timestampMs violates forwardThreshold.", attestationStatement);
         }
 
         if (!attestationStatement.getResponse().isValidSignature()) {
-            throw new BadAttestationStatementException("Android safetynet response in the attestation statement doesn't have a valid signature.");
+            throw new BadAttestationStatementException("Android safetynet response in the attestation statement doesn't have a valid signature.", attestationStatement);
         }
 
         /// If successful, return implementation-specific values representing attestation type Basic and attestation trust path attestationCert.
@@ -117,7 +117,7 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
         }
         verifyJWSNotNull(attestationStatement.getResponse());
         if (attestationStatement.getX5c() == null) { //x5c is nullable here as x5c is extracted from header
-            throw new BadAttestationStatementException("x5c must not be null");
+            throw new BadAttestationStatementException("x5c must not be null", attestationStatement);
         }
     }
 
