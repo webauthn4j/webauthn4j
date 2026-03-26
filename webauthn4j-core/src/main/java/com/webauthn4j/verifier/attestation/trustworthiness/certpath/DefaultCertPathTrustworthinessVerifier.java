@@ -22,6 +22,7 @@ import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationState
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.exception.CertificateException;
 import com.webauthn4j.verifier.exception.TrustAnchorNotFoundException;
@@ -63,19 +64,23 @@ public class DefaultCertPathTrustworthinessVerifier implements CertPathTrustwort
             FIDOU2FAttestationStatement fidou2fAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
             byte[] subjectKeyIdentifier = extractSubjectKeyIdentifier(fidou2fAttestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate());
             trustAnchors = trustAnchorRepository.find(subjectKeyIdentifier);
+
+            if (trustAnchors.isEmpty()) {
+                throw new TrustAnchorNotFoundException("TrustAnchors are not found for subjectKeyIdentifier: " + HexUtil.encodeToString(subjectKeyIdentifier), subjectKeyIdentifier);
+            }
         }
         else {
             trustAnchors = trustAnchorRepository.find(aaguid);
+
+            if (trustAnchors.isEmpty()) {
+                throw new TrustAnchorNotFoundException("TrustAnchors are not found for AAGUID: " + aaguid, aaguid);
+            }
         }
 
         verifyCertPath(certPath, trustAnchors, timestamp);
     }
 
     private TrustAnchor verifyCertPath(CertPath certPath, Set<TrustAnchor> trustAnchors, Instant timestamp){
-
-        if (trustAnchors.isEmpty()) {
-            throw new TrustAnchorNotFoundException("TrustAnchors are not found");
-        }
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
