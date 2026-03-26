@@ -16,6 +16,7 @@
 
 package com.webauthn4j.verifier.attestation.statement.androidkey;
 
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
@@ -27,6 +28,8 @@ import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
+import com.webauthn4j.verifier.exception.KeyDescriptionValidationErrorDetailException;
+import com.webauthn4j.verifier.exception.KeyDescriptionValidationException;
 import com.webauthn4j.verifier.exception.PublicKeyMismatchException;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +62,7 @@ public class AndroidKeyAttestationStatementVerifier extends AbstractStatementVer
         verifyAttestationStatementNotNull(attestationStatement);
 
         if (attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.");
+            throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.", attestationStatement);
         }
 
         /// Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
@@ -77,14 +80,19 @@ public class AndroidKeyAttestationStatementVerifier extends AbstractStatementVer
         }
 
         byte[] clientDataHash = registrationObject.getClientDataHash();
-        keyDescriptionVerifier.verify(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate(), clientDataHash, teeEnforcedOnly);
+        try{
+            keyDescriptionVerifier.verify(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate(), clientDataHash, teeEnforcedOnly);
+        }
+        catch (KeyDescriptionValidationErrorDetailException e){
+            throw new KeyDescriptionValidationException("Key description validation failed.", attestationStatement ,e);
+        }
 
         return AttestationType.BASIC;
     }
 
     void verifyAttestationStatementNotNull(AndroidKeyAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
-            throw new BadAttestationStatementException("attestation statement is not found.");
+            throw new BadAttestationStatementException("attestation statement is not found.", attestationStatement);
         }
     }
 
@@ -96,7 +104,9 @@ public class AndroidKeyAttestationStatementVerifier extends AbstractStatementVer
         PublicKey publicKey = getPublicKey(attestationStatement);
 
         try {
-            Signature verifier = SignatureUtil.createSignature(attestationStatement.getAlg().toSignatureAlgorithm());
+            String jcaName;
+            jcaName = getJcaName(attestationStatement);
+            Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
             verifier.update(signedData);
             if (verifier.verify(signature)) {
@@ -106,6 +116,16 @@ public class AndroidKeyAttestationStatementVerifier extends AbstractStatementVer
         } catch (SignatureException | InvalidKeyException e) {
             throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", e);
         }
+    }
+
+    String getJcaName(@NotNull AndroidKeyAttestationStatement attestationStatement) {
+        SignatureAlgorithm signatureAlgorithm;
+        try {
+            signatureAlgorithm = attestationStatement.getAlg().toSignatureAlgorithm();
+        } catch (IllegalArgumentException e) {
+            throw new BadAttestationStatementException("alg is not a supported signature algorithm", attestationStatement, e);
+        }
+        return signatureAlgorithm.getJcaName();
     }
 
     private @NotNull byte[] getSignedData(@NotNull CoreRegistrationObject registrationObject) {

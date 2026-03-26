@@ -16,19 +16,53 @@
 
 package com.webauthn4j.verifier.exception;
 
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class NotAllowedAlgorithmException extends VerificationException {
 
+    private final List<COSEAlgorithmIdentifier> expected;
+    private final COSEAlgorithmIdentifier actual;
+
+    public NotAllowedAlgorithmException(@Nullable String message, @Nullable List<COSEAlgorithmIdentifier> expected, @Nullable COSEAlgorithmIdentifier actual, @Nullable Throwable cause) {
+        super(message, cause);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
+    public NotAllowedAlgorithmException(@Nullable String message, @Nullable List<COSEAlgorithmIdentifier> expected, @Nullable COSEAlgorithmIdentifier actual) {
+        super(message);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
     public NotAllowedAlgorithmException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.expected = null;
+        this.actual = null;
     }
 
     public NotAllowedAlgorithmException(@Nullable String message) {
         super(message);
+        this.expected = null;
+        this.actual = null;
     }
 
     public NotAllowedAlgorithmException(@Nullable Throwable cause) {
         super(cause);
+        this.expected = null;
+        this.actual = null;
+    }
+
+    @Nullable
+    public List<COSEAlgorithmIdentifier> getExpected() {
+        return expected;
+    }
+
+    @Nullable
+    public COSEAlgorithmIdentifier getActual() {
+        return actual;
     }
 }

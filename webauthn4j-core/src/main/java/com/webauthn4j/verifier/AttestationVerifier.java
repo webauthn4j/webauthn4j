@@ -138,7 +138,7 @@ class AttestationVerifier {
             //noinspection ConstantConditions as null check is already done in caller
             AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
             if (!Objects.equals(aaguid, U2F_AAGUID)) {
-                throw new BadAaguidException("AAGUID is expected to be zero filled in U2F attestation, but it isn't.");
+                throw new BadAaguidException("AAGUID is expected to be zero filled in U2F attestation, but it isn't.", aaguid);
             }
         }
     }
@@ -149,7 +149,7 @@ class AttestationVerifier {
                 return verifier.verify(registrationObject);
             }
         }
-
-        throw new BadAttestationStatementException(String.format("AttestationVerifier is not configured to handle the supplied AttestationStatement format '%s'.", registrationObject.getAttestationObject().getFormat()));
+        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
+        throw new BadAttestationStatementException(String.format("AttestationVerifier is not configured to handle the supplied AttestationStatement format '%s'.", registrationObject.getAttestationObject().getFormat()), attestationStatement);
     }
 }

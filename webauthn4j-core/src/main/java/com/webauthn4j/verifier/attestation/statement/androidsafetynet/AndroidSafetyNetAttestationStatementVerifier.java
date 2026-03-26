@@ -60,7 +60,7 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
                 (AndroidSafetyNetAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         verifyAttestationStatementNotNull(attestationStatement);
         if (attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.");
+            throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.", attestationStatement);
         }
 
         /// Given the verification procedure inputs attStmt, authenticatorData and clientDataHash,
@@ -69,42 +69,48 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
         //  to extract the contained fields.
 
         /// Verify that response is a valid SafetyNet response of version ver.
-        versionVerifier.verify(attestationStatement.getVer());
+        try{
+            versionVerifier.verify(attestationStatement.getVer());
+        }
+        catch (IllegalArgumentException e){
+            throw new BadAttestationStatementException("Version validation failed.", attestationStatement, e);
+        }
 
         /// Verify that the nonce in the response is identical to the Base64url encoding of the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
         Response response = attestationStatement.getResponse().getPayload();
         String nonce = response.getNonce();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
-        verifyNonce(nonce, authenticatorData, registrationObject.getClientDataHash());
+        verifyNonce(attestationStatement, nonce, authenticatorData, registrationObject.getClientDataHash());
 
         /// Let attestationCert be the attestation certificate.
         /// Verify that attestationCert is issued to the hostname "attest.android.com" (see SafetyNet online documentation).
         AttestationCertificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate();
         if (!Objects.equals(attestationCertificate.getSubjectCommonName(), "attest.android.com")) {
-            throw new BadAttestationStatementException("The attestation certificate is not issued to 'attest.android.com'.");
+            throw new BadAttestationStatementException("The attestation certificate is not issued to 'attest.android.com'.", attestationStatement);
         }
 
         /// Verify that the ctsProfileMatch attribute in the payload of response is true.
+        Response response = attestationStatement.getResponse().getPayload();
         if (!Objects.equals(response.getCtsProfileMatch(), true)) {
-            throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.");
+            throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.", attestationStatement);
         }
 
         if (response.getTimestampMs() == null) {
-            throw new BadAttestationStatementException("timestampMs is null.");
+            throw new BadAttestationStatementException("timestampMs is null.", attestationStatement);
         }
 
         // Verify the timestampMs doesn't violate backwardThreshold
         if (Instant.ofEpochMilli(response.getTimestampMs()).isBefore(registrationObject.getTimestamp().minus(Duration.ofSeconds(backwardThreshold)))) {
-            throw new BadAttestationStatementException("timestampMs violates backwardThreshold.");
+            throw new BadAttestationStatementException("timestampMs violates backwardThreshold.", attestationStatement);
         }
 
         // Verify the timestampMs doesn't violate forwardThreshold
         if (Instant.ofEpochMilli(response.getTimestampMs()).isAfter(registrationObject.getTimestamp().plus(Duration.ofSeconds(forwardThreshold)))) {
-            throw new BadAttestationStatementException("timestampMs violates forwardThreshold.");
+            throw new BadAttestationStatementException("timestampMs violates forwardThreshold.", attestationStatement);
         }
 
         if (!attestationStatement.getResponse().isValidSignature()) {
-            throw new BadAttestationStatementException("Android safetynet response in the attestation statement doesn't have a valid signature.");
+            throw new BadAttestationStatementException("Android safetynet response in the attestation statement doesn't have a valid signature.", attestationStatement);
         }
 
         /// If successful, return implementation-specific values representing attestation type Basic and attestation trust path attestationCert.
@@ -113,51 +119,55 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
 
     void verifyAttestationStatementNotNull(AndroidSafetyNetAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
-            throw new BadAttestationStatementException("attestation statement is not found.");
+            throw new BadAttestationStatementException("attestation statement is not found.", attestationStatement);
         }
-        verifyJWSNotNull(attestationStatement.getResponse());
+        verifyJWSNotNull(attestationStatement);
         if (attestationStatement.getX5c() == null) { //x5c is nullable here as x5c is extracted from header
-            throw new BadAttestationStatementException("x5c must not be null");
+            throw new BadAttestationStatementException("x5c must not be null", attestationStatement);
         }
     }
 
-    void verifyJWSNotNull(JWS<Response> response) {
+    void verifyJWSNotNull(AndroidSafetyNetAttestationStatement attestationStatement) {
+        JWS<Response> response = attestationStatement.getResponse();
+        //noinspection ConstantValue
         if (response == null) {
-            throw new BadAttestationStatementException("response must not be null.");
+            throw new BadAttestationStatementException("response must not be null.", attestationStatement);
         }
-        verifyResponseNotNull(response.getPayload());
+        verifyResponseNotNull(attestationStatement);
     }
 
-    void verifyResponseNotNull(Response response) {
+    void verifyResponseNotNull(AndroidSafetyNetAttestationStatement attestationStatement) {
+        Response response = attestationStatement.getResponse().getPayload();
+        //noinspection ConstantValue
         if (response == null) {
-            throw new BadAttestationStatementException("response must not be null.");
+            throw new BadAttestationStatementException("response must not be null.", attestationStatement);
         }
         if (response.getNonce() == null) {
-            throw new BadAttestationStatementException("nonce must not be null.");
+            throw new BadAttestationStatementException("nonce must not be null.", attestationStatement);
         }
         if (response.getTimestampMs() == null) {
-            throw new BadAttestationStatementException("timeStampMs must not be null.");
+            throw new BadAttestationStatementException("timeStampMs must not be null.", attestationStatement);
         }
         if (response.getApkPackageName() == null) {
-            throw new BadAttestationStatementException("apkPackageName must not be null.");
+            throw new BadAttestationStatementException("apkPackageName must not be null.", attestationStatement);
         }
         if (response.getApkCertificateDigestSha256() == null) {
-            throw new BadAttestationStatementException("apkCertificateDigestSha256 must not be null.");
+            throw new BadAttestationStatementException("apkCertificateDigestSha256 must not be null.", attestationStatement);
         }
         if (response.getApkDigestSha256() == null) {
-            throw new BadAttestationStatementException("apkDigestSha256 must not be null.");
+            throw new BadAttestationStatementException("apkDigestSha256 must not be null.", attestationStatement);
         }
         if (response.getCtsProfileMatch() == null) {
-            throw new BadAttestationStatementException("ctsProfileMatch must not be null.");
+            throw new BadAttestationStatementException("ctsProfileMatch must not be null.", attestationStatement);
         }
         if (response.getBasicIntegrity() == null) {
-            throw new BadAttestationStatementException("basicIntegrity must not be null.");
+            throw new BadAttestationStatementException("basicIntegrity must not be null.", attestationStatement);
         }
     }
 
-    private void verifyNonce(@Nullable String nonce, @NotNull byte[] authenticatorData, @NotNull byte[] clientDataHash) {
+    private void verifyNonce(AndroidSafetyNetAttestationStatement attestationStatement, @Nullable String nonce, @NotNull byte[] authenticatorData, @NotNull byte[] clientDataHash) {
         if (nonce == null) {
-            throw new BadAttestationStatementException("Nonce in the Android safetynet response is null.");
+            throw new BadAttestationStatementException("Nonce in the Android safetynet response is null.", attestationStatement);
         }
         ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
@@ -165,7 +175,7 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
         // As nonce is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(hash, Base64Util.decode(nonce))) {
-            throw new BadAttestationStatementException("Nonce in the Android safetynet response doesn't match.");
+            throw new BadAttestationStatementException("Nonce in the Android safetynet response doesn't match.", attestationStatement);
         }
     }
 
@@ -203,10 +213,10 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
             try {
                 int versionNumber = Integer.parseInt(version);
                 if (versionNumber < MINIMAL_VERSION) {
-                    throw new BadAttestationStatementException("The version number of Google Play Services responsible for providing the SafetyNet API doesn't conform minimal requirement.");
+                    throw new IllegalArgumentException("The version number of Google Play Services responsible for providing the SafetyNet API doesn't conform minimal requirement.");
                 }
             } catch (NumberFormatException e) {
-                throw new BadAttestationStatementException("`ver` in android safetynet attestation statement cannot be parsed as number.");
+                throw new IllegalArgumentException("`ver` in android safetynet attestation statement cannot be parsed as number.");
             }
         }
     }

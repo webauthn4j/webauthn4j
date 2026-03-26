@@ -20,5 +20,5 @@ import org.jetbrains.annotations.NotNull;
 
 public interface GooglePlayServiceVersionVerifier {
 
-    void verify(@NotNull String version);
+    void verify(@NotNull String version) throws IllegalArgumentException;
 }
