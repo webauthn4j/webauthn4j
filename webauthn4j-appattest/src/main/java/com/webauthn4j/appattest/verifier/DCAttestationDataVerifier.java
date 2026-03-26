@@ -65,7 +65,7 @@ public class DCAttestationDataVerifier extends CoreRegistrationDataVerifier {
         validateKeyId(registrationData);
     }
 
-    private void validateKeyId(@NotNull CoreRegistrationData registrationData) {
+    void validateKeyId(@NotNull CoreRegistrationData registrationData) {
         DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
         byte[] keyId = dcAttestationData.getKeyId();
         //noinspection ConstantConditions as null check is already done in caller
@@ -101,16 +101,22 @@ public class DCAttestationDataVerifier extends CoreRegistrationDataVerifier {
         this.production = production;
     }
 
-    private void validateAuthenticatorData(@NotNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+    void validateAuthenticatorData(@NotNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getSignCount() != 0) {
             throw new MaliciousCounterValueException("Counter is not zero");
         }
 
         //noinspection ConstantConditions as null check is already done in caller
         AAGUID aaguid = authenticatorData.getAttestedCredentialData().getAaguid();
-        AAGUID expectedAAGUID = isProduction() ? APPLE_APP_ATTEST_ENVIRONMENT_PRODUCTION : APPLE_APP_ATTEST_ENVIRONMENT_DEVELOPMENT;
-        if (!aaguid.equals(expectedAAGUID)) {
-            throw new BadAaguidException("Expected AAGUID of either 'appattestdevelop' or 'appattest'");
+        if(isProduction()){
+            if (!aaguid.equals(APPLE_APP_ATTEST_ENVIRONMENT_PRODUCTION)) {
+                throw new BadAaguidException("'appattest' AAGUID is expected, but it isn't.", aaguid);
+            }
+        }
+        else {
+            if (!aaguid.equals(APPLE_APP_ATTEST_ENVIRONMENT_DEVELOPMENT)) {
+                throw new BadAaguidException("'appattestdevelop' AAGUID is expected, but it isn't.", aaguid);
+            }
         }
     }
 
