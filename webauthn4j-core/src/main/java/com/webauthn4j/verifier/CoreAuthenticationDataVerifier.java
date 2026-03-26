@@ -89,7 +89,7 @@ public class CoreAuthenticationDataVerifier {
      * @param authenticationData       authentication data
      * @param authenticationParameters authentication parameters
      */
-    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
+    @SuppressWarnings({"ConstantConditions", "deprecation"}) // as null check is done by BeanAssertUtil#validate, deprecation for getAuthenticator()
     public void verify(@NotNull CoreAuthenticationData authenticationData, @NotNull CoreAuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
@@ -277,6 +277,7 @@ public class CoreAuthenticationDataVerifier {
 
     }
 
+    @SuppressWarnings("deprecation") // for getAuthenticator()
     protected @NotNull CoreAuthenticationObject createCoreAuthenticationObject(@NotNull CoreAuthenticationData authenticationData, @NotNull CoreAuthenticationParameters authenticationParameters) {
         byte[] credentialId = authenticationData.getCredentialId();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();

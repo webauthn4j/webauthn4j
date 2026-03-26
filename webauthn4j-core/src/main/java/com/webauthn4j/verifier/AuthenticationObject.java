@@ -1,6 +1,7 @@
 package com.webauthn4j.verifier;
 
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
@@ -66,9 +67,28 @@ public class AuthenticationObject extends CoreAuthenticationObject {
         return (ServerProperty) super.getServerProperty();
     }
 
+    /**
+     * @deprecated Use {@link #getCredentialRecord()} instead. This method will be removed in a future version.
+     */
+    @Deprecated
     @Override
     public @NotNull Authenticator getAuthenticator() {
         return (Authenticator) super.getAuthenticator();
+    }
+
+    /**
+     * Gets the credential record.
+     * <p>
+     * Note: This method assumes that a {@link CredentialRecord} instance has been set via the constructor.
+     * If an {@link Authenticator} implementation that does not implement {@link CredentialRecord}
+     * was passed to the constructor, this method will throw an {@link IllegalStateException}.
+     * It is recommended to use {@link CredentialRecord} implementations.
+     *
+     * @return the credential record
+     * @throws IllegalStateException if the internal authenticator is not an instance of {@link CredentialRecord}
+     */
+    public @NotNull CredentialRecord getCredentialRecord() {
+        return (CredentialRecord) super.getCredentialRecord();
     }
 
     @Override

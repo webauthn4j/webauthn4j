@@ -170,8 +170,30 @@ public class CoreAuthenticationParameters {
         return serverProperty;
     }
 
+    /**
+     * @deprecated Use {@link #getCredentialRecord()} instead. This method will be removed in a future version.
+     */
+    @Deprecated
     public @NotNull CoreAuthenticator getAuthenticator() {
         return authenticator;
+    }
+
+    /**
+     * Gets the credential record.
+     * <p>
+     * Note: This method assumes that a {@link CoreCredentialRecord} instance has been set via the constructor.
+     * If the deprecated constructor accepting {@link CoreAuthenticator} was used with an implementation
+     * that does not implement {@link CoreCredentialRecord}, this method will throw an {@link IllegalStateException}.
+     * It is recommended to use the constructor that accepts {@link CoreCredentialRecord} directly.
+     *
+     * @return the credential record
+     * @throws IllegalStateException if the internal authenticator is not an instance of {@link CoreCredentialRecord}
+     */
+    public @NotNull CoreCredentialRecord getCredentialRecord() {
+        if (authenticator instanceof CoreCredentialRecord) {
+            return (CoreCredentialRecord) authenticator;
+        }
+        throw new IllegalStateException("authenticator is not an instance of CoreCredentialRecord");
     }
 
     public @Nullable List<byte[]> getAllowCredentials() {

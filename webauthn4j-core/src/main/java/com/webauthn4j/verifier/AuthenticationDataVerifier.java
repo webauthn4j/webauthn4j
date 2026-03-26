@@ -83,7 +83,7 @@ public class AuthenticationDataVerifier {
      * @param authenticationParameters the parameters for verification
      * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-verifying-assertion">WebAuthn Level 3 § 7.2</a>
      */
-    @SuppressWarnings({"ConstantConditions", "java:S1874"}) // as null check is done by BeanAssertUtil#validate
+    @SuppressWarnings({"ConstantConditions", "java:S1874", "deprecation"}) // as null check is done by BeanAssertUtil#validate, deprecation for getAuthenticator()
     public void verify(@NotNull AuthenticationData authenticationData, @NotNull AuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
