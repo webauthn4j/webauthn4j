@@ -65,7 +65,7 @@ public class DCAttestationDataVerifier extends CoreRegistrationDataVerifier {
         validateKeyId(registrationData);
     }
 
-    private void validateKeyId(@NotNull CoreRegistrationData registrationData) {
+    void validateKeyId(@NotNull CoreRegistrationData registrationData) {
         DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
         byte[] keyId = dcAttestationData.getKeyId();
         //noinspection ConstantConditions as null check is already done in caller
@@ -101,7 +101,7 @@ public class DCAttestationDataVerifier extends CoreRegistrationDataVerifier {
         this.production = production;
     }
 
-    private void validateAuthenticatorData(@NotNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+    void validateAuthenticatorData(@NotNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getSignCount() != 0) {
             throw new MaliciousCounterValueException("Counter is not zero");
         }
