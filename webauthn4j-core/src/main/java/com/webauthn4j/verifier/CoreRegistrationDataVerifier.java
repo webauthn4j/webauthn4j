@@ -254,7 +254,10 @@ public class CoreRegistrationDataVerifier {
 
     void verifyAlg(COSEAlgorithmIdentifier alg, List<PublicKeyCredentialParameters> pubKeyCredParams) {
         if(pubKeyCredParams != null && pubKeyCredParams.stream().noneMatch(item -> item.getAlg().equals(alg))){
-            throw new NotAllowedAlgorithmException("alg not listed in pkOptions.pubKeyCredParams is used.");
+            List<COSEAlgorithmIdentifier> expected = pubKeyCredParams.stream()
+                    .map(PublicKeyCredentialParameters::getAlg)
+                    .toList();
+            throw new NotAllowedAlgorithmException("alg not listed in pkOptions.pubKeyCredParams is used.", expected, alg);
         }
     }
 
