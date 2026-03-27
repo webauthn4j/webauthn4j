@@ -16,6 +16,7 @@
 
 package com.webauthn4j.verifier.exception;
 
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,15 +24,36 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("squid:S110")
 public class BadAlgorithmException extends VerificationException {
+
+    private final COSEAlgorithmIdentifier alg;
+
+    public BadAlgorithmException(@Nullable String message, @Nullable COSEAlgorithmIdentifier alg, @Nullable Throwable cause) {
+        super(message, cause);
+        this.alg = alg;
+    }
+
+    public BadAlgorithmException(@Nullable String message, @Nullable COSEAlgorithmIdentifier alg) {
+        super(message);
+        this.alg = alg;
+    }
+
     public BadAlgorithmException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.alg = null;
     }
 
     public BadAlgorithmException(@Nullable String message) {
         super(message);
+        this.alg = null;
     }
 
     public BadAlgorithmException(@Nullable Throwable cause) {
         super(cause);
+        this.alg = null;
+    }
+
+    @Nullable
+    public COSEAlgorithmIdentifier getAlg() {
+        return alg;
     }
 }
