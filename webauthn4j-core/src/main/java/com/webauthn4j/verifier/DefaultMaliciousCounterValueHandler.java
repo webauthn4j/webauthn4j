@@ -49,6 +49,8 @@ class DefaultMaliciousCounterValueHandler implements MaliciousCounterValueHandle
     @Override
     public void maliciousCounterValueDetected(@NotNull AuthenticationObject authenticationObject) {
         AssertUtil.notNull(authenticationObject, "authenticationObject must not be null");
-        throw new MaliciousCounterValueException("Malicious counter value is detected. Cloned authenticators exist in parallel.");
+        long storedCounter = authenticationObject.getAuthenticator().getCounter();
+        long presentedCounter = authenticationObject.getAuthenticatorData().getSignCount();
+        throw new MaliciousCounterValueException("Malicious counter value is detected. Cloned authenticators exist in parallel.", storedCounter, presentedCounter);
     }
 }

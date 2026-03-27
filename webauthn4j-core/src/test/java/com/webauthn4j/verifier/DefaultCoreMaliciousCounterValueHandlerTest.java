@@ -16,11 +16,14 @@
 
 package com.webauthn4j.verifier;
 
+import com.webauthn4j.authenticator.CoreAuthenticator;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.verifier.exception.MaliciousCounterValueException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DefaultCoreMaliciousCounterValueHandlerTest {
 
@@ -28,7 +31,15 @@ class DefaultCoreMaliciousCounterValueHandlerTest {
 
     @Test
     void maliciousCounterValueDetected_test() {
-        AuthenticationObject authenticationObject = mock(AuthenticationObject.class);
+        CoreAuthenticationObject authenticationObject = mock(CoreAuthenticationObject.class);
+        CoreAuthenticator authenticator = mock(CoreAuthenticator.class);
+        AuthenticatorData authenticatorData = mock(AuthenticatorData.class);
+
+        when(authenticationObject.getAuthenticator()).thenReturn(authenticator);
+        when(authenticationObject.getAuthenticatorData()).thenReturn(authenticatorData);
+        when(authenticator.getCounter()).thenReturn(100L);
+        when(authenticatorData.getSignCount()).thenReturn(50L);
+
         assertThrows(MaliciousCounterValueException.class,
                 () -> target.maliciousCounterValueDetected(authenticationObject)
         );
