@@ -103,7 +103,7 @@ public class DCAttestationDataVerifier extends CoreRegistrationDataVerifier {
 
     void validateAuthenticatorData(@NotNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getSignCount() != 0) {
-            throw new MaliciousCounterValueException("Counter is not zero");
+            throw new MaliciousCounterValueException("Counter is not zero", 0, authenticatorData.getSignCount());
         }
 
         //noinspection ConstantConditions as null check is already done in caller

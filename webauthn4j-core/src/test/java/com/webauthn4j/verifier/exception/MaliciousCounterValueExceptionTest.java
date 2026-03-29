@@ -24,22 +24,47 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MaliciousCounterValueExceptionTest {
 
     private final RuntimeException cause = new RuntimeException();
+    private final long storedCounter = 100L;
+    private final long presentedCounter = 50L;
 
     @Test
     void test() {
-        MaliciousCounterValueException exception1 = new MaliciousCounterValueException("dummy", cause);
-        MaliciousCounterValueException exception2 = new MaliciousCounterValueException("dummy");
-        MaliciousCounterValueException exception3 = new MaliciousCounterValueException(cause);
+        MaliciousCounterValueException exception1 =
+                new MaliciousCounterValueException("dummy", storedCounter, presentedCounter, cause);
+        MaliciousCounterValueException exception2 =
+                new MaliciousCounterValueException("dummy", storedCounter, presentedCounter);
+        MaliciousCounterValueException exception3 =
+                new MaliciousCounterValueException("dummy", cause);  // deprecated
+        MaliciousCounterValueException exception4 =
+                new MaliciousCounterValueException("dummy");  // deprecated
+        MaliciousCounterValueException exception5 =
+                new MaliciousCounterValueException(cause);  // deprecated
 
         assertAll(
                 () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getStoredCounter()).isEqualTo(100L),
+                () -> assertThat(exception1.getPresentedCounter()).isEqualTo(50L),
                 () -> assertThat(exception1.getCause()).isEqualTo(cause),
 
                 () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception2.getStoredCounter()).isEqualTo(100L),
+                () -> assertThat(exception2.getPresentedCounter()).isEqualTo(50L),
                 () -> assertThat(exception2.getCause()).isNull(),
 
-                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
-                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+                () -> assertThat(exception3.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception3.getStoredCounter()).isEqualTo(0L),  // default
+                () -> assertThat(exception3.getPresentedCounter()).isEqualTo(0L),  // default
+                () -> assertThat(exception3.getCause()).isEqualTo(cause),
+
+                () -> assertThat(exception4.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception4.getStoredCounter()).isEqualTo(0L),
+                () -> assertThat(exception4.getPresentedCounter()).isEqualTo(0L),
+                () -> assertThat(exception4.getCause()).isNull(),
+
+                () -> assertThat(exception5.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception5.getStoredCounter()).isEqualTo(0L),
+                () -> assertThat(exception5.getPresentedCounter()).isEqualTo(0L),
+                () -> assertThat(exception5.getCause()).isEqualTo(cause)
         );
     }
 }

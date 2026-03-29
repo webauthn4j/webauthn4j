@@ -23,16 +23,48 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("squid:S110")
 public class MaliciousCounterValueException extends VerificationException {
-    public MaliciousCounterValueException(@Nullable String message) {
-        super(message);
+
+    private final long storedCounter;
+    private final long presentedCounter;
+
+    public MaliciousCounterValueException(@Nullable String message, long storedCounter, long presentedCounter, @Nullable Throwable cause) {
+        super(message, cause);
+        this.storedCounter = storedCounter;
+        this.presentedCounter = presentedCounter;
     }
 
+    public MaliciousCounterValueException(@Nullable String message, long storedCounter, long presentedCounter) {
+        super(message);
+        this.storedCounter = storedCounter;
+        this.presentedCounter = presentedCounter;
+    }
+
+    @Deprecated
     public MaliciousCounterValueException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.storedCounter = 0;
+        this.presentedCounter = 0;
     }
 
+    @Deprecated
+    public MaliciousCounterValueException(@Nullable String message) {
+        super(message);
+        this.storedCounter = 0;
+        this.presentedCounter = 0;
+    }
+
+    @Deprecated
     public MaliciousCounterValueException(@Nullable Throwable cause) {
         super(cause);
+        this.storedCounter = 0;
+        this.presentedCounter = 0;
     }
 
+    public long getStoredCounter() {
+        return storedCounter;
+    }
+
+    public long getPresentedCounter() {
+        return presentedCounter;
+    }
 }
