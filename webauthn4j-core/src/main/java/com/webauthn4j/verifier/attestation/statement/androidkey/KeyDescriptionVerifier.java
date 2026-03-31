@@ -74,7 +74,7 @@ public class KeyDescriptionVerifier {
     }
 
     void doVerify(@NotNull ASN1Structure keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) {
-        /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
+        //spec| Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
         byte[] attestationChallenge = ((ASN1Primitive) keyDescription.get(ATTESTATION_CHALLENGE_INDEX)).getValue();
         // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
@@ -82,9 +82,8 @@ public class KeyDescriptionVerifier {
             throw new KeyDescriptionValidationException("Attestation challenge doesn't match.");
         }
 
-        /// Verify the following using the appropriate authorization list from the attestation certificate extension data:
-
-        /// The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
+        //spec| Verify the following using the appropriate authorization list from the attestation certificate extension data:
+        //spec|  - The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
         ASN1Structure softwareEnforced = (ASN1Structure) keyDescription.get(SW_ENFORCED_INDEX);
         ASN1Structure teeEnforced = (ASN1Structure) keyDescription.get(TEE_ENFORCED_INDEX);
 
@@ -97,28 +96,25 @@ public class KeyDescriptionVerifier {
     }
 
     private void verifyAuthorizationList(boolean teeEnforcedOnly, @NotNull ASN1Structure softwareEnforced, @NotNull ASN1Structure teeEnforced) {
-        /// For the following,
-        /// use only the teeEnforced authorization list if the RP wants to accept only keys
-        /// from a trusted execution environment,
+        //spec|  - For the following, use only the teeEnforced authorization list if the RP wants to accept only keys from a trusted execution environment, otherwise use the union of teeEnforced and softwareEnforced.
         if (teeEnforcedOnly) {
-            /// The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
-            /// The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
+            //spec|    - The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
             if (!isKeyGeneratedInKeymaster(findAuthorizationListEntry(teeEnforced, KM_TAG_ORIGIN))) {
                 throw new KeyDescriptionValidationException("Key is not generated in keymaster.");
             }
+            //spec|    - The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
             if (!containsValidPurpose(findAuthorizationListEntry(teeEnforced, KM_TAG_PURPOSE))) {
                 throw new KeyDescriptionValidationException("Key purpose is invalid.");
             }
         }
-        /// otherwise use the union of teeEnforced and softwareEnforced.
         else {
-            /// The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
-            /// The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
+            //spec|    - The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
             if (!isKeyGeneratedInKeymaster(findAuthorizationListEntry(teeEnforced, KM_TAG_ORIGIN)) &&
                     !isKeyGeneratedInKeymaster(findAuthorizationListEntry(softwareEnforced, KM_TAG_ORIGIN))) {
 
                 throw new KeyDescriptionValidationException("Key is not generated in keymaster.");
             }
+            //spec|    - The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
             if (!containsValidPurpose(findAuthorizationListEntry(teeEnforced, KM_TAG_PURPOSE)) &&
                     !containsValidPurpose(findAuthorizationListEntry(softwareEnforced, KM_TAG_PURPOSE))) {
                 throw new KeyDescriptionValidationException("Key purpose is invalid.");

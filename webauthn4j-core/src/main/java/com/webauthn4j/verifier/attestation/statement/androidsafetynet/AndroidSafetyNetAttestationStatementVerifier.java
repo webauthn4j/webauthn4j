@@ -36,6 +36,16 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Verifies the specified {@link AndroidSafetyNetAttestationStatement} is a valid Android SafetyNet attestation
+ * according to WebAuthn Level 3 specification.
+ * <p>
+ * Implements the verification procedure defined in:
+ * <a href="https://www.w3.org/TR/webauthn-3/#sctn-android-safetynet-attestation">
+ * WebAuthn Level 3 § 8.5 Android SafetyNet Attestation Statement Format</a>
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/">Web Authentication: An API for accessing Public Key Credentials - Level 3</a>
+ */
 public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatementVerifier<AndroidSafetyNetAttestationStatement> {
 
     // ~ Instance fields
@@ -63,32 +73,29 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
             throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.", attestationStatement);
         }
 
-        /// Given the verification procedure inputs attStmt, authenticatorData and clientDataHash,
-        //  the verification procedure is as follows:
-        /// Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it
-        //  to extract the contained fields.
+        //spec| Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
 
-        /// Verify that response is a valid SafetyNet response of version ver.
+        //spec| Verify that response is a valid SafetyNet response of version ver by following the steps indicated by the SafetyNet online documentation. As of this writing, there is only one format of the SafetyNet response and ver is reserved for future use.
         versionVerifier.verify(attestationStatement.getVer());
 
-        /// Verify that the nonce in the response is identical to the Base64url encoding of the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
+        //spec| Verify that the nonce attribute in the payload of response is identical to the Base64 encoding of the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
         Response response = attestationStatement.getResponse().getPayload();
         String nonce = response.getNonce();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         verifyNonce(nonce, authenticatorData, registrationObject.getClientDataHash());
 
-        /// Let attestationCert be the attestation certificate.
-        /// Verify that attestationCert is issued to the hostname "attest.android.com" (see SafetyNet online documentation).
+        // Additional verification not in spec: verify attestation certificate hostname
         AttestationCertificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate();
         if (!Objects.equals(attestationCertificate.getSubjectCommonName(), "attest.android.com")) {
             throw new BadAttestationStatementException("The attestation certificate is not issued to 'attest.android.com'.", attestationStatement);
         }
 
-        /// Verify that the ctsProfileMatch attribute in the payload of response is true.
+        // Additional verification not in spec: verify ctsProfileMatch
         if (!Objects.equals(response.getCtsProfileMatch(), true)) {
             throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.", attestationStatement);
         }
 
+        // Additional verification not in spec: verify timestampMs
         if (response.getTimestampMs() == null) {
             throw new BadAttestationStatementException("timestampMs is null.", attestationStatement);
         }
@@ -103,11 +110,12 @@ public class AndroidSafetyNetAttestationStatementVerifier extends AbstractStatem
             throw new BadAttestationStatementException("timestampMs violates forwardThreshold.", attestationStatement);
         }
 
+        //spec| Verify that the SafetyNet response actually came from the SafetyNet service by following the steps in the SafetyNet online documentation.
         if (!attestationStatement.getResponse().isValidSignature()) {
             throw new BadAttestationStatementException("Android safetynet response in the attestation statement doesn't have a valid signature.", attestationStatement);
         }
 
-        /// If successful, return implementation-specific values representing attestation type Basic and attestation trust path attestationCert.
+        //spec| If successful, return implementation-specific values representing attestation type Basic and attestation trust path x5c.
         return AttestationType.BASIC;
     }
 

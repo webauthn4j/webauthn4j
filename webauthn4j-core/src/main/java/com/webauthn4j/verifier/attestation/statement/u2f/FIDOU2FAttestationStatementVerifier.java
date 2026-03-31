@@ -40,13 +40,26 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 
 /**
- * Verifies the specified {@link AttestationStatement} is a valid FIDO-U2F attestation
+ * Verifies the specified {@link AttestationStatement} is a valid FIDO U2F attestation
+ * according to WebAuthn Level 3 specification.
+ * <p>
+ * Implements the verification procedure defined in:
+ * <a href="https://www.w3.org/TR/webauthn-3/#sctn-fido-u2f-attestation">
+ * WebAuthn Level 3 § 8.6 FIDO U2F Attestation Statement Format</a>
+ * <p>
+ * Also references FIDO U2F Raw Message Formats specification for signature verification.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/">Web Authentication: An API for accessing Public Key Credentials - Level 3</a>
  */
 public class FIDOU2FAttestationStatementVerifier extends AbstractStatementVerifier<FIDOU2FAttestationStatement> {
 
     /**
-     * {@link AttestationType}.BASIC is always returned as RP cannot differentiate between BASIC and Attestation CA from the attestation data,
+     * Verifies a FIDO U2F attestation statement.
+     * <p>
+     * Note: {@link AttestationType}.BASIC is always returned as RP cannot differentiate
+     * between BASIC and Attestation CA from the attestation data.
      *
+     * @param registrationObject the registration object containing attestation data
      * @return AttestationType.BASIC
      */
     @Override
@@ -59,8 +72,16 @@ public class FIDOU2FAttestationStatementVerifier extends AbstractStatementVerifi
         FIDOU2FAttestationStatement attestationStatement =
                 (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         verifyAttestationStatementNotNull(attestationStatement);
+        //spec| Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
+        //spec| Check that x5c has exactly one element and let attCert be that element. Let certificate public key be the public key conveyed by attCert. If certificate public key is not an Elliptic Curve (EC) public key over the P-256 curve, terminate this algorithm and return an appropriate error.
         verifyAttestationStatement(attestationStatement);
+        //spec| Extract the claimed rpIdHash from authenticatorData, and the claimed credentialId and credentialPublicKey from authenticatorData.attestedCredentialData.
+        //spec| Convert the COSE_KEY formatted credentialPublicKey (see Section 7 of [RFC9052]) to Raw ANSI X9.62 public key format (see ALG_KEY_ECC_X962_RAW in Section 3.6.2 Public Key Representation Formats of [FIDO-Registry]).
+        //spec| Let verificationData be the concatenation of (0x00 || rpIdHash || clientDataHash || credentialId || publicKeyU2F) (see Section 4.3 of [FIDO-U2F-Message-Formats]).
+        //spec| Verify the sig using verificationData and the certificate public key per section 4.1.4 of [SEC1] with SHA-256 as the hash function used in step two.
         verifySignature(registrationObject);
+        //spec| Optionally, inspect x5c and consult externally provided knowledge to determine whether attStmt conveys a Basic or AttCA attestation.
+        //spec| If successful, return implementation-specific values representing attestation type Basic, AttCA or uncertainty, and attestation trust path x5c.
         return AttestationType.BASIC;
     }
 

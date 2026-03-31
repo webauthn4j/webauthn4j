@@ -33,6 +33,16 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
+/**
+ * Verifies the specified {@link AppleAnonymousAttestationStatement} is a valid Apple Anonymous attestation
+ * according to WebAuthn Level 3 specification.
+ * <p>
+ * Implements the verification procedure defined in:
+ * <a href="https://www.w3.org/TR/webauthn-3/#sctn-apple-anonymous-attestation">
+ * WebAuthn Level 3 § 8.8 Apple Anonymous Attestation Statement Format</a>
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/">Web Authentication: An API for accessing Public Key Credentials - Level 3</a>
+ */
 public class AppleAnonymousAttestationStatementVerifier extends AbstractStatementVerifier<AppleAnonymousAttestationStatement> {
 
     // ~ Instance fields
@@ -49,10 +59,16 @@ public class AppleAnonymousAttestationStatementVerifier extends AbstractStatemen
         AppleAnonymousAttestationStatement attestationStatement =
                 (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         verifyAttestationStatementNotNull(attestationStatement);
+        //spec| Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
+        //spec| Concatenate authenticatorData and clientDataHash to form nonceToHash.
+        //spec| Perform SHA-256 hash of nonceToHash to produce nonce.
+        //spec| Verify that nonce equals the value of the extension with OID 1.2.840.113635.100.8.2 in credCert.
         verifyNonce(registrationObject);
 
+        //spec| Verify that the credential public key equals the Subject Public Key of credCert.
         verifyPublicKey(registrationObject, attestationStatement);
 
+        //spec| If successful, return implementation-specific values representing attestation type Anonymization CA and attestation trust path x5c.
         return AttestationType.BASIC;
     }
 

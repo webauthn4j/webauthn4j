@@ -81,27 +81,34 @@ public class AttestationCertificate {
     }
 
     public void validate() {
+        //spec| Version MUST be set to 3 (which is indicated by an ASN.1 INTEGER with value 2).
         if (certificate.getVersion() != CERTIFICATE_VERSION_3) {
             throw new CertificateException("Attestation certificate must be version 3", certificate);
         }
 
+        //spec| Subject field MUST be set to:
+        //spec| Subject-C: ISO 3166 code specifying the country where the Authenticator vendor is incorporated (PrintableString)
         String country = getSubjectCountry();
         if (country == null || country.isEmpty()) {
             throw new CertificateException("Subject-C must be present", certificate);
         }
+        //spec| Subject-O: Legal name of the Authenticator vendor (UTF8String)
         String organization = getSubjectOrganization();
         if (organization == null || organization.isEmpty()) {
             throw new CertificateException("Subject-O must be present", certificate);
         }
+        //spec| Subject-OU: Literal string "Authenticator Attestation" (UTF8String)
         String organizationUnit = getSubjectOrganizationUnit();
         if (organizationUnit == null || !organizationUnit.equals("Authenticator Attestation")) {
             throw new CertificateException("Subject-OU must be present", certificate);
         }
+        //spec| Subject-CN: A UTF8String of the vendor's choosing
         String commonName = getSubjectCommonName();
         if (commonName == null || commonName.isEmpty()) {
             throw new CertificateException("Subject-CN must be present", certificate);
         }
 
+        //spec| The Basic Constraints extension MUST have the CA component set to false.
         if (certificate.getBasicConstraints() != NON_CA) {
             throw new CertificateException("Attestation certificate must not be CA certificate", certificate);
         }

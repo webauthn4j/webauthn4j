@@ -37,6 +37,16 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.security.cert.Certificate;
 
+/**
+ * Verifies the specified {@link AndroidKeyAttestationStatement} is a valid Android Key attestation
+ * according to WebAuthn Level 3 specification.
+ * <p>
+ * Implements the verification procedure defined in:
+ * <a href="https://www.w3.org/TR/webauthn-3/#sctn-android-key-attestation">
+ * WebAuthn Level 3 § 8.4 Android Key Attestation Statement Format</a>
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/">Web Authentication: An API for accessing Public Key Credentials - Level 3</a>
+ */
 public class AndroidKeyAttestationStatementVerifier extends AbstractStatementVerifier<AndroidKeyAttestationStatement> {
 
     // ~ Instance fields
@@ -62,12 +72,12 @@ public class AndroidKeyAttestationStatementVerifier extends AbstractStatementVer
             throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.");
         }
 
-        /// Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
+        //spec| Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
 
-        /// Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the public key in the first certificate in x5c with the algorithm specified in alg.
+        //spec| Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the public key in the first certificate in x5c with the algorithm specified in alg.
         verifySignature(registrationObject);
 
-        /// Verify that the public key in the first certificate in x5c matches the credentialPublicKey in the attestedCredentialData in authenticatorData.
+        //spec| Verify that the public key in the first certificate in x5c matches the credentialPublicKey in the attestedCredentialData in authenticatorData.
         PublicKey publicKeyInEndEntityCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
         //noinspection ConstantConditions as null check is already done in caller
@@ -76,9 +86,16 @@ public class AndroidKeyAttestationStatementVerifier extends AbstractStatementVer
             throw new PublicKeyMismatchException("The public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData in authenticatorData.");
         }
 
+        //spec| Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
+        //spec| Verify the following using the appropriate authorization list from the attestation certificate extension data:
+        //spec|  - The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
+        //spec|  - For the following, use only the teeEnforced authorization list if the RP wants to accept only keys from a trusted execution environment, otherwise use the union of teeEnforced and softwareEnforced.
+        //spec|    - The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
+        //spec|    - The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
         byte[] clientDataHash = registrationObject.getClientDataHash();
         keyDescriptionVerifier.verify(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate(), clientDataHash, teeEnforcedOnly);
 
+        //spec| If successful, return attestation type Basic and attestation trust path x5c.
         return AttestationType.BASIC;
     }
 

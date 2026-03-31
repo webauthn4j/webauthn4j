@@ -45,6 +45,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Verifies the specified {@link TPMAttestationStatement} is a valid TPM attestation
+ * according to WebAuthn Level 3 specification.
+ * <p>
+ * Implements the verification procedure defined in:
+ * <a href="https://www.w3.org/TR/webauthn-3/#sctn-tpm-attestation">
+ * WebAuthn Level 3 § 8.3 TPM Attestation Statement Format</a>
+ * <p>
+ * Also references external TPM specifications:
+ * <ul>
+ *   <li>[TPMv2-Part1] Trusted Platform Module Library Part 1: Architecture</li>
+ *   <li>[TPMv2-Part2] Trusted Platform Module Library Part 2: Structures</li>
+ * </ul>
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/">Web Authentication: An API for accessing Public Key Credentials - Level 3</a>
+ */
 public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<TPMAttestationStatement> {
 
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
@@ -61,6 +77,7 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
+        //spec| Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
         TPMAttestationStatement attestationStatement = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         verifyAttestationStatementNotNull(attestationStatement);
 
@@ -72,57 +89,23 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
         TPMTPublic pubArea = attestationStatement.getPubArea();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
 
-        /// Verify that the public key specified by the parameters and unique fields of pubArea is identical to the credentialPublicKey in the attestedCredentialData in authenticatorData.
+        //spec| Verify that the public key specified by the parameters and unique fields of pubArea is identical to the credentialPublicKey in the attestedCredentialData in authenticatorData.
         verifyPublicKeyEquality(pubArea, authenticatorData);
 
-        /// Concatenate authenticatorData and clientDataHash to form attToBeSigned.
+        //spec| Concatenate authenticatorData and clientDataHash to form attToBeSigned.
         byte[] attToBeSigned = getAttToBeSigned(registrationObject);
 
-        /// Verify that certInfo is valid:
-
-        /// Verify that magic is set to TPM_GENERATED_VALUE.
-        if (certInfo.getMagic() != TPMGenerated.TPM_GENERATED_VALUE) {
-            throw new BadAttestationStatementException("magic must be TPM_GENERATED_VALUE");
-        }
-
-        /// Verify that type is set to TPM_ST_ATTEST_CERTIFY.
-        if (certInfo.getType() != TPMISTAttest.TPM_ST_ATTEST_CERTIFY) {
-            throw new BadAttestationStatementException("type must be TPM_ST_ATTEST_CERTIFY");
-        }
-
-        /// Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
-        byte[] hash = calcMessageDigest(attToBeSigned, alg.toSignatureAlgorithm().getMessageDigestAlgorithm());
-        // As hash is public data(not secret data) to client side, there is no risk of timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual`
-        if (!Arrays.equals(certInfo.getExtraData(), hash)) {
-            throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
-        }
 
-        /// Verify that attested contains a TPMS_CERTIFY_INFO structure as specified in [TPMv2-Part2] section 10.12.3,
-        /// whose name field contains a valid Name for pubArea, as computed using the algorithm in the nameAlg field of
-        /// pubArea using the procedure specified in [TPMv2-Part1] section 16.
-        TPMSCertifyInfo certifyInfo = (TPMSCertifyInfo) certInfo.getAttested();
-        TPMIAlgHash hashAlg = certifyInfo.getName().getHashAlg();
-        String algJcaName;
-        algJcaName = getAlgJcaName(hashAlg);
+        // Verify integrity of certInfo
+        verifyIntegrityOfCertInfo(attestationStatement, certInfo, authenticatorData, alg);
 
-        byte[] pubAreaDigest = MessageDigestUtil.createMessageDigest(algJcaName).digest(pubArea.getBytes());
-        // As pubAreaDigest is known data to client side(potential attacker) because it is calculated from parts of a message,
-        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
-        if (!Arrays.equals(pubAreaDigest, certifyInfo.getName().getDigest())) {
-            throw new BadAttestationStatementException("hash of `attested` doesn't match with name field of certifyInfo");
-        }
+        // Validate that certInfo is valid:
+        // Note: certInfo is a TPMS_ATTEST structure.
+        validateCertInfo(certInfo, attToBeSigned, pubArea, alg);
 
-        /// Note that the remaining fields in the "Standard Attestation Structure" [TPMv2-Part1] section 31.2,
-        /// i.e., qualifiedSigner, clockInfo and firmwareVersion are ignored. These fields MAY be used as an input to risk engines.
-
-        /// If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
-        if (attestationStatement.getX5c() != null) {
-            verifyX5c(attestationStatement, certInfo, authenticatorData);
-            /// If successful, return implementation-specific values representing attestation type AttCA and attestation trust path x5c.
-            return AttestationType.ATT_CA;
-        }
-        throw new BadAttestationStatementException("`x5c` or `ecdaaKeyId` must be present.");
+        //spec| If successful, return implementation-specific values representing attestation type AttCA and attestation trust path x5c.
+        return AttestationType.ATT_CA;
     }
 
     void verifyAttestationStatementNotNull(TPMAttestationStatement attestationStatement) {
@@ -152,12 +135,26 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
         return alg.createMessageDigestObject().digest(data);
     }
 
-    private void verifyX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
-        //noinspection ConstantConditions as null check is already done in verifyTPMAttestationStatementNull
+    private void verifyIntegrityOfCertInfo(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData, COSEAlgorithmIdentifier alg) {
+        //spec| Verify that x5c is present.
+        if (attestationStatement.getX5c() == null) {
+            throw new BadAttestationStatementException("`x5c` must be present.");
+        }
+
         X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
 
-        /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
-        Signature certInfoSignature = SignatureUtil.createSignature(attestationStatement.getAlg().toSignatureAlgorithm());
+        //spec| Verify that aikCert meets the requirements in § 8.3.1 TPM Attestation Statement Certificate Requirements.
+        verifyAikCert(aikCert);
+
+        //spec| If aikCert contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
+        byte[] aaguidBytes = aikCert.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
+        //noinspection ConstantConditions as null check is already done in caller
+        if (aaguidBytes != null && !Objects.equals(new AAGUID(aaguidBytes), authenticatorData.getAttestedCredentialData().getAaguid())) {
+            throw new BadAttestationStatementException("AAGUID in aikCert doesn't match with that in authenticatorData");
+        }
+
+        //spec| Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
+        Signature certInfoSignature = SignatureUtil.createSignature(alg.toSignatureAlgorithm());
         try {
             certInfoSignature.initVerify(aikCert.getPublicKey());
             certInfoSignature.update(certInfo.getBytes());
@@ -167,16 +164,40 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
         } catch (SignatureException | InvalidKeyException e) {
             throw new BadAttestationStatementException("Failed to verify the signature.", e);
         }
+    }
 
-        /// Verify that aikCert meets the requirements in §8.3.1 TPM Attestation Statement Certificate Requirements.
-        verifyAikCert(aikCert);
-
-        /// If aikCert contains an extension with OID 1 3 6 1 4 1 45724 1 1 4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
-        byte[] aaguidBytes = aikCert.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
-        //noinspection ConstantConditions as null check is already done in caller
-        if (aaguidBytes != null && !Objects.equals(new AAGUID(aaguidBytes), authenticatorData.getAttestedCredentialData().getAaguid())) {
-            throw new BadAttestationStatementException("AAGUID in aikCert doesn't match with that in authenticatorData");
+    private void validateCertInfo(TPMSAttest certInfo, byte[] attToBeSigned, TPMTPublic pubArea, COSEAlgorithmIdentifier alg) {
+        //spec| Verify that magic is set to TPM_GENERATED_VALUE.
+        if (certInfo.getMagic() != TPMGenerated.TPM_GENERATED_VALUE) {
+            throw new BadAttestationStatementException("magic must be TPM_GENERATED_VALUE");
         }
+
+        //spec| Verify that type is set to TPM_ST_ATTEST_CERTIFY.
+        if (certInfo.getType() != TPMISTAttest.TPM_ST_ATTEST_CERTIFY) {
+            throw new BadAttestationStatementException("type must be TPM_ST_ATTEST_CERTIFY");
+        }
+
+        //spec| Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
+        byte[] hash = calcMessageDigest(attToBeSigned, alg.toSignatureAlgorithm().getMessageDigestAlgorithm());
+        // As hash is public data(not secret data) to client side, there is no risk of timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual`
+        if (!Arrays.equals(certInfo.getExtraData(), hash)) {
+            throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
+        }
+
+        //spec| Verify that attested contains a TPMS_CERTIFY_INFO structure as specified in [TPMv2-Part2] section 10.12.3, whose name field contains a valid Name for pubArea, as computed using the procedure specified in [TPMv2-Part1] section 16 using the nameAlg in the pubArea.
+        TPMSCertifyInfo certifyInfo = (TPMSCertifyInfo) certInfo.getAttested();
+        TPMIAlgHash hashAlg = certifyInfo.getName().getHashAlg();
+        String algJcaName = getAlgJcaName(hashAlg);
+
+        byte[] pubAreaDigest = MessageDigestUtil.createMessageDigest(algJcaName).digest(pubArea.getBytes());
+        // As pubAreaDigest is known data to client side(potential attacker) because it is calculated from parts of a message,
+        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
+        if (!Arrays.equals(pubAreaDigest, certifyInfo.getName().getDigest())) {
+            throw new BadAttestationStatementException("hash of `attested` doesn't match with name field of certifyInfo");
+        }
+
+        // Note: The remaining fields in the "Standard Attestation Structure" [TPMv2-Part1] section 31.2, i.e., qualifiedSigner, clockInfo and firmwareVersion are ignored.
+        // Depending on the properties of the aikCert key used, these fields may be obfuscated. If valid, these MAY be used as an input to risk engines.
     }
 
     String getAlgJcaName(TPMIAlgHash alg) {
@@ -252,28 +273,28 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
 
     void verifyAikCert(X509Certificate certificate) {
         try {
-            /// TPM attestation certificate MUST have the following fields/extensions:
-            /// Version MUST be set to 3.
+            //spec| TPM attestation certificate MUST have the following fields/extensions:
+            //spec| Version MUST be set to 3.
             if (!Objects.equals(certificate.getVersion(), 3)) {
                 throw new BadAttestationStatementException("x5c must be version 3.");
             }
-            /// Subject field MUST be set to empty.
+            //spec| Subject field MUST be set to empty.
             if (!certificate.getSubjectX500Principal().getName().isEmpty()) {
                 throw new BadAttestationStatementException("x5c subject field MUST be set to empty");
             }
-            /// The Subject Alternative Name extension MUST be set as defined in [TPMv2-EK-Profile] section 3.2.9.
+            //spec| The Subject Alternative Name extension MUST be set as defined in [TPMv2-EK-Profile] section 3.2.9.
             verifySubjectAlternativeName(certificate);
-            /// The Extended Key Usage extension MUST contain the "joint-iso-itu-t(2) internationalorganizations(23) 133 tcg-kp(8) tcg-kp-AIKCertificate(3)" OID.
+            //spec| The Extended Key Usage extension MUST contain the OID 2.23.133.8.3 ("joint-iso-itu-t(2) internationalorganizations(23) 133 tcg-kp(8) tcg-kp-AIKCertificate(3)").
             if (certificate.getExtendedKeyUsage() == null || !certificate.getExtendedKeyUsage().contains("2.23.133.8.3")) {
                 throw new BadAttestationStatementException("Attestation certificate doesn't contain tcg-kp-AIKCertificate (2.23.133.8.3) OID");
             }
-            /// The Basic Constraints extension MUST have the CA component set to false.
+            //spec| The Basic Constraints extension MUST have the CA component set to false.
             if (certificate.getBasicConstraints() != -1) {
                 throw new BadAttestationStatementException("The Basic Constraints extension of attestation certificate must have the CA component set to false");
             }
-            /// An Authority Information Access (AIA) extension with entry id-ad-ocsp and a CRL Distribution Point
-            /// extension [RFC5280] are both OPTIONAL as the status of many attestation certificates is available
-            /// through metadata services. See, for example, the FIDO Metadata Service  [FIDOMetadataService].
+            //spec| An Authority Information Access (AIA) extension with entry id-ad-ocsp and a CRL Distribution Point
+            //spec| extension [RFC5280] are both OPTIONAL as the status of many attestation certificates is available
+            //spec| through metadata services. See, for example, the FIDO Metadata Service  [FIDOMetadataService].
 
         } catch (CertificateParsingException e) {
             throw new BadAttestationStatementException("Failed to parse attestation certificate", e);
