@@ -24,9 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * This enumeration’s values describe the Relying Party's requirements for client-side discoverable credentials (formerly known as resident credentials or resident keys)
+ * This enumeration’s values describe the Relying Party’s requirements for client-side discoverable credentials (formerly known as resident credentials or resident keys)
  *
- * @see <a href="https://www.w3.org/TR/2019/WD-webauthn-2-20191126/#enum-residentKeyRequirement">
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#enum-residentKeyRequirement">
  * §5.4.6. Resident Key Requirement Enumeration (enum ResidentKeyRequirement)</a>
  */
 public class ResidentKeyRequirement {

@@ -35,7 +35,7 @@ import java.util.Objects;
  * a secure channel. In both cases, the Relying Party receives the authenticator data in the same format, and uses
  * its knowledge of the authenticator to make trust decisions.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#sec-authenticator-data">§6.1 Authenticator Data.</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sec-authenticator-data">§6.1 Authenticator Data.</a>
  */
 public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> {
     public static final byte BIT_UP = (byte) 0b00000001;

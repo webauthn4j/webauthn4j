@@ -32,7 +32,7 @@ import java.util.Objects;
  * the credentials listed in allowCredentials when calling navigator.credentials.get().</li>
  * </ul>
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#attachment">
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#enumdef-authenticatorattachment">
  * §5.4.5. Authenticator Attachment Enumeration (enum AuthenticatorAttachment)</a>
  */
 public class AuthenticatorAttachment {

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * {@link com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs} is a map containing the client extension input values for
  * zero or more WebAuthn extensions, as defined in §9 WebAuthn Extensions.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticationextensionsclientinputs">
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dictdef-authenticationextensionsclientinputs">
  * §5.7. Authentication Extensions Client Inputs (typedef AuthenticationExtensionsClientInputs)</a>
  */
 public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput> {

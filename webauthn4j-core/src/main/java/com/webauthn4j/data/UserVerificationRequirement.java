@@ -27,7 +27,7 @@ import java.util.Objects;
  * A WebAuthn Relying Party may require user verification for some of its operations but not for
  * others, and may use this type to express its needs.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-userverificationrequirement">
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#enumdef-userverificationrequirement">
  * §5.10.6. User Verification Requirement Enumeration (enum UserVerificationRequirement)</a>
  */
 public class UserVerificationRequirement {

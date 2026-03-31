@@ -394,7 +394,7 @@ For password-less authentication, this should be set to `true`.
 
 If verification succeeds, the authentication is considered successful, and the `counter`,
 `uvInitialized`, and `backedUp` values linked to the persisted `CredentialRecord` should be updated.
-The counter is used to detect cloning of the authenticator. For details on counters, see https://www.w3.org/TR/webauthn-1/#sign-counter[the counter section of the WebAuthn specification].
+The counter is used to detect cloning of the authenticator. For details on counters, see https://www.w3.org/TR/webauthn-3/#sign-counter[the counter section of the WebAuthn specification].
 Then, complete any necessary steps for successful user authentication, such as creating an authenticated session.
 
 If verification fails, a subclass of `VerificationException` will be thrown.

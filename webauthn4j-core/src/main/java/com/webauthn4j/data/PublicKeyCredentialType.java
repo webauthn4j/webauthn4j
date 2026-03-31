@@ -29,7 +29,7 @@ import java.util.Objects;
  * The values of this enumeration are used for versioning the Authentication Assertion and attestation structures
  * according to the type of the authenticator.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#credentialType">
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#enumdef-publickeycredentialtype">
  * §5.10.2. Credential Type Enumeration (enum PublicKeyCredentialType)</a>
  */
 @SuppressWarnings("SameReturnValue")

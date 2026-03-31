@@ -28,7 +28,7 @@ import java.util.Objects;
 /**
  * The client data represents the contextual bindings of both the WebAuthn Relying Party and the client.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#sec-client-data">§5.10.1. Client Data Used in WebAuthn Signatures (dictionary CollectedClientData)</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dictionary-client-data">§5.8.1. Client Data Used in WebAuthn Signatures (dictionary CollectedClientData)</a>
  */
 public class CollectedClientData {
 
