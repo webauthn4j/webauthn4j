@@ -45,6 +45,13 @@ import java.util.Objects;
 
 /**
  * Verifies the specified {@link AttestationStatement} is a valid packed attestation
+ * according to WebAuthn Level 3 specification.
+ * <p>
+ * Implements the verification procedure defined in:
+ * <a href="https://www.w3.org/TR/webauthn-3/#sctn-packed-attestation">
+ * WebAuthn Level 3 § 8.2 Packed Attestation Statement Format</a>
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-3/">Web Authentication: An API for accessing Public Key Credentials - Level 3</a>
  */
 public class PackedAttestationStatementVerifier extends AbstractStatementVerifier<PackedAttestationStatement> {
 
@@ -59,16 +66,17 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
 
+        //spec| Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
         PackedAttestationStatement attestationStatement = (PackedAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         verifyAttestationStatementNotNull(attestationStatement);
         byte[] sig = attestationStatement.getSig();
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
         byte[] attrToBeSigned = getAttToBeSigned(registrationObject);
-        // If x5c is present,
+        //spec| If x5c is present:
         if (attestationStatement.getX5c() != null) {
             return verifyX5c(registrationObject, attestationStatement, sig, alg, attrToBeSigned);
         }
-        // If x5c is not present, self attestation is in use.
+        //spec| If x5c is not present, self attestation is in use.
         else {
             return verifySelfAttestation(registrationObject, sig, alg, attrToBeSigned);
         }
@@ -87,16 +95,14 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
             throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.", attestationStatement);
         }
 
-        // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
-        // using the attestation public key in x5c with the algorithm specified in alg.
+        //spec| Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the attestation public key in attestnCert with the algorithm specified in alg.
         if (!verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, attrToBeSigned)) {
             throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         }
-        // Verify that x5c meets the requirements in §8.2.1 Packed attestation statement certificate requirements.
+        //spec| Verify that attestnCert meets the requirements in § 8.2.1 Certificate Requirements for Packed Attestation Statements.
         attestationStatement.getX5c().getEndEntityAttestationCertificate().validate();
 
-        // If x5c contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that
-        // the value of this extension matches the aaguid in authenticatorData.
+        //spec| If attestnCert contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
         X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         AAGUID aaguidInCertificate = extractAAGUIDFromAttestationCertificate(attestationCertificate);
         //noinspection ConstantConditions as null check is already done in caller
@@ -105,7 +111,8 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
             throw new BadAttestationStatementException("AAGUID in attestation certificate doesn't match the AAGUID in authenticatorData.");
         }
 
-        // If successful, return attestation type BASIC and attestation trust path x5c.
+        //spec| Optionally, inspect x5c and consult externally provided knowledge to determine whether attStmt conveys a Basic or AttCA attestation.
+        //spec| If successful, return implementation-specific values representing attestation type Basic, AttCA or uncertainty, and attestation trust path x5c.
         return AttestationType.BASIC;
     }
 
@@ -127,17 +134,17 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
     private @NotNull AttestationType verifySelfAttestation(@NotNull CoreRegistrationObject registrationObject, @NotNull byte[] sig, @NotNull COSEAlgorithmIdentifier alg, @NotNull byte[] attrToBeSigned) {
         //noinspection ConstantConditions as null check is already done in caller
         COSEKey coseKey = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
-        // Verify that alg matches the algorithm of the coseKey in authenticatorData.
+        //spec| Validate that alg matches the algorithm of the credentialPublicKey in authenticatorData.
         COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = coseKey.getAlgorithm();
         if (!alg.equals(credentialPublicKeyAlgorithm)) {
             throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the coseKey in authenticatorData.", alg);
         }
-        // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
+        //spec| Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
         //noinspection ConstantConditions as null check is already done in caller
         if (!verifySignature(coseKey.getPublicKey(), alg, sig, attrToBeSigned)) {
             throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         }
-        // If successful, return attestation type Self and empty attestation trust path.
+        //spec| If successful, return implementation-specific values representing attestation type Self and an empty attestation trust path.
         return AttestationType.SELF;
     }
 
