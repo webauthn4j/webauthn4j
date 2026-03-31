@@ -53,6 +53,11 @@ public class AuthenticatorTransport {
     public static final AuthenticatorTransport BLE = new AuthenticatorTransport("ble");
 
     /**
+     * Indicates the respective authenticator can be contacted over ISO/IEC 7816 smart card with contacts.
+     */
+    public static final AuthenticatorTransport SMART_CARD = new AuthenticatorTransport("smart-card");
+
+    /**
      * Indicates the respective authenticator can be contacted using a combination of (often separate) data-transport
      * and proximity mechanisms. This supports, for example, authentication on a desktop computer using a smartphone.
      */
