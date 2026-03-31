@@ -37,6 +37,7 @@ class AuthenticatorTransportTest {
                 () -> assertThat(AuthenticatorTransport.create("usb")).isEqualTo(AuthenticatorTransport.USB),
                 () -> assertThat(AuthenticatorTransport.create("nfc")).isEqualTo(AuthenticatorTransport.NFC),
                 () -> assertThat(AuthenticatorTransport.create("ble")).isEqualTo(AuthenticatorTransport.BLE),
+                () -> assertThat(AuthenticatorTransport.create("smart-card")).isEqualTo(AuthenticatorTransport.SMART_CARD),
                 () -> assertThat(AuthenticatorTransport.create("hybrid")).isEqualTo(AuthenticatorTransport.HYBRID),
                 () -> assertThat(AuthenticatorTransport.create("internal")).isEqualTo(AuthenticatorTransport.INTERNAL)
         );
