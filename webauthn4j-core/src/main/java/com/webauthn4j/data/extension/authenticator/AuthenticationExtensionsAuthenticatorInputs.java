@@ -32,8 +32,8 @@ import java.util.stream.Collectors;
  * {@link AuthenticationExtensionsAuthenticatorInputs} containing the authenticator extension input values for
  * zero or more WebAuthn extensions, as defined in §9 WebAuthn Extensions.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#typedefdef-authenticationextensionsauthenticatorinputs">
- * §5.9. Authentication Extensions Authenticator Inputs (typedef AuthenticationExtensionsAuthenticatorInputs)</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#typedefdef-authenticationextensionsauthenticatorinputs">
+ * §5.7.3. Authentication Extensions Authenticator Inputs (typedef AuthenticationExtensionsAuthenticatorInputs)</a>
  */
 public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuthenticatorInput> {
 

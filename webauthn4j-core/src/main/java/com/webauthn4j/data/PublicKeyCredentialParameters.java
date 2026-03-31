@@ -27,7 +27,7 @@ import java.util.Objects;
 /**
  * {@link PublicKeyCredentialParameters} is used to supply additional parameters when creating a new credential.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialparameters">
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dictdef-publickeycredentialparameters">
  * §5.3. Parameters for Credential Generation (dictionary PublicKeyCredentialParameters)</a>
  */
 public class PublicKeyCredentialParameters {

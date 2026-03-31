@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Authenticators respond to Relying Party requests by returning an object derived from the AuthenticatorResponse.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#authenticatorresponse">§5.2. Authenticator Responses (interface AuthenticatorResponse)</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#authenticatorresponse">§5.2. Authenticator Responses (interface AuthenticatorResponse)</a>
  */
 public abstract class AuthenticatorResponse {
 

@@ -270,7 +270,7 @@ save(credentialRecord); // please persist credentialRecord in your manner
 `ServerProperty` のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。
 
 * `origin` には WebAuthn による登録・認証セレモニーの時点でクライアントブラウザ（ユーザーエージェント）が認識していたことを期待する Origin を指定してください。ブラウザは認識した Origin を clientData に書き込み、その内容を含めて署名します。サーバー側では、clientData に記録された Origin が期待値と一致するかを照合することで、想定外のページや別オリジンから不正に起動されたセレモニー（フィッシングやフレーミング誘発）を防ぎます。
-* `rpId` には WebAuthn による認証を提供するサイトの rpId を指定して下さい。rpId は資格情報のスコープを指定するパラメータです。 詳しくは https://www.w3.org/TR/webauthn-1/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
+* `rpId` には WebAuthn による認証を提供するサイトの rpId を指定して下さい。rpId は資格情報のスコープを指定するパラメータです。 詳しくは https://www.w3.org/TR/webauthn-3/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
 * `challenge` には発行した Challenge を指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側で WebAuthn JS API を実行する際にパラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行した Challenge を検証時まで永続化しておくのは WebAuthn4J ライブラリ呼出側の責務です。セッションなどに格納しておくと良いでしょう。
 * （オプション）`topOrigin(...)`/`topOrigins(...)`/`topOriginPredicate(...)` を使用することで、許容するtop originを指定することが出来ます。
 ** WebAuthn は同一オリジン制約とクリックジャッキング対策の観点から、原則としてクロスオリジンを許容しません。
@@ -403,7 +403,7 @@ updateCounter(
 
 検証に成功した場合は、認証に成功したものと見做すことが出来ますので、永続化された `CredentialRecord` に紐づけたcounterおよび、uvInitialized、backedUpの値を更新してください。
 カウンタは万が一認証デバイスのクローンが 作成されたことを検知するために用意されています。
-カウンタについて詳しくは https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
+カウンタについて詳しくは https://www.w3.org/TR/webauthn-3/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 
 その後、認証済セッションを作成するなど、ユーザー認証成功時の処理を実施下さい。
 検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。
@@ -507,7 +507,7 @@ save(dcAppleDevice); // please persist authenticator in your manner
 `DCAppleDevice` には、登録時に永続化した `DCAppleDevice` を指定してください。
 
 検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。 検証後は、 `DCAppleDevice` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
-https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
+https://www.w3.org/TR/webauthn-3/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 
 [source,java]
 ----

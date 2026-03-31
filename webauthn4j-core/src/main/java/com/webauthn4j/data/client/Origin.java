@@ -30,7 +30,7 @@ import java.util.Objects;
  * {@link Origin} contains the fully qualified origin of the requester, as provided to the authenticator
  * by the client.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#dom-collectedclientdata-origin">§5.10.1. Client Data Used in WebAuthn Signatures - origin</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dom-collectedclientdata-origin">§5.8.1. Client Data Used in WebAuthn Signatures - origin</a>
  */
 public class Origin {
 

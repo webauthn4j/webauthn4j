@@ -31,8 +31,8 @@ import java.util.Objects;
 /**
  * The attestation object contains both authenticator data and an attestation statement.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#sctn-attestation">§6.4 Attestation</a>
- * @see <a href="https://www.w3.org/TR/webauthn-1/#generating-an-attestation-object">§6.4.4 Generating an Attestation Object</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-attestation">§6.5 Attestation</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-generating-an-attestation-object">§6.5.4 Generating an Attestation Object</a>
  */
 public class AttestationObject {
 

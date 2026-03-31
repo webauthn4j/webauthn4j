@@ -5,7 +5,7 @@ It delegates attestation statements verification to an implementation of
 `AttestationStatementVerifier` and attestation statements trustworthiness verification to an implementation of
 `CertPathTrustworthinessVerifier`.
 
-Since most sites don't require strict attestation statement verification (https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAuthn Spec related topic] ), WebAuthn4J provides `WebAuthnManager.createNonStrictWebAuthnManager` factory method that returns an `WebAuthnManager` instance configured `AttestationStatementVerifier` and
+Since most sites don't require strict attestation statement verification (https://www.w3.org/TR/webauthn-3/#sctn-no-attestation-security-attestation[WebAuthn Spec related topic] ), WebAuthn4J provides `WebAuthnManager.createNonStrictWebAuthnManager` factory method that returns an `WebAuthnManager` instance configured `AttestationStatementVerifier` and
 `CertPathTrustworthinessVerifier` not to verify attestation statements.
 
 If you are engaging an enterprise use case and strict authenticator verification is a requirement, Use the constructor of the `WebAuthnManager` class and inject verifiers.

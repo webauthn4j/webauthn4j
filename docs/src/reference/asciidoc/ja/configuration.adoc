@@ -4,7 +4,7 @@ WebAuthn4Jを利用する上で中心となるクラスは `WebAuthnManager` ク
 `WebAuthnManager` は登録リクエスト検証時の構成証明ステートメントの署名と信頼性の検証を、 それぞれ `AttestationStatementVerifier` と `CertPathTrustworthinessVerifier` インタフェースの実装に委譲します。
 
 大多数のサイトは厳密な構成証明ステートメントの検証を必要とせず、エンタープライズ用途以外では厳密な構成証明ステートメントの検証は非推奨とされていることから（
-https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAuthn仕様書関連個所参照] ）、 WebAuthn4Jでは構成証明ステートメントの検証をしないように `AttestationStatementVerifier` と
+https://www.w3.org/TR/webauthn-3/#sctn-no-attestation-security-attestation[WebAuthn仕様書関連個所参照] ）、 WebAuthn4Jでは構成証明ステートメントの検証をしないように `AttestationStatementVerifier` と
 `CertPathTrustworthinessVerifier` を構成した `WebAuthnManager` のインスタンスを返却する
 `WebAuthnManager.createNonStrictWebAuthnManager` ファクトリメソッドを用意しています。
 

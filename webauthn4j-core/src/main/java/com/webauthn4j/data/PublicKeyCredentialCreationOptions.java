@@ -33,7 +33,7 @@ import java.util.Objects;
 /**
  * Options for Credential Creation
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialcreationoptions">
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dictdef-publickeycredentialcreationoptions">
  * §5.4. Options for Credential Creation (dictionary PublicKeyCredentialCreationOptions)</a>
  */
 public class PublicKeyCredentialCreationOptions {

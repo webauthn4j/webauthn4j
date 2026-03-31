@@ -32,8 +32,8 @@ import java.util.Set;
  * {@link PublicKeyCredentialDescriptor} contains the attributes that are specified by a caller when referring to
  * a public key credential as an input parameter to the create() or get() methods.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialdescriptor">
- * §5.10.3. Credential Descriptor (dictionary PublicKeyCredentialDescriptor)</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dictdef-publickeycredentialdescriptor">
+ * §5.8.3. Credential Descriptor (dictionary PublicKeyCredentialDescriptor)</a>
  */
 public class PublicKeyCredentialDescriptor {
 

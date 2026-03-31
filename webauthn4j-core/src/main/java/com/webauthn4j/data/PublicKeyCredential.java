@@ -32,7 +32,7 @@ import java.util.Objects;
  * The PublicKeyCredential interface contains the attributes that are returned to the caller
  * when a new credential is created, or a new assertion is requested.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#iface-pkcredential">§5.1. PublicKeyCredential Interface</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#iface-pkcredential">§5.1. PublicKeyCredential Interface</a>
  */
 public class PublicKeyCredential<R extends AuthenticatorResponse, E extends ExtensionClientOutput> {
 

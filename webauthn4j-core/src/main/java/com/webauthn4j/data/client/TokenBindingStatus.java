@@ -30,7 +30,7 @@ import java.util.Objects;
  * <li>present</li>
  * </ul>
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-tokenbindingstatus">§5.10.1. Client Data Used in WebAuthn Signatures - TokenBindingStatus</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#enumdef-tokenbindingstatus">§5.8.1. Client Data Used in WebAuthn Signatures - TokenBindingStatus</a>
  */
 public class TokenBindingStatus {
 

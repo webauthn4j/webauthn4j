@@ -29,7 +29,7 @@ import java.util.Objects;
  * {@link PublicKeyCredentialUserEntity} is used to supply additional user account attributes
  * when creating a new credential.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialuserentity">
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dictdef-publickeycredentialuserentity">
  * §5.4.3. User Account Parameters for Credential Generation (dictionary PublicKeyCredentialUserEntity)</a>
  */
 public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {

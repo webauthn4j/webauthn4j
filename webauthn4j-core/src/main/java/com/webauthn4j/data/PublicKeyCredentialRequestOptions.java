@@ -33,7 +33,7 @@ import java.util.Objects;
  * {@link PublicKeyCredentialRequestOptions} supplies get() with the data it needs to
  * generate an assertion. Its challenge member MUST be present, while its other members are OPTIONAL.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialrequestoptions">
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dictdef-publickeycredentialrequestoptions">
  * §5.5. Options for Assertion Generation (dictionary PublicKeyCredentialRequestOptions)</a>
  */
 public class PublicKeyCredentialRequestOptions {

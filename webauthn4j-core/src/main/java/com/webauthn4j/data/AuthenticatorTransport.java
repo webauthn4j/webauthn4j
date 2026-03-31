@@ -31,8 +31,8 @@ import java.util.Objects;
  * obtain an assertion for a specific credential. Note that these hints represent the WebAuthn Relying Party's
  * best belief as to how an authenticator may be reached.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-authenticatortransport">
- * §5.10.4. Authenticator Transport Enumeration (enum AuthenticatorTransport)</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#enumdef-authenticatortransport">
+ * §5.8.4. Authenticator Transport Enumeration (enum AuthenticatorTransport)</a>
  */
 public class AuthenticatorTransport {
 

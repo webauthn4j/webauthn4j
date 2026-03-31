@@ -25,7 +25,7 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 import java.security.cert.X509Certificate;
 
 // None attesation format authenticator
-// as described in https://www.w3.org/TR/webauthn-2/#sctn-none-attestation
+// as described in https://www.w3.org/TR/webauthn-3/#sctn-none-attestation
 public class NoneAttestationAuthenticator extends WebAuthnModelAuthenticator {
 
     public NoneAttestationAuthenticator(
