@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * Map containing the client extension output values for zero or more WebAuthn
  * extensions, as defined in §9 WebAuthn Extensions.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-3/#dictdef-authenticationextensionsclientoutputs">§5.8. Authentication Extensions Client Outputs</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dictdef-authenticationextensionsclientoutputs">§5.7.2. Authentication Extensions Client Outputs</a>
  */
 public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutput> {
 

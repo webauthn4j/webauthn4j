@@ -30,7 +30,7 @@ import java.util.Objects;
  * used when communicating with the Relying Party. Its absence indicates that the client doesn’t
  * support token binding.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-3/#dom-collectedclientdata-tokenbinding">§5.10.1. Client Data Used in WebAuthn Signatures - tokenBinding</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#dom-collectedclientdata-tokenbinding">§5.8.1. Client Data Used in WebAuthn Signatures - tokenBinding</a>
  */
 public class TokenBinding {
 

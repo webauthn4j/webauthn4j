@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * zero or more WebAuthn extensions, as defined in §9 WebAuthn Extensions.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-3/#dictdef-authenticationextensionsclientinputs">
- * §5.7. Authentication Extensions Client Inputs (typedef AuthenticationExtensionsClientInputs)</a>
+ * §5.7.1. Authentication Extensions Client Inputs (typedef AuthenticationExtensionsClientInputs)</a>
  */
 public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput> {
 

@@ -28,7 +28,7 @@ import java.util.Objects;
  * others, and may use this type to express its needs.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-3/#enumdef-userverificationrequirement">
- * §5.10.6. User Verification Requirement Enumeration (enum UserVerificationRequirement)</a>
+ * §5.8.6. User Verification Requirement Enumeration (enum UserVerificationRequirement)</a>
  */
 public class UserVerificationRequirement {
 

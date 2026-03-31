@@ -30,7 +30,7 @@ import java.util.Objects;
  * according to the type of the authenticator.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-3/#enumdef-publickeycredentialtype">
- * §5.10.2. Credential Type Enumeration (enum PublicKeyCredentialType)</a>
+ * §5.8.2. Credential Type Enumeration (enum PublicKeyCredentialType)</a>
  */
 @SuppressWarnings("SameReturnValue")
 public class PublicKeyCredentialType {

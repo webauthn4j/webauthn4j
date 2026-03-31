@@ -28,7 +28,7 @@ import java.util.Objects;
  * regarding attestation conveyance during credential generation.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-3/#enumdef-attestationconveyancepreference">
- * §5.4.6. Attestation Conveyance Preference Enumeration (enum AttestationConveyancePreference)</a>
+ * §5.4.7. Attestation Conveyance Preference Enumeration (enum AttestationConveyancePreference)</a>
  */
 public class AttestationConveyancePreference {
 

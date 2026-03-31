@@ -28,7 +28,7 @@ import java.util.Objects;
  * Attested credential data is a variable-length byte array added to the authenticator data when
  * generating an attestation object for a given credential.
  *
- * @see <a href="https://www.w3.org/TR/webauthn-3/#sec-attested-credential-data">§6.4.1. Attested Credential Data</a>
+ * @see <a href="https://www.w3.org/TR/webauthn-3/#sec-attested-credential-data">§6.5.1. Attested Credential Data</a>
  */
 public class AttestedCredentialData {
 
