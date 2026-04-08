@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -30,6 +31,13 @@ import javax.security.auth.x500.X500Principal;
 import java.security.cert.X509Certificate;
 
 public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
+
+    public AndroidKeyAuthenticator(AAGUID aaguid) {
+        super(aaguid);
+    }
+
+    public AndroidKeyAuthenticator() {
+    }
 
     @Override
     public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {

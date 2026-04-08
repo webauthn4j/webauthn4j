@@ -17,12 +17,20 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 
+import com.webauthn4j.data.PublicKeyCredentialParameters;
+import com.webauthn4j.data.PublicKeyCredentialRpEntity;
+import com.webauthn4j.data.PublicKeyCredentialType;
+import com.webauthn4j.data.PublicKeyCredentialUserEntity;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.ECUtil;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 class TPMAuthenticatorTest {
@@ -35,5 +43,25 @@ class TPMAuthenticatorTest {
         RegistrationEmulationOption option = new RegistrationEmulationOption();
         AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, EC2COSEKey.create(ECUtil.createKeyPair(), COSEAlgorithmIdentifier.ES256), new byte[0]);
         assertThatCode(() -> target.createAttestationStatement(attestationStatementRequest, option)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void constructorWithAaguid_test() {
+        AAGUID aaguid = new AAGUID("f8a011f3-8c0a-4d15-8006-17111f9edc7d");
+        TPMAuthenticator authenticator = new TPMAuthenticator(aaguid);
+        MakeCredentialResponse response = authenticator.makeCredential(new MakeCredentialRequest(
+                new byte[32],
+                new PublicKeyCredentialRpEntity("test-rp", "Test RP"),
+                new PublicKeyCredentialUserEntity(new byte[32], "test-user", "Test User"),
+                false,
+                true,
+                false,
+                Collections.singletonList(new PublicKeyCredentialParameters(
+                        PublicKeyCredentialType.PUBLIC_KEY,
+                        COSEAlgorithmIdentifier.ES256
+                ))
+        ));
+        assertThat(response.getAttestationObject().getAuthenticatorData()
+                .getAttestedCredentialData().getAaguid()).isEqualTo(aaguid);
     }
 }

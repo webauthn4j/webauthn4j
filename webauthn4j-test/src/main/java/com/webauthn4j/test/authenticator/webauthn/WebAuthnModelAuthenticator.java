@@ -99,9 +99,9 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         secureRandom.nextBytes(this.credentialEncryptionKey);
     }
 
-    public WebAuthnModelAuthenticator() {
+    public WebAuthnModelAuthenticator(AAGUID aaguid) {
         this(
-                AAGUID.ZERO,
+                aaguid,
                 new KeyPair(
                         TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey(),
                         TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey()),
@@ -111,6 +111,10 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
                 true,
                 new ObjectConverter()
         );
+    }
+
+    public WebAuthnModelAuthenticator() {
+        this(AAGUID.ZERO);
     }
 
     public PublicKeyCredentialSource lookup(byte[] credentialId) {

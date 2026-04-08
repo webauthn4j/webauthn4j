@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.Response;
@@ -37,6 +38,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
+
+    public AndroidSafetyNetAuthenticator(AAGUID aaguid) {
+        super(aaguid);
+    }
+
+    public AndroidSafetyNetAuthenticator() {
+    }
 
     private JWSFactory jwsFactory;
 

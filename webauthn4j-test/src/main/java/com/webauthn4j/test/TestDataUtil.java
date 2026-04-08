@@ -314,8 +314,12 @@ public class TestDataUtil {
         return createAttestedCredentialData(createEC2COSEPublicKey());
     }
 
+    public static AttestedCredentialData createAttestedCredentialData(AAGUID aaguid, COSEKey coseKey) {
+        return new AttestedCredentialData(aaguid, new byte[32], coseKey);
+    }
+
     public static AttestedCredentialData createAttestedCredentialData(COSEKey coseKey) {
-        return new AttestedCredentialData(AAGUID.ZERO, new byte[32], coseKey);
+        return createAttestedCredentialData(AAGUID.ZERO, coseKey);
     }
 
     public static EC2COSEKey createEC2COSEPublicKey() {
