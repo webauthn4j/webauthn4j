@@ -17,6 +17,7 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.data.SignatureAlgorithm;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.test.AttestationCertificateBuilder;
@@ -40,6 +41,13 @@ import java.security.spec.EllipticCurve;
 
 @SuppressWarnings("ConstantConditions")
 public class TPMAuthenticator extends WebAuthnModelAuthenticator {
+
+    public TPMAuthenticator(AAGUID aaguid) {
+        super(aaguid);
+    }
+
+    public TPMAuthenticator() {
+    }
 
     @Override
     public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {

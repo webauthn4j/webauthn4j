@@ -18,6 +18,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
@@ -30,6 +31,13 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPrivateKey;
 
 public class PackedAuthenticator extends WebAuthnModelAuthenticator {
+
+    public PackedAuthenticator(AAGUID aaguid) {
+        super(aaguid);
+    }
+
+    public PackedAuthenticator() {
+    }
 
     @Override
     public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {

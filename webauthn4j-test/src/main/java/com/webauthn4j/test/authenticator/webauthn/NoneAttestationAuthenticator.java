@@ -36,13 +36,12 @@ public class NoneAttestationAuthenticator extends WebAuthnModelAuthenticator {
         super(aaguid, null, null, null, counter, capableOfUserVerification, objectConverter);
     }
 
+    public NoneAttestationAuthenticator(AAGUID aaguid) {
+        this(aaguid, 0, true, new ObjectConverter());
+    }
+
     public NoneAttestationAuthenticator() {
-        this(
-            AAGUID.ZERO,
-            0,
-            true,
-            new ObjectConverter()
-        );
+        this(AAGUID.ZERO);
     }
 
     @Override

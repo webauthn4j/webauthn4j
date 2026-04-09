@@ -19,6 +19,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import org.junit.jupiter.api.Test;
@@ -83,6 +84,26 @@ class PackedAuthenticatorTest {
                 false,
                 null));
         assertThat(assertion.getCredentialId()).isEqualTo(credentialId);
+    }
+
+    @Test
+    void constructorWithAaguid_test() {
+        AAGUID aaguid = new AAGUID("f8a011f3-8c0a-4d15-8006-17111f9edc7d");
+        PackedAuthenticator authenticator = new PackedAuthenticator(aaguid);
+        MakeCredentialResponse response = authenticator.makeCredential(new MakeCredentialRequest(
+                new byte[32],
+                new PublicKeyCredentialRpEntity("test-rp", "Test RP"),
+                new PublicKeyCredentialUserEntity(new byte[32], "test-user", "Test User"),
+                false,
+                true,
+                false,
+                Collections.singletonList(new PublicKeyCredentialParameters(
+                        PublicKeyCredentialType.PUBLIC_KEY,
+                        COSEAlgorithmIdentifier.ES256
+                ))
+        ));
+        assertThat(response.getAttestationObject().getAuthenticatorData()
+                .getAttestedCredentialData().getAaguid()).isEqualTo(aaguid);
     }
 
     private String serialize(PublicKeyCredentialCreationOptions options) {
