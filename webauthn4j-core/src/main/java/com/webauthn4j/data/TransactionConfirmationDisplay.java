@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported transaction confirmation display type(s).
  *
- * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#transaction-confirmation-display-types">§3.5 Transaction Confirmation Display Types</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.3-rd-20260105.html#transaction-confirmation-display-types">§3.5 Transaction Confirmation Display Types</a>
  */
 public enum TransactionConfirmationDisplay {
 

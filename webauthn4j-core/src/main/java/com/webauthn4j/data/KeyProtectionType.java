@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported key protection type(s).
  *
- * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#key-protection-types">§3.2 Key Protection Types</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.3-rd-20260105.html#key-protection-types">§3.2 Key Protection Types</a>
  */
 public enum KeyProtectionType {
 
@@ -32,7 +32,8 @@ public enum KeyProtectionType {
     HARDWARE(0x0002, "hardware"),
     TEE(0x0004, "tee"),
     SECURE_ELEMENT(0x0008, "secure_element"),
-    REMOTE_HANDLE(0x0010, "remote_handle");
+    REMOTE_HANDLE(0x0010, "remote_handle"),
+    SYNC_FABRIC(0x0020, "sync_fabric");
 
     private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
 

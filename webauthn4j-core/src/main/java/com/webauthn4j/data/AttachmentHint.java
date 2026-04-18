@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported attachment hint type(s).
  *
- * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#authenticator-attachment-hints">§3.4 Authenticator Attachment Hints</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.3-rd-20260105.html#authenticator-attachment-hints">§3.4 Authenticator Attachment Hints</a>
  */
 public enum AttachmentHint {
 
@@ -36,7 +36,8 @@ public enum AttachmentHint {
     BLUETOOTH(0x0020, "bluetooth"),
     NETWORK(0x0040, "network"),
     READY(0x0080, "ready"),
-    WIFI_DIRECT(0x0100, "wifi_direct");
+    WIFI_DIRECT(0x0100, "wifi_direct"),
+    SMART_CARD(0x0200, "smart-card");
 
     private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
 

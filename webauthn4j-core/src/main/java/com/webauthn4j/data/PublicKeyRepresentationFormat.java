@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported publik key representation format(s).
  *
- * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#public-key-representation-formats">§3.6.2 Public Key Representation Formats</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.3-rd-20260105.html#public-key-representation-formats">§3.6.2 Public Key Representation Formats</a>
  */
 public enum PublicKeyRepresentationFormat {
 
