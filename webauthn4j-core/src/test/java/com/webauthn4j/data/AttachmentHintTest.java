@@ -34,7 +34,8 @@ class AttachmentHintTest {
                     () -> assertThat(AttachmentHint.BLUETOOTH.getValue()).isEqualTo(0x0020),
                     () -> assertThat(AttachmentHint.NETWORK.getValue()).isEqualTo(0x0040),
                     () -> assertThat(AttachmentHint.READY.getValue()).isEqualTo(0x0080),
-                    () -> assertThat(AttachmentHint.WIFI_DIRECT.getValue()).isEqualTo(0x0100)
+                    () -> assertThat(AttachmentHint.WIFI_DIRECT.getValue()).isEqualTo(0x0100),
+                    () -> assertThat(AttachmentHint.SMART_CARD.getValue()).isEqualTo(0x0200)
             );
         }
 
@@ -58,7 +59,8 @@ class AttachmentHintTest {
                     () -> assertThat(AttachmentHint.create(0x0020)).isEqualTo(AttachmentHint.BLUETOOTH),
                     () -> assertThat(AttachmentHint.create(0x0040)).isEqualTo(AttachmentHint.NETWORK),
                     () -> assertThat(AttachmentHint.create(0x0080)).isEqualTo(AttachmentHint.READY),
-                    () -> assertThat(AttachmentHint.create(0x0100)).isEqualTo(AttachmentHint.WIFI_DIRECT)
+                    () -> assertThat(AttachmentHint.create(0x0100)).isEqualTo(AttachmentHint.WIFI_DIRECT),
+                    () -> assertThat(AttachmentHint.create(0x0200)).isEqualTo(AttachmentHint.SMART_CARD)
             );
         }
 
@@ -73,7 +75,8 @@ class AttachmentHintTest {
                     () -> assertThat(AttachmentHint.create("bluetooth")).isEqualTo(AttachmentHint.BLUETOOTH),
                     () -> assertThat(AttachmentHint.create("network")).isEqualTo(AttachmentHint.NETWORK),
                     () -> assertThat(AttachmentHint.create("ready")).isEqualTo(AttachmentHint.READY),
-                    () -> assertThat(AttachmentHint.create("wifi_direct")).isEqualTo(AttachmentHint.WIFI_DIRECT)
+                    () -> assertThat(AttachmentHint.create("wifi_direct")).isEqualTo(AttachmentHint.WIFI_DIRECT),
+                    () -> assertThat(AttachmentHint.create("smart-card")).isEqualTo(AttachmentHint.SMART_CARD)
             );
         }
         
