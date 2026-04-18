@@ -32,7 +32,8 @@ public enum KeyProtectionType {
     HARDWARE(0x0002, "hardware"),
     TEE(0x0004, "tee"),
     SECURE_ELEMENT(0x0008, "secure_element"),
-    REMOTE_HANDLE(0x0010, "remote_handle");
+    REMOTE_HANDLE(0x0010, "remote_handle"),
+    SYNC_FABRIC(0x0020, "sync_fabric");
 
     private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
 
