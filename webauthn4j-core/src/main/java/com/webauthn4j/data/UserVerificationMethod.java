@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported user verification method(s).
  *
- * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#user-verification-methods">§3.1 User Verification Methods</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.3-rd-20260105.html#user-verification-methods">§3.1 User Verification Methods</a>
  */
 public enum UserVerificationMethod {
 

@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported authentication algorithm(s).
  *
- * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#authentication-algorithms">§3.6.1 Authentication Algorithms</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.3-rd-20260105.html#authentication-algorithms">§3.6.1 Authentication Algorithms</a>
  */
 public enum AuthenticationAlgorithm {
 

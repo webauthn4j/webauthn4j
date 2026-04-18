@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported attachment hint type(s).
  *
- * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#authenticator-attachment-hints">§3.4 Authenticator Attachment Hints</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.3-rd-20260105.html#authenticator-attachment-hints">§3.4 Authenticator Attachment Hints</a>
  */
 public enum AttachmentHint {
 

@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported attestation type(s). (e.g. ATTESTATION_BASIC_FULL(0x3E07), ATTESTATION_BASIC_SURROGATE(0x3E08)).
  *
- * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#authenticator-attestation-types">§3.6.3 Authenticator Attestation Types</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.3-rd-20260105.html#authenticator-attestation-types">§3.6.3 Authenticator Attestation Types</a>
  */
 public enum AuthenticatorAttestationType {
 
