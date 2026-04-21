@@ -55,5 +55,5 @@ jobs:
       - name: Push commit
         run: |
           git fetch
-          git rebase origin/master
+          git rebase origin/0.30.x
           git push

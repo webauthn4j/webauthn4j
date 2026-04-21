@@ -1,41 +1,44 @@
-name: Doc
-
-on:
-  push:
-    branches:
-      - master
-env:
-  JAVA_VERSION: 17
-
-jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-24.04
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Configure git
-        run: |
-          git submodule init
-          git submodule update
-          git config --local user.email "mail@ynojima.net"
-          git config --local user.name "ynojima"
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
-
-      - name: Build with Gradle
-        run: |
-          ./gradlew javadoc generateReferenceJA generateReferenceEN
-      - name: Commit & Push pages
-        run: |
-          rm -rf docs
-          mv build/docs/asciidoc/html5 docs
-          git add docs
-          git commit -m "Update docs"
-          git checkout -b gh-pages
-          git push origin gh-pages -f
+# This workflow is disabled on the 0.30.x branch.
+# The gh-pages documentation is published from the master branch only.
+#
+#name: Doc
+#
+#on:
+#  push:
+#    branches:
+#      - master
+#env:
+#  JAVA_VERSION: 17
+#
+#jobs:
+#  build:
+#    name: Build
+#    runs-on: ubuntu-24.04
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v6
+#      - name: Configure git
+#        run: |
+#          git submodule init
+#          git submodule update
+#          git config --local user.email "mail@ynojima.net"
+#          git config --local user.name "ynojima"
+#      - name: Set up JDK ${{ env.JAVA_VERSION }}
+#        uses: actions/setup-java@v5
+#        with:
+#          distribution: 'temurin'
+#          java-version: ${{ env.JAVA_VERSION }}
+#          cache: 'gradle'
+#
+#      - name: Build with Gradle
+#        run: |
+#          ./gradlew javadoc generateReferenceJA generateReferenceEN
+#      - name: Commit & Push pages
+#        run: |
+#          rm -rf docs
+#          mv build/docs/asciidoc/html5 docs
+#          git add docs
+#          git commit -m "Update docs"
+#          git checkout -b gh-pages
+#          git push origin gh-pages -f

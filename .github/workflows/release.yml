@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
           git fetch
-          git rebase origin/master
+          git rebase origin/0.30.x
           git push
 
       - name: Tag commit
@@ -72,7 +72,7 @@ jobs:
         run: |
           VERSION=$(grep "webAuthn4JVersion" gradle.properties | cut -d'=' -f2)
           git fetch
-          git rebase origin/master
+          git rebase origin/0.30.x
           git push origin "${VERSION}.RELEASE"
 
 
