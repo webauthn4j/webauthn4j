@@ -44,11 +44,13 @@ class KeyProtectionTypeTest {
                 () -> assertThat(KeyProtectionType.create(0x0004)).isEqualTo(KeyProtectionType.TEE),
                 () -> assertThat(KeyProtectionType.create(0x0008)).isEqualTo(KeyProtectionType.SECURE_ELEMENT),
                 () -> assertThat(KeyProtectionType.create(0x0010)).isEqualTo(KeyProtectionType.REMOTE_HANDLE),
+                () -> assertThat(KeyProtectionType.create(0x0020)).isEqualTo(KeyProtectionType.SYNC_FABRIC),
                 () -> assertThat(KeyProtectionType.create("software")).isEqualTo(KeyProtectionType.SOFTWARE),
                 () -> assertThat(KeyProtectionType.create("hardware")).isEqualTo(KeyProtectionType.HARDWARE),
                 () -> assertThat(KeyProtectionType.create("tee")).isEqualTo(KeyProtectionType.TEE),
                 () -> assertThat(KeyProtectionType.create("secure_element")).isEqualTo(KeyProtectionType.SECURE_ELEMENT),
-                () -> assertThat(KeyProtectionType.create("remote_handle")).isEqualTo(KeyProtectionType.REMOTE_HANDLE)
+                () -> assertThat(KeyProtectionType.create("remote_handle")).isEqualTo(KeyProtectionType.REMOTE_HANDLE),
+                () -> assertThat(KeyProtectionType.create("sync_fabric")).isEqualTo(KeyProtectionType.SYNC_FABRIC)
         );
     }
 

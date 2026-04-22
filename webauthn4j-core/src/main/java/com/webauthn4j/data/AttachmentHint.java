@@ -36,7 +36,8 @@ public enum AttachmentHint {
     BLUETOOTH(0x0020, "bluetooth"),
     NETWORK(0x0040, "network"),
     READY(0x0080, "ready"),
-    WIFI_DIRECT(0x0100, "wifi_direct");
+    WIFI_DIRECT(0x0100, "wifi_direct"),
+    SMART_CARD(0x0200, "smart-card");
 
     private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
 
