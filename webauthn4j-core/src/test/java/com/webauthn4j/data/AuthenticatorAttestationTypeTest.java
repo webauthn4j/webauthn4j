@@ -26,10 +26,14 @@ class AuthenticatorAttestationTypeTest {
                 () -> assertThat(AuthenticatorAttestationType.create(0x3E08)).isEqualTo(AuthenticatorAttestationType.BASIC_SURROGATE),
                 () -> assertThat(AuthenticatorAttestationType.create(0x3E09)).isEqualTo(AuthenticatorAttestationType.ECDAA),
                 () -> assertThat(AuthenticatorAttestationType.create(0x3E0A)).isEqualTo(AuthenticatorAttestationType.ATTCA),
+                () -> assertThat(AuthenticatorAttestationType.create(0x3E0B)).isEqualTo(AuthenticatorAttestationType.NONE),
+                () -> assertThat(AuthenticatorAttestationType.create(0x3E0C)).isEqualTo(AuthenticatorAttestationType.ANONCA),
                 () -> assertThat(AuthenticatorAttestationType.create("basic_full")).isEqualTo(AuthenticatorAttestationType.BASIC_FULL),
                 () -> assertThat(AuthenticatorAttestationType.create("basic_surrogate")).isEqualTo(AuthenticatorAttestationType.BASIC_SURROGATE),
                 () -> assertThat(AuthenticatorAttestationType.create("ecdaa")).isEqualTo(AuthenticatorAttestationType.ECDAA),
-                () -> assertThat(AuthenticatorAttestationType.create("attca")).isEqualTo(AuthenticatorAttestationType.ATTCA)
+                () -> assertThat(AuthenticatorAttestationType.create("attca")).isEqualTo(AuthenticatorAttestationType.ATTCA),
+                () -> assertThat(AuthenticatorAttestationType.create("none")).isEqualTo(AuthenticatorAttestationType.NONE),
+                () -> assertThat(AuthenticatorAttestationType.create("anonca")).isEqualTo(AuthenticatorAttestationType.ANONCA)
         );
     }
 

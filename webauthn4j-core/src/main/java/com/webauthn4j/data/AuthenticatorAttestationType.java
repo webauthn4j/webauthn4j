@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * The supported attestation type(s). (e.g. ATTESTATION_BASIC_FULL(0x3E07), ATTESTATION_BASIC_SURROGATE(0x3E08)).
  *
- * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#authenticator-attestation-types">§3.6.3 Authenticator Attestation Types</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.2-ps-20220523.html#authenticator-attestation-types">§3.6.3 Authenticator Attestation Types</a>
  */
 public enum AuthenticatorAttestationType {
 
@@ -32,7 +32,8 @@ public enum AuthenticatorAttestationType {
     BASIC_SURROGATE(0x3E08, "basic_surrogate"),
     ECDAA(0x3E09, "ecdaa"),
     ATTCA(0x3E0A, "attca"),
-    ANONCA(0xFFFF, "anonca"); //TODO: correct value
+    NONE(0x3E0B, "none"),
+    ANONCA(0x3E0C, "anonca");
 
 
     private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
