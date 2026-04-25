@@ -36,7 +36,6 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation(libs.playwright)
-    testImplementation("com.google.code.gson:gson:2.11.0")
 
     implementation("ch.qos.logback:logback-classic")
     
