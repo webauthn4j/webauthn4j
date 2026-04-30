@@ -18,7 +18,7 @@ jreleaser = "1.23.0"
 
 spring-boot-bom = "4.0.6"
 spring-dependency-management = "1.1.7"
-sonarqube = "7.2.3.7755"
+sonarqube = "7.3.0.8198"
 
 quarkus = "3.34.6"
 selenium = "4.43.0"
