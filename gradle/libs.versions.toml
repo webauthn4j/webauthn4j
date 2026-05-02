@@ -12,8 +12,6 @@ bouncycastle = "1.84"
 jetbrains-annotations = "26.1.0"
 asciidoctor = "4.0.5"
 
-jreleaser = "1.24.0"
-
 # Test dependencies
 
 spring-boot-bom = "4.0.6"
@@ -49,7 +47,6 @@ playwright = { module = "com.microsoft.playwright:playwright", version.ref = "pl
 
 
 [plugins]
-jreleaser = { id = "org.jreleaser", version.ref = "jreleaser" }
 asciidoctor = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor"}
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-bom" }

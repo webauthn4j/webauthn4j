@@ -2,7 +2,6 @@ import com.webauthn4j.gradle.BuildUtils
 import com.webauthn4j.gradle.VersionUtils
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.jreleaser.model.Active
 import java.net.URI
 import java.nio.charset.StandardCharsets
 
@@ -12,7 +11,7 @@ plugins {
     id("maven-publish")
     id("jacoco")
 
-    id(libs.plugins.jreleaser.get().pluginId) version libs.versions.jreleaser
+    id("net.sharplab.maven-central-publish")
     id(libs.plugins.asciidoctor.get().pluginId) version libs.versions.asciidoctor
     id(libs.plugins.sonarqube.get().pluginId) version libs.versions.sonarqube
 }
@@ -78,7 +77,6 @@ subprojects {
 configure(subprojects.filter { it.name.startsWith("webauthn4j-") }) {
     apply(plugin = "signing")
     apply(plugin = "maven-publish")
-    apply(plugin = "org.jreleaser")
 
     val githubUrl = "https://github.com/webauthn4j/webauthn4j"
     val mavenCentralUser = BuildUtils.getVariable(project, "MAVEN_CENTRAL_USER", "mavenCentralUser")
@@ -130,10 +128,6 @@ configure(subprojects.filter { it.name.startsWith("webauthn4j-") }) {
 
         repositories {
             maven {
-                name = "localStaging"
-                url = layout.buildDirectory.dir("local-staging").get().asFile.toURI()
-            }
-            maven {
                 name = "snapshot"
                 url = URI("https://central.sonatype.com/repository/maven-snapshots/")
                 credentials {
@@ -155,41 +149,6 @@ configure(subprojects.filter { it.name.startsWith("webauthn4j-") }) {
             onlyIf { isSnapshot }
         }
 
-        jreleaser {
-            project {
-                authors.set(listOf("Yoshikazu Nojima"))
-                license = "Apache-2.0"
-                links {
-                    homepage = githubUrl
-                }
-                version = effectiveVersion
-            }
-
-            release{
-                github{
-                    token.set("dummy")
-                    skipRelease = true
-                    skipTag = true
-                }
-            }
-
-            deploy {
-                maven {
-                    mavenCentral {
-                        this.register("mavenCentral"){
-                            active = Active.RELEASE
-                            sign = false // artifacts are signed by gradle native feature. signing by jreleaser is not required.
-                            username = mavenCentralUser
-                            password = mavenCentralPassword
-                            url = "https://central.sonatype.com/api/v1/publisher/"
-                            stagingRepository(layout.buildDirectory.dir("local-staging").get().asFile.absolutePath)
-                            retryDelay = 10
-                            maxRetries = 1000
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -340,4 +299,12 @@ sonarqube {
         property("sonar.issue.ignore.multicriteria.e4.ruleKey", "java:S5778")
         property("sonar.issue.ignore.multicriteria.e4.resourceKey", "**/*.java")
     }
+}
+
+val publishedSubprojects = subprojects.filter { it.name.startsWith("webauthn4j-") }
+
+mavenCentralPublish {
+    targetProjects = publishedSubprojects
+    username = providers.environmentVariable("MAVEN_CENTRAL_USER")
+    password = providers.environmentVariable("MAVEN_CENTRAL_PASSWORD")
 }
