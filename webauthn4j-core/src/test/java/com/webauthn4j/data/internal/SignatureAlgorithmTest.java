@@ -37,11 +37,24 @@ class SignatureAlgorithmTest {
     }
 
     @Test
+    void getMessageDigestAlgorithm_pure_signature_scheme_returns_null_test() {
+        assertThat(SignatureAlgorithm.Ed25519.getMessageDigestAlgorithm()).isNull();
+    }
+
+    @Test
     void equals_hashCode_test() {
         assertThat(SignatureAlgorithm.ES256)
                 .isEqualTo(SignatureAlgorithm.ES256)
                 .hasSameHashCodeAs(SignatureAlgorithm.ES256)
                 .isNotEqualTo(SignatureAlgorithm.RS512)
                 .isNotEqualTo(SignatureAlgorithm.ES512);
+    }
+
+    @Test
+    void equals_hashCode_pure_signature_scheme_test() {
+        assertThat(SignatureAlgorithm.Ed25519)
+                .isEqualTo(SignatureAlgorithm.Ed25519)
+                .hasSameHashCodeAs(SignatureAlgorithm.Ed25519)
+                .isNotEqualTo(SignatureAlgorithm.ES256);
     }
 }

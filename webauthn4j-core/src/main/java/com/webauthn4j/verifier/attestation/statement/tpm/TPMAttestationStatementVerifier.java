@@ -178,7 +178,16 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
         }
 
         //spec| Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
-        byte[] hash = calcMessageDigest(attToBeSigned, alg.toSignatureAlgorithm().getMessageDigestAlgorithm());
+        // Pure signature schemes (e.g., Ed25519) do not have a pre-hash algorithm.
+        // The TPM attestation spec requires "the hash algorithm employed in alg" to compute extraData,
+        // but pure signature schemes have no such hash algorithm.
+        // TPM does not currently support pure signature schemes, so this is a defensive check.
+        MessageDigestAlgorithm messageDigestAlgorithm = alg.toSignatureAlgorithm().getMessageDigestAlgorithm();
+        if (messageDigestAlgorithm == null) {
+            throw new BadAttestationStatementException(
+                    "The specified algorithm does not have a pre-hash algorithm and is not supported for TPM attestation.");
+        }
+        byte[] hash = calcMessageDigest(attToBeSigned, messageDigestAlgorithm);
         // As hash is public data(not secret data) to client side, there is no risk of timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual`
         if (!Arrays.equals(certInfo.getExtraData(), hash)) {
             throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
