@@ -107,7 +107,14 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         MessageDigest messageDigest;
         try {
             SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();
-            messageDigest = signatureAlgorithm.getMessageDigestAlgorithm().createMessageDigestObject();
+            // Pure signature schemes (e.g., Ed25519) do not have a pre-hash algorithm
+            // and are not supported for TPM attestation.
+            com.webauthn4j.data.MessageDigestAlgorithm messageDigestAlgorithm = signatureAlgorithm.getMessageDigestAlgorithm();
+            if (messageDigestAlgorithm == null) {
+                throw new WebAuthnModelException(
+                        "The specified algorithm does not have a pre-hash algorithm and is not supported for TPM attestation.");
+            }
+            messageDigest = messageDigestAlgorithm.createMessageDigestObject();
         } catch (IllegalArgumentException e) {
             throw new WebAuthnModelException("alg is not signature algorithm", e);
         }

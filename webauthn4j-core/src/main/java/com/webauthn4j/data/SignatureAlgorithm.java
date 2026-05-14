@@ -26,6 +26,23 @@ import java.util.Objects;
 
 import static com.webauthn4j.data.MessageDigestAlgorithm.*;
 
+/**
+ * Represents a signature algorithm as a pair of a JCA algorithm name and an optional pre-hash
+ * (message digest) algorithm.
+ * <p>
+ * The {@code jcaName} is the algorithm name passed to {@link java.security.Signature#getInstance(String)}
+ * (e.g., "SHA256withECDSA", "RSASSA-PSS", "ed25519").
+ * <p>
+ * The {@code messageDigestAlgorithm} represents the hash function applied to the message
+ * <em>before</em> the core signing operation. For pre-hash signature schemes such as ECDSA and RSA,
+ * this corresponds to the hash component of the composite algorithm (e.g., SHA-256 in SHA256withECDSA).
+ * For RSA-PSS, it is also used to distinguish PS256/PS384/PS512, which share the same JCA name "RSASSA-PSS".
+ * <p>
+ * For pure signature schemes (e.g., Ed25519), the message is not pre-hashed; it is passed directly
+ * to the signing function. In such cases, {@code messageDigestAlgorithm} is null.
+ * Note that pure schemes may still use hash functions internally (e.g., Ed25519 uses SHA-512
+ * for nonce and challenge computation), but this is not an external pre-hash step.
+ */
 public class SignatureAlgorithm {
 
     private static final String JCA_SHA_256_WITH_ECDSA = "SHA256withECDSA";
@@ -50,17 +67,20 @@ public class SignatureAlgorithm {
     public static final SignatureAlgorithm RS384 = new SignatureAlgorithm(JCA_SHA_384_WITH_RSA, SHA384);
     public static final SignatureAlgorithm RS512 = new SignatureAlgorithm(JCA_SHA_512_WITH_RSA, SHA512);
     /**
-     * Ed25519 is only supported on JDK 15 or later
+     * Ed25519 is a pure signature scheme, not a pre-hash scheme like SHA256withECDSA.
+     * Although SHA-512 is used internally within the Ed25519 algorithm (e.g., for nonce
+     * and challenge computation), the message itself is NOT pre-hashed before signing.
+     * Therefore, messageDigestAlgorithm is null.
      */
-    public static final SignatureAlgorithm Ed25519 = new SignatureAlgorithm(JCA_ED_25519, SHA512);
+    public static final SignatureAlgorithm Ed25519 = new SignatureAlgorithm(JCA_ED_25519, null);
     public static final SignatureAlgorithm PS256 = new SignatureAlgorithm(JCA_RSA_SSA_PSS, SHA256);
     public static final SignatureAlgorithm PS384 = new SignatureAlgorithm(JCA_RSA_SSA_PSS, SHA384);
     public static final SignatureAlgorithm PS512 = new SignatureAlgorithm(JCA_RSA_SSA_PSS, SHA512);
 
     private final String jcaName;
-    private final MessageDigestAlgorithm messageDigestAlgorithm;
+    private final @Nullable MessageDigestAlgorithm messageDigestAlgorithm;
 
-    private SignatureAlgorithm(@NotNull String jcaName, @NotNull MessageDigestAlgorithm messageDigestAlgorithm) {
+    private SignatureAlgorithm(@NotNull String jcaName, @Nullable MessageDigestAlgorithm messageDigestAlgorithm) {
         this.jcaName = jcaName;
         this.messageDigestAlgorithm = messageDigestAlgorithm;
     }
@@ -142,6 +162,9 @@ public class SignatureAlgorithm {
     @JsonValue
     public @NotNull String serialize() {
         if(jcaName.equals(JCA_RSA_SSA_PSS)){
+            if (messageDigestAlgorithm == null){
+                throw new IllegalStateException("messageDigestAlgorithm must not be null for RSA-PSS");
+            }
             if (messageDigestAlgorithm.equals(SHA256)){
                 return SHA_256_WITH_RSA_PSS;
             }
@@ -164,7 +187,13 @@ public class SignatureAlgorithm {
         return jcaName;
     }
 
-    public @NotNull MessageDigestAlgorithm getMessageDigestAlgorithm() {
+    /**
+     * Returns the message digest algorithm used for pre-hashing the message before signing.
+     * Returns null for pure signature schemes (e.g., Ed25519) where the message is not pre-hashed.
+     *
+     * @return the message digest algorithm, or null for pure signature schemes
+     */
+    public @Nullable MessageDigestAlgorithm getMessageDigestAlgorithm() {
         return messageDigestAlgorithm;
     }
 
