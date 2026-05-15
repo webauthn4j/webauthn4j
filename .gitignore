@@ -30,3 +30,6 @@ nbdist/
 ### Project Files ###
 sample/node_modules
 sample/src/main/resources/application-local-with-services.yml
+
+### Temporary Files ###
+tmp/

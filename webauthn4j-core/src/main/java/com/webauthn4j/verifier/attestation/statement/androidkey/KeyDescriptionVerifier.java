@@ -19,12 +19,15 @@
 
 package com.webauthn4j.verifier.attestation.statement.androidkey;
 
+import com.webauthn4j.data.internal.asn1.der.ASN1;
+import com.webauthn4j.data.internal.asn1.der.ASN1Integer;
+import com.webauthn4j.data.internal.asn1.der.ASN1OctetString;
+import com.webauthn4j.data.internal.asn1.der.ASN1Primitive;
+import com.webauthn4j.data.internal.asn1.der.ASN1Sequence;
+import com.webauthn4j.data.internal.asn1.der.ASN1Structure;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.KeyDescriptionValidationException;
-import com.webauthn4j.verifier.internal.asn1.ASN1;
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
-import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -34,8 +37,6 @@ import java.math.BigInteger;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Objects;
-
-import static com.webauthn4j.verifier.internal.asn1.ASN1Tag.INTEGER;
 
 public class KeyDescriptionVerifier {
 
@@ -59,21 +60,22 @@ public class KeyDescriptionVerifier {
         AssertUtil.notNull(x509Certificate, "x509Certificate must not be null");
         AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
 
-        ASN1Structure keyDescription = extractKeyDescription(x509Certificate);
+        ASN1Sequence keyDescription = extractKeyDescription(x509Certificate);
         doVerify(keyDescription, clientDataHash, teeEnforcedOnly);
     }
 
-    @NotNull ASN1Structure extractKeyDescription(@NotNull X509Certificate x509Certificate) {
+    @NotNull ASN1Sequence extractKeyDescription(@NotNull X509Certificate x509Certificate) {
 
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
 
         if (attestationExtensionBytes == null) {
             throw new KeyDescriptionValidationException("KeyDescription must not be null");
         }
-        return ASN1Primitive.parse(attestationExtensionBytes).getValueAsASN1Structure();
+        ASN1OctetString encodedKeyDescription = ASN1OctetString.parse(attestationExtensionBytes);
+        return ASN1Sequence.parse(encodedKeyDescription.getValue());
     }
 
-    void doVerify(@NotNull ASN1Structure keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) {
+    void doVerify(@NotNull ASN1Sequence keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) {
         //spec| Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
         byte[] attestationChallenge = ((ASN1Primitive) keyDescription.get(ATTESTATION_CHALLENGE_INDEX)).getValue();
         // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
@@ -157,16 +159,16 @@ public class KeyDescriptionVerifier {
         if (asn1Value == null) {
             return null;
         }
-        if (!(asn1Value.getClass() == ASN1Primitive.class && asn1Value.getTag().getNumber() == INTEGER)) {
+        if (!(asn1Value instanceof ASN1Integer)) {
             throw new BadAttestationStatementException(String.format("ASN1Integer is expected. Found %s instead.", asn1Value.getClass().getName()));
         }
-        return ((ASN1Primitive)asn1Value).getValueAsBigInteger();
+        return ((ASN1Integer) asn1Value).getContent();
     }
 
     private @Nullable ASN1 findAuthorizationListEntry(@NotNull ASN1Structure authorizationList, int tag) {
         for (ASN1 listItem : authorizationList) {
             ASN1Structure entry = (ASN1Structure)listItem;
-            if (entry.getTag().getNumber() == tag) {
+            if (entry.getTagNumber() == tag) {
                 return entry.get(0);
             }
         }

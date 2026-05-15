@@ -30,7 +30,7 @@ import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAlgorithmException;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
+import com.webauthn4j.data.internal.asn1.der.ASN1OctetString;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,9 +122,9 @@ public class PackedAttestationStatementVerifier extends AbstractStatementVerifie
             if (extensionValue == null) {
                 return AAGUID.NULL;
             }
-            ASN1Primitive envelope = ASN1Primitive.parse(extensionValue);
-            ASN1Primitive innerEnvelope = ASN1Primitive.parse(envelope.getValue());
-            return new AAGUID(UUIDUtil.fromBytes(innerEnvelope.getValue()));
+            ASN1OctetString encodedAaguidExtension = ASN1OctetString.parse(extensionValue);
+            ASN1OctetString aaguidOctetString = ASN1OctetString.parse(encodedAaguidExtension.getValue());
+            return new AAGUID(UUIDUtil.fromBytes(aaguidOctetString.getValue()));
         } catch (RuntimeException e) {
             throw new BadAttestationStatementException("Failed to extract aaguid from Packed attestation statement.", e);
         }

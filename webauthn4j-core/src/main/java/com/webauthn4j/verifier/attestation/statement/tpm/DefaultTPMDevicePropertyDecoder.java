@@ -1,7 +1,7 @@
 package com.webauthn4j.verifier.attestation.statement.tpm;
 
+import com.webauthn4j.data.internal.asn1.der.ASN1Utf8String;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingEnumeration;
@@ -33,8 +33,8 @@ public class DefaultTPMDevicePropertyDecoder implements TPMDevicePropertyDecoder
             return null;
         }
         else {
-            ASN1Primitive asn1Primitive = ASN1Primitive.parse(attr);
-            return asn1Primitive.getValueAsUtf8String();
+            ASN1Utf8String asn1Utf8String = ASN1Utf8String.parse(attr);
+            return asn1Utf8String.getContent();
         }
     }
 

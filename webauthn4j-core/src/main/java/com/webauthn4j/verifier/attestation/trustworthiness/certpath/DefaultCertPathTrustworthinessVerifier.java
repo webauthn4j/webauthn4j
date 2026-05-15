@@ -26,8 +26,8 @@ import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.exception.CertificateException;
 import com.webauthn4j.verifier.exception.TrustAnchorNotFoundException;
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
-import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
+import com.webauthn4j.data.internal.asn1.der.ASN1BitString;
+import com.webauthn4j.data.internal.asn1.der.ASN1Sequence;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -143,9 +143,9 @@ public class DefaultCertPathTrustworthinessVerifier implements CertPathTrustwort
 
     public static @NotNull byte[] extractSubjectKeyIdentifier(X509Certificate certificate){
         byte[] publicKeyEncoded = certificate.getPublicKey().getEncoded();
-        ASN1Structure sequence = ASN1Structure.parse(publicKeyEncoded);
-        ASN1Primitive publicKey = (ASN1Primitive) sequence.get(1);
-        byte[] publicKeyBytes = publicKey.getValueAsBitString();
+        ASN1Sequence sequence = ASN1Sequence.parse(publicKeyEncoded);
+        ASN1BitString publicKey = (ASN1BitString) sequence.get(1);
+        byte[] publicKeyBytes = publicKey.getContent();
         return MessageDigestUtil.createMessageDigest("SHA-1").digest(publicKeyBytes);
     }
 }

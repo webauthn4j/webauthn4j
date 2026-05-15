@@ -23,9 +23,11 @@ import com.webauthn4j.metadata.data.MetadataBLOBFactory;
 import com.webauthn4j.metadata.exception.CertPathCheckException;
 import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.verifier.internal.asn1.ASN1;
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
-import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
+import com.webauthn4j.data.internal.asn1.der.ASN1;
+import com.webauthn4j.data.internal.asn1.der.ASN1OctetString;
+import com.webauthn4j.data.internal.asn1.der.ASN1Primitive;
+import com.webauthn4j.data.internal.asn1.der.ASN1Sequence;
+import com.webauthn4j.data.internal.asn1.der.ASN1Structure;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -221,15 +223,15 @@ public class FidoMDS3MetadataBLOBAsyncProvider extends CachingMetadataBLOBAsyncP
         private List<String> extractCRLDistributionPoints(X509Certificate x509Certificate){
             byte[] extensionValue = x509Certificate.getExtensionValue("2.5.29.31");
 
-            ASN1Primitive envelope = ASN1Primitive.parse(extensionValue);
-            ASN1Structure crlDistributionPoints = envelope.getValueAsASN1Structure();
+            ASN1OctetString encodedCrlExtension = ASN1OctetString.parse(extensionValue);
+            ASN1Sequence crlDistributionPoints = ASN1Sequence.parse(encodedCrlExtension.getValue());
             ArrayList<String> urls = new ArrayList<>();
             for (ASN1 item: crlDistributionPoints){
                 ASN1Structure distributionPointSequence = (ASN1Structure)item;
                 ASN1Structure distributionPoint = (ASN1Structure) distributionPointSequence.get(0);
                 ASN1Structure fullName = (ASN1Structure)distributionPoint.get(0);
                 for (ASN1 fullNameItem : fullName){
-                    String url = ((ASN1Primitive)fullNameItem).getValueAsUtf8String();
+                    String url = new String(((ASN1Primitive)fullNameItem).getValue(), java.nio.charset.StandardCharsets.UTF_8);
                     urls.add(url);
                 }
             }
