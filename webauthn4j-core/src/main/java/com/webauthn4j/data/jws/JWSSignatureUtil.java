@@ -16,8 +16,13 @@
 
 package com.webauthn4j.data.jws;
 
+import com.webauthn4j.data.internal.asn1.der.ASN1Integer;
+import com.webauthn4j.data.internal.asn1.der.ASN1Sequence;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.math.BigInteger;
+import java.util.Arrays;
 
 class JWSSignatureUtil {
 
@@ -62,69 +67,18 @@ class JWSSignatureUtil {
 
         AssertUtil.notNull(jwsSignature, "jwsSignature must not be null");
 
-        // Adapted from org.apache.xml.security.algorithms.implementations.SignatureECDSA
-
         int rawLen = jwsSignature.length / 2;
 
-        int i;
+        byte[] rBytes = Arrays.copyOfRange(jwsSignature, 0, rawLen);
+        byte[] sBytes = Arrays.copyOfRange(jwsSignature, rawLen, jwsSignature.length);
 
-        for (i = rawLen; (i > 0) && (jwsSignature[rawLen - i] == 0); i--) {
-            // do nothing
-        }
+        // BigInteger handles leading zero stripping and sign-extension
+        byte[] r = new BigInteger(1, rBytes).toByteArray();
+        byte[] s = new BigInteger(1, sBytes).toByteArray();
 
-        int j = i;
-
-        if (jwsSignature[rawLen - i] < 0) {
-            j += 1;
-        }
-
-        int k;
-
-        for (k = rawLen; (k > 0) && (jwsSignature[2 * rawLen - k] == 0); k--) {
-            // do nothing
-        }
-
-        int l = k;
-
-        if (jwsSignature[2 * rawLen - k] < 0) {
-            l += 1;
-        }
-
-        int len = 2 + j + 2 + l;
-
-        if (len > 255) {
-            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
-        }
-
-        int offset;
-
-        final byte[] derSignature;
-
-        if (len < 128) {
-            derSignature = new byte[2 + 2 + j + 2 + l];
-            offset = 1;
-        }
-        else {
-            derSignature = new byte[3 + 2 + j + 2 + l];
-            derSignature[1] = (byte) 0x81;
-            offset = 2;
-        }
-
-        derSignature[0] = 48;
-        derSignature[offset++] = (byte) len;
-        derSignature[offset++] = 2;
-        derSignature[offset++] = (byte) j;
-
-        System.arraycopy(jwsSignature, rawLen - i, derSignature, (offset + j) - i, i);
-
-        offset += j;
-
-        derSignature[offset++] = 2;
-        derSignature[offset++] = (byte) l;
-
-        System.arraycopy(jwsSignature, 2 * rawLen - k, derSignature, (offset + l) - k, k);
-
-        return derSignature;
+        ASN1Integer rInt = ASN1Integer.create(r);
+        ASN1Integer sInt = ASN1Integer.create(s);
+        return ASN1Sequence.create(rInt, sInt).toBytes();
     }
 
     /**
@@ -134,49 +88,40 @@ class JWSSignatureUtil {
      * @return signature in JWS format
      */
     public static @NotNull byte[] convertDerSignatureToJwsSignature(@NotNull byte[] derSignature) {
-        if (derSignature.length < 8 || derSignature[0] != 48) {
+        ASN1Sequence seq;
+        try {
+            seq = ASN1Sequence.parse(derSignature);
+        }
+        catch (Exception e) {
+            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT, e);
+        }
+
+        if (seq.size() != 2) {
             throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }
 
-        int offset;
-        if (derSignature[1] > 0) {
-            offset = 2;
-        }
-        else if (derSignature[1] == (byte) 0x81) {
-            offset = 3;
-        }
-        else {
-            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
-        }
+        BigInteger r = ((ASN1Integer) seq.get(0)).getContent();
+        BigInteger s = ((ASN1Integer) seq.get(1)).getContent();
 
-        byte rLength = derSignature[offset + 1];
+        // Determine raw component length from the larger of the two
+        byte[] rUnsigned = toUnsignedByteArray(r);
+        byte[] sUnsigned = toUnsignedByteArray(s);
+        int rawLen = Math.max(rUnsigned.length, sUnsigned.length);
 
-        int i;
-        for (i = rLength; (i > 0) && (derSignature[(offset + 2 + rLength) - i] == 0); i--) {
-            // do nothing
-        }
-
-        byte sLength = derSignature[offset + 2 + rLength + 1];
-
-        int j;
-        for (j = sLength; (j > 0) && (derSignature[(offset + 2 + rLength + 2 + sLength) - j] == 0); j--) {
-            // do nothing
-        }
-
-        int rawLen = Math.max(i, j);
-
-        if ((derSignature[offset - 1] & 0xff) != derSignature.length - offset
-                || (derSignature[offset - 1] & 0xff) != 2 + rLength + 2 + sLength
-                || derSignature[offset] != 2
-                || derSignature[offset + 2 + rLength] != 2) {
-            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
-        }
-
-        final byte[] concatSignature = new byte[2 * rawLen];
-
-        System.arraycopy(derSignature, (offset + 2 + rLength) - i, concatSignature, rawLen - i, i);
-        System.arraycopy(derSignature, (offset + 2 + rLength + 2 + sLength) - j, concatSignature, 2 * rawLen - j, j);
+        // Pad to fixed-length and concatenate
+        byte[] concatSignature = new byte[2 * rawLen];
+        System.arraycopy(rUnsigned, 0, concatSignature, rawLen - rUnsigned.length, rUnsigned.length);
+        System.arraycopy(sUnsigned, 0, concatSignature, 2 * rawLen - sUnsigned.length, sUnsigned.length);
 
         return concatSignature;
+    }
+
+    private static byte[] toUnsignedByteArray(BigInteger value) {
+        byte[] bytes = value.toByteArray();
+        // Remove leading zero byte if present (sign-extension)
+        if (bytes.length > 1 && bytes[0] == 0) {
+            return Arrays.copyOfRange(bytes, 1, bytes.length);
+        }
+        return bytes;
     }
 }

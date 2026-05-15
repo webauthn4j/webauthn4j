@@ -26,8 +26,10 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
-import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
-import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
+import com.webauthn4j.data.internal.asn1.der.ASN1OctetString;
+import com.webauthn4j.data.internal.asn1.der.ASN1Primitive;
+import com.webauthn4j.data.internal.asn1.der.ASN1Sequence;
+import com.webauthn4j.data.internal.asn1.der.ASN1Structure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,11 +124,10 @@ public class AppleAppAttestAttestationStatementVerifier extends AbstractStatemen
         }
 
         try {
-            ASN1Primitive envelope = ASN1Primitive.parse(extensionValue);
-            ASN1Structure sequence = envelope.getValueAsASN1Structure();
-            ASN1Structure item = (ASN1Structure)sequence.get(0);
-            ASN1Primitive nonceContainer = (ASN1Primitive)item.get(0);
-            return nonceContainer.getValue();
+            ASN1OctetString encodedNonceExtension = ASN1OctetString.parse(extensionValue);
+            ASN1Sequence nonceExtension = ASN1Sequence.parse(encodedNonceExtension.getValue());
+            ASN1Structure nonceEntry = (ASN1Structure) nonceExtension.get(0);
+            return ((ASN1Primitive) nonceEntry.get(0)).getValue();
         } catch (RuntimeException e) {
             throw new BadAttestationStatementException("Failed to extract nonce from Apple App Attest attestation statement.", e);
         }

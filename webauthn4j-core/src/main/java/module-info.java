@@ -36,7 +36,7 @@ module com.webauthn4j.core {
     exports com.webauthn4j.util.exception;
 
     exports com.webauthn4j.verifier;
-    exports com.webauthn4j.verifier.internal.asn1 to com.webauthn4j.appattest, com.webauthn4j.metadata.async;
+    exports com.webauthn4j.data.internal.asn1.der to com.webauthn4j.appattest, com.webauthn4j.metadata.async;
     exports com.webauthn4j.verifier.attestation.statement;
     exports com.webauthn4j.verifier.attestation.statement.androidkey;
     exports com.webauthn4j.verifier.attestation.statement.androidsafetynet;

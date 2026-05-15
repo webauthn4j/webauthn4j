@@ -1,11 +1,12 @@
-package com.webauthn4j.verifier.internal.asn1;
+package com.webauthn4j.data.internal.asn1.der;
 
 import com.webauthn4j.util.UnsignedNumberUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
-public class ASN1Tag {
+class ASN1Tag {
 
     // Tag and data types
     public static final int ANY = 0x00;
@@ -84,6 +85,43 @@ public class ASN1Tag {
 
     public int getNumber() {
         return number;
+    }
+
+    /**
+     * Encode this tag to DER byte array.
+     *
+     * @return DER-encoded tag bytes
+     */
+    public byte[] toBytes() {
+        if (number < NUMBER_MASK) {
+            // Short form (8.1.2.3): single byte
+            byte b = (byte) (tagClass.getValue() | (constructed ? CONSTRUCTED_MASK : 0) | number);
+            return new byte[]{b};
+        }
+        else {
+            // Long form (8.1.2.4): first byte has 0x1F in low 5 bits, then base-128 encoded number
+            byte firstByte = (byte) (tagClass.getValue() | (constructed ? CONSTRUCTED_MASK : 0) | NUMBER_MASK);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            out.write(firstByte);
+            encodeBase128(out, number);
+            return out.toByteArray();
+        }
+    }
+
+    private static void encodeBase128(ByteArrayOutputStream out, int value) {
+        // Collect 7-bit groups from least significant to most significant
+        byte[] temp = new byte[5]; // max 5 bytes for a 32-bit int
+        int count = 0;
+        temp[count++] = (byte) (value & 0x7F); // last byte has no continuation bit
+        value >>= 7;
+        while (value > 0) {
+            temp[count++] = (byte) ((value & 0x7F) | LEADING_BIT_MASK); // continuation bit set
+            value >>= 7;
+        }
+        // Write in reverse order (most significant first)
+        for (int i = count - 1; i >= 0; i--) {
+            out.write(temp[i]);
+        }
     }
 
     @Override
