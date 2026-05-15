@@ -44,6 +44,18 @@ public class COSEAlgorithmIdentifier {
     public static final COSEAlgorithmIdentifier PS256;
     public static final COSEAlgorithmIdentifier PS384;
     public static final COSEAlgorithmIdentifier PS512;
+    /**
+     * ML-DSA-44 is only supported on JDK 24 or later
+     */
+    public static final COSEAlgorithmIdentifier ML_DSA_44;
+    /**
+     * ML-DSA-65 is only supported on JDK 24 or later
+     */
+    public static final COSEAlgorithmIdentifier ML_DSA_65;
+    /**
+     * ML-DSA-87 is only supported on JDK 24 or later
+     */
+    public static final COSEAlgorithmIdentifier ML_DSA_87;
 
     private static final Map<COSEAlgorithmIdentifier, COSEKeyType> keyTypeMap = new HashMap<>();
     private static final Map<COSEAlgorithmIdentifier, SignatureAlgorithm> algorithmMap = new HashMap<>();
@@ -61,6 +73,9 @@ public class COSEAlgorithmIdentifier {
         PS256 = new COSEAlgorithmIdentifier(-37);
         PS384 = new COSEAlgorithmIdentifier(-38);
         PS512 = new COSEAlgorithmIdentifier(-39);
+        ML_DSA_44 = new COSEAlgorithmIdentifier(-48);
+        ML_DSA_65 = new COSEAlgorithmIdentifier(-49);
+        ML_DSA_87 = new COSEAlgorithmIdentifier(-50);
 
         keyTypeMap.put(COSEAlgorithmIdentifier.ES256, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ES384, COSEKeyType.EC2);
@@ -73,6 +88,9 @@ public class COSEAlgorithmIdentifier {
         keyTypeMap.put(COSEAlgorithmIdentifier.PS256, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.PS384, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.PS512, COSEKeyType.RSA);
+        keyTypeMap.put(COSEAlgorithmIdentifier.ML_DSA_44, COSEKeyType.AKP);
+        keyTypeMap.put(COSEAlgorithmIdentifier.ML_DSA_65, COSEKeyType.AKP);
+        keyTypeMap.put(COSEAlgorithmIdentifier.ML_DSA_87, COSEKeyType.AKP);
 
         algorithmMap.put(COSEAlgorithmIdentifier.ES256, SignatureAlgorithm.ES256);
         algorithmMap.put(COSEAlgorithmIdentifier.ES384, SignatureAlgorithm.ES384);
@@ -85,6 +103,9 @@ public class COSEAlgorithmIdentifier {
         algorithmMap.put(COSEAlgorithmIdentifier.PS256, SignatureAlgorithm.PS256);
         algorithmMap.put(COSEAlgorithmIdentifier.PS384, SignatureAlgorithm.PS384);
         algorithmMap.put(COSEAlgorithmIdentifier.PS512, SignatureAlgorithm.PS512);
+        algorithmMap.put(COSEAlgorithmIdentifier.ML_DSA_44, SignatureAlgorithm.ML_DSA_44);
+        algorithmMap.put(COSEAlgorithmIdentifier.ML_DSA_65, SignatureAlgorithm.ML_DSA_65);
+        algorithmMap.put(COSEAlgorithmIdentifier.ML_DSA_87, SignatureAlgorithm.ML_DSA_87);
 
         for (Map.Entry<COSEAlgorithmIdentifier, SignatureAlgorithm> entry : algorithmMap.entrySet()) {
             reverseAlgorithmMap.put(entry.getValue(), entry.getKey());
@@ -190,6 +211,15 @@ public class COSEAlgorithmIdentifier {
         }
         else if(value == PS512.value){
             return "PS512";
+        }
+        else if(value == ML_DSA_44.value){
+            return "ML-DSA-44";
+        }
+        else if(value == ML_DSA_65.value){
+            return "ML-DSA-65";
+        }
+        else if(value == ML_DSA_87.value){
+            return "ML-DSA-87";
         }
         else {
             return String.format("Unknown COSEAlgorithmIdentifier(%d)", value);

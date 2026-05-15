@@ -3,7 +3,7 @@ name: Pull Request Gate CI
 on: pull_request
 
 env:
-  JAVA_VERSION: 17
+  JAVA_VERSION: 25
 
 jobs:
   build:
