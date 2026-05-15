@@ -59,8 +59,14 @@ public class JWSFactory {
         try {
             signatureInstance.initSign(privateKey);
             signatureInstance.update(signedData.getBytes());
-            byte[] derSignature = signatureInstance.sign();
-            byte[] jwsSignature = JWSSignatureUtil.convertDerSignatureToJwsSignature(derSignature);
+            byte[] rawSignature = signatureInstance.sign();
+            byte[] jwsSignature;
+            if (header.getAlg() == JWAIdentifier.ES256 || header.getAlg() == JWAIdentifier.ES384 || header.getAlg() == JWAIdentifier.ES512) {
+                jwsSignature = JWSSignatureUtil.convertDerSignatureToJwsSignature(rawSignature);
+            }
+            else {
+                jwsSignature = rawSignature;
+            }
             return new JWS<>(header, headerString, payload, payloadString, jwsSignature);
         } catch (InvalidKeyException | SignatureException e) {
             throw new IllegalArgumentException(e);
