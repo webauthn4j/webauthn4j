@@ -52,6 +52,9 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.create("SHA384withRSA")).isEqualTo(SignatureAlgorithm.RS384),
                 () -> assertThat(SignatureAlgorithm.create("SHA512withRSA")).isEqualTo(SignatureAlgorithm.RS512),
                 () -> assertThat(SignatureAlgorithm.create("ed25519")).isEqualTo(SignatureAlgorithm.Ed25519),
+                () -> assertThat(SignatureAlgorithm.create("ML-DSA-44")).isEqualTo(SignatureAlgorithm.ML_DSA_44),
+                () -> assertThat(SignatureAlgorithm.create("ML-DSA-65")).isEqualTo(SignatureAlgorithm.ML_DSA_65),
+                () -> assertThat(SignatureAlgorithm.create("ML-DSA-87")).isEqualTo(SignatureAlgorithm.ML_DSA_87),
                 () -> assertThatThrownBy(()->SignatureAlgorithm.create("invalid")).isInstanceOf(IllegalArgumentException.class)
         );
     }
@@ -70,6 +73,9 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.deserialize("SHA256withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS256),
                 () -> assertThat(SignatureAlgorithm.deserialize("SHA384withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS384),
                 () -> assertThat(SignatureAlgorithm.deserialize("SHA512withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS512),
+                () -> assertThat(SignatureAlgorithm.deserialize("ML-DSA-44")).isEqualTo(SignatureAlgorithm.ML_DSA_44),
+                () -> assertThat(SignatureAlgorithm.deserialize("ML-DSA-65")).isEqualTo(SignatureAlgorithm.ML_DSA_65),
+                () -> assertThat(SignatureAlgorithm.deserialize("ML-DSA-87")).isEqualTo(SignatureAlgorithm.ML_DSA_87),
                 () -> assertThatThrownBy(()->SignatureAlgorithm.deserialize("invalid")).isInstanceOf(InvalidFormatException.class)
         );
     }
@@ -87,7 +93,10 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.Ed25519).hasToString("Ed25519"),
                 () -> assertThat(SignatureAlgorithm.PS256).hasToString("PS256"),
                 () -> assertThat(SignatureAlgorithm.PS384).hasToString("PS384"),
-                () -> assertThat(SignatureAlgorithm.PS512).hasToString("PS512")
+                () -> assertThat(SignatureAlgorithm.PS512).hasToString("PS512"),
+                () -> assertThat(SignatureAlgorithm.ML_DSA_44).hasToString("ML-DSA-44"),
+                () -> assertThat(SignatureAlgorithm.ML_DSA_65).hasToString("ML-DSA-65"),
+                () -> assertThat(SignatureAlgorithm.ML_DSA_87).hasToString("ML-DSA-87")
         );
     }
 
