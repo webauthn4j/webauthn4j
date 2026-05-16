@@ -23,7 +23,6 @@ import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.data.extension.UvmEntry;
 import org.junit.jupiter.api.Test;
-
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -146,6 +145,5 @@ class AuthenticationExtensionsClientOutputsTest {
                 .isEqualTo(instance2)
                 .hasSameHashCodeAs(instance2);
     }
-
 
 }

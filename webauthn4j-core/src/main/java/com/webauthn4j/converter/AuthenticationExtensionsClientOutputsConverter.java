@@ -23,7 +23,8 @@ import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientOutputs}
@@ -65,8 +66,9 @@ public class AuthenticationExtensionsClientOutputsConverter {
     public <T extends ExtensionClientOutput> @Nullable AuthenticationExtensionsClientOutputs<T> convert(@NotNull String value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
-            return objectConverter.getJsonMapper().readValue(value, new TypeReference<AuthenticationExtensionsClientOutputs<T>>() {
-            });
+            JsonMapper jsonMapper = objectConverter.getJsonMapper();
+            ObjectNode rawData = jsonMapper.readValue(value, ObjectNode.class);
+            return new AuthenticationExtensionsClientOutputs<>(rawData, objectConverter);
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }

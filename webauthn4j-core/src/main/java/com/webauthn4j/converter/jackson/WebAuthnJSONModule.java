@@ -19,6 +19,7 @@ package com.webauthn4j.converter.jackson;
 import com.webauthn4j.converter.jackson.deserializer.json.*;
 import com.webauthn4j.converter.jackson.serializer.json.*;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.extension.client.*;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
@@ -53,6 +54,16 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addDeserializer(byte[].class, new ByteArrayBase64UrlDeserializer());
+
+        this.addDeserializer(AuthenticationExtensionsClientOutputs.class, new AuthenticationExtensionsClientOutputsDeserializer(objectConverter));
+
+        // Extension output deserializers
+        this.addDeserializer(FIDOAppIDExtensionClientOutput.class, new FIDOAppIDExtensionClientOutputDeserializer());
+        this.addDeserializer(FIDOAppIDExclusionExtensionClientOutput.class, new FIDOAppIDExclusionExtensionClientOutputDeserializer());
+        this.addDeserializer(UserVerificationMethodExtensionClientOutput.class, new UserVerificationMethodExtensionClientOutputDeserializer());
+        this.addDeserializer(CredentialPropertiesExtensionClientOutput.class, new CredentialPropertiesExtensionClientOutputDeserializer());
+        this.addDeserializer(HMACSecretRegistrationExtensionClientOutput.class, new HMACSecretRegistrationExtensionClientOutputDeserializer());
+        this.addDeserializer(HMACSecretAuthenticationExtensionClientOutput.class, new HMACSecretAuthenticationExtensionClientOutputDeserializer());
 
         this.addSerializer(AttachmentHint.class, new AttachmentHintToLongSerializer());
         this.addSerializer(AuthenticatorAttestationType.class, new AuthenticatorAttestationTypeToIntSerializer());
