@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+pluginManagement {
+    includeBuild("maven-central-publish-plugin")
+}
+
 include("webauthn4j-core")
 include("webauthn4j-core-async")
 include("webauthn4j-metadata")
