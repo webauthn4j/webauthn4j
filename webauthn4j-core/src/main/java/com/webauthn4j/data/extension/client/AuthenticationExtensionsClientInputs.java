@@ -163,6 +163,8 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         return ext != null ? ext.getValue() : null;
     }
 
+    // credProtect is a single extension that spans two JSON keys ("credentialProtectionPolicy" and
+    // "enforceCredentialProtectionPolicy"), so two convenience getters delegate to the same extension class.
     @JsonIgnore
     public @Nullable CredentialProtectionPolicy getCredentialProtectionPolicy() {
         CredentialProtectionExtensionClientInput ext = lookupExtension(CredentialProtectionExtensionClientInput.class);

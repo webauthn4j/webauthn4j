@@ -5,6 +5,9 @@ import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.jetbrains.annotations.NotNull;
 
+// At the CTAP2 Authenticator Extension level, credProtect is a single key ("credProtect") with an
+// integer value. The "enforceCredentialProtectionPolicy" key exists only at the Client Extension level
+// and is not sent to the authenticator.
 public class CredentialProtectionExtensionAuthenticatorInput extends SingleValueExtensionInputBase<CredentialProtectionPolicy> implements RegistrationExtensionAuthenticatorInput {
 
     public static final String ID = "credProtect";

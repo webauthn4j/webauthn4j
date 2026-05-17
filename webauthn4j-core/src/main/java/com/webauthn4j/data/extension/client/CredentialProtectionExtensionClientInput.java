@@ -6,6 +6,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
+// The credProtect extension is unusual in that it uses two independent top-level JSON keys
+// ("credentialProtectionPolicy" and "enforceCredentialProtectionPolicy") to represent a single
+// extension at the Client Extension Input level. Most extensions use a single key.
+//
+// This is a historical artifact of how the extension was specified. The "enforceCredentialProtectionPolicy"
+// key is processed only on the client side and is NOT sent to the authenticator — at the CTAP2 level,
+// only the "credProtect" key (an integer) exists.
+//
+// See: https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-errata-20220621.html#sctn-credProtect-extension
 public class CredentialProtectionExtensionClientInput implements RegistrationExtensionClientInput {
 
     public static final String ID = "credProtect";
