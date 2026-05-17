@@ -62,6 +62,8 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     public AuthenticationExtensionsClientOutputs(
             @NotNull ObjectNode rawData,
             @NotNull ObjectConverter objectConverter) {
+        AssertUtil.notNull(rawData, "rawData must not be null");
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.rawData = rawData;
         this.objectConverter = objectConverter;
     }
@@ -73,7 +75,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
     @JsonIgnore
     public @NotNull Set<String> getKeys() {
-        if (rawData == null) return Set.of();
         return rawData.properties().stream()
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
@@ -102,7 +103,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             case HMACSecretAuthenticationExtensionClientOutput.KEY_HMAC_GET_SECRET:
                 return getHMACGetSecret();
             default:
-                if (rawData == null) return null;
                 JsonNode node = rawData.get(key);
                 if (node == null || node.isNull()) return null;
                 if (node.isBoolean()) return node.asBoolean();
@@ -170,12 +170,10 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     public @NotNull Map<Class<? extends T>, T> getExtensions() {
         if (extensions == null) {
             Map<Class<? extends T>, T> map = new HashMap<>();
-            if (rawData != null) {
-                for (Class<? extends ExtensionClientOutput> type : KNOWN_TYPES) {
-                    Object ext = objectConverter.getJsonMapper().treeToValue(rawData, type);
-                    if (ext != null) {
-                        map.put((Class<? extends T>) type, (T) ext);
-                    }
+            for (Class<? extends ExtensionClientOutput> type : KNOWN_TYPES) {
+                Object ext = objectConverter.getJsonMapper().treeToValue(rawData, type);
+                if (ext != null) {
+                    map.put((Class<? extends T>) type, (T) ext);
                 }
             }
             extensions = Collections.unmodifiableMap(map);
