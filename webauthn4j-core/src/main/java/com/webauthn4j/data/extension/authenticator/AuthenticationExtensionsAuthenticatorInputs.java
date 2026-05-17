@@ -91,6 +91,15 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    /**
+     * Returns keys not recognized by webauthn4j-core.
+     * Note: Extensions registered by external modules via Jackson Module are also
+     * reported as "unknown" by this method, even though they have valid deserializers.
+     * Use {@link #getKeys()} and filter as needed instead.
+     *
+     * @deprecated This method only reflects extensions known to webauthn4j-core.
+     */
+    @Deprecated
     @JsonIgnore
     public @NotNull Set<String> getUnknownKeys() {
         return getKeys().stream()
@@ -164,6 +173,14 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
         return (E) getExtensions().get(tClass);
     }
 
+    /**
+     * Returns a map of extensions known to webauthn4j-core that are present in the data.
+     * Note: Extensions registered by external modules via Jackson Module are NOT included
+     * in this map. Use {@link #getExtension(Class)} to retrieve specific extensions instead.
+     *
+     * @deprecated This method only reflects extensions known to webauthn4j-core.
+     */
+    @Deprecated
     @SuppressWarnings("unchecked")
     @JsonIgnore
     public @NotNull Map<Class<? extends T>, T> getExtensions() {
