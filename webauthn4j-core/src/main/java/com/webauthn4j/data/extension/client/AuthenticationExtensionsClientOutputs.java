@@ -55,6 +55,10 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
                 new ObjectConverter());
     }
 
+    // Extension data is stored as raw ObjectNode and deserialized lazily via treeToValue when accessed.
+    // Since future extensions may embed CBOR within JSON and require a customized CborMapper for
+    // deserialization, ObjectConverter (which pairs both JsonMapper and CborMapper with WebAuthn4J
+    // modules) is used rather than a bare JsonMapper.
     public AuthenticationExtensionsClientOutputs(
             @NotNull ObjectNode rawData,
             @NotNull ObjectConverter objectConverter) {
