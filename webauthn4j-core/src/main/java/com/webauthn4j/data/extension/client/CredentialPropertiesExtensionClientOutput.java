@@ -25,6 +25,7 @@ public class CredentialPropertiesExtensionClientOutput
         implements RegistrationExtensionClientOutput {
 
     public static final String ID = "credProps";
+    public static final String KEY_CRED_PROPS = "credProps";
 
     public CredentialPropertiesExtensionClientOutput(@NotNull CredentialPropertiesOutput value) {
         super(value);

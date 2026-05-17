@@ -24,6 +24,7 @@ public class
 FIDOAppIDExtensionClientInput extends SingleValueExtensionInputBase<String> implements AuthenticationExtensionClientInput {
 
     public static final String ID = "appid";
+    public static final String KEY_APPID = "appid";
 
     public FIDOAppIDExtensionClientInput(@NotNull String appId) {
         super(appId);

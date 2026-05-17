@@ -25,6 +25,7 @@ public class FIDOAppIDExtensionClientOutput
         implements AuthenticationExtensionClientOutput {
 
     public static final String ID = "appid";
+    public static final String KEY_APPID = "appid";
 
     public FIDOAppIDExtensionClientOutput(@NotNull Boolean value) {
         super(value);

@@ -24,6 +24,7 @@ public class HMACSecretRegistrationExtensionAuthenticatorInput extends SingleVal
         implements RegistrationExtensionAuthenticatorInput {
 
     public static final String ID = "hmac-secret";
+    public static final String KEY_HMAC_SECRET = "hmac-secret";
 
     public HMACSecretRegistrationExtensionAuthenticatorInput(@NotNull Boolean value) {
         super(value);
