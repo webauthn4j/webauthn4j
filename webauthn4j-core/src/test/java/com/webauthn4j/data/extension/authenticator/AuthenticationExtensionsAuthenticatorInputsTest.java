@@ -149,5 +149,36 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
                 .hasSameHashCodeAs(instance2);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Test
+    void toString_test() {
+        AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration();
+        builder.setUvm(true);
+        builder.set("custom", "value");
+        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance = builder.build();
+        assertThat(instance.toString()).contains("uvm");
+        assertThat(instance.toString()).contains("custom");
+    }
+
+    @Test
+    void getValue_unknown_key_types_test() {
+        AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration();
+        builder.set("longVal", 42L);
+        builder.set("doubleVal", 3.14);
+        builder.set("textVal", "hello");
+        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> target = builder.build();
+
+        assertThat(target.getValue("longVal")).isNotNull();
+        assertThat(target.getValue("doubleVal")).isNotNull();
+        assertThat(target.getValue("textVal")).isEqualTo("hello");
+        assertThat(target.getValue("absent")).isNull();
+    }
+
+    @Test
+    void no_arg_constructor_test() {
+        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();
+        assertThat(instance.getKeys()).isEmpty();
+        assertThat(instance.getUvm()).isNull();
+    }
 
 }

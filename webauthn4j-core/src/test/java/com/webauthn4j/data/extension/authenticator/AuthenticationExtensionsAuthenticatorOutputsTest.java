@@ -144,4 +144,18 @@ class AuthenticationExtensionsAuthenticatorOutputsTest {
         assertThat(serialized).isEqualTo(testData);
     }
 
+    @Test
+    void getValue_unknown_key_types_test() {
+        AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
+        builder.set("longVal", 42L);
+        builder.set("doubleVal", 3.14);
+        builder.set("textVal", "hello");
+        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> target = builder.build();
+
+        assertThat(target.getValue("longVal")).isNotNull();
+        assertThat(target.getValue("doubleVal")).isNotNull();
+        assertThat(target.getValue("textVal")).isEqualTo("hello");
+        assertThat(target.getValue("absent")).isNull();
+    }
+
 }

@@ -189,4 +189,29 @@ class AuthenticationExtensionsClientInputsTest {
         assertThat(json).isEqualTo("{\"appid\":\"dummyAppid\"}");
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Test
+    void toString_test() {
+        AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
+        builder.setAppid("dummyAppid");
+        builder.set("custom", "value");
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> instance = builder.build();
+        assertThat(instance.toString()).contains("appid");
+        assertThat(instance.toString()).contains("custom");
+    }
+
+    @Test
+    void getValue_unknown_key_types_test() {
+        AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
+        builder.set("longVal", 42L);
+        builder.set("doubleVal", 3.14);
+        builder.set("textVal", "hello");
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> target = builder.build();
+
+        assertThat(target.getValue("longVal")).isNotNull();
+        assertThat(target.getValue("doubleVal")).isNotNull();
+        assertThat(target.getValue("textVal")).isEqualTo("hello");
+        assertThat(target.getValue("absent")).isNull();
+    }
+
 }
