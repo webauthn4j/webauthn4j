@@ -20,12 +20,11 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import org.jetbrains.annotations.NotNull;
 import tools.jackson.core.JsonParser;
-import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.deser.std.StdDeserializer;
 
 /**
- * Jackson Serializer for {@link AuthenticationExtensionsAuthenticatorOutputsEnvelope}
+ * Jackson Deserializer for {@link AuthenticationExtensionsAuthenticatorOutputsEnvelope}
  */
 public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer extends StdDeserializer<AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput>> {
 
@@ -38,7 +37,8 @@ public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer ex
      */
     @Override
     public @NotNull AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput> deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
-        AuthenticationExtensionsAuthenticatorOutputs<? extends ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = p.readValueAs(new TypeReference<AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput>>(){});
+        AuthenticationExtensionsAuthenticatorOutputs<?> authenticationExtensionsAuthenticatorOutputs =
+                p.readValueAs(AuthenticationExtensionsAuthenticatorOutputs.class);
         int length = (int) p.currentLocation().getByteOffset();
         return new AuthenticationExtensionsAuthenticatorOutputsEnvelope<>(authenticationExtensionsAuthenticatorOutputs, length);
     }
