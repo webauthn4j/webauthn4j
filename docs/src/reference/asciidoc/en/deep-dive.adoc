@@ -279,13 +279,187 @@ via its constructor's `customRegistrationVerifiers` and `customAuthenticationVer
 === Custom converter implementation
 
 WebAuthn4J uses Jackson 3 library for JSON and CBOR serialization and deserialization.
-If you would like to perform custom serialization or deserialization for Client Extensions or Authenticator Extensions data, you need to pass Jackson 3's `JsonMapper` and `CBORMapper` with custom serializers and deserializers registered to WebAuthn4J.
+If you would like to perform custom serialization or deserialization, you need to pass Jackson 3's `JsonMapper` and `CBORMapper` with custom serializers and deserializers registered to WebAuthn4J.
 
 ==== Custom converter registration
 
 WebAuthn4J receives a set of Jackson 3's `JsonMapper` and `CBORMapper` through an instance of the `ObjectConverter` class.
 Inject the `JsonMapper` and `CBORMapper` with custom serializers and deserializers registered through the constructor when creating an `ObjectConverter` instance,
 and specify the `ObjectConverter` as a parameter when creating a `WebAuthnManager` instance.
+
+==== Adding WebAuthn extensions from external modules
+
+WebAuthn4J allows external modules to define and add custom WebAuthn extensions without modifying webauthn4j-core.
+
+Extension containers such as `AuthenticationExtensionsClientOutputs` store raw data internally as an `ObjectNode`, and each extension is lazily deserialized through deserializers registered in Jackson Modules.
+External modules can add their own extensions by registering extension deserializers in their own Jackson Module and passing an `ObjectConverter` containing that Module to WebAuthn4J.
+
+===== Adding a Client Extension Output (JSON)
+
+The following example shows how to add a fictional extension `exampleExtension` from an external module.
+
+Assume the extension is defined as follows:
+
+[source,webidl]
+----
+partial dictionary AuthenticationExtensionsClientOutputs {
+    ExampleExtensionOutput exampleExtension;
+};
+
+dictionary ExampleExtensionOutput {
+    required USVString exampleValue;
+    boolean exampleFlag;
+};
+----
+
+Based on this definition, the Client Extension Output is returned as JSON like this:
+
+[source,json]
+----
+{
+  "exampleExtension": {
+    "exampleValue": "hello",
+    "exampleFlag": true
+  }
+}
+----
+
+Here are the steps to make this extension available in WebAuthn4J:
+
+*1. Define the extension data class*
+
+[source,java]
+----
+public class ExampleExtensionClientOutput
+        implements AuthenticationExtensionClientOutput {
+
+    private final String exampleValue;
+    private final Boolean exampleFlag;
+
+    @JsonCreator
+    public ExampleExtensionClientOutput(
+            @JsonProperty("exampleValue") String exampleValue,
+            @JsonProperty("exampleFlag") Boolean exampleFlag) {
+        this.exampleValue = exampleValue;
+        this.exampleFlag = exampleFlag;
+    }
+
+    @Override
+    public @NotNull String getIdentifier() {
+        return "exampleExtension";
+    }
+
+    public @NotNull String getExampleValue() {
+        return exampleValue;
+    }
+
+    public @Nullable Boolean getExampleFlag() {
+        return exampleFlag;
+    }
+
+    @Override
+    public void validate() {
+        if (exampleValue == null) {
+            throw new ConstraintViolationException("exampleValue must not be null");
+        }
+    }
+}
+----
+
+*2. Implement a deserializer extending `ExtensionClientOutputDeserializer`*
+
+The deserializer receives the entire `ObjectNode` of `AuthenticationExtensionsClientOutputs` and extracts the value for its key (`"exampleExtension"`).
+It returns `null` if the key is not present.
+
+[source,java]
+----
+public class ExampleExtensionClientOutputDeserializer
+        extends ExtensionClientOutputDeserializer<ExampleExtensionClientOutput> {
+
+    public ExampleExtensionClientOutputDeserializer() {
+        super(ExampleExtensionClientOutput.class);
+    }
+
+    @Override
+    public @NotNull Class<ExampleExtensionClientOutput> getType() {
+        return ExampleExtensionClientOutput.class;
+    }
+
+    @Override
+    public @NotNull Set<String> getKeys() {
+        return Set.of("exampleExtension");
+    }
+
+    @Override
+    public ExampleExtensionClientOutput deserialize(
+            JsonParser p, DeserializationContext ctxt) {
+        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        JsonNode value = node.get("exampleExtension");
+        if (value == null || value.isNull()) return null;
+        // Construct directly from JSON fields rather than using readTreeAsValue
+        // with the same class, which would recursively invoke this deserializer.
+        String exampleValue = value.has("exampleValue") ? value.get("exampleValue").asText() : null;
+        Boolean exampleFlag = value.has("exampleFlag") ? value.get("exampleFlag").asBoolean() : null;
+        return new ExampleExtensionClientOutput(exampleValue, exampleFlag);
+    }
+}
+----
+
+*3. Create a Jackson Module and register the deserializer*
+
+[source,java]
+----
+public class ExampleExtensionModule extends SimpleModule {
+    public ExampleExtensionModule() {
+        super("ExampleExtensionModule");
+        this.addDeserializer(ExampleExtensionClientOutput.class,
+            new ExampleExtensionClientOutputDeserializer());
+    }
+}
+----
+
+*4. Create an `ObjectConverter` with this Module and pass it to `WebAuthnManager`*
+
+`ObjectConverter` automatically adds `WebAuthnJSONModule` / `WebAuthnCBORModule` to the provided
+`JsonMapper` / `CBORMapper`, so you only need to register your external module.
+
+[source,java]
+----
+JsonMapper jsonMapper = JsonMapper.builder()
+    .addModule(new ExampleExtensionModule())
+    .build();
+ObjectConverter objectConverter = new ObjectConverter(jsonMapper, new CBORMapper());
+----
+
+*5. Retrieve the extension type-safely via `getExtension(Class)`*
+
+[source,java]
+----
+ExampleExtensionClientOutput example =
+    clientOutputs.getExtension(ExampleExtensionClientOutput.class);
+String value = example.getExampleValue();
+----
+
+===== Other extension points
+
+The same pattern applies to the following extension types:
+
+[cols="1,2,2"]
+|===
+|Type |Base deserializer class |Registration target
+
+|Client Extension Input
+|`ExtensionClientInputDeserializer`
+|Jackson Module on `JsonMapper`
+
+|Authenticator Extension Output
+|`ExtensionAuthenticatorOutputDeserializer`
+|Jackson Module on `CBORMapper`
+
+|Authenticator Extension Input
+|`ExtensionAuthenticatorInputDeserializer`
+|Jackson Module on `CBORMapper`
+|===
 
 
 === Classes

@@ -18,6 +18,7 @@ package com.webauthn4j.converter.jackson;
 
 import com.webauthn4j.converter.jackson.deserializer.cbor.*;
 import com.webauthn4j.converter.jackson.serializer.cbor.*;
+import com.webauthn4j.data.extension.authenticator.*;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
@@ -88,7 +89,19 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.registerSubtypes(new NamedType(AppleAnonymousAttestationStatement.class, AppleAnonymousAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
 
-        // authenticator extension outputs
+        // authenticator extension output deserializers
+        this.addDeserializer(UserVerificationMethodExtensionAuthenticatorOutput.class, new UserVerificationMethodExtensionAuthenticatorOutputDeserializer());
+        this.addDeserializer(CredentialProtectionExtensionAuthenticatorOutput.class, new CredentialProtectionExtensionAuthenticatorOutputDeserializer());
+        this.addDeserializer(HMACSecretRegistrationExtensionAuthenticatorOutput.class, new HMACSecretRegistrationExtensionAuthenticatorOutputDeserializer());
+        this.addDeserializer(HMACSecretAuthenticationExtensionAuthenticatorOutput.class, new HMACSecretAuthenticationExtensionAuthenticatorOutputDeserializer());
+        this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputs.class, new AuthenticationExtensionsAuthenticatorOutputsDeserializer(objectConverter));
+
+        // authenticator extension input deserializers
+        this.addDeserializer(UserVerificationMethodExtensionAuthenticatorInput.class, new UserVerificationMethodExtensionAuthenticatorInputDeserializer());
+        this.addDeserializer(CredentialProtectionExtensionAuthenticatorInput.class, new CredentialProtectionExtensionAuthenticatorInputDeserializer());
+        this.addDeserializer(HMACSecretRegistrationExtensionAuthenticatorInput.class, new HMACSecretRegistrationExtensionAuthenticatorInputDeserializer());
+        this.addDeserializer(HMACSecretAuthenticationExtensionAuthenticatorInput.class, new HMACSecretAuthenticationExtensionAuthenticatorInputDeserializer());
+        this.addDeserializer(AuthenticationExtensionsAuthenticatorInputs.class, new AuthenticationExtensionsAuthenticatorInputsDeserializer(objectConverter));
 
     }
 

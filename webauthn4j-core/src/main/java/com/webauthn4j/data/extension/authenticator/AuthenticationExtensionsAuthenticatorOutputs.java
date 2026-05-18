@@ -17,147 +17,174 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
-import com.fasterxml.jackson.annotation.*;
-import com.webauthn4j.converter.jackson.deserializer.cbor.CredentialProtectionPolicyDeserializer;
-import com.webauthn4j.converter.jackson.serializer.cbor.CredentialProtectionPolicySerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.jackson.databind.annotation.JsonDeserialize;
-import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAuthenticatorOutput> {
 
-    private static final String KEY_UVM = "uvm";
-    private static final String KEY_CRED_PROTECT = "credProtect";
-    private static final String KEY_HMAC_SECRET = "hmac-secret";
+    private static final List<Class<? extends ExtensionAuthenticatorOutput>> KNOWN_TYPES = List.of(
+            UserVerificationMethodExtensionAuthenticatorOutput.class,
+            CredentialProtectionExtensionAuthenticatorOutput.class,
+            HMACSecretRegistrationExtensionAuthenticatorOutput.class,
+            HMACSecretAuthenticationExtensionAuthenticatorOutput.class
+    );
+
+    private static final Set<String> KNOWN_KEYS = Set.of(
+            UserVerificationMethodExtensionAuthenticatorOutput.KEY_UVM,
+            CredentialProtectionExtensionAuthenticatorOutput.KEY_CRED_PROTECT,
+            HMACSecretRegistrationExtensionAuthenticatorOutput.KEY_HMAC_SECRET
+    );
 
     @JsonIgnore
-    private final Map<String, Object> unknowns = new HashMap<>();
-    @JsonProperty
-    private UvmEntries uvm;
-    @JsonSerialize(using = CredentialProtectionPolicySerializer.class)
-    @JsonDeserialize(using = CredentialProtectionPolicyDeserializer.class)
-    @JsonProperty
-    private CredentialProtectionPolicy credProtect;
+    private final ObjectNode rawData;
+
     @JsonIgnore
-    private Boolean hmacCreateSecret;
-    @JsonIgnore
-    private byte[] hmacGetSecret;
+    private final ObjectConverter objectConverter;
+
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
-    @JsonSetter(KEY_HMAC_SECRET)
-    private void setHMACSecret(@Nullable Object hmacSecret){
-        if(hmacSecret instanceof Boolean){
-            hmacCreateSecret = (Boolean)hmacSecret;
-            hmacGetSecret = null;
-        }
-        else {
-            hmacCreateSecret = null;
-            hmacGetSecret = (byte[])hmacSecret;
-        }
+    public AuthenticationExtensionsAuthenticatorOutputs() {
+        this(tools.jackson.databind.node.JsonNodeFactory.instance.objectNode(),
+                new ObjectConverter());
     }
 
-    @JsonAnySetter
-    private void setUnknowns(@NotNull String name, @Nullable Object value) {
-        this.unknowns.put(name, value);
+    // Extension data is stored as raw ObjectNode and deserialized lazily via treeToValue when accessed.
+    // Since future extensions may embed JSON within CBOR and require a customized JsonMapper for
+    // deserialization, ObjectConverter (which pairs both CborMapper and JsonMapper with WebAuthn4J
+    // modules) is used rather than a bare CborMapper.
+    public AuthenticationExtensionsAuthenticatorOutputs(
+            @NotNull ObjectNode rawData,
+            @NotNull ObjectConverter objectConverter) {
+        AssertUtil.notNull(rawData, "rawData must not be null");
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+        this.rawData = rawData;
+        this.objectConverter = objectConverter;
     }
 
-    @JsonAnyGetter
-    private @NotNull Map<String, Object> getUnknowns() {
-        return this.unknowns;
+    @JsonValue
+    private ObjectNode getRawData() {
+        return this.rawData;
     }
 
     @JsonIgnore
     public @NotNull Set<String> getKeys() {
-        Set<String> keys = new HashSet<>();
-        if (uvm != null) {
-            keys.add(KEY_UVM);
-        }
-        if (credProtect != null) {
-            keys.add(KEY_CRED_PROTECT);
-        }
-        if(hmacCreateSecret != null){
-            keys.add(KEY_HMAC_SECRET);
-        }
-        if(hmacGetSecret != null){
-            keys.add(KEY_HMAC_SECRET);
-        }
-        keys.addAll(getUnknownKeys());
-        return keys;
+        return rawData.properties().stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    /**
+     * Returns keys not recognized by webauthn4j-core.
+     * Note: Extensions registered by external modules via Jackson Module are also
+     * reported as "unknown" by this method, even though they have valid deserializers.
+     * Use {@link #getKeys()} and filter as needed instead.
+     *
+     * @deprecated This method only reflects extensions known to webauthn4j-core.
+     */
+    @Deprecated
     @JsonIgnore
     public @NotNull Set<String> getUnknownKeys() {
-        return unknowns.keySet();
+        return getKeys().stream()
+                .filter(key -> !KNOWN_KEYS.contains(key))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @JsonIgnore
     public @Nullable Object getValue(@NotNull String key) {
         switch (key) {
-            case KEY_UVM:
-                return uvm;
-            case KEY_CRED_PROTECT:
-                return credProtect;
-            case KEY_HMAC_SECRET:
-                return hmacCreateSecret != null ? hmacCreateSecret : hmacGetSecret;
+            case UserVerificationMethodExtensionAuthenticatorOutput.KEY_UVM:
+                return getUvm();
+            case CredentialProtectionExtensionAuthenticatorOutput.KEY_CRED_PROTECT:
+                return getCredProtect();
+            case HMACSecretRegistrationExtensionAuthenticatorOutput.KEY_HMAC_SECRET:
+                return getHMACSecret();
             default:
-                return unknowns.get(key);
+                JsonNode node = rawData.get(key);
+                if (node == null || node.isNull()) return null;
+                if (node.isBoolean()) return node.asBoolean();
+                if (node.isString()) return node.textValue();
+                if (node.isInt()) return node.asInt();
+                if (node.isLong()) return node.asLong();
+                if (node.isDouble()) return node.asDouble();
+                return objectConverter.getCborMapper().treeToValue(node, Object.class);
         }
     }
 
     @JsonIgnore
     public @Nullable UvmEntries getUvm() {
-        return this.uvm;
+        UserVerificationMethodExtensionAuthenticatorOutput ext = lookupExtension(UserVerificationMethodExtensionAuthenticatorOutput.class);
+        return ext != null ? ext.getUvm() : null;
     }
 
     @JsonIgnore
     public @Nullable CredentialProtectionPolicy getCredProtect() {
-        return credProtect;
+        CredentialProtectionExtensionAuthenticatorOutput ext = lookupExtension(CredentialProtectionExtensionAuthenticatorOutput.class);
+        return ext != null ? ext.getCredProtect() : null;
     }
 
-    @JsonGetter(KEY_HMAC_SECRET)
-    public @Nullable Object getHMACSecret(){
-        return hmacCreateSecret != null ? hmacCreateSecret : hmacGetSecret;
+    public @Nullable Object getHMACSecret() {
+        Boolean hmacCreateSecret = getHMACCreateSecret();
+        if (hmacCreateSecret != null) return hmacCreateSecret;
+        return getHMACGetSecret();
     }
 
     @JsonIgnore
     public @Nullable Boolean getHMACCreateSecret() {
-        return hmacCreateSecret;
+        HMACSecretRegistrationExtensionAuthenticatorOutput ext = lookupExtension(HMACSecretRegistrationExtensionAuthenticatorOutput.class);
+        return ext != null ? ext.getValue() : null;
     }
 
     @JsonIgnore
     public @Nullable byte[] getHMACGetSecret() {
-        return hmacGetSecret;
+        HMACSecretAuthenticationExtensionAuthenticatorOutput ext = lookupExtension(HMACSecretAuthenticationExtensionAuthenticatorOutput.class);
+        return ext != null ? ext.getValue() : null;
     }
 
     @SuppressWarnings("unchecked")
     public @Nullable <E extends T> E getExtension(@NotNull Class<E> tClass) {
+        E cached = (E) getExtensions().get(tClass);
+        if (cached != null) return cached;
+        // Fall back to treeToValue for extensions not in KNOWN_TYPES
+        // (e.g. extensions registered by external modules via Jackson Module)
+        return objectConverter.getCborMapper().treeToValue(rawData, tClass);
+    }
+
+    // unconstrained lookup for internal use by convenience getters
+    @SuppressWarnings("unchecked")
+    private @Nullable <E extends ExtensionAuthenticatorOutput> E lookupExtension(@NotNull Class<E> tClass) {
         return (E) getExtensions().get(tClass);
     }
 
+    /**
+     * Returns a map of extensions known to webauthn4j-core that are present in the data.
+     * Note: Extensions registered by external modules via Jackson Module are NOT included
+     * in this map. Use {@link #getExtension(Class)} to retrieve specific extensions instead.
+     *
+     * @deprecated This method only reflects extensions known to webauthn4j-core.
+     */
+    @Deprecated
     @SuppressWarnings("unchecked")
     @JsonIgnore
     public @NotNull Map<Class<? extends T>, T> getExtensions() {
         if (extensions == null) {
             Map<Class<? extends T>, T> map = new HashMap<>();
-            if (uvm != null) {
-                map.put((Class<? extends T>) UserVerificationMethodExtensionAuthenticatorOutput.class, (T) new UserVerificationMethodExtensionAuthenticatorOutput(uvm));
-            }
-            if (credProtect != null) {
-                map.put((Class<? extends T>) CredentialProtectionExtensionAuthenticatorOutput.class, (T) new CredentialProtectionExtensionAuthenticatorOutput(credProtect));
-            }
-            if (hmacCreateSecret != null) {
-                map.put((Class<? extends T>) HMACSecretRegistrationExtensionAuthenticatorOutput.class, (T) new HMACSecretRegistrationExtensionAuthenticatorOutput(hmacCreateSecret));
-            }
-            if (hmacGetSecret != null) {
-                map.put((Class<? extends T>) HMACSecretAuthenticationExtensionAuthenticatorOutput.class, (T) new HMACSecretAuthenticationExtensionAuthenticatorOutput(hmacGetSecret));
+            for (Class<? extends ExtensionAuthenticatorOutput> type : KNOWN_TYPES) {
+                Object ext = objectConverter.getCborMapper().treeToValue(rawData, type);
+                if (ext != null) {
+                    map.put((Class<? extends T>) type, (T) ext);
+                }
             }
             extensions = Collections.unmodifiableMap(map);
         }
@@ -169,67 +196,60 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationExtensionsAuthenticatorOutputs<?> that = (AuthenticationExtensionsAuthenticatorOutputs<?>) o;
-        return Objects.equals(unknowns, that.unknowns) && Objects.equals(uvm, that.uvm) && credProtect == that.credProtect && Objects.equals(hmacCreateSecret, that.hmacCreateSecret) && Arrays.equals(hmacGetSecret, that.hmacGetSecret) && Objects.equals(extensions, that.extensions);
+        return Objects.equals(rawData, that.rawData);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(unknowns, uvm, credProtect, hmacCreateSecret, extensions);
-        result = 31 * result + Arrays.hashCode(hmacGetSecret);
-        return result;
+        return Objects.hash(rawData);
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("AuthenticationExtensionsAuthenticatorInputs(");
-        String entries = getExtensions().values().stream().map(t -> String.format("%s=%s", t.getIdentifier(), t)).collect(Collectors.joining(", "));
+        builder.append("AuthenticationExtensionsAuthenticatorOutputs(");
+        String entries = getKeys().stream()
+                .map(key -> String.format("%s=%s", key, getValue(key)))
+                .collect(Collectors.joining(", "));
         builder.append(entries);
-        String unknownsStr = getUnknowns().entrySet().stream().map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue())).collect(Collectors.joining(", "));
-        if(!unknownsStr.isEmpty()){
-            builder.append(", ");
-            builder.append(unknownsStr);
-        }
         builder.append(")");
         return builder.toString();
     }
 
     public static class BuilderForRegistration {
 
-        private final Map<String, Object> unknowns = new HashMap<>();
-        private UvmEntries uvm;
-        private CredentialProtectionPolicy credProtect;
-        private Boolean hmacCreateSecret;
+        private final Map<String, Object> values = new LinkedHashMap<>();
+        private ObjectConverter objectConverter = new ObjectConverter();
 
         public @NotNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> build() {
-            AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
-            instance.uvm = this.uvm;
-            instance.credProtect = this.credProtect;
-            instance.unknowns.putAll(this.unknowns);
-            instance.hmacCreateSecret = this.hmacCreateSecret;
+            ObjectNode rawData = objectConverter.getCborMapper().valueToTree(values);
+            return new AuthenticationExtensionsAuthenticatorOutputs<>(rawData, objectConverter);
+        }
 
-            return instance;
+        public @NotNull BuilderForRegistration setObjectConverter(@NotNull ObjectConverter objectConverter) {
+            this.objectConverter = objectConverter;
+            return this;
         }
 
         public @NotNull BuilderForRegistration setUvm(@Nullable UvmEntries uvm) {
-            this.uvm = uvm;
+            if (uvm != null) values.put("uvm", uvm);
             return this;
         }
 
         public @NotNull BuilderForRegistration setCredProtect(@Nullable CredentialProtectionPolicy credProtect) {
-            this.credProtect = credProtect;
+            if (credProtect != null) values.put("credProtect", credProtect);
             return this;
         }
 
         public @NotNull BuilderForRegistration setHMACCreateSecret(@Nullable Boolean hmacCreateSecret) {
-            this.hmacCreateSecret = hmacCreateSecret;
+            if (hmacCreateSecret != null) values.put("hmac-secret", hmacCreateSecret);
             return this;
         }
 
         public @NotNull BuilderForRegistration set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
-            unknowns.put(key, value);
+            values.put(key, value);
             return this;
         }
 
@@ -237,36 +257,35 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
 
     public static class BuilderForAuthentication {
 
-        private final Map<String, Object> unknowns = new HashMap<>();
-        private UvmEntries uvm;
-        private byte[] hmacGetSecret;
+        private final Map<String, Object> values = new LinkedHashMap<>();
+        private ObjectConverter objectConverter = new ObjectConverter();
 
         public @NotNull AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> build() {
-            AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
-            instance.uvm = this.uvm;
-            instance.unknowns.putAll(this.unknowns);
-            instance.hmacGetSecret = this.hmacGetSecret;
+            ObjectNode rawData = objectConverter.getCborMapper().valueToTree(values);
+            return new AuthenticationExtensionsAuthenticatorOutputs<>(rawData, objectConverter);
+        }
 
-            return instance;
+        public @NotNull BuilderForAuthentication setObjectConverter(@NotNull ObjectConverter objectConverter) {
+            this.objectConverter = objectConverter;
+            return this;
         }
 
         public @NotNull BuilderForAuthentication setUvm(@Nullable UvmEntries uvm) {
-            this.uvm = uvm;
+            if (uvm != null) values.put("uvm", uvm);
             return this;
         }
 
         public @NotNull BuilderForAuthentication setHMACGetSecret(@Nullable byte[] hmacGetSecret) {
-            this.hmacGetSecret = hmacGetSecret;
+            if (hmacGetSecret != null) values.put("hmac-secret", hmacGetSecret);
             return this;
         }
 
         public @NotNull BuilderForAuthentication set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
-            unknowns.put(key, value);
+            values.put(key, value);
             return this;
         }
-
 
     }
 

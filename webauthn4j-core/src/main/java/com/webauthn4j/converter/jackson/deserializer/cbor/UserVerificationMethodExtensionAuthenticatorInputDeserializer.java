@@ -1,0 +1,30 @@
+package com.webauthn4j.converter.jackson.deserializer.cbor;
+
+import com.webauthn4j.data.extension.authenticator.UserVerificationMethodExtensionAuthenticatorInput;
+import org.jetbrains.annotations.NotNull;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
+
+import java.util.Set;
+
+public class UserVerificationMethodExtensionAuthenticatorInputDeserializer extends ExtensionAuthenticatorInputDeserializer<UserVerificationMethodExtensionAuthenticatorInput> {
+
+    public UserVerificationMethodExtensionAuthenticatorInputDeserializer() {
+        super(UserVerificationMethodExtensionAuthenticatorInput.class);
+    }
+
+    @Override
+    public @NotNull Set<String> getKeys() {
+        return Set.of(UserVerificationMethodExtensionAuthenticatorInput.KEY_UVM);
+    }
+
+    @Override
+    public UserVerificationMethodExtensionAuthenticatorInput deserialize(JsonParser p, DeserializationContext ctxt) {
+        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        JsonNode value = node.get(UserVerificationMethodExtensionAuthenticatorInput.KEY_UVM);
+        if (value == null || value.isNull()) return null;
+        return new UserVerificationMethodExtensionAuthenticatorInput(value.asBoolean());
+    }
+}

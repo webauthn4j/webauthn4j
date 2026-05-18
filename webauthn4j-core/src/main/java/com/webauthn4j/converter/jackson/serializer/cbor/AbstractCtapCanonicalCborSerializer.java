@@ -21,8 +21,6 @@ import org.jetbrains.annotations.Nullable;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ser.std.StdSerializer;
-import tools.jackson.dataformat.cbor.CBORGenerator;
-
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -47,7 +45,7 @@ public abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializ
                         .filter(item -> item.value != null)
                         .collect(Collectors.toList());
 
-        ((CBORGenerator) gen).writeStartObject(null, nonNullValues.size()); // This is important to write finite length map
+        gen.writeStartObject(null, nonNullValues.size()); // This is important to write finite length map
 
         for (KeyValue nonNullValue : nonNullValues) {
             if (nonNullValue.name instanceof String) {

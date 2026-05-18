@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class FIDOAppIDExclusionExtensionClientInput extends SingleValueExtensionInputBase<String> implements AuthenticationExtensionClientInput {
 
     public static final String ID = "appidExclude";
+    public static final String KEY_APPID_EXCLUDE = "appidExclude";
 
     public FIDOAppIDExclusionExtensionClientInput(@NotNull String appIdExclude) {
         super(appIdExclude);

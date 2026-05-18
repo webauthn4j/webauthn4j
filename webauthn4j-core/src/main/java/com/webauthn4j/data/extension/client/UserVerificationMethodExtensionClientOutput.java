@@ -26,6 +26,7 @@ public class UserVerificationMethodExtensionClientOutput
         implements RegistrationExtensionClientOutput, AuthenticationExtensionClientOutput {
 
     public static final String ID = "uvm";
+    public static final String KEY_UVM = "uvm";
 
     public UserVerificationMethodExtensionClientOutput(@NotNull UvmEntries value) {
         super(value);

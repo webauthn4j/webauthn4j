@@ -18,16 +18,18 @@ package com.webauthn4j.data.extension.authenticator;
 
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.attestation.authenticator.COSEKey;
+import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.dataformat.cbor.CBORMapper;
 
+import java.security.interfaces.ECPrivateKey;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsAuthenticatorInputsTest {
@@ -77,7 +79,8 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
     @SuppressWarnings("java:S5961")
     @Test
     void authentication_variant_test() {
-        HMACGetSecretAuthenticatorInput hmacGetSecretAuthenticatorInput = new HMACGetSecretAuthenticatorInput(mock(COSEKey.class), new byte[16], new byte[16]);
+        EC2COSEKey coseKey = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
+        HMACGetSecretAuthenticatorInput hmacGetSecretAuthenticatorInput = new HMACGetSecretAuthenticatorInput(coseKey, new byte[16], new byte[16]);
         AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication();
         builder.setUvm(true);
         builder.setHMACGetSecret(hmacGetSecretAuthenticatorInput);
@@ -146,5 +149,36 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
                 .hasSameHashCodeAs(instance2);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Test
+    void toString_test() {
+        AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration();
+        builder.setUvm(true);
+        builder.set("custom", "value");
+        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance = builder.build();
+        assertThat(instance.toString()).contains("uvm");
+        assertThat(instance.toString()).contains("custom");
+    }
+
+    @Test
+    void getValue_unknown_key_types_test() {
+        AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration();
+        builder.set("longVal", 42L);
+        builder.set("doubleVal", 3.14);
+        builder.set("textVal", "hello");
+        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> target = builder.build();
+
+        assertThat(target.getValue("longVal")).isNotNull();
+        assertThat(target.getValue("doubleVal")).isNotNull();
+        assertThat(target.getValue("textVal")).isEqualTo("hello");
+        assertThat(target.getValue("absent")).isNull();
+    }
+
+    @Test
+    void no_arg_constructor_test() {
+        AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();
+        assertThat(instance.getKeys()).isEmpty();
+        assertThat(instance.getUvm()).isNull();
+    }
 
 }

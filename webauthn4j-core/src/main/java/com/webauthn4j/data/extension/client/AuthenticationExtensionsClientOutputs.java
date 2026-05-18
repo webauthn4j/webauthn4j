@@ -1,15 +1,16 @@
 package com.webauthn4j.data.extension.client;
 
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,140 +23,175 @@ import java.util.stream.Collectors;
  */
 public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutput> {
 
+    private static final List<Class<? extends ExtensionClientOutput>> KNOWN_TYPES = List.of(
+            FIDOAppIDExtensionClientOutput.class,
+            FIDOAppIDExclusionExtensionClientOutput.class,
+            UserVerificationMethodExtensionClientOutput.class,
+            CredentialPropertiesExtensionClientOutput.class,
+            HMACSecretRegistrationExtensionClientOutput.class,
+            HMACSecretAuthenticationExtensionClientOutput.class
+    );
+
+    private static final Set<String> KNOWN_KEYS = Set.of(
+            FIDOAppIDExtensionClientOutput.KEY_APPID,
+            FIDOAppIDExclusionExtensionClientOutput.KEY_APPID_EXCLUDE,
+            UserVerificationMethodExtensionClientOutput.KEY_UVM,
+            CredentialPropertiesExtensionClientOutput.KEY_CRED_PROPS,
+            HMACSecretRegistrationExtensionClientOutput.KEY_HMAC_CREATE_SECRET,
+            HMACSecretAuthenticationExtensionClientOutput.KEY_HMAC_GET_SECRET
+    );
+
     @JsonIgnore
-    private final Map<String, Object> unknowns = new HashMap<>();
-    @JsonProperty
-    private Boolean appid;
-    @JsonProperty
-    private Boolean appidExclude;
-    @JsonProperty
-    private UvmEntries uvm;
-    @JsonProperty
-    private CredentialPropertiesOutput credProps;
-    @JsonProperty
-    private Boolean hmacCreateSecret;
-    @JsonProperty
-    private HMACGetSecretOutput hmacGetSecret;
+    private final ObjectNode rawData;
+
+    @JsonIgnore
+    private final ObjectConverter objectConverter;
+
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
-    @JsonAnySetter
-    private void setUnknowns(@NotNull String name, @Nullable Object value) {
-        this.unknowns.put(name, value);
+    public AuthenticationExtensionsClientOutputs() {
+        this(tools.jackson.databind.node.JsonNodeFactory.instance.objectNode(),
+                new ObjectConverter());
     }
 
-    @JsonAnyGetter
-    private @NotNull Map<String, Object> getUnknowns() {
-        return this.unknowns;
+    // Extension data is stored as raw ObjectNode and deserialized lazily via treeToValue when accessed.
+    // Since future extensions may embed CBOR within JSON and require a customized CborMapper for
+    // deserialization, ObjectConverter (which pairs both JsonMapper and CborMapper with WebAuthn4J
+    // modules) is used rather than a bare JsonMapper.
+    public AuthenticationExtensionsClientOutputs(
+            @NotNull ObjectNode rawData,
+            @NotNull ObjectConverter objectConverter) {
+        AssertUtil.notNull(rawData, "rawData must not be null");
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+        this.rawData = rawData;
+        this.objectConverter = objectConverter;
+    }
+
+    @JsonValue
+    private ObjectNode getRawData() {
+        return this.rawData;
     }
 
     @JsonIgnore
     public @NotNull Set<String> getKeys() {
-        Set<String> keys = new HashSet<>();
-        if (appid != null) {
-            keys.add("appid");
-        }
-        if (appidExclude != null) {
-            keys.add("appidExclude");
-        }
-        if (uvm != null) {
-            keys.add("uvm");
-        }
-        if (credProps != null) {
-            keys.add("credProps");
-        }
-        if(hmacCreateSecret != null){
-            keys.add("hmacCreateSecret");
-        }
-        if(hmacGetSecret != null){
-            keys.add("hmacGetSecret");
-        }
-        keys.addAll(getUnknownKeys());
-        return keys;
+        return rawData.properties().stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    /**
+     * Returns keys not recognized by webauthn4j-core.
+     * Note: Extensions registered by external modules via Jackson Module are also
+     * reported as "unknown" by this method, even though they have valid deserializers.
+     * Use {@link #getKeys()} and filter as needed instead.
+     *
+     * @deprecated This method only reflects extensions known to webauthn4j-core.
+     */
+    @Deprecated
     @JsonIgnore
     public @NotNull Set<String> getUnknownKeys() {
-        return unknowns.keySet();
+        return getKeys().stream()
+                .filter(key -> !KNOWN_KEYS.contains(key))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @JsonIgnore
     public @Nullable Object getValue(@NotNull String key) {
         switch (key) {
-            case "appid":
-                return appid;
-            case "appidExclude":
-                return appidExclude;
-            case "uvm":
-                return uvm;
-            case "credProps":
-                return credProps;
-            case "hmacCreateSecret":
-                return hmacCreateSecret;
-            case "hmacGetSecret":
-                return hmacGetSecret;
+            case FIDOAppIDExtensionClientOutput.KEY_APPID:
+                return getAppid();
+            case FIDOAppIDExclusionExtensionClientOutput.KEY_APPID_EXCLUDE:
+                return getAppidExclude();
+            case UserVerificationMethodExtensionClientOutput.KEY_UVM:
+                return getUvm();
+            case CredentialPropertiesExtensionClientOutput.KEY_CRED_PROPS:
+                return getCredProps();
+            case HMACSecretRegistrationExtensionClientOutput.KEY_HMAC_CREATE_SECRET:
+                return getHMACCreateSecret();
+            case HMACSecretAuthenticationExtensionClientOutput.KEY_HMAC_GET_SECRET:
+                return getHMACGetSecret();
             default:
-                return unknowns.get(key);
+                JsonNode node = rawData.get(key);
+                if (node == null || node.isNull()) return null;
+                if (node.isBoolean()) return node.asBoolean();
+                if (node.isString()) return node.textValue();
+                if (node.isInt()) return node.asInt();
+                if (node.isLong()) return node.asLong();
+                if (node.isDouble()) return node.asDouble();
+                return objectConverter.getJsonMapper().treeToValue(node, Object.class);
         }
     }
 
     @JsonIgnore
     public @Nullable Boolean getAppid() {
-        return this.appid;
+        FIDOAppIDExtensionClientOutput ext = lookupExtension(FIDOAppIDExtensionClientOutput.class);
+        return ext != null ? ext.getValue() : null;
     }
 
     @JsonIgnore
     public @Nullable Boolean getAppidExclude() {
-        return this.appidExclude;
+        FIDOAppIDExclusionExtensionClientOutput ext = lookupExtension(FIDOAppIDExclusionExtensionClientOutput.class);
+        return ext != null ? ext.getValue() : null;
     }
 
     @JsonIgnore
     public @Nullable UvmEntries getUvm() {
-        return this.uvm;
+        UserVerificationMethodExtensionClientOutput ext = lookupExtension(UserVerificationMethodExtensionClientOutput.class);
+        return ext != null ? ext.getValue() : null;
     }
 
     @JsonIgnore
     public @Nullable Boolean getHMACCreateSecret() {
-        return hmacCreateSecret;
+        HMACSecretRegistrationExtensionClientOutput ext = lookupExtension(HMACSecretRegistrationExtensionClientOutput.class);
+        return ext != null ? ext.getValue() : null;
     }
 
     @JsonIgnore
     public @Nullable HMACGetSecretOutput getHMACGetSecret() {
-        return hmacGetSecret;
+        HMACSecretAuthenticationExtensionClientOutput ext = lookupExtension(HMACSecretAuthenticationExtensionClientOutput.class);
+        return ext != null ? ext.getValue() : null;
     }
 
     @JsonIgnore
     public @Nullable CredentialPropertiesOutput getCredProps() {
-        return this.credProps;
+        CredentialPropertiesExtensionClientOutput ext = lookupExtension(CredentialPropertiesExtensionClientOutput.class);
+        return ext != null ? ext.getValue() : null;
     }
 
     @SuppressWarnings("unchecked")
     public @Nullable <E extends T> E getExtension(@NotNull Class<E> tClass) {
+        E cached = (E) getExtensions().get(tClass);
+        if (cached != null) return cached;
+        // Fall back to treeToValue for extensions not in KNOWN_TYPES
+        // (e.g. extensions registered by external modules via Jackson Module)
+        return objectConverter.getJsonMapper().treeToValue(rawData, tClass);
+    }
+
+    // unconstrained lookup for internal use by convenience getters
+    @SuppressWarnings("unchecked")
+    private @Nullable <E extends ExtensionClientOutput> E lookupExtension(@NotNull Class<E> tClass) {
         return (E) getExtensions().get(tClass);
     }
 
+    /**
+     * Returns a map of extensions known to webauthn4j-core that are present in the data.
+     * Note: Extensions registered by external modules via Jackson Module are NOT included
+     * in this map. Use {@link #getExtension(Class)} to retrieve specific extensions instead.
+     *
+     * @deprecated This method only reflects extensions known to webauthn4j-core.
+     */
+    @Deprecated
     @SuppressWarnings("unchecked")
     @JsonIgnore
     public @NotNull Map<Class<? extends T>, T> getExtensions() {
         if (extensions == null) {
             Map<Class<? extends T>, T> map = new HashMap<>();
-            if (appid != null) {
-                map.put((Class<? extends T>) FIDOAppIDExtensionClientOutput.class, (T) new FIDOAppIDExtensionClientOutput(appid));
-            }
-            if (appidExclude != null) {
-                map.put((Class<? extends T>) FIDOAppIDExclusionExtensionClientOutput.class, (T) new FIDOAppIDExclusionExtensionClientOutput(appidExclude));
-            }
-            if (uvm != null) {
-                map.put((Class<? extends T>) UserVerificationMethodExtensionClientOutput.class, (T) new UserVerificationMethodExtensionClientOutput(uvm));
-            }
-            if (credProps != null) {
-                map.put((Class<? extends T>) CredentialPropertiesExtensionClientOutput.class, (T) new CredentialPropertiesExtensionClientOutput(credProps));
-            }
-            if (hmacCreateSecret != null) {
-                map.put((Class<? extends T>) HMACSecretRegistrationExtensionClientOutput.class, (T) new HMACSecretRegistrationExtensionClientOutput(hmacCreateSecret));
-            }
-            if (hmacGetSecret != null) {
-                map.put((Class<? extends T>) HMACSecretAuthenticationExtensionClientOutput.class, (T) new HMACSecretAuthenticationExtensionClientOutput(hmacGetSecret));
+            for (Class<? extends ExtensionClientOutput> type : KNOWN_TYPES) {
+                Object ext = objectConverter.getJsonMapper().treeToValue(rawData, type);
+                if (ext != null) {
+                    map.put((Class<? extends T>) type, (T) ext);
+                }
             }
             extensions = Collections.unmodifiableMap(map);
         }
@@ -164,119 +200,107 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationExtensionsClientOutputs<?> that = (AuthenticationExtensionsClientOutputs<?>) o;
-        return Objects.equals(unknowns, that.unknowns) && Objects.equals(appid, that.appid) && Objects.equals(appidExclude, that.appidExclude) && Objects.equals(uvm, that.uvm) && Objects.equals(credProps, that.credProps) && Objects.equals(hmacCreateSecret, that.hmacCreateSecret) && Objects.equals(hmacGetSecret, that.hmacGetSecret) && Objects.equals(extensions, that.extensions);
+        return Objects.equals(rawData, that.rawData);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(unknowns, appid, appidExclude, uvm, credProps, hmacCreateSecret, hmacGetSecret, extensions);
+        return Objects.hash(rawData);
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("AuthenticationExtensionsAuthenticatorInputs(");
-        String entries = getExtensions().values().stream().map(t -> String.format("%s=%s", t.getIdentifier(), t)).collect(Collectors.joining(", "));
+        builder.append("AuthenticationExtensionsClientOutputs(");
+        String entries = getKeys().stream()
+                .map(key -> String.format("%s=%s", key, getValue(key)))
+                .collect(Collectors.joining(", "));
         builder.append(entries);
-        String unknownsStr = getUnknowns().entrySet().stream().map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue())).collect(Collectors.joining(", "));
-        if(!unknownsStr.isEmpty()){
-            builder.append(", ");
-            builder.append(unknownsStr);
-        }
         builder.append(")");
         return builder.toString();
     }
 
     public static class BuilderForRegistration {
 
-        private final Map<String, Object> unknowns = new HashMap<>();
-        private UvmEntries uvm;
-        private CredentialPropertiesOutput credProps;
-        private Boolean hmacCreateSecret;
+        private final Map<String, Object> values = new LinkedHashMap<>();
+        private ObjectConverter objectConverter = new ObjectConverter();
 
         public @NotNull AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> build() {
-            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
-            instance.uvm = this.uvm;
-            instance.credProps = this.credProps;
-            instance.hmacCreateSecret = this.hmacCreateSecret;
-            instance.unknowns.putAll(this.unknowns);
+            ObjectNode rawData = objectConverter.getJsonMapper().valueToTree(values);
+            return new AuthenticationExtensionsClientOutputs<>(rawData, objectConverter);
+        }
 
-            return instance;
+        public @NotNull BuilderForRegistration setObjectConverter(@NotNull ObjectConverter objectConverter) {
+            this.objectConverter = objectConverter;
+            return this;
         }
 
         public @NotNull BuilderForRegistration setUvm(@Nullable UvmEntries uvm) {
-            this.uvm = uvm;
+            if (uvm != null) values.put("uvm", uvm);
             return this;
         }
 
         public @NotNull BuilderForRegistration setCredProps(@Nullable CredentialPropertiesOutput credProps) {
-            this.credProps = credProps;
+            if (credProps != null) values.put("credProps", credProps);
             return this;
         }
 
         public @NotNull BuilderForRegistration setHMACCreateSecret(@Nullable Boolean hmacCreateSecret) {
-            this.hmacCreateSecret = hmacCreateSecret;
+            if (hmacCreateSecret != null) values.put("hmacCreateSecret", hmacCreateSecret);
             return this;
         }
 
         public @NotNull BuilderForRegistration set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
-            unknowns.put(key, value);
+            values.put(key, value);
             return this;
         }
-
     }
 
     public static class BuilderForAuthentication {
 
-        private final Map<String, Object> unknowns = new HashMap<>();
-        private Boolean appid;
-        private Boolean appidExclude;
-        private UvmEntries uvm;
-        private HMACGetSecretOutput hmacGetSecret;
+        private final Map<String, Object> values = new LinkedHashMap<>();
+        private ObjectConverter objectConverter = new ObjectConverter();
 
         public @NotNull AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> build() {
-            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
-            instance.appid = this.appid;
-            instance.appidExclude = this.appidExclude;
-            instance.uvm = this.uvm;
-            instance.hmacGetSecret = this .hmacGetSecret;
-            instance.unknowns.putAll(this.unknowns);
+            ObjectNode rawData = objectConverter.getJsonMapper().valueToTree(values);
+            return new AuthenticationExtensionsClientOutputs<>(rawData, objectConverter);
+        }
 
-            return instance;
+        public @NotNull BuilderForAuthentication setObjectConverter(@NotNull ObjectConverter objectConverter) {
+            this.objectConverter = objectConverter;
+            return this;
         }
 
         public @NotNull BuilderForAuthentication setAppid(@Nullable Boolean appid) {
-            this.appid = appid;
+            if (appid != null) values.put("appid", appid);
             return this;
         }
 
         public @NotNull BuilderForAuthentication setAppidExclude(@Nullable Boolean appidExclude) {
-            this.appidExclude = appidExclude;
+            if (appidExclude != null) values.put("appidExclude", appidExclude);
             return this;
         }
 
         public @NotNull BuilderForAuthentication setUvm(@Nullable UvmEntries uvm) {
-            this.uvm = uvm;
+            if (uvm != null) values.put("uvm", uvm);
             return this;
         }
 
         public @NotNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretOutput hmacGetSecret) {
-            this.hmacGetSecret = hmacGetSecret;
+            if (hmacGetSecret != null) values.put("hmacGetSecret", hmacGetSecret);
             return this;
         }
 
         public @NotNull BuilderForAuthentication set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
-            unknowns.put(key, value);
+            values.put(key, value);
             return this;
         }
-
-
     }
-
 }

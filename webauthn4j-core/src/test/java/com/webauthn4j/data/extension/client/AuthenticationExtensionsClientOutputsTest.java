@@ -23,7 +23,6 @@ import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.data.extension.UvmEntry;
 import org.junit.jupiter.api.Test;
-
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -147,5 +146,28 @@ class AuthenticationExtensionsClientOutputsTest {
                 .hasSameHashCodeAs(instance2);
     }
 
+    @Test
+    void toString_test() {
+        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
+        builder.setAppid(true);
+        builder.set("custom", "value");
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = builder.build();
+        assertThat(instance.toString()).contains("appid");
+        assertThat(instance.toString()).contains("custom");
+    }
+
+    @Test
+    void getValue_unknown_key_types_test() {
+        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
+        builder.set("longVal", 42L);
+        builder.set("doubleVal", 3.14);
+        builder.set("textVal", "hello");
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> target = builder.build();
+
+        assertThat(target.getValue("longVal")).isNotNull();
+        assertThat(target.getValue("doubleVal")).isNotNull();
+        assertThat(target.getValue("textVal")).isEqualTo("hello");
+        assertThat(target.getValue("absent")).isNull();
+    }
 
 }

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class FIDOAppIDExclusionExtensionClientOutput extends SingleValueExtensionOutputBase<Boolean> implements AuthenticationExtensionClientOutput {
 
     public static final String ID = "appidExclude";
+    public static final String KEY_APPID_EXCLUDE = "appidExclude";
 
     public FIDOAppIDExclusionExtensionClientOutput(@NotNull Boolean appIdExclude) {
         super(appIdExclude);

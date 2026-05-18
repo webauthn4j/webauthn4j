@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class UserVerificationMethodExtensionClientInput extends SingleValueExtensionInputBase<Boolean> implements RegistrationExtensionClientInput, AuthenticationExtensionClientInput {
 
     public static final String ID = "uvm";
+    public static final String KEY_UVM = "uvm";
 
     public UserVerificationMethodExtensionClientInput(@NotNull Boolean appId) {
         super(appId);

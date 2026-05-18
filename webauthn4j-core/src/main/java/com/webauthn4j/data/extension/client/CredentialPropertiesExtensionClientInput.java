@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class CredentialPropertiesExtensionClientInput extends SingleValueExtensionInputBase<Boolean> implements RegistrationExtensionClientInput {
 
     public static final String ID = "credProps";
+    public static final String KEY_CRED_PROPS = "credProps";
 
     public CredentialPropertiesExtensionClientInput(@NotNull Boolean value) {
         super(value);
