@@ -19,6 +19,7 @@ package com.webauthn4j.metadata.data.statement;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -26,7 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticatorGetInfoTest {
 
-    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
+    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper().rebuild()
+            .addModule(new WebAuthnMetadataJSONModule())
+            .build();
 
 
     @Test
@@ -47,6 +50,57 @@ class AuthenticatorGetInfoTest {
         );
         assertThat(authenticatorGetInfo.getMaxMsgSize()).isEqualTo(1200);
         assertThat(authenticatorGetInfo.getPinUvAuthProtocols()).containsExactly(PinProtocolVersion.VERSION_1);
+    }
+
+    @Test
+    void options_shouldSerializeAsPlainBooleans() {
+        AuthenticatorGetInfo.Options options = new AuthenticatorGetInfo.Options(
+                AuthenticatorGetInfo.Options.PlatformOption.CROSS_PLATFORM,
+                AuthenticatorGetInfo.Options.ResidentKeyOption.SUPPORTED,
+                AuthenticatorGetInfo.Options.ClientPINOption.SET,
+                AuthenticatorGetInfo.Options.UserPresenceOption.SUPPORTED,
+                AuthenticatorGetInfo.Options.UserVerificationOption.READY,
+                null,
+                null
+        );
+        String json = jsonMapper.writeValueAsString(options);
+        assertThat(json).contains("\"plat\":false");
+        assertThat(json).contains("\"rk\":true");
+        assertThat(json).contains("\"clientPin\":true");
+        assertThat(json).contains("\"up\":true");
+        assertThat(json).contains("\"uv\":true");
+        // Should NOT contain nested objects
+        assertThat(json).doesNotContain("\"value\"");
+    }
+
+    @Test
+    void options_shouldRoundTrip() {
+        AuthenticatorGetInfo.Options original = new AuthenticatorGetInfo.Options(
+                AuthenticatorGetInfo.Options.PlatformOption.CROSS_PLATFORM,
+                AuthenticatorGetInfo.Options.ResidentKeyOption.SUPPORTED,
+                AuthenticatorGetInfo.Options.ClientPINOption.SET,
+                AuthenticatorGetInfo.Options.UserPresenceOption.SUPPORTED,
+                AuthenticatorGetInfo.Options.UserVerificationOption.READY,
+                AuthenticatorGetInfo.Options.UVTokenOption.NOT_SUPPORTED,
+                AuthenticatorGetInfo.Options.ConfigOption.NOT_SUPPORTED
+        );
+        String json = jsonMapper.writeValueAsString(original);
+        AuthenticatorGetInfo.Options deserialized = jsonMapper.readValue(json, AuthenticatorGetInfo.Options.class);
+        assertThat(deserialized).isEqualTo(original);
+    }
+
+    @Test
+    void authenticatorGetInfo_aaguid_shouldSerializeAsString() {
+        AuthenticatorGetInfo info = new AuthenticatorGetInfo(
+                java.util.List.of("FIDO_2_0"),
+                null,
+                new AAGUID("33c1642b-b5e9-423d-9add-5a0119c2a8b8"),
+                null,
+                null,
+                null
+        );
+        String json = jsonMapper.writeValueAsString(info);
+        assertThat(json).contains("\"aaguid\":\"33c1642b-b5e9-423d-9add-5a0119c2a8b8\"");
     }
 
     private AuthenticatorGetInfo createAuthenticatorGetInfo(){
