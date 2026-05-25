@@ -25,6 +25,13 @@ selenium = "4.44.0"
 assertj = "3.27.7"
 playwright = "1.60.0"
 
+# fido-integration-bdd dependencies
+
+kotlin = "2.3.21"
+kotest = "5.9.1"
+kotlinx-coroutines = "1.11.0"
+webauthn4j-ctap = "0.2.0.RELEASE"
+
 [libraries]
 # Third-party libraries
 
@@ -47,6 +54,16 @@ selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version.ref 
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
 
+# fido-integration-bdd dependencies
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+webauthn4j-ctap-authenticator = { module = "com.webauthn4j:webauthn4j-ctap-authenticator", version.ref = "webauthn4j-ctap" }
+webauthn4j-ctap-client = { module = "com.webauthn4j:webauthn4j-ctap-client", version.ref = "webauthn4j-ctap" }
+
 
 [plugins]
 jreleaser = { id = "org.jreleaser", version.ref = "jreleaser" }
@@ -55,3 +72,4 @@ sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-bom" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
 quarkus = { id = "io.quarkus", version.ref = "quarkus" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
