@@ -18,6 +18,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
@@ -212,6 +213,7 @@ public class AuthenticatorGetInfo {
                 this.value = value;
             }
 
+            @JsonValue
             public boolean getValue() {
                 return value;
             }
@@ -243,6 +245,7 @@ public class AuthenticatorGetInfo {
                 this.value = value;
             }
 
+            @JsonValue
             public boolean getValue() {
                 return value;
             }
@@ -274,6 +277,7 @@ public class AuthenticatorGetInfo {
                 this.value = value;
             }
 
+            @JsonValue
             public boolean getValue() {
                 return value;
             }
@@ -305,6 +309,7 @@ public class AuthenticatorGetInfo {
                 this.value = value;
             }
 
+            @JsonValue
             public boolean getValue() {
                 return value;
             }
@@ -336,6 +341,7 @@ public class AuthenticatorGetInfo {
                 this.value = value;
             }
 
+            @JsonValue
             public boolean getValue() {
                 return value;
             }
@@ -367,6 +373,7 @@ public class AuthenticatorGetInfo {
                 this.value = value;
             }
 
+            @JsonValue
             public boolean getValue() {
                 return value;
             }
@@ -398,6 +405,7 @@ public class AuthenticatorGetInfo {
                 this.value = value;
             }
 
+            @JsonValue
             public boolean getValue() {
                 return value;
             }

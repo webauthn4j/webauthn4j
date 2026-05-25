@@ -16,6 +16,9 @@
 
 package com.webauthn4j.metadata.converter.jackson;
 
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
+import com.webauthn4j.metadata.converter.jackson.serializer.MetadataAAGUIDSerializer;
 import tools.jackson.databind.module.SimpleModule;
 
 public class WebAuthnMetadataJSONModule extends SimpleModule {
@@ -23,6 +26,9 @@ public class WebAuthnMetadataJSONModule extends SimpleModule {
     @SuppressWarnings("deprecation")
     public WebAuthnMetadataJSONModule() {
         super("WebAuthnMetadataJSONModule");
+
+        this.addSerializer(AAGUID.class, new MetadataAAGUIDSerializer());
+        this.addDeserializer(AAGUID.class, new MetadataAAGUIDRelaxedDeserializer());
     }
 
 }
