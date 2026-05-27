@@ -26,7 +26,7 @@ jobs:
           cache: 'gradle'
 
       - name: Build with Gradle
-        run: ./gradlew build javadoc generateReferenceEN generateReferenceJA -PfailBuildOnCVSS=4
+        run: ./gradlew build javadoc generateReferenceEN generateReferenceJA -PfailBuildOnCVSS=4 -x :integration-tests:fido-mds-integration:check
 
   matrix-test:
     name: Test on java ${{ matrix.java_version }} and ${{ matrix.os }}
@@ -48,7 +48,27 @@ jobs:
           cache: 'gradle'
 
       - name: Build with Gradle
-        run: ./gradlew check
+        run: ./gradlew check -x :integration-tests:fido-mds-integration:check
+
+  # Run FIDO MDS integration tests separately to avoid rate limiting
+  # from the FIDO Metadata Service (https://mds.fidoalliance.org/).
+  # These tests must not run in parallel with other jobs that hit the same endpoint.
+  fido-mds-integration-test:
+    name: FIDO MDS Integration Test
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'gradle'
+
+      - name: Run FIDO MDS integration tests
+        run: ./gradlew :integration-tests:fido-mds-integration:check
 
   code-analysis:
     name: Code Analysis
@@ -69,11 +89,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: if [ "$SONAR_TOKEN" != "" ]; then ./gradlew jacocoTestReport check sonar -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io ; fi
+        run: if [ "$SONAR_TOKEN" != "" ]; then ./gradlew jacocoTestReport check sonar -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -x :integration-tests:fido-mds-integration:check ; fi
 
   jitpack-comment:
     name: Comment with JitPack info
-    needs: [build, matrix-test, code-analysis]
+    needs: [build, matrix-test, fido-mds-integration-test, code-analysis]
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     permissions:
