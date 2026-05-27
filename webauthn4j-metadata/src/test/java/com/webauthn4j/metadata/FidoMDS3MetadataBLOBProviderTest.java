@@ -17,7 +17,6 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.metadata.data.MetadataBLOB;
 import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.CertificateUtil;
@@ -60,13 +59,6 @@ class FidoMDS3MetadataBLOBProviderTest {
                     "mcIfeg7jLQitChws/zyrVQ4PkX4268NXSb7hLi18YIvDQVETI53O9zJrlAGomecs" +
                     "Mx86OyXShkDOOyyGeMlhLxS67ttVb9+E7gUJTb0o2HLO02JQZR7rkpeDMdmztcpH" +
                     "WD9f"));
-
-    @Test
-    void test(){
-        FidoMDS3MetadataBLOBProvider target = new FidoMDS3MetadataBLOBProvider(new ObjectConverter(), rootCertificate);
-        MetadataBLOB metadataBLOB = target.provide();
-        assertThat(metadataBLOB).isNotNull();
-    }
 
     @Nested
     class when_expired_blob_jwt{
