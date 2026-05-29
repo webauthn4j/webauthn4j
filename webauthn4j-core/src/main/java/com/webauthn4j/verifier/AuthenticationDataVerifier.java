@@ -62,6 +62,7 @@ public class AuthenticationDataVerifier {
     private OriginVerifier originVerifier = new OriginVerifierImpl();
     private TopOriginVerifier topOriginVerifier = new TopOriginVerifier();
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
+    private @NotNull ClientDataType expectedClientDataType = ClientDataType.WEBAUTHN_GET;
 
     public AuthenticationDataVerifier(@NotNull List<CustomAuthenticationVerifier> customAuthenticationVerifiers) {
         AssertUtil.notNull(customAuthenticationVerifiers, "customAuthenticationVerifiers must not be null");
@@ -161,9 +162,7 @@ public class AuthenticationDataVerifier {
 
         //spec| Step10
         //spec| Verify that the value of C.type is the string webauthn.get.
-        if (!Objects.equals(collectedClientData.getType(), ClientDataType.WEBAUTHN_GET)) {
-            throw new InconsistentClientDataTypeException("ClientData.type must be 'get' on authentication, but it isn't.");
-        }
+        verifyClientDataType(collectedClientData);
 
         //spec| Step11
         //spec| Verify that the value of C.challenge equals the base64url encoding of pkOptions.challenge.
@@ -302,6 +301,22 @@ public class AuthenticationDataVerifier {
 
 
 
+
+    private void verifyClientDataType(@NotNull CollectedClientData collectedClientData) {
+        if (!Objects.equals(collectedClientData.getType(), expectedClientDataType)) {
+            throw new InconsistentClientDataTypeException(
+                    String.format("ClientData.type must be '%s' on authentication, but it isn't.", expectedClientDataType.getValue()));
+        }
+    }
+
+    public @NotNull ClientDataType getExpectedClientDataType() {
+        return expectedClientDataType;
+    }
+
+    public void setExpectedClientDataType(@NotNull ClientDataType expectedClientDataType) {
+        AssertUtil.notNull(expectedClientDataType, "expectedClientDataType must not be null");
+        this.expectedClientDataType = expectedClientDataType;
+    }
 
     public @NotNull CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
         return maliciousCounterValueHandler;

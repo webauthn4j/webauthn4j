@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SPC Registration - Bank</title>
+</head>
+<body>
+    <h1>SPC Registration (bank.localhost)</h1>
+    <div id="status">Ready</div>
+    <button id="register-btn" onclick="registerSPC()">Register SPC Credential</button>
+    <div id="result"></div>
+
+    <script>
+        async function registerSPC() {
+            const status = document.getElementById('status');
+            const result = document.getElementById('result');
+            try {
+                status.textContent = 'Registering...';
+
+                const response = await fetch('/api/register/options');
+                const optionsJSON = await response.json();
+                const credential = await navigator.credentials.create({
+                    publicKey: PublicKeyCredential.parseCreationOptionsFromJSON(optionsJSON)
+                });
+
+                const verifyResp = await fetch('/api/register/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(credential.toJSON())
+                });
+
+                if (verifyResp.ok) {
+                    status.textContent = 'Registration successful';
+                    result.textContent = 'Credential registered: ' + credential.id;
+                } else {
+                    const err = await verifyResp.text();
+                    status.textContent = 'Registration verification failed';
+                    result.textContent = 'Error: ' + err;
+                }
+            } catch (e) {
+                status.textContent = 'Registration failed';
+                result.textContent = 'Error: ' + e.message;
+            }
+        }
+
+    </script>
+</body>
+</html>

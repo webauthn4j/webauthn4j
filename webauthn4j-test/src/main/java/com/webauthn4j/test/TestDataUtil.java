@@ -460,6 +460,14 @@ public class TestDataUtil {
                 .build();
     }
 
+    public static RegistrationParameters createRegistrationParameters() {
+        return createRegistrationParameters(createServerProperty());
+    }
+
+    public static RegistrationParameters createRegistrationParameters(ServerProperty serverProperty) {
+        return new RegistrationParameters(serverProperty, null, false, true);
+    }
+
     public static CredentialRecord createCredentialRecord(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement) {
         return new CredentialRecordImpl(attestationStatement, false, false, false, 1L, attestedCredentialData, null, null, null, null);
     }

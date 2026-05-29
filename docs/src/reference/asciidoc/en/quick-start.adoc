@@ -401,6 +401,281 @@ If verification fails, a subclass of `VerificationException` will be thrown.
 
 
 
+=== Secure Payment Confirmation (SPC) verification
+
+https://www.w3.org/TR/secure-payment-confirmation/[Secure Payment Confirmation (SPC)] is a W3C specification that extends WebAuthn for payment authentication. While standard WebAuthn authenticates a user to a Relying Party (RP), SPC additionally binds the authentication to specific payment details (amount, currency, payee), providing cryptographic evidence that the user consented to a particular transaction.
+
+==== SPC Authentication Flow
+
+SPC authentication differs from standard WebAuthn in several key ways:
+
+* The client uses the `PaymentRequest` API instead of `navigator.credentials.get()`
+* The `CollectedClientData` includes a `payment` field with transaction details
+* The `ClientData.type` is `"payment.get"` instead of `"webauthn.get"`
+* A third-party (e.g., a merchant) can initiate the authentication on behalf of the Relying Party (e.g., a payment provider)
+
+[plantuml,spc authentication sequence,svg]
+....
+@startuml
+title Secure Payment Confirmation Authentication Overview
+autonumber
+actor "User"
+participant "Authenticator"
+participant "Client\n(Browser)" as Client
+participant "Merchant\n(Frontend)" as MerchantFE
+participant "Merchant\nServer" as MerchantBE
+participant "Relying Party\n(Payment Provider)" as RP
+database "RP Storage" as Storage
+
+MerchantFE -> MerchantBE: checkout request\n(cart details)
+MerchantBE -> RP: request authentication\n(transaction details)
+RP -> RP: generate challenge
+RP -> Storage: store challenge\n(keyed by transaction ID)
+RP -> MerchantBE: challenge, credentialIds\n(via payment protocol, e.g. 3D Secure)
+MerchantBE -> MerchantFE: SPC options\n(challenge, credentialIds, instrument, total, payee)
+
+MerchantFE -> Client: PaymentRequest.show()\nwith "secure-payment-confirmation" method
+Client -> Client: display transaction confirmation UX\n(amount, payee, instrument)
+Client -> "User": consent request\n(showing payment details)
+"User" -> Client: approve transaction
+Client -> Client: generate client data\n(challenge, origin, payment details)
+Client -> "Authenticator": credential request (client data hash, etc.)
+"Authenticator" -> "User": user verification
+"User" -> "Authenticator": authorization gesture
+"Authenticator" -> "Authenticator": sign over authenticator data\nand client data hash
+"Authenticator" -> Client: credential response\n(authenticator data, signature, etc.)
+Client -> MerchantFE: PaymentResponse\n(authenticator data, client data, signature)
+MerchantFE -> MerchantBE: SPC assertion\n(authenticator data, client data, signature)
+MerchantBE -> RP: forward assertion\n(with transaction ID)
+Storage -> RP: load challenge
+RP -> RP: verify signature, challenge, origin,\npayment details (total, instrument, payee)
+
+@enduml
+....
+
+==== Getting from Maven Central
+
+SPC verification support is contained in the dedicated `webauthn4j-spc` module.
+
+[source,xml]
+----
+<properties>
+  ...
+  <!-- Use the latest version whenever possible. -->
+  <webauthn4j.version>0.31.5.RELEASE</webauthn4j.version>
+  ...
+</properties>
+
+<dependencies>
+  ...
+  <dependency>
+    <groupId>com.webauthn4j</groupId>
+    <artifactId>webauthn4j-spc</artifactId>
+    <version>${webauthn4j.version}</version>
+  </dependency>
+  ...
+</dependencies>
+----
+
+==== SPC Registration
+
+SPC registration uses the standard WebAuthn `navigator.credentials.create()` API with the `payment` extension specified. The Relying Party (e.g., a payment provider) typically performs registration in its own iframe on the merchant's site.
+
+The server should return `PublicKeyCredentialCreationOptions` as JSON, including the `payment` extension
+in the `extensions` field. The frontend can use `PublicKeyCredential.parseCreationOptionsFromJSON()` to
+parse the JSON and pass the result to `navigator.credentials.create()`.
+
+.Frontend: Registering an SPC Credential
+[source,javascript,caption="Example {counter:number}: "]
+----
+// Fetch registration options from the server.
+// The server returns PublicKeyCredentialCreationOptions as JSON:
+// {
+//   "rp": { "id": "bank.example", "name": "Example Bank" },
+//   "user": { "id": "AQIDBA", "name": "user@example.com", "displayName": "Jane Doe" },
+//   "challenge": "dGVzdC1jaGFsbGVuZ2U",
+//   "pubKeyCredParams": [{ "type": "public-key", "alg": -7 }],
+//   "authenticatorSelection": {
+//     "authenticatorAttachment": "platform",
+//     "residentKey": "required",
+//     "userVerification": "required"
+//   },
+//   "extensions": { "payment": { "isPayment": true } }
+// }
+const response = await fetch("/spc/registrationOptions");
+const optionsJSON = await response.json();
+const credential = await navigator.credentials.create(
+    PublicKeyCredential.parseCreationOptionsFromJSON(optionsJSON));
+
+// Send credential to server for verification
+const registrationResponseJSON = credential.toJSON();
+await fetch("/spc/register", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(registrationResponseJSON)
+});
+----
+
+.Server-side: Verifying SPC Registration
+[source,java,caption="Example {counter:number}: "]
+----
+SPCManager spcManager = new SPCManager();
+
+String registrationResponseJSON = "<registrationResponseJSON>"; /* received from frontend */
+RegistrationData registrationData;
+try {
+    registrationData = spcManager.parse(registrationRequest);
+} catch (DataConversionException e) {
+    throw e;
+}
+
+// Server properties
+Origin origin = null /* set origin */;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .build();
+
+List<PublicKeyCredentialParameters> pubKeyCredParams = null;
+SPCRegistrationParameters registrationParameters = new SPCRegistrationParameters(
+        serverProperty,
+        pubKeyCredParams
+);
+
+try {
+    spcManager.verify(registrationData, registrationParameters);
+} catch (VerificationException e) {
+    throw e;
+}
+
+// Persist CredentialRecord for later authentication
+CredentialRecord credentialRecord = new CredentialRecordImpl(
+        registrationData.getAttestationObject(),
+        registrationData.getCollectedClientData(),
+        registrationData.getClientExtensions(),
+        registrationData.getTransports()
+);
+save(credentialRecord);
+----
+
+==== SPC Authentication
+
+SPC authentication is triggered by the merchant via the `PaymentRequest` API with the `"secure-payment-confirmation"` payment method. The browser displays a transaction confirmation UX showing the payment details to the user.
+
+The server should return a JSON object containing the `SecurePaymentConfirmationRequest` data
+(as `spcData`) and `PaymentDetailsInit` (as `total`). The frontend converts base64url-encoded
+binary fields to `ArrayBuffer` and passes them to the `PaymentRequest` constructor.
+
+.Frontend: Authenticating with SPC
+[source,javascript,caption="Example {counter:number}: "]
+----
+// Fetch SPC authentication options from the server.
+// The server returns JSON like:
+// {
+//   "spcData": {
+//     "credentialIds": ["AQIDBA..."],
+//     "challenge": "dGVzdC1jaGFsbGVuZ2U",
+//     "rpId": "bank.example",
+//     "instrument": { "displayName": "Bank Card ****1234", "icon": "https://bank.example/card-art.png" },
+//     "payeeName": "Merchant Shop",
+//     "payeeOrigin": "https://merchant.example",
+//     "timeout": 60000
+//   },
+//   "total": { "label": "Total", "amount": { "currency": "USD", "value": "5.00" } }
+// }
+const response = await fetch("/spc/authenticationOptions");
+const options = await response.json();
+
+// Convert base64url-encoded fields to ArrayBuffer
+const spcData = options.spcData;
+spcData.credentialIds = spcData.credentialIds.map(id => base64urlToBuffer(id));
+spcData.challenge = base64urlToBuffer(spcData.challenge);
+
+const request = new PaymentRequest([{
+    supportedMethods: 'secure-payment-confirmation',
+    data: spcData
+}], { total: options.total });
+
+const paymentResponse = await request.show();
+await paymentResponse.complete('success');
+
+// paymentResponse.details is a PublicKeyCredential
+const authenticationResponseJSON = paymentResponse.details.toJSON();
+await fetch("/spc/authenticate", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(authenticationResponseJSON)
+});
+----
+
+.Server-side: Verifying SPC Authentication
+[source,java,caption="Example {counter:number}: "]
+----
+SPCManager spcManager = new SPCManager();
+
+AuthenticationData authenticationData;
+try {
+    authenticationData = spcManager.parse(authenticationRequest);
+} catch (DataConversionException e) {
+    throw e;
+}
+
+// Server properties
+Origin origin = null /* set origin (the merchant's origin) */;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+Origin topOrigin = null /* set topOrigin (the top-level origin where SPC was invoked) */;
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .topOrigin(topOrigin)
+        .build();
+
+CredentialRecord credentialRecord = load(authenticationData.getCredentialId());
+
+// SPC-specific parameters: expected payment details
+SPCAuthenticationParameters authenticationParameters = new SPCAuthenticationParameters(
+        serverProperty,
+        credentialRecord,
+        new PaymentCurrencyAmount("USD", "5.00"),             // expected total
+        new PaymentCredentialInstrument("Bank Card ****1234",  // expected instrument
+                "https://bank.example/card-art.png"),
+        "Merchant Shop",                                       // expected payee name
+        new Origin("https://merchant.example")                 // expected payee origin
+);
+
+try {
+    spcManager.verify(authenticationData, authenticationParameters);
+} catch (VerificationException e) {
+    throw e;
+}
+
+// Update counter
+updateCounter(
+        authenticationData.getCredentialId(),
+        authenticationData.getAuthenticatorData().getSignCount()
+);
+----
+
+The `SPCAuthenticationParameters` extends `AuthenticationParameters` with SPC-specific expected values.
+The convenience constructor defaults `userVerificationRequired` and `userPresenceRequired` to `true`.
+`SPCManager` internally verifies:
+
+* `ClientData.type` is `"payment.get"`
+* `payment.rpId` matches the expected RP ID
+* `payment.topOrigin` matches the expected top-level origin (via `ServerProperty.topOriginPredicate`; must be configured)
+* `payment.total` matches the expected transaction amount
+* `payment.instrument` matches the expected payment instrument
+* `payment.payeeName` and `payment.payeeOrigin` match the expected values (when specified)
+
+NOTE: `ServerProperty` must have `topOrigin` (or `topOriginPredicate`) configured for SPC authentication. The `SPCAuthenticationVerifier` requires it because SPC always involves a cross-origin payment context.
+
+If verification succeeds, the Relying Party has cryptographic evidence that the user consented to the specific transaction details.
+
 === Apple App Attest verification
 
 Next, how to verify Apple App Attest is explained.

@@ -151,6 +151,8 @@ class AuthenticationObjectTest {
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         // Mock an Authenticator that does NOT implement CredentialRecord
         Authenticator authenticator = mock(Authenticator.class);
+        @SuppressWarnings("deprecation")
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(serverProperty, authenticator, null, false, true);
 
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId,
@@ -159,8 +161,7 @@ class AuthenticationObjectTest {
                 clientData,
                 clientDataBytes,
                 clientExtensions,
-                serverProperty,
-                authenticator
+                authenticationParameters
         );
 
         assertThatThrownBy(authenticationObject::getCredentialRecord)

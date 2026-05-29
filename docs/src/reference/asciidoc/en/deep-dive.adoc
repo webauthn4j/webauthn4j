@@ -185,6 +185,14 @@ Provides async variant of core features for WebAuthn attestation and assertion v
 
 Provides async variant of additional features regarding FIDO Metadata Service.
 
+==== SPC: webauthn4j-spc.jar
+
+Provides server-side verification for https://www.w3.org/TR/secure-payment-confirmation/[W3C Secure Payment Confirmation (SPC)].
+
+==== SPC-Async: webauthn4j-spc-async.jar
+
+Provides async variant of SPC verification features.
+
 ==== App Attest: webauthn4j-appattest.jar
 
 Provides core features for Apple App Attest attestation and assertion verification.
