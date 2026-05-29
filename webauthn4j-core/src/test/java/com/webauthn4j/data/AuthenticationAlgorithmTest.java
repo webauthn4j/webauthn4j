@@ -31,7 +31,8 @@ class AuthenticationAlgorithmTest {
                     () -> assertThat(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_DER.getValue()).isEqualTo(0x0002),
                     () -> assertThat(AuthenticationAlgorithm.RSASSA_PSS_SHA256_RAW.getValue()).isEqualTo(0x0003),
                     () -> assertThat(AuthenticationAlgorithm.RSA_EMSA_PKCS1_SHA256_RAW.getValue()).isEqualTo(0x0008),
-                    () -> assertThat(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW.getValue()).isEqualTo(0x0012)
+                    () -> assertThat(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW.getValue()).isEqualTo(0x0012),
+                    () -> assertThat(AuthenticationAlgorithm.ED448_EDDSA_SHA512_RAW.getValue()).isEqualTo(0x0013)
             );
         }
 
@@ -43,7 +44,8 @@ class AuthenticationAlgorithmTest {
                     () -> assertThat(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_DER).hasToString("secp256r1_ecdsa_sha256_der"),
                     () -> assertThat(AuthenticationAlgorithm.RSASSA_PSS_SHA256_RAW).hasToString("rsassa_pss_sha256_raw"),
                     () -> assertThat(AuthenticationAlgorithm.RSASSA_PSS_SHA256_DER).hasToString("rsassa_pss_sha256_der"),
-                    () -> assertThat(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW).hasToString("ed25519_eddsa_sha512_raw")
+                    () -> assertThat(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW).hasToString("ed25519_eddsa_sha512_raw"),
+                    () -> assertThat(AuthenticationAlgorithm.ED448_EDDSA_SHA512_RAW).hasToString("ed448_eddsa_sha512_raw")
             );
         }
     }
@@ -72,7 +74,8 @@ class AuthenticationAlgorithmTest {
                     () -> assertThat(AuthenticationAlgorithm.create(0x000F)).isEqualTo(AuthenticationAlgorithm.RSASSA_PKCSV15_SHA1_RAW),
                     () -> assertThat(AuthenticationAlgorithm.create(0x0010)).isEqualTo(AuthenticationAlgorithm.SECP384R1_ECDSA_SHA384_RAW),
                     () -> assertThat(AuthenticationAlgorithm.create(0x0011)).isEqualTo(AuthenticationAlgorithm.SECP521R1_ECDSA_SHA512_RAW),
-                    () -> assertThat(AuthenticationAlgorithm.create(0x0012)).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW)
+                    () -> assertThat(AuthenticationAlgorithm.create(0x0012)).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW),
+                    () -> assertThat(AuthenticationAlgorithm.create(0x0013)).isEqualTo(AuthenticationAlgorithm.ED448_EDDSA_SHA512_RAW)
             );
         }
 
@@ -97,7 +100,8 @@ class AuthenticationAlgorithmTest {
                     () -> assertThat(AuthenticationAlgorithm.create("rsassa_pkcsv15_sha1_raw")).isEqualTo(AuthenticationAlgorithm.RSASSA_PKCSV15_SHA1_RAW),
                     () -> assertThat(AuthenticationAlgorithm.create("secp384r1_ecdsa_sha384_raw")).isEqualTo(AuthenticationAlgorithm.SECP384R1_ECDSA_SHA384_RAW),
                     () -> assertThat(AuthenticationAlgorithm.create("secp521r1_ecdsa_sha512_raw")).isEqualTo(AuthenticationAlgorithm.SECP521R1_ECDSA_SHA512_RAW),
-                    () -> assertThat(AuthenticationAlgorithm.create("ed25519_eddsa_sha512_raw")).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW)
+                    () -> assertThat(AuthenticationAlgorithm.create("ed25519_eddsa_sha512_raw")).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW),
+                    () -> assertThat(AuthenticationAlgorithm.create("ed448_eddsa_sha512_raw")).isEqualTo(AuthenticationAlgorithm.ED448_EDDSA_SHA512_RAW)
             );
         }
         
@@ -107,7 +111,7 @@ class AuthenticationAlgorithmTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("value");
 
-            assertThatThrownBy(() -> AuthenticationAlgorithm.create(0x0013)) // undefined value
+            assertThatThrownBy(() -> AuthenticationAlgorithm.create(0x0014)) // undefined value
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("value");
                     
