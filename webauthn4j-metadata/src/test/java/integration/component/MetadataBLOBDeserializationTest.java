@@ -33,7 +33,7 @@ class MetadataBLOBDeserializationTest {
     private final JWSFactory jwsFactory = new JWSFactory();
 
     @Test
-    void test_with_mds3_metadata_as_of_202111(){
+    void test_with_mds3_metadata_as_of_202605(){
         JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlobAsString("integration/component/blob.jwt"), MetadataBLOBPayload.class);
         assertThat(metadataBLOB).isNotNull();
     }
@@ -41,6 +41,12 @@ class MetadataBLOBDeserializationTest {
     @Test
     void test_with_test_data(){
         JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlobAsString("integration/component/test-blob.jwt"), MetadataBLOBPayload.class);
+        assertThat(metadataBLOB).isNotNull();
+    }
+
+    @Test
+    void test_with_new_authenticator_algorithms(){
+        JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlobAsString("integration/component/test-blob-with-new-auth-alg.jwt"), MetadataBLOBPayload.class);
         assertThat(metadataBLOB).isNotNull();
     }
 
