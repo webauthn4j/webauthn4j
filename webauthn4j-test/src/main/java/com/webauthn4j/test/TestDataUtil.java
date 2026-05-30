@@ -17,6 +17,7 @@
 package com.webauthn4j.test;
 
 import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
+import com.webauthn4j.appattest.data.DCAttestationParameters;
 import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.appattest.verifier.DCRegistrationObject;
 import com.webauthn4j.authenticator.Authenticator;
@@ -27,9 +28,7 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.credential.CredentialRecordImpl;
-import com.webauthn4j.data.AuthenticatorAttestationResponse;
-import com.webauthn4j.data.AuthenticatorTransport;
-import com.webauthn4j.data.PublicKeyCredential;
+import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -105,7 +104,8 @@ public class TestDataUtil {
         byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, TestDataUtil.createServerProperty());
+        RegistrationParameters registrationParameters = new RegistrationParameters(TestDataUtil.createServerProperty(), null, false, true);
+        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, registrationParameters);
     }
 
     public static RegistrationObject createRegistrationObjectWithAndroidKeyAttestation() {
@@ -116,7 +116,8 @@ public class TestDataUtil {
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, TestDataUtil.createServerProperty());
+        RegistrationParameters registrationParameters = new RegistrationParameters(TestDataUtil.createServerProperty(), null, false, true);
+        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, registrationParameters);
     }
 
     public static RegistrationObject createRegistrationObjectWithAndroidSafetyNetAttestation() {
@@ -127,7 +128,8 @@ public class TestDataUtil {
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         Instant timestamp = Instant.parse("2019-02-02T07:01:00.00Z");
-        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, TestDataUtil.createServerProperty(), timestamp);
+        RegistrationParameters registrationParameters = new RegistrationParameters(TestDataUtil.createServerProperty(), null, false, true);
+        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, registrationParameters, timestamp);
     }
 
     public static DCRegistrationObject createRegistrationObjectWithAppleAppAttestAttestation() {
@@ -140,7 +142,8 @@ public class TestDataUtil {
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         Instant timestamp = Instant.parse("2020-08-18T13:37:00Z");
 
-        return new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcServerProperty, timestamp);
+        DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
+        return new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcAttestationParameters, timestamp);
     }
 
     public static CoreRegistrationObject createCoreRegistrationObjectWithAppleAppAttestAttestation() {
@@ -151,8 +154,9 @@ public class TestDataUtil {
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        Instant timestamp = Instant.parse("2020-08-18T13:37:00");
-        return new CoreRegistrationObject(attestationObject, attestationObjectBytes, clientDataHash, TestDataUtil.createServerProperty(), timestamp);
+        Instant timestamp = Instant.parse("2020-08-18T13:37:00Z");
+        CoreRegistrationParameters coreRegistrationParameters = new CoreRegistrationParameters(TestDataUtil.createServerProperty(), null, false, true);
+        return new CoreRegistrationObject(attestationObject, attestationObjectBytes, clientDataHash, coreRegistrationParameters, timestamp);
     }
 
     public static RegistrationObject createRegistrationObjectWithTPMAttestation() {
@@ -162,7 +166,8 @@ public class TestDataUtil {
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, TestDataUtil.createServerProperty());
+        RegistrationParameters registrationParameters = new RegistrationParameters(TestDataUtil.createServerProperty(), null, false, true);
+        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, registrationParameters);
     }
 
     public static RegistrationObject createRegistrationObjectWithAppleAttestation() {
@@ -174,7 +179,8 @@ public class TestDataUtil {
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = new ServerProperty(new Origin("https://6cc3c9e7967a.ngrok.io"), "6cc3c9e7967a.ngrok.io", new DefaultChallenge("kOwMvE2mQO6ou0B0jjD0VA"), null);
 
-        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, serverProperty, Instant.parse("2020-10-07T10:00:00Z"));
+        RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, null, false, true);
+        return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, registrationParameters, Instant.parse("2020-10-07T10:00:00Z"));
     }
 
     public static RegistrationObject createRegistrationObject(Function<byte[], AttestationObject> attestationObjectProvider) {
@@ -184,6 +190,7 @@ public class TestDataUtil {
         byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        RegistrationParameters registrationParameters = new RegistrationParameters(TestDataUtil.createServerProperty(), null, false, true);
         return new RegistrationObject(
                 attestationObject,
                 attestationObjectBytes,
@@ -191,7 +198,7 @@ public class TestDataUtil {
                 collectedClientDataBytes,
                 authenticationExtensionsClientOutputs,
                 transports,
-                TestDataUtil.createServerProperty()
+                registrationParameters
         );
     }
 
@@ -203,6 +210,7 @@ public class TestDataUtil {
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensionResults = publicKeyCredential.getClientExtensionResults();
         Set<AuthenticatorTransport> transports = publicKeyCredential.getResponse().getTransports();
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
+        RegistrationParameters registrationParameters = new RegistrationParameters(TestDataUtil.createServerProperty(), null, false, true);
         return new RegistrationObject(
                 attestationObject,
                 attestationObjectBytes,
@@ -210,7 +218,7 @@ public class TestDataUtil {
                 registrationRequest.getClientDataJSON(),
                 clientExtensionResults,
                 transports,
-                TestDataUtil.createServerProperty()
+                registrationParameters
         );
     }
 

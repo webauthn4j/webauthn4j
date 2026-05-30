@@ -21,6 +21,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.RegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
@@ -55,6 +56,7 @@ class RegistrationObjectTest {
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
+        RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, null, false, true);
         Instant timestamp = Instant.now();
         RegistrationObject registrationObject = new RegistrationObject(
                 attestationObject,
@@ -63,7 +65,7 @@ class RegistrationObjectTest {
                 clientDataBytes,
                 clientExtensions,
                 transports,
-                serverProperty,
+                registrationParameters,
                 timestamp
         );
 
@@ -89,6 +91,7 @@ class RegistrationObjectTest {
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
+        RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, null, false, true);
         Instant timestamp = Instant.now();
         RegistrationObject instanceA = new RegistrationObject(
                 attestationObject,
@@ -97,7 +100,7 @@ class RegistrationObjectTest {
                 clientDataBytes,
                 clientExtensions,
                 transports,
-                serverProperty,
+                registrationParameters,
                 timestamp
         );
 
@@ -108,7 +111,7 @@ class RegistrationObjectTest {
                 clientDataBytes,
                 clientExtensions,
                 transports,
-                serverProperty,
+                registrationParameters,
                 timestamp
         );
 

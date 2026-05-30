@@ -17,6 +17,7 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.RegistrationParameters;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
@@ -222,6 +223,8 @@ class PackedAttestationStatementVerifierTest {
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
 
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+        RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, null, false, true);
         RegistrationObject registrationObject = new RegistrationObject(
                 attestationObject,
                 attestationObjectBytes,
@@ -229,7 +232,7 @@ class PackedAttestationStatementVerifierTest {
                 clientDataBytes,
                 authenticationExtensionsClientOutputs,
                 transports,
-                new ServerProperty(origin, rpId, challenge, tokenBindingId)
+                registrationParameters
         );
 
         target.verify(registrationObject);

@@ -151,11 +151,12 @@ public class AuthenticationDataVerifier {
             throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
         }
 
+        @SuppressWarnings("deprecation")
         Authenticator authenticator = authenticationParameters.getAuthenticator();
 
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId, authenticatorData, aData, collectedClientData, cData, clientExtensions,
-                serverProperty, authenticator
+                authenticationParameters
         );
 
         //spec| Step10

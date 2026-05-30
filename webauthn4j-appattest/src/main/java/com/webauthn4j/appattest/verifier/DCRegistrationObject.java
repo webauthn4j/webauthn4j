@@ -16,6 +16,8 @@
 
 package com.webauthn4j.appattest.verifier;
 
+import com.webauthn4j.appattest.data.DCAttestationParameters;
+import com.webauthn4j.data.CoreRegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
@@ -31,7 +33,33 @@ public class DCRegistrationObject extends CoreRegistrationObject {
 
     private final byte[] keyId;
 
+    public DCRegistrationObject(
+            @NotNull byte[] keyId,
+            @NotNull AttestationObject attestationObject,
+            @NotNull byte[] attestationObjectBytes,
+            @NotNull byte[] clientDataHash,
+            @NotNull DCAttestationParameters dcAttestationParameters,
+            @NotNull Instant timestamp) {
+        super(attestationObject, attestationObjectBytes, clientDataHash, dcAttestationParameters, timestamp);
 
+        AssertUtil.notNull(keyId, "keyId must not be null");
+
+        this.keyId = ArrayUtil.clone(keyId);
+    }
+
+    public DCRegistrationObject(
+            @NotNull byte[] keyId,
+            @NotNull AttestationObject attestationObject,
+            @NotNull byte[] attestationObjectBytes,
+            @NotNull byte[] clientDataHash,
+            @NotNull DCAttestationParameters dcAttestationParameters) {
+        this(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcAttestationParameters, Instant.now());
+    }
+
+    /**
+     * @deprecated Use {@link #DCRegistrationObject(byte[], AttestationObject, byte[], byte[], DCAttestationParameters, Instant)} instead.
+     */
+    @Deprecated
     public DCRegistrationObject(
             @NotNull byte[] keyId,
             @NotNull AttestationObject attestationObject,
@@ -46,6 +74,10 @@ public class DCRegistrationObject extends CoreRegistrationObject {
         this.keyId = ArrayUtil.clone(keyId);
     }
 
+    /**
+     * @deprecated Use {@link #DCRegistrationObject(byte[], AttestationObject, byte[], byte[], DCAttestationParameters, Instant)} instead.
+     */
+    @Deprecated
     public DCRegistrationObject(
             @NotNull byte[] keyId,
             @NotNull AttestationObject attestationObject,
@@ -61,6 +93,11 @@ public class DCRegistrationObject extends CoreRegistrationObject {
 
     public @NotNull byte[] getKeyId() {
         return ArrayUtil.clone(keyId);
+    }
+
+    @Override
+    public @Nullable DCAttestationParameters getRegistrationParameters() {
+        return (DCAttestationParameters) super.getRegistrationParameters();
     }
 
     @Override

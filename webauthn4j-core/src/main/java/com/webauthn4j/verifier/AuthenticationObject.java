@@ -2,6 +2,7 @@ package com.webauthn4j.verifier;
 
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.credential.CredentialRecord;
+import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
@@ -37,6 +38,30 @@ public class AuthenticationObject extends CoreAuthenticationObject {
             @NotNull CollectedClientData collectedClientData,
             @NotNull byte[] collectedClientDataBytes,
             @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
+            @NotNull AuthenticationParameters authenticationParameters) {
+
+        super(credentialId, authenticatorData, authenticatorDataBytes, MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), authenticationParameters);
+
+        AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
+        AssertUtil.notNull(collectedClientDataBytes, "collectedClientDataBytes must not be null");
+
+        this.collectedClientData = collectedClientData;
+        this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
+        this.clientExtensions = clientExtensions;
+    }
+
+    /**
+     * @deprecated Use {@link #AuthenticationObject(byte[], AuthenticatorData, byte[], CollectedClientData, byte[], AuthenticationExtensionsClientOutputs, AuthenticationParameters)} instead.
+     */
+    @Deprecated
+    @SuppressWarnings("squid:S00107")
+    public AuthenticationObject(
+            @NotNull byte[] credentialId,
+            @NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @NotNull byte[] authenticatorDataBytes,
+            @NotNull CollectedClientData collectedClientData,
+            @NotNull byte[] collectedClientDataBytes,
+            @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
             @NotNull ServerProperty serverProperty,
             @NotNull Authenticator authenticator) {
 
@@ -62,6 +87,12 @@ public class AuthenticationObject extends CoreAuthenticationObject {
         return this.clientExtensions;
     }
 
+    @Override
+    public @Nullable AuthenticationParameters getAuthenticationParameters() {
+        return (AuthenticationParameters) super.getAuthenticationParameters();
+    }
+
+    @Deprecated
     @Override
     public @NotNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();

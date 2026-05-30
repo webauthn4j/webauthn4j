@@ -16,14 +16,11 @@
 
 package com.webauthn4j.appattest.verifier;
 
-import com.webauthn4j.appattest.authenticator.DCAppleDevice;
-import com.webauthn4j.appattest.authenticator.DCAppleDeviceImpl;
-import com.webauthn4j.authenticator.CoreAuthenticator;
+import com.webauthn4j.appattest.data.DCAssertionParameters;
 import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.data.CoreAuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
-import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.CoreAuthenticationDataVerifier;
 import com.webauthn4j.verifier.CoreAuthenticationObject;
@@ -38,7 +35,6 @@ public class DCAssertionDataVerifier extends CoreAuthenticationDataVerifier {
         super(customAuthenticationValidators, new DCAssertionSignatureVerifier());
     }
 
-    @SuppressWarnings("deprecation") // for getAuthenticator()
     @Override
     protected @NotNull CoreAuthenticationObject createCoreAuthenticationObject(@NotNull CoreAuthenticationData authenticationData, @NotNull CoreAuthenticationParameters authenticationParameters) {
 
@@ -50,17 +46,10 @@ public class DCAssertionDataVerifier extends CoreAuthenticationDataVerifier {
         byte[] authenticatorDataBytes = authenticationData.getAuthenticatorDataBytes();
         byte[] clientDataHash = authenticationData.getClientDataHash();
 
-        CoreServerProperty serverProperty = authenticationParameters.getServerProperty();
-        CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();
-        DCAppleDevice dcAppleDevice = new DCAppleDeviceImpl(
-                authenticator.getAttestedCredentialData(),
-                authenticator.getAttestationStatement(),
-                authenticator.getCounter(),
-                authenticator.getAuthenticatorExtensions());
-
+        DCAssertionParameters dcAssertionParameters = (DCAssertionParameters) authenticationParameters;
         //noinspection ConstantConditions null check is already done in caller
         return new DCAuthenticationObject(
-                credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, dcAppleDevice
+                credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, dcAssertionParameters
         );
     }
 

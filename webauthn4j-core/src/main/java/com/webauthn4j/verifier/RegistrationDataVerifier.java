@@ -151,7 +151,7 @@ public class RegistrationDataVerifier {
                 clientDataBytes,
                 clientExtensions,
                 transports,
-                serverProperty
+                registrationParameters
         );
 
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = attestationObject.getAuthenticatorData();
