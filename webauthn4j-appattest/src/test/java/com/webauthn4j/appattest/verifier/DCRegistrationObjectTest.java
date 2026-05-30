@@ -17,6 +17,7 @@
 package com.webauthn4j.appattest.verifier;
 
 import com.webauthn4j.appattest.DeviceCheckManager;
+import com.webauthn4j.appattest.data.DCAttestationParameters;
 import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -25,12 +26,10 @@ import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mockStatic;
 
 class DCRegistrationObjectTest {
 
@@ -47,20 +46,18 @@ class DCRegistrationObjectTest {
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
 
         DCServerProperty dcServerProperty = new DCServerProperty("8YE23NZS57.com.kayak.travel", new DefaultChallenge(challenge));
+        DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
 
         Instant timestamp = Instant.parse("2020-01-01T00:00:00Z");
-        try (MockedStatic<Instant> mocked = mockStatic(Instant.class)) {
-            mocked.when(Instant::now).thenReturn(timestamp);
 
-            //noinspection ConstantConditions
-            DCRegistrationObject instance = new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcServerProperty);
-            assertThat(instance.getKeyId()).isEqualTo(keyId);
-            assertThat(instance.getAttestationObjectBytes()).isEqualTo(attestationObjectBytes);
-            assertThat(instance.getAttestationObject()).isEqualTo(attestationObject);
-            assertThat(instance.getClientDataHash()).isEqualTo(clientDataHash);
-            assertThat(instance.getServerProperty()).isEqualTo(dcServerProperty);
-            assertThat(instance.getTimestamp()).isEqualTo(timestamp);
-        }
+        //noinspection ConstantConditions
+        DCRegistrationObject instance = new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcAttestationParameters, timestamp);
+        assertThat(instance.getKeyId()).isEqualTo(keyId);
+        assertThat(instance.getAttestationObjectBytes()).isEqualTo(attestationObjectBytes);
+        assertThat(instance.getAttestationObject()).isEqualTo(attestationObject);
+        assertThat(instance.getClientDataHash()).isEqualTo(clientDataHash);
+        assertThat(instance.getServerProperty()).isEqualTo(dcServerProperty);
+        assertThat(instance.getTimestamp()).isEqualTo(timestamp);
 
     }
 
@@ -74,11 +71,12 @@ class DCRegistrationObjectTest {
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
 
         DCServerProperty dcServerProperty = new DCServerProperty("8YE23NZS57.com.kayak.travel", new DefaultChallenge(challenge));
+        DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
         Instant timestamp = Instant.now();
 
         //noinspection ConstantConditions
-        DCRegistrationObject instanceA = new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcServerProperty, timestamp);
-        DCRegistrationObject instanceB = new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcServerProperty, timestamp);
+        DCRegistrationObject instanceA = new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcAttestationParameters, timestamp);
+        DCRegistrationObject instanceB = new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcAttestationParameters, timestamp);
 
         assertThat(instanceA)
                 .isEqualTo(instanceB)

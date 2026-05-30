@@ -2,6 +2,7 @@ package com.webauthn4j.verifier;
 
 import com.webauthn4j.authenticator.CoreAuthenticator;
 import com.webauthn4j.credential.CoreCredentialRecord;
+import com.webauthn4j.data.CoreAuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.CoreServerProperty;
@@ -25,10 +26,39 @@ public class CoreAuthenticationObject {
     private final AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData;
     private final byte[] authenticatorDataBytes;
     private final byte[] clientDataHash;
+    // Retained for deprecated constructors where coreAuthenticationParameters is null. Remove when deprecated constructors are removed.
     private final CoreServerProperty serverProperty;
-
+    private final CoreAuthenticationParameters coreAuthenticationParameters;
+    // Retained for deprecated constructors where coreAuthenticationParameters is null. Remove when deprecated constructors are removed.
     private final CoreAuthenticator authenticator;
 
+    @SuppressWarnings({"squid:S00107", "deprecation"})
+    public CoreAuthenticationObject(
+            @NotNull byte[] credentialId,
+            @NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @NotNull byte[] authenticatorDataBytes,
+            @NotNull byte[] clientDataHash,
+            @NotNull CoreAuthenticationParameters coreAuthenticationParameters) {
+
+        AssertUtil.notNull(credentialId, "credentialId must not be null");
+        AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
+        AssertUtil.notNull(authenticatorDataBytes, "authenticatorDataBytes must not be null");
+        AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
+        AssertUtil.notNull(coreAuthenticationParameters, "coreAuthenticationParameters must not be null");
+
+        this.credentialId = ArrayUtil.clone(credentialId);
+        this.authenticatorData = authenticatorData;
+        this.authenticatorDataBytes = ArrayUtil.clone(authenticatorDataBytes);
+        this.clientDataHash = ArrayUtil.clone(clientDataHash);
+        this.serverProperty = coreAuthenticationParameters.getServerProperty();
+        this.coreAuthenticationParameters = coreAuthenticationParameters;
+        this.authenticator = coreAuthenticationParameters.getAuthenticator();
+    }
+
+    /**
+     * @deprecated Use {@link #CoreAuthenticationObject(byte[], AuthenticatorData, byte[], byte[], CoreAuthenticationParameters)} instead.
+     */
+    @Deprecated
     @SuppressWarnings("squid:S00107")
     public CoreAuthenticationObject(
             @NotNull byte[] credentialId,
@@ -50,6 +80,7 @@ public class CoreAuthenticationObject {
         this.authenticatorDataBytes = ArrayUtil.clone(authenticatorDataBytes);
         this.clientDataHash = ArrayUtil.clone(clientDataHash);
         this.serverProperty = serverProperty;
+        this.coreAuthenticationParameters = null;
         this.authenticator = authenticator;
     }
 
@@ -69,6 +100,14 @@ public class CoreAuthenticationObject {
         return ArrayUtil.clone(clientDataHash);
     }
 
+    public @Nullable CoreAuthenticationParameters getAuthenticationParameters() {
+        return coreAuthenticationParameters;
+    }
+
+    /**
+     * @deprecated Use {@link #getAuthenticationParameters()} instead.
+     */
+    @Deprecated
     public @NotNull CoreServerProperty getServerProperty() {
         return this.serverProperty;
     }
@@ -109,12 +148,13 @@ public class CoreAuthenticationObject {
                 Arrays.equals(authenticatorDataBytes, that.authenticatorDataBytes) &&
                 Arrays.equals(clientDataHash, that.clientDataHash) &&
                 Objects.equals(serverProperty, that.serverProperty) &&
+                Objects.equals(coreAuthenticationParameters, that.coreAuthenticationParameters) &&
                 Objects.equals(authenticator, that.authenticator);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(authenticatorData, serverProperty, authenticator);
+        int result = Objects.hash(authenticatorData, serverProperty, coreAuthenticationParameters, authenticator);
         result = 31 * result + Arrays.hashCode(credentialId);
         result = 31 * result + Arrays.hashCode(authenticatorDataBytes);
         result = 31 * result + Arrays.hashCode(clientDataHash);

@@ -17,6 +17,7 @@
 package com.webauthn4j.appattest.verifier;
 
 import com.webauthn4j.appattest.data.DCAttestationData;
+import com.webauthn4j.appattest.data.DCAttestationParameters;
 import com.webauthn4j.appattest.verifier.attestation.statement.appleappattest.AppleAppAttestAttestationStatementVerifier;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.CoreRegistrationData;
@@ -84,13 +85,14 @@ public class DCAttestationDataVerifier extends CoreRegistrationDataVerifier {
         AssertUtil.notNull(registrationParameters, "registrationParameters must not be null");
 
         DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
+        DCAttestationParameters dcAttestationParameters = (DCAttestationParameters) registrationParameters;
         //noinspection ConstantConditions null check is already done in caller
         return new DCRegistrationObject(
                 dcAttestationData.getKeyId(),
                 registrationData.getAttestationObject(),
                 registrationData.getAttestationObjectBytes(),
                 registrationData.getClientDataHash(),
-                registrationParameters.getServerProperty(), Instant.now());
+                dcAttestationParameters, Instant.now());
     }
 
     public boolean isProduction() {

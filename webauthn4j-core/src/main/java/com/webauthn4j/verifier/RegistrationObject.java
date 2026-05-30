@@ -17,6 +17,7 @@
 package com.webauthn4j.verifier;
 
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.RegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
@@ -57,6 +58,43 @@ public class RegistrationObject extends CoreRegistrationObject {
             @NotNull byte[] collectedClientDataBytes,
             @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             @Nullable Set<AuthenticatorTransport> transports,
+            @NotNull RegistrationParameters registrationParameters,
+            @NotNull Instant timestamp) {
+
+        super(attestationObject, attestationObjectBytes, MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), registrationParameters, timestamp);
+
+        AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
+        AssertUtil.notNull(collectedClientDataBytes, "collectedClientDataBytes must not be null");
+
+        this.collectedClientData = collectedClientData;
+        this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
+        this.clientExtensions = clientExtensions;
+        this.transports = CollectionUtil.unmodifiableSet(transports);
+    }
+
+    public RegistrationObject(
+            @NotNull AttestationObject attestationObject,
+            @NotNull byte[] attestationObjectBytes,
+            @NotNull CollectedClientData collectedClientData,
+            @NotNull byte[] collectedClientDataBytes,
+            @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+            @Nullable Set<AuthenticatorTransport> transports,
+            @NotNull RegistrationParameters registrationParameters) {
+        this(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, clientExtensions, transports, registrationParameters, Instant.now());
+    }
+
+    /**
+     * @deprecated Use {@link #RegistrationObject(AttestationObject, byte[], CollectedClientData, byte[], AuthenticationExtensionsClientOutputs, Set, RegistrationParameters, Instant)} instead.
+     */
+    @Deprecated
+    @SuppressWarnings("squid:S00107")
+    public RegistrationObject(
+            @NotNull AttestationObject attestationObject,
+            @NotNull byte[] attestationObjectBytes,
+            @NotNull CollectedClientData collectedClientData,
+            @NotNull byte[] collectedClientDataBytes,
+            @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+            @Nullable Set<AuthenticatorTransport> transports,
             @NotNull ServerProperty serverProperty,
             @NotNull Instant timestamp) {
 
@@ -71,6 +109,10 @@ public class RegistrationObject extends CoreRegistrationObject {
         this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
+    /**
+     * @deprecated Use {@link #RegistrationObject(AttestationObject, byte[], CollectedClientData, byte[], AuthenticationExtensionsClientOutputs, Set, RegistrationParameters, Instant)} instead.
+     */
+    @Deprecated
     public RegistrationObject(
             @NotNull AttestationObject attestationObject,
             @NotNull byte[] attestationObjectBytes,
@@ -98,10 +140,16 @@ public class RegistrationObject extends CoreRegistrationObject {
         return clientExtensions;
     }
 
+    @Override
+    public @Nullable RegistrationParameters getRegistrationParameters() {
+        return (RegistrationParameters) super.getRegistrationParameters();
+    }
+
     public @Nullable Set<AuthenticatorTransport> getTransports() {
         return transports;
     }
 
+    @Deprecated
     @Override
     public @NotNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();

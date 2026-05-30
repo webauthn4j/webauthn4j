@@ -17,13 +17,30 @@
 package com.webauthn4j.appattest.verifier;
 
 import com.webauthn4j.appattest.authenticator.DCAppleDevice;
+import com.webauthn4j.appattest.data.DCAssertionParameters;
+import com.webauthn4j.data.CoreAuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.verifier.CoreAuthenticationObject;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class DCAuthenticationObject extends CoreAuthenticationObject {
+
+    public DCAuthenticationObject(
+            @NotNull byte[] credentialId,
+            @NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @NotNull byte[] authenticatorDataBytes,
+            @NotNull byte[] clientDataHash,
+            @NotNull DCAssertionParameters dcAssertionParameters) {
+        super(credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, dcAssertionParameters);
+    }
+
+    /**
+     * @deprecated Use {@link #DCAuthenticationObject(byte[], AuthenticatorData, byte[], byte[], DCAssertionParameters)} instead.
+     */
+    @Deprecated
     public DCAuthenticationObject(
             @NotNull byte[] credentialId,
             @NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
@@ -32,5 +49,10 @@ public class DCAuthenticationObject extends CoreAuthenticationObject {
             @NotNull CoreServerProperty serverProperty,
             @NotNull DCAppleDevice dcAppleDevice) {
         super(credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, dcAppleDevice);
+    }
+
+    @Override
+    public @Nullable DCAssertionParameters getAuthenticationParameters() {
+        return (DCAssertionParameters) super.getAuthenticationParameters();
     }
 }

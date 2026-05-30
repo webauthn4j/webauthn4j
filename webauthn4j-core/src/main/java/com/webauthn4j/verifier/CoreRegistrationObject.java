@@ -17,6 +17,7 @@
 package com.webauthn4j.verifier;
 
 import com.webauthn4j.converter.jackson.JacksonUtil;
+import com.webauthn4j.data.CoreRegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
@@ -36,9 +37,44 @@ public class CoreRegistrationObject {
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
     private final byte[] clientDataHash;
+    // Retained for deprecated constructors where coreRegistrationParameters is null. Remove when deprecated constructors are removed.
     private final CoreServerProperty serverProperty;
+    private final CoreRegistrationParameters coreRegistrationParameters;
     private final Instant timestamp;
 
+    public CoreRegistrationObject(
+            @NotNull AttestationObject attestationObject,
+            @NotNull byte[] attestationObjectBytes,
+            @NotNull byte[] clientDataHash,
+            @NotNull CoreRegistrationParameters coreRegistrationParameters,
+            @NotNull Instant timestamp) {
+
+        AssertUtil.notNull(attestationObject, "attestationObject must not be null");
+        AssertUtil.notNull(attestationObjectBytes, "attestationObjectBytes must not be null");
+        AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
+        AssertUtil.notNull(coreRegistrationParameters, "coreRegistrationParameters must not be null");
+        AssertUtil.notNull(timestamp, "timestamp must not be null");
+
+        this.attestationObject = attestationObject;
+        this.attestationObjectBytes = attestationObjectBytes;
+        this.clientDataHash = clientDataHash;
+        this.serverProperty = coreRegistrationParameters.getServerProperty();
+        this.coreRegistrationParameters = coreRegistrationParameters;
+        this.timestamp = timestamp;
+    }
+
+    public CoreRegistrationObject(
+            @NotNull AttestationObject attestationObject,
+            @NotNull byte[] attestationObjectBytes,
+            @NotNull byte[] clientDataHash,
+            @NotNull CoreRegistrationParameters coreRegistrationParameters) {
+        this(attestationObject, attestationObjectBytes, clientDataHash, coreRegistrationParameters, Instant.now());
+    }
+
+    /**
+     * @deprecated Use {@link #CoreRegistrationObject(AttestationObject, byte[], byte[], CoreRegistrationParameters, Instant)} instead.
+     */
+    @Deprecated
     public CoreRegistrationObject(
             @NotNull AttestationObject attestationObject,
             @NotNull byte[] attestationObjectBytes,
@@ -56,9 +92,14 @@ public class CoreRegistrationObject {
         this.attestationObjectBytes = attestationObjectBytes;
         this.clientDataHash = clientDataHash;
         this.serverProperty = serverProperty;
+        this.coreRegistrationParameters = null;
         this.timestamp = timestamp;
     }
 
+    /**
+     * @deprecated Use {@link #CoreRegistrationObject(AttestationObject, byte[], byte[], CoreRegistrationParameters, Instant)} instead.
+     */
+    @Deprecated
     public CoreRegistrationObject(
             @NotNull AttestationObject attestationObject,
             @NotNull byte[] attestationObjectBytes,
@@ -88,6 +129,14 @@ public class CoreRegistrationObject {
         return clientDataHash;
     }
 
+    public @Nullable CoreRegistrationParameters getRegistrationParameters() {
+        return coreRegistrationParameters;
+    }
+
+    /**
+     * @deprecated Use {@link #getRegistrationParameters()} instead.
+     */
+    @Deprecated
     public @NotNull CoreServerProperty getServerProperty() {
         return serverProperty;
     }
@@ -105,12 +154,13 @@ public class CoreRegistrationObject {
                 Arrays.equals(attestationObjectBytes, that.attestationObjectBytes) &&
                 Arrays.equals(clientDataHash, that.clientDataHash) &&
                 Objects.equals(serverProperty, that.serverProperty) &&
+                Objects.equals(coreRegistrationParameters, that.coreRegistrationParameters) &&
                 Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(attestationObject, serverProperty, timestamp);
+        int result = Objects.hash(attestationObject, serverProperty, coreRegistrationParameters, timestamp);
         result = 31 * result + Arrays.hashCode(attestationObjectBytes);
         result = 31 * result + Arrays.hashCode(clientDataHash);
         return result;

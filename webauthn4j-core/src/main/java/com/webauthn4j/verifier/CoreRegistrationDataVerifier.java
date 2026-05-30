@@ -273,7 +273,7 @@ public class CoreRegistrationDataVerifier {
                 registrationData.getAttestationObject(),
                 registrationData.getAttestationObjectBytes(),
                 registrationData.getClientDataHash(),
-                registrationParameters.getServerProperty()
+                registrationParameters
         );
     }
 

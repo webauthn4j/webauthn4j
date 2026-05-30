@@ -21,6 +21,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.credential.CredentialRecord;
+import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
@@ -50,7 +51,8 @@ class AuthenticationObjectTest {
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
-        Authenticator authenticator = TestDataUtil.createCredentialRecord();
+        CredentialRecord credentialRecord = TestDataUtil.createCredentialRecord();
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(serverProperty, credentialRecord, null, false, true);
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId,
                 authenticatorData,
@@ -58,8 +60,7 @@ class AuthenticationObjectTest {
                 clientData,
                 clientDataBytes,
                 clientExtensions,
-                serverProperty,
-                authenticator
+                authenticationParameters
         );
 
         assertAll(
@@ -70,7 +71,7 @@ class AuthenticationObjectTest {
                 () -> assertThat(authenticationObject.getAuthenticatorDataBytes()).isEqualTo(authenticatorDataBytes),
                 () -> assertThat(authenticationObject.getClientExtensions()).isEqualTo(clientExtensions),
                 () -> assertThat(authenticationObject.getServerProperty()).isEqualTo(serverProperty),
-                () -> assertThat(authenticationObject.getAuthenticator()).isEqualTo(authenticator)
+                () -> assertThat(authenticationObject.getCredentialRecord()).isEqualTo(credentialRecord)
         );
     }
 
@@ -84,7 +85,8 @@ class AuthenticationObjectTest {
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
-        Authenticator authenticator = TestDataUtil.createCredentialRecord();
+        CredentialRecord credentialRecord = TestDataUtil.createCredentialRecord();
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(serverProperty, credentialRecord, null, false, true);
 
         AuthenticationObject instanceA = new AuthenticationObject(
                 credentialId,
@@ -93,8 +95,7 @@ class AuthenticationObjectTest {
                 clientData,
                 clientDataBytes,
                 clientExtensions,
-                serverProperty,
-                authenticator
+                authenticationParameters
         );
 
         AuthenticationObject instanceB = new AuthenticationObject(
@@ -104,8 +105,7 @@ class AuthenticationObjectTest {
                 clientData,
                 clientDataBytes,
                 clientExtensions,
-                serverProperty,
-                authenticator
+                authenticationParameters
         );
 
         assertAll(
@@ -124,6 +124,7 @@ class AuthenticationObjectTest {
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         CredentialRecord credentialRecord = TestDataUtil.createCredentialRecord();
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(serverProperty, credentialRecord, null, false, true);
 
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId,
@@ -132,8 +133,7 @@ class AuthenticationObjectTest {
                 clientData,
                 clientDataBytes,
                 clientExtensions,
-                serverProperty,
-                credentialRecord
+                authenticationParameters
         );
 
         assertThat(authenticationObject.getCredentialRecord()).isEqualTo(credentialRecord);
