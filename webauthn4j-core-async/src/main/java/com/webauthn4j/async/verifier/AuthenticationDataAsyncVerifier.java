@@ -308,20 +308,15 @@ public class AuthenticationDataAsyncVerifier {
             //spec| If the Relying Party performs additional security checks beyond these WebAuthn authentication ceremony steps, the above state updates SHOULD be deferred to after those additional checks are completed successfully.
             //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
-            for (CustomAuthenticationAsyncVerifier customAuthenticationAsyncVerifier : customAuthenticationAsyncVerifiers) {
-                customAuthenticationAsyncVerifier.verify(authenticationObject);
-            }
-            Iterator<CustomAuthenticationAsyncVerifier> iterator = customAuthenticationAsyncVerifiers.iterator();
             CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null);
-            while(iterator.hasNext()){
-                CustomAuthenticationAsyncVerifier customAuthenticationAsyncVerifier = iterator.next();
-                completableFuture = completableFuture.thenAccept(unused -> customAuthenticationAsyncVerifier.verify(authenticationObject));
+            for (CustomAuthenticationAsyncVerifier customAuthenticationAsyncVerifier : customAuthenticationAsyncVerifiers) {
+                completableFuture = completableFuture.thenCompose(unused -> customAuthenticationAsyncVerifier.verify(authenticationObject).toCompletableFuture());
             }
 
             //spec| Step27
             //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
 
-            return CompletableFuture.completedFuture(null);
+            return completableFuture;
         }
 
     }
