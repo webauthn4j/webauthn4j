@@ -80,7 +80,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java_version: [17]
+        java_version: [25]
         os: [ubuntu-22.04]
 
     steps:

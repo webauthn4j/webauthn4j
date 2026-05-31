@@ -32,7 +32,10 @@ public enum JWAIdentifier {
     RS512("RS512", "SHA512withRSA"),
     ES256("ES256", "SHA256withECDSA"),
     ES384("ES384", "SHA384withECDSA"),
-    ES512("ES512", "SHA512withECDSA");
+    ES512("ES512", "SHA512withECDSA"),
+    ML_DSA_44("ML-DSA-44", "ML-DSA-44"),
+    ML_DSA_65("ML-DSA-65", "ML-DSA-65"),
+    ML_DSA_87("ML-DSA-87", "ML-DSA-87");
 
     private final String name;
     private final String jcaName;
@@ -85,6 +88,12 @@ public enum JWAIdentifier {
                 return SignatureAlgorithm.ES384;
             case ES512:
                 return SignatureAlgorithm.ES512;
+            case ML_DSA_44:
+                return SignatureAlgorithm.ML_DSA_44;
+            case ML_DSA_65:
+                return SignatureAlgorithm.ML_DSA_65;
+            case ML_DSA_87:
+                return SignatureAlgorithm.ML_DSA_87;
             default:
                 throw new IllegalArgumentException("Invalid JWA Identifier provided: " + this);
         }
