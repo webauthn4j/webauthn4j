@@ -29,7 +29,7 @@ public class RSAUnique implements TPMUPublicId {
     private final byte[] n;
 
     public RSAUnique(@NotNull byte[] n) {
-        this.n = n;
+        this.n = ArrayUtil.clone(n);
     }
 
     public @NotNull byte[] getN() {

@@ -31,10 +31,10 @@ public class TPMSRSAParms implements TPMUPublicParms {
     private final byte[] exponent;
 
     public TPMSRSAParms(@NotNull byte[] symmetric, @NotNull byte[] scheme, @NotNull byte[] keyBits, @NotNull byte[] exponent) {
-        this.symmetric = symmetric;
-        this.scheme = scheme;
-        this.keyBits = keyBits;
-        this.exponent = exponent;
+        this.symmetric = ArrayUtil.clone(symmetric);
+        this.scheme = ArrayUtil.clone(scheme);
+        this.keyBits = ArrayUtil.clone(keyBits);
+        this.exponent = ArrayUtil.clone(exponent);
     }
 
     public @NotNull byte[] getSymmetric() {

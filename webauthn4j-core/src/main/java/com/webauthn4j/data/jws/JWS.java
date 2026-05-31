@@ -46,7 +46,7 @@ public class JWS<T> {
 
         this.header = header;
         this.payload = payload;
-        this.signature = signature;
+        this.signature = ArrayUtil.clone(signature);
         this.headerString = headerString;
         this.payloadString = payloadString;
     }

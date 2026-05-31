@@ -21,6 +21,7 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,7 +61,7 @@ public class RegistrationData extends CoreRegistrationData {
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;
-        this.transports = transports;
+        this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
     /**

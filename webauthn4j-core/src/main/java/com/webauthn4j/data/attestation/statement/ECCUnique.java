@@ -33,8 +33,8 @@ public class ECCUnique implements TPMUPublicId {
     public ECCUnique(@NotNull byte[] x, @NotNull byte[] y) {
         AssertUtil.notNull(x, "x must not be null");
         AssertUtil.notNull(y, "y must not be null");
-        this.x = x;
-        this.y = y;
+        this.x = ArrayUtil.clone(x);
+        this.y = ArrayUtil.clone(y);
     }
 
     public @NotNull byte[] getX() {

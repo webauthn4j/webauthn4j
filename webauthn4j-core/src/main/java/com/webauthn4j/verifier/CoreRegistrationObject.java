@@ -56,8 +56,8 @@ public class CoreRegistrationObject {
         AssertUtil.notNull(timestamp, "timestamp must not be null");
 
         this.attestationObject = attestationObject;
-        this.attestationObjectBytes = attestationObjectBytes;
-        this.clientDataHash = clientDataHash;
+        this.attestationObjectBytes = ArrayUtil.clone(attestationObjectBytes);
+        this.clientDataHash = ArrayUtil.clone(clientDataHash);
         this.serverProperty = coreRegistrationParameters.getServerProperty();
         this.coreRegistrationParameters = coreRegistrationParameters;
         this.timestamp = timestamp;
@@ -89,8 +89,8 @@ public class CoreRegistrationObject {
         AssertUtil.notNull(timestamp, "timestamp must not be null");
 
         this.attestationObject = attestationObject;
-        this.attestationObjectBytes = attestationObjectBytes;
-        this.clientDataHash = clientDataHash;
+        this.attestationObjectBytes = ArrayUtil.clone(attestationObjectBytes);
+        this.clientDataHash = ArrayUtil.clone(clientDataHash);
         this.serverProperty = serverProperty;
         this.coreRegistrationParameters = null;
         this.timestamp = timestamp;
@@ -126,7 +126,7 @@ public class CoreRegistrationObject {
     }
 
     public @NotNull byte[] getClientDataHash() {
-        return clientDataHash;
+        return ArrayUtil.clone(clientDataHash);
     }
 
     public @Nullable CoreRegistrationParameters getRegistrationParameters() {

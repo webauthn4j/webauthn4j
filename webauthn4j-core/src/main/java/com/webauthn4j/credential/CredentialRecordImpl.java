@@ -9,6 +9,7 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
+import com.webauthn4j.util.CollectionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +43,7 @@ public class CredentialRecordImpl extends CoreCredentialRecordImpl implements Cr
         super(attestationObject);
         this.clientData = clientData;
         this.clientExtensions = clientExtensions;
-        this.transports = transports;
+        this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
     /**
@@ -74,7 +75,7 @@ public class CredentialRecordImpl extends CoreCredentialRecordImpl implements Cr
         super(attestationStatement, uvInitialized, backupEligible, backupState, counter, attestedCredentialData, authenticatorExtensions);
         this.clientData = clientData;
         this.clientExtensions = clientExtensions;
-        this.transports = transports;
+        this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
     /**

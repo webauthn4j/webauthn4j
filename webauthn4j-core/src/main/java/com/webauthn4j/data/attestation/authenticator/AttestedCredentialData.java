@@ -44,7 +44,7 @@ public class AttestedCredentialData {
         AssertUtil.notNull(credentialId, "credentialId must not be null");
         AssertUtil.notNull(coseKey, "coseKey must not be null");
         this.aaguid = aaguid;
-        this.credentialId = credentialId;
+        this.credentialId = ArrayUtil.clone(credentialId);
         this.coseKey = coseKey;
     }
 

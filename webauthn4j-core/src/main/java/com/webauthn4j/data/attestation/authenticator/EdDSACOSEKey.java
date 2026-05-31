@@ -56,8 +56,8 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
             @Nullable @JsonProperty("-4") byte[] d) {
         super(keyId, algorithm, keyOps, null);
         this.curve = curve;
-        this.x = x;
-        this.d = d;
+        this.x = ArrayUtil.clone(x);
+        this.d = ArrayUtil.clone(d);
     }
 
     /**

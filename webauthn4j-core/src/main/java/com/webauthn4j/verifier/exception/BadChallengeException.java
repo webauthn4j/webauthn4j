@@ -16,6 +16,7 @@
 
 package com.webauthn4j.verifier.exception;
 
+import com.webauthn4j.util.ArrayUtil;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -29,14 +30,14 @@ public class BadChallengeException extends VerificationException {
 
     public BadChallengeException(@Nullable String message, @Nullable byte[] expected, @Nullable byte[] actual, @Nullable Throwable cause) {
         super(message, cause);
-        this.expected = expected;
-        this.actual = actual;
+        this.expected = ArrayUtil.clone(expected);
+        this.actual = ArrayUtil.clone(actual);
     }
 
     public BadChallengeException(@Nullable String message, @Nullable byte[] expected, @Nullable byte[] actual) {
         super(message);
-        this.expected = expected;
-        this.actual = actual;
+        this.expected = ArrayUtil.clone(expected);
+        this.actual = ArrayUtil.clone(actual);
     }
 
     public BadChallengeException(@Nullable String message, @Nullable Throwable cause) {
@@ -58,10 +59,10 @@ public class BadChallengeException extends VerificationException {
     }
 
     public byte[] getExpected() {
-        return expected;
+        return ArrayUtil.clone(expected);
     }
 
     public byte[] getActual() {
-        return actual;
+        return ArrayUtil.clone(actual);
     }
 }

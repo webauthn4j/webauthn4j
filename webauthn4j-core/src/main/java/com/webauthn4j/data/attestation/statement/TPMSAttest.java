@@ -48,8 +48,8 @@ public class TPMSAttest {
             @NotNull TPMUAttest attested) {
         this.magic = magic;
         this.type = type;
-        this.qualifiedSigner = qualifiedSigner;
-        this.extraData = extraData;
+        this.qualifiedSigner = ArrayUtil.clone(qualifiedSigner);
+        this.extraData = ArrayUtil.clone(extraData);
         this.clockInfo = clockInfo;
         this.firmwareVersion = firmwareVersion;
         this.attested = attested;

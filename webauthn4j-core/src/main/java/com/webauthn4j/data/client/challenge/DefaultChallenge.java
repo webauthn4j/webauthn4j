@@ -36,7 +36,7 @@ public class DefaultChallenge implements Challenge {
      */
     public DefaultChallenge(@NotNull byte[] value) {
         AssertUtil.notNull(value, "value cannot be null");
-        this.value = value;
+        this.value = ArrayUtil.clone(value);
     }
 
     public DefaultChallenge(@NotNull String base64urlString) {

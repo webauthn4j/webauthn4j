@@ -63,7 +63,7 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         this.ver = ver;
         this.alg = alg;
         this.x5c = x5c;
-        this.sig = sig;
+        this.sig = ArrayUtil.clone(sig);
         this.certInfo = certInfo;
         this.pubArea = pubArea;
     }

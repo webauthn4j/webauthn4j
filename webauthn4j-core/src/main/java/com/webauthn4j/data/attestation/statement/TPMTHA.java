@@ -32,7 +32,7 @@ public class TPMTHA {
 
     public TPMTHA(@NotNull TPMIAlgHash hashAlg, @NotNull byte[] digest) {
         this.hashAlg = hashAlg;
-        this.digest = digest;
+        this.digest = ArrayUtil.clone(digest);
     }
 
     public @NotNull TPMIAlgHash getHashAlg() {

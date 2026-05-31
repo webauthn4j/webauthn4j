@@ -46,7 +46,7 @@ public class TPMTPublic {
         this.type = type;
         this.nameAlg = nameAlg;
         this.objectAttributes = objectAttributes;
-        this.authPolicy = authPolicy;
+        this.authPolicy = ArrayUtil.clone(authPolicy);
         this.parameters = parameters;
         this.unique = unique;
     }

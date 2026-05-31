@@ -89,14 +89,14 @@ public class RSACOSEKey extends AbstractCOSEKey {
             @Nullable @JsonProperty("-8") byte[] qInv
     ) {
         super(keyId, algorithm, keyOps, null);
-        this.n = n;
-        this.e = e;
-        this.d = d;
-        this.p = p;
-        this.q = q;
-        this.dP = dP;
-        this.dQ = dQ;
-        this.qInv = qInv;
+        this.n = ArrayUtil.clone(n);
+        this.e = ArrayUtil.clone(e);
+        this.d = ArrayUtil.clone(d);
+        this.p = ArrayUtil.clone(p);
+        this.q = ArrayUtil.clone(q);
+        this.dP = ArrayUtil.clone(dP);
+        this.dQ = ArrayUtil.clone(dQ);
+        this.qInv = ArrayUtil.clone(qInv);
     }
 
     /**
@@ -116,8 +116,8 @@ public class RSACOSEKey extends AbstractCOSEKey {
             @Nullable @JsonProperty("-1") byte[] n,
             @Nullable @JsonProperty("-2") byte[] e) {
         super(keyId, algorithm, keyOps, null);
-        this.n = n;
-        this.e = e;
+        this.n = ArrayUtil.clone(n);
+        this.e = ArrayUtil.clone(e);
     }
 
     public static @NotNull RSACOSEKey create(@NotNull RSAPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {

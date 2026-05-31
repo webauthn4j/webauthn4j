@@ -48,7 +48,7 @@ public class AppleAppAttestAttestationStatement implements CertificateBaseAttest
         AssertUtil.notNull(x5c, "x5c must not be null");
         AssertUtil.notNull(receipt, "receipt must not be null");
         this.x5c = x5c;
-        this.receipt = receipt;
+        this.receipt = ArrayUtil.clone(receipt);
     }
 
     @SuppressWarnings("unused")

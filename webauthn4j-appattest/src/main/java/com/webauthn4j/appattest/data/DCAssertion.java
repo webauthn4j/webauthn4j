@@ -19,6 +19,7 @@ package com.webauthn4j.appattest.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,18 +35,18 @@ public class DCAssertion {
             @NotNull @JsonProperty("authenticatorData") byte[] authenticatorData) {
         AssertUtil.notNull(signature, "signature must not be null");
         AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
-        this.signature = signature;
-        this.authenticatorData = authenticatorData;
+        this.signature = ArrayUtil.clone(signature);
+        this.authenticatorData = ArrayUtil.clone(authenticatorData);
     }
 
     @JsonGetter("signature")
     public @Nullable byte[] getSignature() {
-        return signature;
+        return ArrayUtil.clone(signature);
     }
 
     @JsonGetter("authenticatorData")
     public @Nullable byte[] getAuthenticatorData() {
-        return authenticatorData;
+        return ArrayUtil.clone(authenticatorData);
     }
 
 }

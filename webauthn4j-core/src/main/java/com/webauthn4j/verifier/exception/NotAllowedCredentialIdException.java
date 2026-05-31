@@ -16,6 +16,8 @@
 
 package com.webauthn4j.verifier.exception;
 
+import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.CollectionUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -27,14 +29,14 @@ public class NotAllowedCredentialIdException extends VerificationException {
 
     public NotAllowedCredentialIdException(@Nullable String message, @Nullable List<byte[]> expected, @Nullable byte[] actual, @Nullable Throwable cause) {
         super(message, cause);
-        this.expected = expected;
-        this.actual = actual;
+        this.expected = CollectionUtil.unmodifiableList(expected);
+        this.actual = ArrayUtil.clone(actual);
     }
 
     public NotAllowedCredentialIdException(@Nullable String message, @Nullable List<byte[]> expected, @Nullable byte[] actual) {
         super(message);
-        this.expected = expected;
-        this.actual = actual;
+        this.expected = CollectionUtil.unmodifiableList(expected);
+        this.actual = ArrayUtil.clone(actual);
     }
 
     public NotAllowedCredentialIdException(@Nullable String message, @Nullable Throwable cause) {
@@ -62,6 +64,6 @@ public class NotAllowedCredentialIdException extends VerificationException {
 
     @Nullable
     public byte[] getActual() {
-        return actual;
+        return ArrayUtil.clone(actual);
     }
 }

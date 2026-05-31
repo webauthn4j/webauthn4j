@@ -22,6 +22,7 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.CollectionUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -50,10 +51,10 @@ public abstract class AbstractCOSEKey implements COSEKey {
             @Nullable @JsonProperty("4") List<COSEKeyOperation> keyOps,
             @Nullable @JsonProperty("5") byte[] baseIV
     ) {
-        this.keyId = keyId;
+        this.keyId = ArrayUtil.clone(keyId);
         this.algorithm = algorithm;
-        this.keyOps = keyOps;
-        this.baseIV = baseIV;
+        this.keyOps = CollectionUtil.unmodifiableList(keyOps);
+        this.baseIV = ArrayUtil.clone(baseIV);
     }
 
     @JsonProperty("1")

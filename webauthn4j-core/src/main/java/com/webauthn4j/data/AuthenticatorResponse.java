@@ -38,7 +38,7 @@ public abstract class AuthenticatorResponse {
 
     AuthenticatorResponse(@NotNull byte[] clientDataJSON) {
         AssertUtil.notNull(clientDataJSON, "clientDataJSON must not be null");
-        this.clientDataJSON = clientDataJSON;
+        this.clientDataJSON = ArrayUtil.clone(clientDataJSON);
     }
 
     public @NotNull byte[] getClientDataJSON() {

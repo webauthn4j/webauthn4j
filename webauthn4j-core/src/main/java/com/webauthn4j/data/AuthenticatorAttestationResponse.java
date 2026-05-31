@@ -66,7 +66,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         AssertUtil.notNull(attestationObject, "attestationObject must not be null");
 
 
-        this.attestationObject = attestationObject;
+        this.attestationObject = ArrayUtil.clone(attestationObject);
         this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 

@@ -26,6 +26,7 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.CollectionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +55,7 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
             @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         super(attestedCredentialData, attestationStatement, counter, authenticatorExtensions);
         this.clientExtensions = clientExtensions;
-        this.transports = transports;
+        this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
     public AuthenticatorImpl(
@@ -99,7 +100,7 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
     }
 
     public void setTransports(@Nullable Set<AuthenticatorTransport> transports) {
-        this.transports = transports;
+        this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
     @Override

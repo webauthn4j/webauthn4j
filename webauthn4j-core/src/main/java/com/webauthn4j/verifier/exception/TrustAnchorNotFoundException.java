@@ -17,6 +17,7 @@
 package com.webauthn4j.verifier.exception;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.util.ArrayUtil;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -30,7 +31,7 @@ public class TrustAnchorNotFoundException extends VerificationException {
 
     public TrustAnchorNotFoundException(@Nullable String message, @Nullable byte[] subjectKeyIdentifier) {
         super(message);
-        this.subjectKeyIdentifier = subjectKeyIdentifier;
+        this.subjectKeyIdentifier = ArrayUtil.clone(subjectKeyIdentifier);
         this.aaguid = null;
     }
 
@@ -61,7 +62,7 @@ public class TrustAnchorNotFoundException extends VerificationException {
 
     @Nullable
     public byte[] getSubjectKeyIdentifier() {
-        return subjectKeyIdentifier;
+        return ArrayUtil.clone(subjectKeyIdentifier);
     }
 
     @Nullable
