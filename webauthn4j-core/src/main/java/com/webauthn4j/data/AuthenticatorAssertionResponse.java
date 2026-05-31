@@ -52,9 +52,9 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         super(clientDataJSON);
         AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
         AssertUtil.notNull(signature, "signature must not be null");
-        this.authenticatorData = authenticatorData;
-        this.signature = signature;
-        this.userHandle = userHandle;
+        this.authenticatorData = ArrayUtil.clone(authenticatorData);
+        this.signature = ArrayUtil.clone(signature);
+        this.userHandle = ArrayUtil.clone(userHandle);
     }
 
     public @NotNull byte[] getAuthenticatorData() {

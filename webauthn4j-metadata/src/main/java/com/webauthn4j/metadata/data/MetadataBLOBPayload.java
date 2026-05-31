@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.CollectionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tools.jackson.databind.annotation.JsonDeserialize;
@@ -49,7 +50,7 @@ public class MetadataBLOBPayload {
         this.legalHeader = legalHeader;
         this.no = no;
         this.nextUpdate = nextUpdate;
-        this.entries = entries;
+        this.entries = CollectionUtil.unmodifiableList(entries);
     }
 
     @Nullable

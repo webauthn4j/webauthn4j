@@ -52,7 +52,7 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
         AssertUtil.notNull(sig, "sig must not be null");
         AssertUtil.notNull(x5c, "x5c must not be null");
         this.alg = alg;
-        this.sig = sig;
+        this.sig = ArrayUtil.clone(sig);
         this.x5c = x5c;
     }
 

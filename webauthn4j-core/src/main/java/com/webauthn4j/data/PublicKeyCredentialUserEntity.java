@@ -53,7 +53,7 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
         super(name);
         AssertUtil.notNull(name, "name must not be null");
         AssertUtil.notNull(displayName, "displayName must not be null");
-        this.id = id;
+        this.id = ArrayUtil.clone(id);
         this.displayName = displayName;
     }
 

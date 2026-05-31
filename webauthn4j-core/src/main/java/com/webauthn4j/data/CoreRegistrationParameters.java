@@ -19,6 +19,7 @@ package com.webauthn4j.data;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.CollectionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +48,7 @@ public class CoreRegistrationParameters {
                                       boolean userVerificationRequired, boolean userPresenceRequired) {
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         this.serverProperty = serverProperty;
-        this.pubKeyCredParams = pubKeyCredParams;
+        this.pubKeyCredParams = CollectionUtil.unmodifiableList(pubKeyCredParams);
         this.userVerificationRequired = userVerificationRequired;
         this.userPresenceRequired = userPresenceRequired;
     }

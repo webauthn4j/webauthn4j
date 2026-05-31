@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.BiometricStatusReport;
@@ -70,10 +71,10 @@ public class MetadataBLOBPayloadEntry {
             @JsonProperty("rogueListHash") @Nullable String rogueListHash) {
         this.aaid = aaid;
         this.aaguid = aaguid;
-        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
+        this.attestationCertificateKeyIdentifiers = CollectionUtil.unmodifiableList(attestationCertificateKeyIdentifiers);
         this.metadataStatement = metadataStatement;
-        this.biometricStatusReports = biometricStatusReports;
-        this.statusReports = statusReports;
+        this.biometricStatusReports = CollectionUtil.unmodifiableList(biometricStatusReports);
+        this.statusReports = CollectionUtil.unmodifiableList(statusReports);
         this.timeOfLastStatusChange = timeOfLastStatusChange;
         this.rogueListURL = rogueListURL;
         this.rogueListHash = rogueListHash;

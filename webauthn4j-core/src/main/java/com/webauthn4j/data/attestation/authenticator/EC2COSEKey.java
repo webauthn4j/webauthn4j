@@ -81,9 +81,9 @@ public class EC2COSEKey extends AbstractCOSEKey {
             @Nullable @JsonProperty("-4") byte[] d) {
         super(keyId, algorithm, keyOps, null);
         this.curve = curve;
-        this.x = x;
-        this.y = y;
-        this.d = d;
+        this.x = ArrayUtil.clone(x);
+        this.y = ArrayUtil.clone(y);
+        this.d = ArrayUtil.clone(d);
     }
 
     /**
@@ -106,8 +106,8 @@ public class EC2COSEKey extends AbstractCOSEKey {
             @Nullable @JsonProperty("-3") byte[] y) {
         super(keyId, algorithm, keyOps, null);
         this.curve = curve;
-        this.x = x;
-        this.y = y;
+        this.x = ArrayUtil.clone(x);
+        this.y = ArrayUtil.clone(y);
     }
 
     /**
@@ -128,7 +128,7 @@ public class EC2COSEKey extends AbstractCOSEKey {
             @Nullable @JsonProperty("-2") byte[] d) {
         super(keyId, algorithm, keyOps, null);
         this.curve = curve;
-        this.d = d;
+        this.d = ArrayUtil.clone(d);
     }
 
     public static @NotNull EC2COSEKey create(@NotNull ECPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {

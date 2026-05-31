@@ -51,7 +51,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         AssertUtil.notNull(alg, "alg must not be null");
         AssertUtil.notNull(sig, "sig must not be null");
         this.alg = alg;
-        this.sig = sig;
+        this.sig = ArrayUtil.clone(sig);
         this.x5c = x5c;
     }
 

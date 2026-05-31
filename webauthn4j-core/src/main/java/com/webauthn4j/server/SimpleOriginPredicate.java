@@ -27,7 +27,7 @@ public class SimpleOriginPredicate implements OriginPredicate {
      * @param origins the set of allowed origins
      */
     SimpleOriginPredicate(Set<Origin> origins) {
-        this.origins = origins;
+        this.origins = Collections.unmodifiableSet(origins);
     }
 
     /**

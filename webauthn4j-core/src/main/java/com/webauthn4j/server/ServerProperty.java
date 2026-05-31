@@ -18,6 +18,7 @@ package com.webauthn4j.server;
 
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -216,7 +217,7 @@ public class ServerProperty extends CoreServerProperty {
         AssertUtil.notNull(originPredicate, "originPredicate must not be null");
         this.originPredicate = originPredicate;
         this.topOriginPredicate = topOriginPredicate;
-        this.tokenBindingId = tokenBindingId;
+        this.tokenBindingId = ArrayUtil.clone(tokenBindingId);
     }
 
     /**
@@ -310,7 +311,7 @@ public class ServerProperty extends CoreServerProperty {
      */
     @Deprecated(forRemoval = false)
     public @Nullable byte[] getTokenBindingId() {
-        return tokenBindingId;
+        return ArrayUtil.clone(tokenBindingId);
     }
 
     @Override

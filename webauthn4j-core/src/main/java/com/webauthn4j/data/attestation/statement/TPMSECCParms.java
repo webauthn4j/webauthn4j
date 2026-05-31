@@ -32,10 +32,10 @@ public class TPMSECCParms implements TPMUPublicParms {
     private final byte[] kdf;
 
     public TPMSECCParms(@NotNull byte[] symmetric, @NotNull byte[] scheme, @NotNull TPMEccCurve curveId, @NotNull byte[] kdf) {
-        this.symmetric = symmetric;
-        this.scheme = scheme;
+        this.symmetric = ArrayUtil.clone(symmetric);
+        this.scheme = ArrayUtil.clone(scheme);
         this.curveId = curveId;
-        this.kdf = kdf;
+        this.kdf = ArrayUtil.clone(kdf);
     }
 
     public @NotNull byte[] getSymmetric() {

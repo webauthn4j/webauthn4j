@@ -48,7 +48,7 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
         AssertUtil.notNull(x5c, "x5c must not be null");
         AssertUtil.notNull(sig, "sig must not be null");
         this.x5c = x5c;
-        this.sig = sig;
+        this.sig = ArrayUtil.clone(sig);
     }
 
     @Override

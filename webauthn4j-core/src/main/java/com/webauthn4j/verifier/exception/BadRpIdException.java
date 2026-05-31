@@ -16,6 +16,7 @@
 
 package com.webauthn4j.verifier.exception;
 
+import com.webauthn4j.util.ArrayUtil;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -29,14 +30,14 @@ public class BadRpIdException extends VerificationException {
 
     public BadRpIdException(@Nullable String message, @Nullable byte[] expected, @Nullable byte[] actual, @Nullable Throwable cause) {
         super(message, cause);
-        this.expected = expected;
-        this.actual = actual;
+        this.expected = ArrayUtil.clone(expected);
+        this.actual = ArrayUtil.clone(actual);
     }
 
     public BadRpIdException(@Nullable String message, @Nullable byte[] expected, @Nullable byte[] actual) {
         super(message);
-        this.expected = expected;
-        this.actual = actual;
+        this.expected = ArrayUtil.clone(expected);
+        this.actual = ArrayUtil.clone(actual);
     }
 
 
@@ -60,11 +61,11 @@ public class BadRpIdException extends VerificationException {
 
     @Nullable
     public byte[] getExpected() {
-        return expected;
+        return ArrayUtil.clone(expected);
     }
 
     @Nullable
     public byte[] getActual() {
-        return actual;
+        return ArrayUtil.clone(actual);
     }
 }
