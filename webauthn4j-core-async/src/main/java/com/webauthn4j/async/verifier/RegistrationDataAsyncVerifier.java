@@ -306,13 +306,11 @@ public class RegistrationDataAsyncVerifier {
 
 
             // verify with custom logic
-            Iterator<CustomRegistrationAsyncVerifier> iterator = customRegistrationAsyncVerifiers.iterator();
             CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null);
-            while(iterator.hasNext()){
-                CustomRegistrationAsyncVerifier customRegistrationAsyncVerifier = iterator.next();
-                completableFuture = completableFuture.thenAccept(unused -> customRegistrationAsyncVerifier.verify(registrationObject));
+            for (CustomRegistrationAsyncVerifier customRegistrationAsyncVerifier : customRegistrationAsyncVerifiers) {
+                completableFuture = completableFuture.thenCompose(unused -> customRegistrationAsyncVerifier.verify(registrationObject).toCompletableFuture());
             }
-            return CompletableFuture.completedFuture(null);
+            return completableFuture;
         }
     }
 }
