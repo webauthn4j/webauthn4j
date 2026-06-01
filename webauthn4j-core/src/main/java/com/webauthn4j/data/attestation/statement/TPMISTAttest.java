@@ -16,14 +16,16 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
-import tools.jackson.databind.exc.InvalidFormatException;
-
 import java.util.Arrays;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public enum TPMISTAttest {
     TPM_ST_ATTEST_CERTIFY(new byte[]{(byte) 0x80, (byte) 0x17}),
     TPM_ST_ATTEST_QUOTE(new byte[]{(byte) 0x80, (byte) 0x18}),
@@ -66,16 +68,6 @@ public enum TPMISTAttest {
         }
     }
 
-    @JsonCreator
-    private static @NotNull TPMISTAttest deserialize(@NotNull byte[] value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, TPMISTAttest.class);
-        }
-    }
-
-    @JsonValue
     public @NotNull byte[] getValue() {
         return ArrayUtil.clone(value);
     }

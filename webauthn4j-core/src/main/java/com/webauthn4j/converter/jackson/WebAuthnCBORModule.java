@@ -18,12 +18,14 @@ package com.webauthn4j.converter.jackson;
 
 import com.webauthn4j.converter.jackson.deserializer.cbor.*;
 import com.webauthn4j.converter.jackson.serializer.cbor.*;
-import com.webauthn4j.data.extension.authenticator.*;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.authenticator.Curve;
 import com.webauthn4j.data.attestation.statement.*;
+import com.webauthn4j.data.extension.authenticator.*;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.util.AssertUtil;
@@ -54,6 +56,18 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
+
+        this.addDeserializer(AuthenticatorTransport.class, new AuthenticatorTransportDeserializer());
+        this.addDeserializer(COSEAlgorithmIdentifier.class, new COSEAlgorithmIdentifierDeserializer());
+        this.addDeserializer(COSEKeyOperation.class, new COSEKeyOperationDeserializer());
+        this.addDeserializer(COSEKeyType.class, new COSEKeyTypeDeserializer());
+        this.addDeserializer(Curve.class, new CurveDeserializer());
+
+        this.addSerializer(new AuthenticatorTransportSerializer());
+        this.addSerializer(new COSEAlgorithmIdentifierSerializer());
+        this.addSerializer(new COSEKeyOperationSerializer());
+        this.addSerializer(new COSEKeyTypeSerializer());
+        this.addSerializer(new CurveSerializer());
 
         this.addSerializer(new AttestationObjectSerializer());
         this.addSerializer(new AAGUIDSerializer());

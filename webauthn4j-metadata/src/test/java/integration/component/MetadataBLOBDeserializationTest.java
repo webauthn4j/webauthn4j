@@ -16,10 +16,13 @@
 
 package integration.component;
 
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.metadata.data.MetadataBLOBPayload;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +33,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MetadataBLOBDeserializationTest {
 
-    private final JWSFactory jwsFactory = new JWSFactory();
+    private final JWSFactory jwsFactory;
+
+    MetadataBLOBDeserializationTest() {
+        ObjectConverter oc = new ObjectConverter();
+        JsonMapper jsonMapper = oc.getJsonMapper().rebuild().addModule(new WebAuthnMetadataJSONModule()).build();
+        ObjectConverter objectConverter = new ObjectConverter(jsonMapper, oc.getCborMapper());
+        this.jwsFactory = new JWSFactory(objectConverter);
+    }
 
     @Test
     void test_with_mds3_metadata_as_of_202111(){

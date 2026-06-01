@@ -36,7 +36,7 @@ public class AttachmentHintFromLongDeserializer extends StdDeserializer<Attachme
         try {
             return AttachmentHint.create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, AttachmentHint.class);
+            throw new InvalidFormatException(p, "value is out of range", value, AttachmentHint.class);
         }
     }
 }

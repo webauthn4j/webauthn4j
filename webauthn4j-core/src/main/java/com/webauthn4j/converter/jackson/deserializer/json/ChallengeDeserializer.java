@@ -42,7 +42,7 @@ public class ChallengeDeserializer extends StdDeserializer<Challenge> {
         try {
             return new DefaultChallenge(str);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", str, DefaultChallenge.class);
+            throw new InvalidFormatException(p, "value is out of range", str, DefaultChallenge.class);
         }
     }
 }

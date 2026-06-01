@@ -3,11 +3,13 @@ package com.webauthn4j.async.metadata.anchor;
 import com.webauthn4j.async.metadata.LocalFileMetadataBLOBAsyncProvider;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.verifier.RegistrationObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,7 +89,10 @@ class MetadataBLOBBasedTrustAnchorAsyncRepositoryTest {
             Path blobPath = new File(filePath).toPath();
             Path dstPath = tempDir.resolve("blob.jwt");
             Files.copy(blobPath, dstPath);
-            LocalFileMetadataBLOBAsyncProvider localFileMetadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter(), dstPath);
+            ObjectConverter oc = new ObjectConverter();
+            JsonMapper jsonMapper = oc.getJsonMapper().rebuild().addModule(new WebAuthnMetadataJSONModule()).build();
+            ObjectConverter objectConverter = new ObjectConverter(jsonMapper, oc.getCborMapper());
+            LocalFileMetadataBLOBAsyncProvider localFileMetadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(objectConverter, dstPath);
             return new MetadataBLOBBasedTrustAnchorAsyncRepository(localFileMetadataBLOBAsyncProvider);
         } catch (IOException e) {
             throw new UncheckedIOException(e);

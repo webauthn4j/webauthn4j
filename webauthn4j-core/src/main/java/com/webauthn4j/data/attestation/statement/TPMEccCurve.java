@@ -16,16 +16,19 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
-import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.security.spec.EllipticCurve;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public enum TPMEccCurve {
     TPM_ECC_NONE(0x0000),
     TPM_ECC_NIST_P192(0x0001),
@@ -81,20 +84,10 @@ public enum TPMEccCurve {
         throw new IllegalArgumentException("value '" + value + "' is out of range");
     }
 
-    @JsonCreator
-    private static @NotNull TPMEccCurve deserialize(int value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, TPMEccCurve.class);
-        }
-    }
-
     public @NotNull byte[] getBytes() {
         return UnsignedNumberUtil.toBytes(getValue());
     }
 
-    @JsonValue
     public int getValue() {
         return value;
     }

@@ -16,15 +16,17 @@
 
 package com.webauthn4j.data.jws;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
-import tools.jackson.databind.exc.InvalidFormatException;
-
 import java.util.Arrays;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public enum JWAIdentifier {
     RS1("RS1", "SHA1withRSA"),
     RS256("RS256", "SHA256withRSA"),
@@ -50,17 +52,6 @@ public enum JWAIdentifier {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid JWA Identifier provided: " + value));
     }
 
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NotNull JWAIdentifier deserialize(@NotNull String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "Invalid JWA Identifier provided", value, JWAIdentifier.class);
-        }
-    }
-
-    @JsonValue
     public @NotNull String getName() {
         return name;
     }

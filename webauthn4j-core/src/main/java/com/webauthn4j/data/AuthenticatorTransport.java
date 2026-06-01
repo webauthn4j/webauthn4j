@@ -16,14 +16,15 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.util.Objects;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Authenticators may implement various transports for communicating with clients.
@@ -34,6 +35,8 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-3/#enumdef-authenticatortransport">
  * §5.8.4. Authenticator Transport Enumeration (enum AuthenticatorTransport)</a>
  */
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public class AuthenticatorTransport {
 
     /**
@@ -80,16 +83,6 @@ public class AuthenticatorTransport {
         return new AuthenticatorTransport(value);
     }
 
-    @JsonCreator
-    static @NotNull AuthenticatorTransport deserialize(@NotNull String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorTransport.class);
-        }
-    }
-
-    @JsonValue
     public @NotNull String getValue() {
         return value;
     }

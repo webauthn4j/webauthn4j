@@ -16,14 +16,17 @@
 
 package com.webauthn4j.metadata.data.toc;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
 import org.jetbrains.annotations.NotNull;
-import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * This enumeration describes the status of an authenticator webauthn as identified by its AAID and potentially some additional information (such as a specific attestation key).
  */
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public enum AuthenticatorStatus {
     /**
      * This authenticator has passed FIDO functional certification.
@@ -146,17 +149,6 @@ public enum AuthenticatorStatus {
         }
     }
 
-    @NotNull
-    @JsonCreator
-    private static AuthenticatorStatus deserialize(@NotNull String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorStatus.class);
-        }
-    }
-
-    @JsonValue
     public String getValue() {
         return value;
     }

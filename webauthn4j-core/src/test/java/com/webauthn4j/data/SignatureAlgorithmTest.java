@@ -17,21 +17,20 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.SignatureUtil;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
-import org.junit.jupiter.api.condition.JRE;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.exc.InvalidFormatException;
 import tools.jackson.databind.exc.MismatchedInputException;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.cbor.CBORMapper;
 import tools.jackson.databind.module.SimpleModule;
 import tools.jackson.databind.ser.std.StdSerializer;
-import tools.jackson.dataformat.cbor.CBORMapper;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -59,18 +58,18 @@ class SignatureAlgorithmTest {
     @Test
     void deserialize_test() {
         assertAll(
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA256withECDSA")).isEqualTo(SignatureAlgorithm.ES256),
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA384withECDSA")).isEqualTo(SignatureAlgorithm.ES384),
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA512withECDSA")).isEqualTo(SignatureAlgorithm.ES512),
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA1withRSA")).isEqualTo(SignatureAlgorithm.RS1),
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA256withRSA")).isEqualTo(SignatureAlgorithm.RS256),
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA384withRSA")).isEqualTo(SignatureAlgorithm.RS384),
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA512withRSA")).isEqualTo(SignatureAlgorithm.RS512),
-                () -> assertThat(SignatureAlgorithm.deserialize("ed25519")).isEqualTo(SignatureAlgorithm.Ed25519),
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA256withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS256),
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA384withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS384),
-                () -> assertThat(SignatureAlgorithm.deserialize("SHA512withRSA/PSS")).isEqualTo(SignatureAlgorithm.PS512),
-                () -> assertThatThrownBy(()->SignatureAlgorithm.deserialize("invalid")).isInstanceOf(InvalidFormatException.class)
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA256withECDSA\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.ES256),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA384withECDSA\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.ES384),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA512withECDSA\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.ES512),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA1withRSA\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.RS1),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA256withRSA\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.RS256),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA384withRSA\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.RS384),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA512withRSA\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.RS512),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"ed25519\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.Ed25519),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA256withRSA/PSS\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.PS256),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA384withRSA/PSS\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.PS384),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA512withRSA/PSS\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.PS512),
+                () -> assertThatThrownBy(() -> jsonMapper.readValue("{\"alg\":\"invalid\"}", TestDto.class)).isInstanceOf(InvalidFormatException.class)
         );
     }
 
@@ -119,8 +118,7 @@ class SignatureAlgorithmTest {
         JsonMapper customizedJsonMapper = jsonMapper.rebuild()
                 .addModule(simpleModule)
                 .build();
-        CBORMapper cborMapper = new CBORMapper();
-        ObjectConverter objectConverter = new ObjectConverter(customizedJsonMapper, cborMapper);
+        ObjectConverter objectConverter = new ObjectConverter(customizedJsonMapper, new CBORMapper());
 
         String string = objectConverter.getJsonMapper().writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
         assertThat(string).isEqualTo("{\"alg\":-7}");
@@ -142,7 +140,7 @@ class SignatureAlgorithmTest {
         private final SignatureAlgorithm alg;
 
         @JsonCreator
-        public TestDto(SignatureAlgorithm alg) {
+        public TestDto(@JsonProperty("alg") SignatureAlgorithm alg) {
             this.alg = alg;
         }
 

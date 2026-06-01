@@ -19,7 +19,7 @@ public class AuthenticationAlgorithmFromIntDeserializer extends StdDeserializer<
         try {
             return AuthenticationAlgorithm.create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, AuthenticationAlgorithm.class);
+            throw new InvalidFormatException(p, "value is out of range", value, AuthenticationAlgorithm.class);
         }
     }
 }

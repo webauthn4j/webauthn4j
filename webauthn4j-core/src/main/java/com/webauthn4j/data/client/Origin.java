@@ -16,15 +16,15 @@
 
 package com.webauthn4j.data.client;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.jackson.databind.exc.InvalidFormatException;
-
 import java.net.URI;
 import java.util.Objects;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * {@link Origin} contains the fully qualified origin of the requester, as provided to the authenticator
@@ -32,6 +32,8 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-3/#dom-collectedclientdata-origin">§5.8.1. Client Data Used in WebAuthn Signatures - origin</a>
  */
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public class Origin {
 
     private static final String SCHEME_HTTPS = "https";
@@ -95,16 +97,6 @@ public class Origin {
         }
     }
 
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NotNull Origin deserialize(@NotNull String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value has an invalid syntax:'" + value + "'", value, Origin.class);
-        }
-    }
-
     private static @Nullable String toLowerCase(@Nullable String s) {
         return s == null ? null : s.toLowerCase();
     }
@@ -125,7 +117,6 @@ public class Origin {
         return schemeSpecificPart;
     }
 
-    @JsonValue
     @Override
     public @NotNull String toString() {
         if (this.scheme == null) {

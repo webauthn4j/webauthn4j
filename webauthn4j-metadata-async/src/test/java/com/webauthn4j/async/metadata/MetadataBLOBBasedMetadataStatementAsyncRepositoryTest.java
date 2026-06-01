@@ -2,9 +2,11 @@ package com.webauthn4j.async.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,13 +21,19 @@ class MetadataBLOBBasedMetadataStatementAsyncRepositoryTest {
     @TempDir
     Path tempDir;
 
+    private static ObjectConverter createObjectConverter() {
+        ObjectConverter oc = new ObjectConverter();
+        JsonMapper jsonMapper = oc.getJsonMapper().rebuild().addModule(new WebAuthnMetadataJSONModule()).build();
+        return new ObjectConverter(jsonMapper, oc.getCborMapper());
+    }
+
     @Test
     void find_by_aaguid_test() throws IOException, ExecutionException, InterruptedException {
         AAGUID aaguid = new AAGUID("9c835346-796b-4c27-8898-d6032f515cc5");
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter(), dstPath);
+        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(createObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementAsyncRepository target = new MetadataBLOBBasedMetadataStatementAsyncRepository(metadataBLOBAsyncProvider);
         assertThat(target.find(aaguid).toCompletableFuture().get()).hasSize(1);
     }
@@ -36,7 +44,7 @@ class MetadataBLOBBasedMetadataStatementAsyncRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter(), dstPath);
+        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(createObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementAsyncRepository target = new MetadataBLOBBasedMetadataStatementAsyncRepository(metadataBLOBAsyncProvider);
         assertThat(target.find(attestationCertificateKeyIdentifier).toCompletableFuture().get()).hasSize(1);
     }
@@ -47,7 +55,7 @@ class MetadataBLOBBasedMetadataStatementAsyncRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter(), dstPath);
+        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(createObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementAsyncRepository target = new MetadataBLOBBasedMetadataStatementAsyncRepository(metadataBLOBAsyncProvider);
         target.setNotFidoCertifiedAllowed(false);
         assertThat(target.isNotFidoCertifiedAllowed()).isFalse();
@@ -63,7 +71,7 @@ class MetadataBLOBBasedMetadataStatementAsyncRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/test-blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter(), dstPath);
+        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(createObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementAsyncRepository target = new MetadataBLOBBasedMetadataStatementAsyncRepository(metadataBLOBAsyncProvider);
 
         target.setSelfAssertionSubmittedAllowed(false);
