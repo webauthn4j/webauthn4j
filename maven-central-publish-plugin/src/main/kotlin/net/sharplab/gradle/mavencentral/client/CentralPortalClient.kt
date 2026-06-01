@@ -1,6 +1,6 @@
 package net.sharplab.gradle.mavencentral.client
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.json.JsonMapper
 import java.io.ByteArrayOutputStream
 import java.net.URI
 import java.net.http.HttpClient
@@ -25,7 +25,7 @@ class CentralPortalClient(
         .followRedirects(HttpClient.Redirect.NORMAL)
         .build()
 
-    private val objectMapper: ObjectMapper = ObjectMapper()
+    private val jsonMapper: JsonMapper = JsonMapper.shared()
 
     /**
      * Uploads the ZIP bundle to Central Portal.
@@ -67,14 +67,14 @@ class CentralPortalClient(
             throw CentralPortalApiException(response.statusCode(), response.body())
         }
 
-        val tree = objectMapper.readTree(response.body())
-        val state = tree.get("deploymentState")?.asText()
+        val tree = jsonMapper.readTree(response.body())
+        val state = tree.get("deploymentState")?.asString()
             ?: throw CentralPortalApiException(response.statusCode(), response.body())
         val errorsNode = tree.get("errors")
         val errors: List<String>? = if (errorsNode != null && errorsNode.isArray) {
             val list = mutableListOf<String>()
             for (node in errorsNode) {
-                list.add(node.asText())
+                list.add(node.asString())
             }
             list
         } else {

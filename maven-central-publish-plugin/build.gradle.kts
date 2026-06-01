@@ -7,8 +7,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.fasterxml.jackson.core:jackson-databind:2.18.6")
-    testImplementation("com.fasterxml.jackson.core:jackson-databind:2.18.6")
+    implementation("tools.jackson.core:jackson-databind:3.1.3")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -18,12 +17,6 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-}
-
-// Make compileOnly dependencies (e.g. jackson-databind provided by Gradle at runtime)
-// available in Gradle TestKit's plugin classpath.
-tasks.pluginUnderTestMetadata {
-    pluginClasspath.from(configurations.compileClasspath)
 }
 
 

@@ -217,7 +217,7 @@ HTTP client for the Central Portal Publisher API. Has no Gradle dependency.
 | Purpose | Library | Rationale |
 |---|---|---|
 | HTTP | `java.net.http.HttpClient` | Java 11+ standard library |
-| JSON | `com.fasterxml.jackson.databind.ObjectMapper` | Bundled with Gradle runtime; declared as `compileOnly` |
+| JSON | `tools.jackson.databind.json.JsonMapper` | Jackson 3.x; declared as `implementation` |
 
 **API interactions:**
 
