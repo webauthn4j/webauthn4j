@@ -1,19 +1,33 @@
 package com.webauthn4j.spc.verifier;
 
+import com.webauthn4j.data.SignatureAlgorithm;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.server.OriginPredicate;
+import com.webauthn4j.spc.credential.BrowserBoundKey;
 import com.webauthn4j.spc.data.SPCAuthenticationParameters;
 import com.webauthn4j.spc.data.client.CollectedClientAdditionalPaymentData;
 import com.webauthn4j.spc.data.client.CollectedClientPaymentData;
 import com.webauthn4j.spc.data.client.PaymentCredentialInstrument;
 import com.webauthn4j.spc.data.client.PaymentCurrencyAmount;
 import com.webauthn4j.spc.data.client.PaymentEntityLogo;
+import com.webauthn4j.spc.data.extension.client.AuthenticationExtensionsPaymentOutputs;
+import com.webauthn4j.spc.data.extension.client.BrowserBoundSignature;
+import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.verifier.AuthenticationObject;
 import com.webauthn4j.verifier.CustomAuthenticationVerifier;
+import com.webauthn4j.verifier.exception.BadSignatureException;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.security.InvalidKeyException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +45,10 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/2026/CRD-secure-payment-confirmation-20260528/#sctn-verifying-assertion">SPC § 9.1</a>
  */
 public class SPCAuthenticationVerifier implements CustomAuthenticationVerifier {
+
+    private final Logger logger = LoggerFactory.getLogger(SPCAuthenticationVerifier.class);
+
+    private BrowserBoundKeyHandler browserBoundKeyHandler = new DefaultBrowserBoundKeyHandler();
 
     @Override
     public void verify(@NotNull AuthenticationObject authenticationObject) {
@@ -115,9 +133,75 @@ public class SPCAuthenticationVerifier implements CustomAuthenticationVerifier {
         //spec| that should have been displayed to the user.
         verifyInstrument(paymentData.getInstrument(), spcParameters.getExpectedInstrument());
 
-        // TODO: Verify Browser Bound Key (BBK) signature.
-        // Requires SPCCredentialRecord (extending CredentialRecord) to carry the stored browserBoundPublicKey,
-        // then verify BrowserBoundSignature over clientDataJSON using that key. See SPC spec §9.
+        // BBK (Browser Bound Key) verification (SPC spec §11.3)
+        verifyBrowserBoundKey(authenticationObject, paymentData, spcParameters);
+    }
+
+    void verifyBrowserBoundKey(
+            @NotNull AuthenticationObject authenticationObject,
+            @NotNull CollectedClientAdditionalPaymentData paymentData,
+            @NotNull SPCAuthenticationParameters spcParameters) {
+
+        List<BrowserBoundKey> storedKeys = spcParameters.getCredentialRecord().getBrowserBoundKeys();
+        if (storedKeys.isEmpty()) {
+            return;
+        }
+
+        COSEKey presentedKey = paymentData.getBrowserBoundPublicKey();
+        if (presentedKey == null) {
+            browserBoundKeyHandler.handle(new MissingBrowserBoundKeyEvent(authenticationObject));
+            return;
+        }
+
+        BrowserBoundKey matchedKey = storedKeys.stream()
+                .filter(k -> Objects.equals(k.getPublicKey(), presentedKey))
+                .findFirst()
+                .orElse(null);
+
+        if (matchedKey == null) {
+            browserBoundKeyHandler.handle(new UnknownBrowserBoundKeyEvent(authenticationObject, presentedKey));
+            return;
+        }
+
+        BrowserBoundSignature browserBoundSignature = extractBrowserBoundSignature(authenticationObject);
+        if (browserBoundSignature == null) {
+            throw new ConstraintViolationException(
+                    "BrowserBoundSignature is missing but browserBoundPublicKey is present in clientData.");
+        }
+
+        verifyBrowserBoundSignature(
+                matchedKey.getPublicKey(),
+                browserBoundSignature.getSignature(),
+                authenticationObject.getCollectedClientDataBytes());
+    }
+
+    private @Nullable BrowserBoundSignature extractBrowserBoundSignature(@NotNull AuthenticationObject authenticationObject) {
+        var clientExtensions = authenticationObject.getClientExtensions();
+        if (clientExtensions == null) {
+            return null;
+        }
+        AuthenticationExtensionsPaymentOutputs paymentOutputs =
+                clientExtensions.getExtension(AuthenticationExtensionsPaymentOutputs.class);
+        if (paymentOutputs == null) {
+            return null;
+        }
+        return paymentOutputs.getBrowserBoundSignature();
+    }
+
+    void verifyBrowserBoundSignature(@NotNull COSEKey publicKey, @NotNull byte[] signature, @NotNull byte[] clientDataJSON) {
+        try {
+            PublicKey javaPublicKey = publicKey.getPublicKey();
+            SignatureAlgorithm signatureAlgorithm = publicKey.getAlgorithm().toSignatureAlgorithm();
+            Signature verifier = SignatureUtil.createSignature(signatureAlgorithm);
+            verifier.initVerify(javaPublicKey);
+            verifier.update(clientDataJSON);
+            if (!verifier.verify(signature)) {
+                throw new BadSignatureException("Browser bound key signature is not valid.");
+            }
+        } catch (SignatureException | InvalidKeyException e) {
+            logger.debug("Unexpected exception during BBK signature verification.", e);
+            throw new BadSignatureException("Browser bound key signature verification failed.", e);
+        }
     }
 
     void verifyRpId(@NotNull String actual, @NotNull String expected) {
@@ -195,5 +279,10 @@ public class SPCAuthenticationVerifier implements CustomAuthenticationVerifier {
             }
         }
         return true;
+    }
+
+    public void setBrowserBoundKeyHandler(@NotNull BrowserBoundKeyHandler browserBoundKeyHandler) {
+        AssertUtil.notNull(browserBoundKeyHandler, "browserBoundKeyHandler must not be null");
+        this.browserBoundKeyHandler = browserBoundKeyHandler;
     }
 }

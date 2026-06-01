@@ -16,6 +16,8 @@ import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.spc.SPCManager;
+import com.webauthn4j.spc.credential.BrowserBoundKey;
+import com.webauthn4j.spc.credential.SPCCredentialRecord;
 import com.webauthn4j.spc.data.SPCAuthenticationParameters;
 import com.webauthn4j.spc.data.SPCRegistrationParameters;
 import com.webauthn4j.spc.data.client.*;
@@ -24,9 +26,11 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletionException;
 
 import static org.assertj.core.api.Assertions.*;
@@ -85,7 +89,7 @@ class SPCAsyncManagerIntegrationTest {
     @Test
     void authentication_should_succeed_with_valid_spc_data() {
         Challenge challenge = new DefaultChallenge();
-        CredentialRecord credentialRecord = createCredentialRecord(challenge);
+        SPCCredentialRecord credentialRecord = createCredentialRecord(challenge);
 
         Challenge authChallenge = new DefaultChallenge();
         CollectedClientPaymentData paymentClientData = createPaymentClientData(authChallenge);
@@ -113,7 +117,7 @@ class SPCAsyncManagerIntegrationTest {
     @Test
     void authentication_should_fail_with_wrong_total() {
         Challenge challenge = new DefaultChallenge();
-        CredentialRecord credentialRecord = createCredentialRecord(challenge);
+        SPCCredentialRecord credentialRecord = createCredentialRecord(challenge);
 
         Challenge authChallenge = new DefaultChallenge();
         CollectedClientPaymentData paymentClientData = createPaymentClientData(authChallenge);
@@ -180,12 +184,38 @@ class SPCAsyncManagerIntegrationTest {
         );
     }
 
-    private CredentialRecord createCredentialRecord(Challenge challenge) {
+    private SPCCredentialRecord createCredentialRecord(Challenge challenge) {
         var credentialCreationOptions = createCredentialCreationOptions(challenge);
         var response = clientPlatform.create(credentialCreationOptions);
         var registrationResponse = response.getResponse();
         AttestationObject attestationObject = attestationObjectConverter.convert(registrationResponse.getAttestationObject());
         var clientData = collectedClientDataConverter.convert(registrationResponse.getClientDataJSON());
-        return new CredentialRecordImpl(attestationObject, clientData, response.getClientExtensionResults(), registrationResponse.getTransports());
+        CredentialRecord base = new CredentialRecordImpl(attestationObject, clientData, response.getClientExtensionResults(), registrationResponse.getTransports());
+        return new TestSPCCredentialRecord(base, Collections.emptyList());
+    }
+
+    private static class TestSPCCredentialRecord extends CredentialRecordImpl implements SPCCredentialRecord {
+        private final List<BrowserBoundKey> browserBoundKeys;
+
+        TestSPCCredentialRecord(CredentialRecord base, List<BrowserBoundKey> browserBoundKeys) {
+            super(
+                    base.getAttestationStatement(),
+                    base.isUvInitialized(),
+                    base.isBackupEligible(),
+                    base.isBackedUp(),
+                    base.getCounter(),
+                    base.getAttestedCredentialData(),
+                    base.getAuthenticatorExtensions(),
+                    base.getClientData(),
+                    base.getClientExtensions(),
+                    base.getTransports()
+            );
+            this.browserBoundKeys = browserBoundKeys;
+        }
+
+        @Override
+        public @NotNull List<BrowserBoundKey> getBrowserBoundKeys() {
+            return browserBoundKeys;
+        }
     }
 }

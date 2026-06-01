@@ -1,8 +1,9 @@
 package com.webauthn4j.test.integration.spc;
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.credential.CredentialRecordImpl;
+import com.webauthn4j.spc.credential.BrowserBoundKey;
+import com.webauthn4j.spc.credential.SPCCredentialRecord;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
@@ -18,6 +19,7 @@ import com.webauthn4j.spc.data.SPCRegistrationParameters;
 import com.webauthn4j.spc.data.SecurePaymentConfirmationRequest;
 import com.webauthn4j.spc.data.client.PaymentCredentialInstrument;
 import com.webauthn4j.spc.data.client.PaymentCurrencyAmount;
+import org.jetbrains.annotations.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -42,7 +44,7 @@ public class SPCResource {
     private final SPCManager spcManager = new SPCManager();
 
     private Challenge currentChallenge;
-    private CredentialRecord storedCredentialRecord;
+    private SPCCredentialRecord storedCredentialRecord;
     private byte[] storedCredentialId;
 
     // === Registration (called from bank.localhost) ===
@@ -89,10 +91,9 @@ public class SPCResource {
 
             RegistrationData registrationData = spcManager.verifyRegistrationResponseJSON(registrationResponseJSON, params);
 
-            storedCredentialRecord = new CredentialRecordImpl(
+            storedCredentialRecord = new SimpleSPCCredentialRecord(
                     registrationData.getAttestationObject(),
-                    registrationData.getCollectedClientData(),
-                    null, null);
+                    registrationData.getCollectedClientData());
             storedCredentialId = registrationData.getAttestationObject()
                     .getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
@@ -155,6 +156,17 @@ public class SPCResource {
             return Response.ok("OK").build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
+    private static class SimpleSPCCredentialRecord extends CredentialRecordImpl implements SPCCredentialRecord {
+        SimpleSPCCredentialRecord(AttestationObject attestationObject, com.webauthn4j.data.client.CollectedClientData clientData) {
+            super(attestationObject, clientData, null, null);
+        }
+
+        @Override
+        public @NotNull List<BrowserBoundKey> getBrowserBoundKeys() {
+            return List.of();
         }
     }
 }

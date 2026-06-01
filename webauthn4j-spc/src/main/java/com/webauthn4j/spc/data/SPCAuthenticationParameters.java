@@ -1,8 +1,8 @@
 package com.webauthn4j.spc.data;
 
-import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.client.Origin;
+import com.webauthn4j.spc.credential.SPCCredentialRecord;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.spc.data.client.PaymentCredentialInstrument;
 import com.webauthn4j.spc.data.client.PaymentCurrencyAmount;
@@ -26,7 +26,7 @@ public class SPCAuthenticationParameters extends AuthenticationParameters {
     @SuppressWarnings("java:S107")
     public SPCAuthenticationParameters(
             @NotNull ServerProperty serverProperty,
-            @NotNull CredentialRecord credentialRecord,
+            @NotNull SPCCredentialRecord credentialRecord,
             @Nullable List<byte[]> allowCredentials,
             boolean userVerificationRequired,
             boolean userPresenceRequired,
@@ -48,7 +48,7 @@ public class SPCAuthenticationParameters extends AuthenticationParameters {
     @SuppressWarnings("java:S107")
     public SPCAuthenticationParameters(
             @NotNull ServerProperty serverProperty,
-            @NotNull CredentialRecord credentialRecord,
+            @NotNull SPCCredentialRecord credentialRecord,
             @Nullable List<byte[]> allowCredentials,
             @NotNull PaymentCurrencyAmount expectedTotal,
             @NotNull PaymentCredentialInstrument expectedInstrument,
@@ -60,12 +60,17 @@ public class SPCAuthenticationParameters extends AuthenticationParameters {
 
     public SPCAuthenticationParameters(
             @NotNull ServerProperty serverProperty,
-            @NotNull CredentialRecord credentialRecord,
+            @NotNull SPCCredentialRecord credentialRecord,
             @NotNull PaymentCurrencyAmount expectedTotal,
             @NotNull PaymentCredentialInstrument expectedInstrument,
             @Nullable String expectedPayeeName,
             @Nullable Origin expectedPayeeOrigin) {
         this(serverProperty, credentialRecord, null, true, true, expectedTotal, expectedInstrument, expectedPayeeName, expectedPayeeOrigin, null);
+    }
+
+    @Override
+    public @NotNull SPCCredentialRecord getCredentialRecord() {
+        return (SPCCredentialRecord) super.getCredentialRecord();
     }
 
     public @NotNull PaymentCurrencyAmount getExpectedTotal() {

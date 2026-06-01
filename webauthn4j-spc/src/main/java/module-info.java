@@ -6,6 +6,7 @@ module com.webauthn4j.spc {
     requires static org.jetbrains.annotations;
 
     exports com.webauthn4j.spc;
+    exports com.webauthn4j.spc.credential;
     exports com.webauthn4j.spc.converter.jackson;
     exports com.webauthn4j.spc.converter.jackson.deserializer.json;
     exports com.webauthn4j.spc.converter.jackson.serializer.json;
