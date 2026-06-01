@@ -1,0 +1,16 @@
+changelog:
+  categories:
+    - title: ":warning: Breaking Changes"
+      labels: ["breaking change"]
+    - title: ":star: Enhancements"
+      labels: ["enhancement"]
+    - title: ":beetle: Bugs"
+      labels: ["bug"]
+    - title: ":memo: Documentation"
+      labels: ["documentation"]
+    - title: ":hammer_and_wrench: Build/Test"
+      labels: ["build/test"]
+    - title: ":package: Dependency Upgrades"
+      labels: ["dependencies"]
+    - title: "Other"
+      labels: ["*"]

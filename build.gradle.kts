@@ -221,15 +221,6 @@ tasks.register("switchToRelease"){
 }
 
 
-tasks.register<JavaExec>("generateReleaseNote") {
-    group = "documentation"
-    description = "Generate release note"
-
-    classpath = files("gradle/lib/github-release-notes-generator.jar")
-
-    args(effectiveVersion, file("build/release-note.md").absolutePath, "--spring.config.location=file:" + file("github-release-notes-generator.yml").absolutePath)
-}
-
 asciidoctorj{
     modules{
         diagram.use()
