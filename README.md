@@ -58,7 +58,7 @@ If you are using Maven, just add the webauthn4j as a dependency:
 <properties>
   ...
   <!-- Use the latest version whenever possible. -->
-  <webauthn4j.version>0.31.5.RELEASE</webauthn4j.version>
+  <webauthn4j.version>0.31.6.RELEASE</webauthn4j.version>
   ...
 </properties>
 
