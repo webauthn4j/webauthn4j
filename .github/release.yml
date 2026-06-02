@@ -1,4 +1,7 @@
 changelog:
+  exclude:
+    labels:
+      - "dev-dependencies"
   categories:
     - title: ":warning: Breaking Changes"
       labels: ["breaking change"]
