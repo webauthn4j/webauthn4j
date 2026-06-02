@@ -57,6 +57,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(UserVerificationMethod.class, new UserVerificationMethodFromLongDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
+        // These types have @JsonSerialize/@JsonDeserialize guard annotations that are cleared by setupModule() via MixIn.
         this.addDeserializer(AuthenticatorTransport.class, new AuthenticatorTransportDeserializer());
         this.addDeserializer(COSEAlgorithmIdentifier.class, new COSEAlgorithmIdentifierDeserializer());
         this.addDeserializer(COSEKeyOperation.class, new COSEKeyOperationDeserializer());
@@ -125,6 +126,31 @@ public class WebAuthnJSONModule extends SimpleModule {
 
         this.addSerializer(new ByteArrayBase64UrlSerializer());
 
+    }
+
+    @Override
+    public void setupModule(SetupContext context) {
+        super.setupModule(context);
+        // These classes have @JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class) /
+        // @JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class) annotations that throw
+        // if no module is registered. Clear them so that the serializers/deserializers registered above
+        // via addSerializer/addDeserializer take effect instead.
+        // This is necessary because Jackson resolves annotation-based serializers before module-registered ones.
+        // Only set the clearing MixIn if the user hasn't already provided their own MixIn for the type.
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, AuthenticatorTransport.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, COSEAlgorithmIdentifier.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, COSEKeyOperation.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, COSEKeyType.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, Curve.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, JWAIdentifier.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, MessageDigestAlgorithm.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, Origin.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, SignatureAlgorithm.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, TPMEccCurve.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, TPMGenerated.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, TPMIAlgHash.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, TPMIAlgPublic.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, TPMISTAttest.class);
     }
 
 }

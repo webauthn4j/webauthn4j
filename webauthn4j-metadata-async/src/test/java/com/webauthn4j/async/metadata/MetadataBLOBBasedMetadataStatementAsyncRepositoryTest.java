@@ -2,7 +2,6 @@ package com.webauthn4j.async.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -26,7 +25,7 @@ class MetadataBLOBBasedMetadataStatementAsyncRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
+        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementAsyncRepository target = new MetadataBLOBBasedMetadataStatementAsyncRepository(metadataBLOBAsyncProvider);
         assertThat(target.find(aaguid).toCompletableFuture().get()).hasSize(1);
     }
@@ -37,7 +36,7 @@ class MetadataBLOBBasedMetadataStatementAsyncRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
+        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementAsyncRepository target = new MetadataBLOBBasedMetadataStatementAsyncRepository(metadataBLOBAsyncProvider);
         assertThat(target.find(attestationCertificateKeyIdentifier).toCompletableFuture().get()).hasSize(1);
     }
@@ -48,7 +47,7 @@ class MetadataBLOBBasedMetadataStatementAsyncRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
+        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementAsyncRepository target = new MetadataBLOBBasedMetadataStatementAsyncRepository(metadataBLOBAsyncProvider);
         target.setNotFidoCertifiedAllowed(false);
         assertThat(target.isNotFidoCertifiedAllowed()).isFalse();
@@ -64,7 +63,7 @@ class MetadataBLOBBasedMetadataStatementAsyncRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/test-blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
+        LocalFileMetadataBLOBAsyncProvider metadataBLOBAsyncProvider = new LocalFileMetadataBLOBAsyncProvider(new ObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementAsyncRepository target = new MetadataBLOBBasedMetadataStatementAsyncRepository(metadataBLOBAsyncProvider);
 
         target.setSelfAssertionSubmittedAllowed(false);

@@ -24,10 +24,11 @@ import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 
 class MetadataBLOBPayloadEntryTest {
 
-    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
+    private final JsonMapper jsonMapper = new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()).getJsonMapper();
 
     @SuppressWarnings({"java:S5976", "java:S5961"})
     @Test

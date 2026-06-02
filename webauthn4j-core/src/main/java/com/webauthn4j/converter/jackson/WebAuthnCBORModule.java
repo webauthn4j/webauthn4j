@@ -45,56 +45,58 @@ public class WebAuthnCBORModule extends SimpleModule {
         super("WebAuthnCBORModule");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        this.addDeserializer(AAGUID.class, new AAGUIDDeserializer());
-        this.addDeserializer(AttestedCredentialData.class, new AttestedCredentialDataDeserializer(objectConverter));
-        this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
-        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(objectConverter));
-        this.addDeserializer(CertPath.class, new CertPathDeserializer());
-        this.addDeserializer(COSEKeyEnvelope.class, new COSEKeyEnvelopeDeserializer());
-        this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
-        this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
-        this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
-        this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
-        this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
-
+        // Guarded types: these have @JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class) /
+        // @JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class) annotations.
+        // The guard annotations are cleared by setupModule() via MixIn so that these serializers/deserializers take effect.
+        this.addSerializer(new AuthenticatorTransportSerializer());
         this.addDeserializer(AuthenticatorTransport.class, new AuthenticatorTransportDeserializer());
+        this.addSerializer(new COSEAlgorithmIdentifierSerializer());
         this.addDeserializer(COSEAlgorithmIdentifier.class, new COSEAlgorithmIdentifierDeserializer());
+        this.addSerializer(new COSEKeyOperationSerializer());
         this.addDeserializer(COSEKeyOperation.class, new COSEKeyOperationDeserializer());
+        this.addSerializer(new COSEKeyTypeSerializer());
         this.addDeserializer(COSEKeyType.class, new COSEKeyTypeDeserializer());
+        this.addSerializer(new CurveSerializer());
         this.addDeserializer(Curve.class, new CurveDeserializer());
 
-        this.addSerializer(new AuthenticatorTransportSerializer());
-        this.addSerializer(new COSEAlgorithmIdentifierSerializer());
-        this.addSerializer(new COSEKeyOperationSerializer());
-        this.addSerializer(new COSEKeyTypeSerializer());
-        this.addSerializer(new CurveSerializer());
-
-        this.addSerializer(new AttestationObjectSerializer());
+        // Non-guarded types
         this.addSerializer(new AAGUIDSerializer());
+        this.addDeserializer(AAGUID.class, new AAGUIDDeserializer());
+        this.addSerializer(new AttestationObjectSerializer());
         this.addSerializer(new AndroidKeyAttestationStatementSerializer());
         this.addSerializer(new AndroidSafetyNetAttestationStatementSerializer());
         this.addSerializer(new AppleAnonymousAttestationStatementSerializer());
         this.addSerializer(new NoneAttestationStatementSerializer());
         this.addSerializer(new AttestedCredentialDataSerializer(objectConverter));
-        this.addSerializer(new AuthenticationExtensionsAuthenticatorInputsSerializer());
-        this.addSerializer(new AuthenticationExtensionsAuthenticatorOutputsSerializer());
+        this.addDeserializer(AttestedCredentialData.class, new AttestedCredentialDataDeserializer(objectConverter));
         this.addSerializer(new AuthenticatorDataSerializer(objectConverter));
+        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(objectConverter));
         this.addSerializer(new CertPathSerializer());
+        this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addSerializer(new CredentialProtectionPolicySerializer());
+        this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
         this.addSerializer(new EC2COSEKeySerializer());
         this.addSerializer(new EdDSACOSEKeySerializer());
+        this.addDeserializer(COSEKeyEnvelope.class, new COSEKeyEnvelopeDeserializer());
         this.addSerializer(new FIDOU2FAttestationStatementSerializer());
         this.addSerializer(new HMACGetSecretAuthenticatorInputSerializer());
         this.addSerializer(new JWSSerializer());
+        this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
         this.addSerializer(new PackedAttestationStatementSerializer());
         this.addSerializer(new PublicKeyCredentialDescriptorSerializer());
         this.addSerializer(new RSACOSEKeySerializer());
         this.addSerializer(new TPMAttestationStatementSerializer());
         this.addSerializer(new TPMSAttestSerializer());
+        this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addSerializer(new TPMTPublicSerializer());
+        this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addSerializer(new X509CertificateSerializer());
+        this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
+        this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
+        this.addSerializer(new AuthenticationExtensionsAuthenticatorInputsSerializer());
+        this.addSerializer(new AuthenticationExtensionsAuthenticatorOutputsSerializer());
 
-        // attestation statements
+        // Attestation statement subtypes
         this.registerSubtypes(new NamedType(FIDOU2FAttestationStatement.class, FIDOU2FAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(PackedAttestationStatement.class, PackedAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(AndroidKeyAttestationStatement.class, AndroidKeyAttestationStatement.FORMAT));
@@ -103,20 +105,36 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.registerSubtypes(new NamedType(AppleAnonymousAttestationStatement.class, AppleAnonymousAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
 
-        // authenticator extension output deserializers
+        // Authenticator extension output deserializers
         this.addDeserializer(UserVerificationMethodExtensionAuthenticatorOutput.class, new UserVerificationMethodExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(CredentialProtectionExtensionAuthenticatorOutput.class, new CredentialProtectionExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(HMACSecretRegistrationExtensionAuthenticatorOutput.class, new HMACSecretRegistrationExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(HMACSecretAuthenticationExtensionAuthenticatorOutput.class, new HMACSecretAuthenticationExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputs.class, new AuthenticationExtensionsAuthenticatorOutputsDeserializer(objectConverter));
 
-        // authenticator extension input deserializers
+        // Authenticator extension input deserializers
         this.addDeserializer(UserVerificationMethodExtensionAuthenticatorInput.class, new UserVerificationMethodExtensionAuthenticatorInputDeserializer());
         this.addDeserializer(CredentialProtectionExtensionAuthenticatorInput.class, new CredentialProtectionExtensionAuthenticatorInputDeserializer());
         this.addDeserializer(HMACSecretRegistrationExtensionAuthenticatorInput.class, new HMACSecretRegistrationExtensionAuthenticatorInputDeserializer());
         this.addDeserializer(HMACSecretAuthenticationExtensionAuthenticatorInput.class, new HMACSecretAuthenticationExtensionAuthenticatorInputDeserializer());
         this.addDeserializer(AuthenticationExtensionsAuthenticatorInputs.class, new AuthenticationExtensionsAuthenticatorInputsDeserializer(objectConverter));
 
+    }
+
+    @Override
+    public void setupModule(SetupContext context) {
+        super.setupModule(context);
+        // These classes have @JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class) /
+        // @JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class) annotations that throw
+        // if no module is registered. Clear them so that the serializers/deserializers registered above
+        // via addSerializer/addDeserializer take effect instead.
+        // This is necessary because Jackson resolves annotation-based serializers before module-registered ones.
+        // Only set the clearing MixIn if the user hasn't already provided their own MixIn for the type.
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, AuthenticatorTransport.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, COSEAlgorithmIdentifier.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, COSEKeyOperation.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, COSEKeyType.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, Curve.class);
     }
 
 }

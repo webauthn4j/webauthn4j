@@ -19,7 +19,6 @@ package integration.component;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
-import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.metadata.data.MetadataBLOBPayload;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +28,7 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 
 class MetadataBLOBDeserializationTest {
 

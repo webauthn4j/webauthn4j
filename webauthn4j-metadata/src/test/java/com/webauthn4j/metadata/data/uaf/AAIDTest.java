@@ -17,13 +17,13 @@
 package com.webauthn4j.metadata.data.uaf;
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 
 class AAIDTest {
 

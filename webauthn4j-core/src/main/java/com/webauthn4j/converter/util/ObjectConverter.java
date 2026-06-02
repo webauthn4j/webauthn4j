@@ -19,7 +19,6 @@ package com.webauthn4j.converter.util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.webauthn4j.converter.jackson.WebAuthnCBORModule;
 import com.webauthn4j.converter.jackson.WebAuthnJSONModule;
-import com.webauthn4j.converter.jackson.WebAuthnModuleGuardAnnotationIntrospector;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import tools.jackson.databind.DeserializationFeature;
@@ -58,7 +57,6 @@ public class ObjectConverter {
      */
     private static JsonMapper reconfigureJsonMapper(@NotNull JsonMapper jsonMapper, @NotNull ObjectConverter objectConverter) {
         var builder = jsonMapper.rebuild()
-                .annotationIntrospector(new WebAuthnModuleGuardAnnotationIntrospector())
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .changeDefaultPropertyInclusion(incl -> incl
                         .withValueInclusion(JsonInclude.Include.NON_NULL)
@@ -76,7 +74,6 @@ public class ObjectConverter {
      */
     private static CBORMapper reconfigureCborMapper(@NotNull CBORMapper cborMapper, @NotNull ObjectConverter objectConverter) {
         var builder = cborMapper.rebuild()
-                .annotationIntrospector(new WebAuthnModuleGuardAnnotationIntrospector())
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .changeDefaultPropertyInclusion(incl -> incl
                         .withValueInclusion(JsonInclude.Include.NON_NULL)

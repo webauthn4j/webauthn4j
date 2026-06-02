@@ -16,6 +16,7 @@
 
 package com.webauthn4j.metadata.converter.jackson;
 
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardClearingMixin;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.AAIDDeserializer;
 import com.webauthn4j.metadata.converter.jackson.deserializer.AuthenticatorStatusDeserializer;
@@ -36,10 +37,24 @@ public class WebAuthnMetadataJSONModule extends SimpleModule {
         this.addSerializer(AAGUID.class, new MetadataAAGUIDSerializer());
         this.addDeserializer(AAGUID.class, new MetadataAAGUIDRelaxedDeserializer());
 
+        // These types have @JsonSerialize/@JsonDeserialize guard annotations that are cleared by setupModule() via MixIn.
         this.addSerializer(AAID.class, new AAIDSerializer());
         this.addDeserializer(AAID.class, new AAIDDeserializer());
         this.addSerializer(AuthenticatorStatus.class, new AuthenticatorStatusSerializer());
         this.addDeserializer(AuthenticatorStatus.class, new AuthenticatorStatusDeserializer());
+    }
+
+    @Override
+    public void setupModule(SetupContext context) {
+        super.setupModule(context);
+        // These classes have @JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class) /
+        // @JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class) annotations that throw
+        // if no module is registered. Clear them so that the serializers/deserializers registered above
+        // via addSerializer/addDeserializer take effect instead.
+        // This is necessary because Jackson resolves annotation-based serializers before module-registered ones.
+        // Only set the clearing MixIn if the user hasn't already provided their own MixIn for the type.
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, AAID.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, AuthenticatorStatus.class);
     }
 
 }

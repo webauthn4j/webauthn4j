@@ -473,11 +473,22 @@ Classes under `com.webauthn4j.data` package are designed as immutable DTO.
 Classes under `com.webauthn4j.data` package are designed as being serializable and deserializable.
 
 Some Classes under `converter` package needs custom serializer and deserializer.
-Jackson's module named
+Jackson’s module named
 `WebAuthnJSONModule` and `WebAuthnCBORModule` consolidate these custom serializer and deserializer.
-WebAuthn4J’s validators register these modules onto Jackson's `ObjectMapper` automatically.
+`ObjectConverter` registers these modules automatically.
 
-If you want to use WebAuthn4J’s serializer and deserializer outside of WebAuthnManager, you can register these modules onto Jackson's `ObjectMapper`.
+If you want to use WebAuthn4J’s serializer and deserializer outside of `ObjectConverter`, you can register these modules onto Jackson’s `ObjectMapper`.
+
+When working with FIDO Metadata Service (MDS) types such as `AAID` and `AuthenticatorStatus`, `WebAuthnMetadataJSONModule` provides the corresponding serializers and deserializers.
+Currently, metadata entry-point classes such as `MetadataBLOBFactory`, `LocalFilesMetadataStatementsProvider`, and `LocalFilesMetadataStatementsAsyncProvider` automatically register fallback serializers/deserializers with a warning if `WebAuthnMetadataJSONModule` is not explicitly registered.
+In a future release, explicit `WebAuthnMetadataJSONModule` registration will be required.
+To register the module, use `ObjectConverter.rebuildWithJSONModule`:
+
+[source,java]
+----
+ObjectConverter objectConverter = new ObjectConverter()
+    .rebuildWithJSONModule(new WebAuthnMetadataJSONModule());
+----
 
 ==== TrustAnchorsResolver
 

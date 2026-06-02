@@ -19,7 +19,6 @@ package com.webauthn4j.metadata.anchor;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.LocalFileMetadataBLOBProvider;
-import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.verifier.RegistrationObject;
@@ -103,7 +102,7 @@ class MetadataBLOBBasedTrustAnchorRepositoryTest {
             Path blobPath = new File(filePath).toPath();
             Path dstPath = tempDir.resolve("blob.jwt");
             Files.copy(blobPath, dstPath);
-            LocalFileMetadataBLOBProvider localFileMetadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
+            LocalFileMetadataBLOBProvider localFileMetadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter(), dstPath);
             return new MetadataBLOBBasedTrustAnchorRepository(localFileMetadataBLOBProvider);
         } catch (IOException e) {
             throw new UncheckedIOException(e);

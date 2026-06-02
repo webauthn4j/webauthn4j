@@ -18,7 +18,6 @@ package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -41,7 +40,7 @@ class MetadataBLOBBasedMetadataStatementRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBProvider metadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
+        LocalFileMetadataBLOBProvider metadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementRepository target = new MetadataBLOBBasedMetadataStatementRepository(metadataBLOBProvider);
         assertThat(target.find(aaguid)).hasSize(1);
     }
@@ -52,7 +51,7 @@ class MetadataBLOBBasedMetadataStatementRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBProvider metadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
+        LocalFileMetadataBLOBProvider metadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementRepository target = new MetadataBLOBBasedMetadataStatementRepository(metadataBLOBProvider);
         assertThat(target.find(attestationCertificateKeyIdentifier)).hasSize(1);
     }
@@ -63,7 +62,7 @@ class MetadataBLOBBasedMetadataStatementRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBProvider metadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
+        LocalFileMetadataBLOBProvider metadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementRepository target = new MetadataBLOBBasedMetadataStatementRepository(metadataBLOBProvider);
         target.setNotFidoCertifiedAllowed(false);
         assertThat(target.isNotFidoCertifiedAllowed()).isFalse();
@@ -79,7 +78,7 @@ class MetadataBLOBBasedMetadataStatementRepositoryTest {
         Path blobPath = new File("src/test/resources/integration/component/test-blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBProvider metadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
+        LocalFileMetadataBLOBProvider metadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter(), dstPath);
         MetadataBLOBBasedMetadataStatementRepository target = new MetadataBLOBBasedMetadataStatementRepository(metadataBLOBProvider);
 
         target.setSelfAssertionSubmittedAllowed(false);

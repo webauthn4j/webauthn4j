@@ -25,10 +25,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 
 class AuthenticatorStatusTest {
 
-    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
+    private final JsonMapper jsonMapper = new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()).getJsonMapper();
 
     @Test
     void create_test() {
