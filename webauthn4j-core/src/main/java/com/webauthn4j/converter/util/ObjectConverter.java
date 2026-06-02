@@ -23,6 +23,7 @@ import com.webauthn4j.converter.jackson.WebAuthnModuleGuardAnnotationIntrospecto
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JacksonModule;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.dataformat.cbor.CBORMapper;
@@ -116,6 +117,16 @@ public class ObjectConverter {
 
     public @NotNull CBORMapper getCborMapper() {
         return cborMapper;
+    }
+
+    public @NotNull ObjectConverter rebuildWithJSONModule(@NotNull JacksonModule module) {
+        JsonMapper newJsonMapper = this.jsonMapper.rebuild().addModule(module).build();
+        return new ObjectConverter(newJsonMapper, this.cborMapper);
+    }
+
+    public @NotNull ObjectConverter rebuildWithCBORModule(@NotNull JacksonModule module) {
+        CBORMapper newCborMapper = this.cborMapper.rebuild().addModule(module).build();
+        return new ObjectConverter(this.jsonMapper, newCborMapper);
     }
 
 }

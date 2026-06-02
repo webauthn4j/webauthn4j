@@ -20,8 +20,6 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.exc.InvalidFormatException;
-import tools.jackson.databind.json.JsonMapper;
-import tools.jackson.dataformat.cbor.CBORMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,14 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AAIDTest {
 
-    private final ObjectConverter objectConverter = createObjectConverterWithMetadataModule();
-
-    private static ObjectConverter createObjectConverterWithMetadataModule() {
-        ObjectConverter oc = new ObjectConverter();
-        JsonMapper jsonMapper = oc.getJsonMapper().rebuild().addModule(new WebAuthnMetadataJSONModule()).build();
-        CBORMapper cborMapper = oc.getCborMapper().rebuild().build();
-        return new ObjectConverter(jsonMapper, cborMapper);
-    }
+    private final ObjectConverter objectConverter = new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule());
 
     @Test
     void constructor_test() {

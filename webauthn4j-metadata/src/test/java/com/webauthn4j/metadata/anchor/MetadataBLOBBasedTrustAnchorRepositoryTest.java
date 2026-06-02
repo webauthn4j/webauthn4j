@@ -25,7 +25,6 @@ import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.verifier.RegistrationObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -104,10 +103,7 @@ class MetadataBLOBBasedTrustAnchorRepositoryTest {
             Path blobPath = new File(filePath).toPath();
             Path dstPath = tempDir.resolve("blob.jwt");
             Files.copy(blobPath, dstPath);
-            ObjectConverter oc = new ObjectConverter();
-            JsonMapper jsonMapper = oc.getJsonMapper().rebuild().addModule(new WebAuthnMetadataJSONModule()).build();
-            ObjectConverter objectConverter = new ObjectConverter(jsonMapper, oc.getCborMapper());
-            LocalFileMetadataBLOBProvider localFileMetadataBLOBProvider = new LocalFileMetadataBLOBProvider(objectConverter, dstPath);
+            LocalFileMetadataBLOBProvider localFileMetadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()), dstPath);
             return new MetadataBLOBBasedTrustAnchorRepository(localFileMetadataBLOBProvider);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
