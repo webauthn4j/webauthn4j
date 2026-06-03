@@ -35,12 +35,15 @@ import java.util.Objects;
 
 /**
  * This metadata statement contains a subset of verifiable information for authenticators certified by the FIDO Alliance.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-rd-20251016.html#dictdef-metadatastatement">Metadata Statement v3.1.1</a>
  */
 public class MetadataStatement {
     @Nullable private final String legalHeader;
     @Nullable private final AAID aaid;
     @Nullable private final AAGUID aaguid;
     @Nullable private final List<String> attestationCertificateKeyIdentifiers;
+    @Nullable private final FriendlyNames friendlyNames;
     @NotNull private final String description;
     @Nullable private final AlternativeDescriptions alternativeDescriptions;
     @NotNull private final Integer authenticatorVersion;
@@ -111,9 +114,19 @@ public class MetadataStatement {
     @Nullable
     private final String icon;
     @Nullable
+    private final String iconDark;
+    @Nullable
+    private final String providerLogoLight;
+    @Nullable
+    private final String providerLogoDark;
+    @Nullable
     private final List<ExtensionDescriptor> supportedExtensions;
     @Nullable
+    private final MultiDeviceCredentialSupport multiDeviceCredentialSupport;
+    @Nullable
     private final AuthenticatorGetInfo authenticatorGetInfo;
+    @Nullable
+    private final String cxConfigURL;
 
     @SuppressWarnings("java:S107")
     public MetadataStatement(
@@ -121,6 +134,7 @@ public class MetadataStatement {
             @JsonProperty("aaid") @Nullable AAID aaid,
             @JsonProperty("aaguid") @Nullable AAGUID aaguid,
             @JsonProperty("attestationCertificateKeyIdentifiers") @Nullable List<String> attestationCertificateKeyIdentifiers,
+            @JsonProperty("friendlyNames") @Nullable FriendlyNames friendlyNames,
             @JsonProperty("description") @NotNull String description,
             @JsonProperty("alternativeDescriptions") @Nullable AlternativeDescriptions alternativeDescriptions,
             @JsonProperty("authenticatorVersion") @NotNull Integer authenticatorVersion,
@@ -143,12 +157,18 @@ public class MetadataStatement {
             @JsonProperty("attestationRootCertificates") @NotNull List<X509Certificate> attestationRootCertificates,
             @JsonProperty("ecdaaTrustAnchors") @Nullable List<EcdaaTrustAnchor> ecdaaTrustAnchors,
             @JsonProperty("icon") @Nullable String icon,
+            @JsonProperty("iconDark") @Nullable String iconDark,
+            @JsonProperty("providerLogoLight") @Nullable String providerLogoLight,
+            @JsonProperty("providerLogoDark") @Nullable String providerLogoDark,
             @JsonProperty("supportedExtensions") @Nullable List<ExtensionDescriptor> supportedExtensions,
-            @JsonProperty("authenticatorGetInfo") @Nullable AuthenticatorGetInfo authenticatorGetInfo) {
+            @JsonProperty("multiDeviceCredentialSupport") @Nullable MultiDeviceCredentialSupport multiDeviceCredentialSupport,
+            @JsonProperty("authenticatorGetInfo") @Nullable AuthenticatorGetInfo authenticatorGetInfo,
+            @JsonProperty("cxConfigURL") @Nullable String cxConfigURL) {
         this.legalHeader = legalHeader;
         this.aaid = aaid;
         this.aaguid = aaguid;
         this.attestationCertificateKeyIdentifiers = CollectionUtil.unmodifiableList(attestationCertificateKeyIdentifiers);
+        this.friendlyNames = friendlyNames;
         this.description = description;
         this.alternativeDescriptions = alternativeDescriptions;
         this.authenticatorVersion = authenticatorVersion;
@@ -171,8 +191,52 @@ public class MetadataStatement {
         this.attestationRootCertificates = CollectionUtil.unmodifiableList(attestationRootCertificates);
         this.ecdaaTrustAnchors = CollectionUtil.unmodifiableList(ecdaaTrustAnchors);
         this.icon = icon;
+        this.iconDark = iconDark;
+        this.providerLogoLight = providerLogoLight;
+        this.providerLogoDark = providerLogoDark;
         this.supportedExtensions = CollectionUtil.unmodifiableList(supportedExtensions);
+        this.multiDeviceCredentialSupport = multiDeviceCredentialSupport;
         this.authenticatorGetInfo = authenticatorGetInfo;
+        this.cxConfigURL = cxConfigURL;
+    }
+
+    @Deprecated
+    public MetadataStatement(
+            @Nullable String legalHeader,
+            @Nullable AAID aaid,
+            @Nullable AAGUID aaguid,
+            @Nullable List<String> attestationCertificateKeyIdentifiers,
+            @NotNull String description,
+            @Nullable AlternativeDescriptions alternativeDescriptions,
+            @NotNull Integer authenticatorVersion,
+            @NotNull String protocolFamily,
+            @NotNull Integer schema,
+            @NotNull List<Version> upv,
+            @NotNull List<AuthenticationAlgorithm> authenticationAlgorithms,
+            @NotNull List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings,
+            @NotNull List<AuthenticatorAttestationType> attestationTypes,
+            @NotNull List<VerificationMethodANDCombinations> userVerificationDetails,
+            @NotNull List<KeyProtectionType> keyProtection,
+            @Nullable Boolean isKeyRestricted,
+            @Nullable Boolean isFreshUserVerificationRequired,
+            @NotNull List<MatcherProtectionType> matcherProtection,
+            @Nullable Integer cryptoStrength,
+            @Nullable List<AttachmentHint> attachmentHint,
+            @NotNull List<TransactionConfirmationDisplay> tcDisplay,
+            @Nullable String tcDisplayContentType,
+            @Nullable List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics,
+            @NotNull List<X509Certificate> attestationRootCertificates,
+            @Nullable List<EcdaaTrustAnchor> ecdaaTrustAnchors,
+            @Nullable String icon,
+            @Nullable List<ExtensionDescriptor> supportedExtensions,
+            @Nullable AuthenticatorGetInfo authenticatorGetInfo) {
+        this(legalHeader, aaid, aaguid, attestationCertificateKeyIdentifiers, null,
+                description, alternativeDescriptions, authenticatorVersion, protocolFamily, schema,
+                upv, authenticationAlgorithms, publicKeyAlgAndEncodings, attestationTypes,
+                userVerificationDetails, keyProtection, isKeyRestricted, isFreshUserVerificationRequired,
+                matcherProtection, cryptoStrength, attachmentHint, tcDisplay, tcDisplayContentType,
+                tcDisplayPNGCharacteristics, attestationRootCertificates, ecdaaTrustAnchors,
+                icon, null, null, null, supportedExtensions, null, authenticatorGetInfo, null);
     }
 
     @Nullable
@@ -193,6 +257,11 @@ public class MetadataStatement {
     @Nullable
     public List<String> getAttestationCertificateKeyIdentifiers() {
         return attestationCertificateKeyIdentifiers;
+    }
+
+    @Nullable
+    public FriendlyNames getFriendlyNames() {
+        return friendlyNames;
     }
 
     @NotNull
@@ -306,8 +375,28 @@ public class MetadataStatement {
     }
 
     @Nullable
+    public String getIconDark() {
+        return iconDark;
+    }
+
+    @Nullable
+    public String getProviderLogoLight() {
+        return providerLogoLight;
+    }
+
+    @Nullable
+    public String getProviderLogoDark() {
+        return providerLogoDark;
+    }
+
+    @Nullable
     public List<ExtensionDescriptor> getSupportedExtensions() {
         return supportedExtensions;
+    }
+
+    @Nullable
+    public MultiDeviceCredentialSupport getMultiDeviceCredentialSupport() {
+        return multiDeviceCredentialSupport;
     }
 
     @Nullable
@@ -315,16 +404,21 @@ public class MetadataStatement {
         return authenticatorGetInfo;
     }
 
+    @Nullable
+    public String getCxConfigURL() {
+        return cxConfigURL;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MetadataStatement that = (MetadataStatement) o;
-        return Objects.equals(legalHeader, that.legalHeader) && Objects.equals(aaid, that.aaid) && Objects.equals(aaguid, that.aaguid) && Objects.equals(attestationCertificateKeyIdentifiers, that.attestationCertificateKeyIdentifiers) && description.equals(that.description) && Objects.equals(alternativeDescriptions, that.alternativeDescriptions) && authenticatorVersion.equals(that.authenticatorVersion) && protocolFamily.equals(that.protocolFamily) && schema.equals(that.schema) && upv.equals(that.upv) && authenticationAlgorithms.equals(that.authenticationAlgorithms) && publicKeyAlgAndEncodings.equals(that.publicKeyAlgAndEncodings) && attestationTypes.equals(that.attestationTypes) && userVerificationDetails.equals(that.userVerificationDetails) && keyProtection.equals(that.keyProtection) && Objects.equals(isKeyRestricted, that.isKeyRestricted) && Objects.equals(isFreshUserVerificationRequired, that.isFreshUserVerificationRequired) && matcherProtection.equals(that.matcherProtection) && Objects.equals(cryptoStrength, that.cryptoStrength) && Objects.equals(attachmentHint, that.attachmentHint) && tcDisplay.equals(that.tcDisplay) && Objects.equals(tcDisplayContentType, that.tcDisplayContentType) && Objects.equals(tcDisplayPNGCharacteristics, that.tcDisplayPNGCharacteristics) && attestationRootCertificates.equals(that.attestationRootCertificates) && Objects.equals(ecdaaTrustAnchors, that.ecdaaTrustAnchors) && Objects.equals(icon, that.icon) && Objects.equals(supportedExtensions, that.supportedExtensions) && Objects.equals(authenticatorGetInfo, that.authenticatorGetInfo);
+        return Objects.equals(legalHeader, that.legalHeader) && Objects.equals(aaid, that.aaid) && Objects.equals(aaguid, that.aaguid) && Objects.equals(attestationCertificateKeyIdentifiers, that.attestationCertificateKeyIdentifiers) && Objects.equals(friendlyNames, that.friendlyNames) && description.equals(that.description) && Objects.equals(alternativeDescriptions, that.alternativeDescriptions) && authenticatorVersion.equals(that.authenticatorVersion) && protocolFamily.equals(that.protocolFamily) && schema.equals(that.schema) && upv.equals(that.upv) && authenticationAlgorithms.equals(that.authenticationAlgorithms) && publicKeyAlgAndEncodings.equals(that.publicKeyAlgAndEncodings) && attestationTypes.equals(that.attestationTypes) && userVerificationDetails.equals(that.userVerificationDetails) && keyProtection.equals(that.keyProtection) && Objects.equals(isKeyRestricted, that.isKeyRestricted) && Objects.equals(isFreshUserVerificationRequired, that.isFreshUserVerificationRequired) && matcherProtection.equals(that.matcherProtection) && Objects.equals(cryptoStrength, that.cryptoStrength) && Objects.equals(attachmentHint, that.attachmentHint) && tcDisplay.equals(that.tcDisplay) && Objects.equals(tcDisplayContentType, that.tcDisplayContentType) && Objects.equals(tcDisplayPNGCharacteristics, that.tcDisplayPNGCharacteristics) && attestationRootCertificates.equals(that.attestationRootCertificates) && Objects.equals(ecdaaTrustAnchors, that.ecdaaTrustAnchors) && Objects.equals(icon, that.icon) && Objects.equals(iconDark, that.iconDark) && Objects.equals(providerLogoLight, that.providerLogoLight) && Objects.equals(providerLogoDark, that.providerLogoDark) && Objects.equals(supportedExtensions, that.supportedExtensions) && Objects.equals(multiDeviceCredentialSupport, that.multiDeviceCredentialSupport) && Objects.equals(authenticatorGetInfo, that.authenticatorGetInfo) && Objects.equals(cxConfigURL, that.cxConfigURL);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(legalHeader, aaid, aaguid, attestationCertificateKeyIdentifiers, description, alternativeDescriptions, authenticatorVersion, protocolFamily, schema, upv, authenticationAlgorithms, publicKeyAlgAndEncodings, attestationTypes, userVerificationDetails, keyProtection, isKeyRestricted, isFreshUserVerificationRequired, matcherProtection, cryptoStrength, attachmentHint, tcDisplay, tcDisplayContentType, tcDisplayPNGCharacteristics, attestationRootCertificates, ecdaaTrustAnchors, icon, supportedExtensions, authenticatorGetInfo);
+        return Objects.hash(legalHeader, aaid, aaguid, attestationCertificateKeyIdentifiers, friendlyNames, description, alternativeDescriptions, authenticatorVersion, protocolFamily, schema, upv, authenticationAlgorithms, publicKeyAlgAndEncodings, attestationTypes, userVerificationDetails, keyProtection, isKeyRestricted, isFreshUserVerificationRequired, matcherProtection, cryptoStrength, attachmentHint, tcDisplay, tcDisplayContentType, tcDisplayPNGCharacteristics, attestationRootCertificates, ecdaaTrustAnchors, icon, iconDark, providerLogoLight, providerLogoDark, supportedExtensions, multiDeviceCredentialSupport, authenticatorGetInfo, cxConfigURL);
     }
 }
