@@ -26,6 +26,9 @@ import java.util.Objects;
 
 /**
  * Contains the current BiometricStatusReport of one of the authenticator's biometric component.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1.1-ps-20260105.html#dictdef-biometricstatusreport">
+ * §3.1.2. BiometricStatusReport dictionary</a>
  */
 public class BiometricStatusReport {
     @NotNull private final Integer certLevel;

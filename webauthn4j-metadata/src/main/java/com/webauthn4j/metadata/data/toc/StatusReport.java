@@ -27,11 +27,14 @@ import tools.jackson.databind.ext.javatime.ser.LocalDateSerializer;
 
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 /**
- * Contains an AuthenticatorStatus and additional data associated with it, if any.
- * New StatusReport entries will be added to report known issues present in firmware updates.
+ * Contains an {@link AuthenticatorStatus} and additional data associated with it, if any.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1.1-ps-20260105.html#dictdef-statusreport">
+ * §3.1.3. StatusReport dictionary</a>
  */
 public class StatusReport {
     @NotNull
@@ -43,6 +46,14 @@ public class StatusReport {
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty
     private final LocalDate effectiveDate;
+
+    @Nullable
+    @JsonProperty
+    private final Long authenticatorVersion;
+
+    @Nullable
+    @JsonProperty
+    private final X509Certificate batchCertificate;
 
     @Nullable
     @JsonProperty
@@ -66,27 +77,72 @@ public class StatusReport {
 
     @Nullable
     @JsonProperty
+    private final List<CertificationProfile> certificationProfiles;
+
+    @Nullable
+    @JsonProperty
     private final String certificationRequirementsVersion;
 
+    @Nullable
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonProperty
+    private final LocalDate sunsetDate;
 
+    @Nullable
+    @JsonProperty
+    private final Long fipsRevision;
+
+    @Nullable
+    @JsonProperty
+    private final Long fipsPhysicalSecurityLevel;
+
+    @SuppressWarnings("java:S107")
     @JsonCreator
     public StatusReport(
             @JsonProperty("status") @NotNull AuthenticatorStatus status,
             @JsonProperty("effectiveDate") @Nullable LocalDate effectiveDate,
+            @JsonProperty("authenticatorVersion") @Nullable Long authenticatorVersion,
             @JsonProperty("certificate") @Nullable X509Certificate certificate,
+            @JsonProperty("batchCertificate") @Nullable X509Certificate batchCertificate,
             @JsonProperty("url") @Nullable String url,
             @JsonProperty("certificationDescriptor") @Nullable String certificationDescriptor,
             @JsonProperty("certificateNumber") @Nullable String certificateNumber,
             @JsonProperty("certificationPolicyVersion") @Nullable String certificationPolicyVersion,
-            @JsonProperty("certificationRequirementsVersion") @Nullable String certificationRequirementsVersion) {
+            @JsonProperty("certificationProfiles") @Nullable List<CertificationProfile> certificationProfiles,
+            @JsonProperty("certificationRequirementsVersion") @Nullable String certificationRequirementsVersion,
+            @JsonProperty("sunsetDate") @Nullable LocalDate sunsetDate,
+            @JsonProperty("fipsRevision") @Nullable Long fipsRevision,
+            @JsonProperty("fipsPhysicalSecurityLevel") @Nullable Long fipsPhysicalSecurityLevel) {
         this.status = status;
         this.effectiveDate = effectiveDate;
+        this.authenticatorVersion = authenticatorVersion;
         this.certificate = certificate;
+        this.batchCertificate = batchCertificate;
         this.url = url;
         this.certificationDescriptor = certificationDescriptor;
         this.certificateNumber = certificateNumber;
         this.certificationPolicyVersion = certificationPolicyVersion;
+        this.certificationProfiles = certificationProfiles;
         this.certificationRequirementsVersion = certificationRequirementsVersion;
+        this.sunsetDate = sunsetDate;
+        this.fipsRevision = fipsRevision;
+        this.fipsPhysicalSecurityLevel = fipsPhysicalSecurityLevel;
+    }
+
+    @Deprecated
+    public StatusReport(
+            @NotNull AuthenticatorStatus status,
+            @Nullable LocalDate effectiveDate,
+            @Nullable X509Certificate certificate,
+            @Nullable String url,
+            @Nullable String certificationDescriptor,
+            @Nullable String certificateNumber,
+            @Nullable String certificationPolicyVersion,
+            @Nullable String certificationRequirementsVersion) {
+        this(status, effectiveDate, null, certificate, null, url, certificationDescriptor,
+                certificateNumber, certificationPolicyVersion, null, certificationRequirementsVersion,
+                null, null, null);
     }
 
     @NotNull
@@ -97,6 +153,16 @@ public class StatusReport {
     @Nullable
     public LocalDate getEffectiveDate() {
         return effectiveDate;
+    }
+
+    @Nullable
+    public Long getAuthenticatorVersion() {
+        return authenticatorVersion;
+    }
+
+    @Nullable
+    public X509Certificate getBatchCertificate() {
+        return batchCertificate;
     }
 
     @Nullable
@@ -125,8 +191,28 @@ public class StatusReport {
     }
 
     @Nullable
+    public List<CertificationProfile> getCertificationProfiles() {
+        return certificationProfiles;
+    }
+
+    @Nullable
     public String getCertificationRequirementsVersion() {
         return certificationRequirementsVersion;
+    }
+
+    @Nullable
+    public LocalDate getSunsetDate() {
+        return sunsetDate;
+    }
+
+    @Nullable
+    public Long getFipsRevision() {
+        return fipsRevision;
+    }
+
+    @Nullable
+    public Long getFipsPhysicalSecurityLevel() {
+        return fipsPhysicalSecurityLevel;
     }
 
     @Override
@@ -134,11 +220,11 @@ public class StatusReport {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StatusReport that = (StatusReport) o;
-        return status == that.status && Objects.equals(effectiveDate, that.effectiveDate) && Objects.equals(certificate, that.certificate) && Objects.equals(url, that.url) && Objects.equals(certificationDescriptor, that.certificationDescriptor) && Objects.equals(certificateNumber, that.certificateNumber) && Objects.equals(certificationPolicyVersion, that.certificationPolicyVersion) && Objects.equals(certificationRequirementsVersion, that.certificationRequirementsVersion);
+        return status == that.status && Objects.equals(effectiveDate, that.effectiveDate) && Objects.equals(authenticatorVersion, that.authenticatorVersion) && Objects.equals(certificate, that.certificate) && Objects.equals(batchCertificate, that.batchCertificate) && Objects.equals(url, that.url) && Objects.equals(certificationDescriptor, that.certificationDescriptor) && Objects.equals(certificateNumber, that.certificateNumber) && Objects.equals(certificationPolicyVersion, that.certificationPolicyVersion) && Objects.equals(certificationProfiles, that.certificationProfiles) && Objects.equals(certificationRequirementsVersion, that.certificationRequirementsVersion) && Objects.equals(sunsetDate, that.sunsetDate) && Objects.equals(fipsRevision, that.fipsRevision) && Objects.equals(fipsPhysicalSecurityLevel, that.fipsPhysicalSecurityLevel);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(status, effectiveDate, certificate, url, certificationDescriptor, certificateNumber, certificationPolicyVersion, certificationRequirementsVersion);
+        return Objects.hash(status, effectiveDate, authenticatorVersion, certificate, batchCertificate, url, certificationDescriptor, certificateNumber, certificationPolicyVersion, certificationProfiles, certificationRequirementsVersion, sunsetDate, fipsRevision, fipsPhysicalSecurityLevel);
     }
 }
