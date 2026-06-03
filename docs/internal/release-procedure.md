@@ -17,8 +17,4 @@ After the release workflow completion, bump-version workflow is automatically tr
 
 Write a release note on the GitHub: https://github.com/webauthn4j/webauthn4j/releases
 
-Release note draft can be generated with the following command. 
-
-```
-./gradlew generateReleaseNote
-```
+Click "Generate release notes" button or use `gh release create <tag> --generate-notes` to generate a release note draft based on `.github/release.yml`.
