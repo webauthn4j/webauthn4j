@@ -7,12 +7,12 @@ repositories {
 }
 
 dependencies {
-    implementation("tools.jackson.core:jackson-databind:3.1.4")
+    implementation(libs.jackson.databind)
 
-    testImplementation("org.junit.jupiter:junit-jupiter:6.1.0")
+    testImplementation(libs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("org.assertj:assertj-core:3.27.7")
-    testImplementation("com.squareup.okhttp3:mockwebserver:5.3.2")
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.mockwebserver)
 }
 
 tasks.test {

@@ -12,22 +12,36 @@ bouncycastle = "1.84"
 jetbrains-annotations = "26.1.0"
 asciidoctor = "4.0.5"
 
+asciidoctorj-diagram = "2.3.1"
+
 # Test dependencies
 
 spring-boot-bom = "4.0.6"
+
 spring-dependency-management = "1.1.7"
+
 sonarqube = "7.3.0.8198"
 
 quarkus = "3.36.0"
+
 selenium = "4.44.0"
+
 assertj = "3.27.7"
+
+junit-jupiter = "6.1.0"
+
+mockwebserver = "5.3.2"
+
 playwright = "1.60.0"
 
 # fido-integration-bdd dependencies
 
 kotlin = "2.3.21"
+
 kotest = "5.9.1"
+
 kotlinx-coroutines = "1.11.0"
+
 webauthn4j-ctap = "0.2.0.RELEASE"
 
 [libraries]
@@ -50,6 +64,8 @@ spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies"
 quarkus-bom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
 selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version.ref = "selenium" }
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "mockwebserver" }
 playwright = { module = "com.microsoft.playwright:playwright", version.ref = "playwright" }
 
 # fido-integration-bdd dependencies

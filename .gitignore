@@ -31,5 +31,11 @@ nbdist/
 sample/node_modules
 sample/src/main/resources/application-local-with-services.yml
 
+### Claude Code ###
+.claude/
+
+### Kotlin ###
+.kotlin/
+
 ### Temporary Files ###
 tmp/

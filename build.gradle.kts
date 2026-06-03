@@ -224,7 +224,7 @@ tasks.register("switchToRelease"){
 asciidoctorj{
     modules{
         diagram.use()
-        diagram.version("2.3.1")
+        diagram.version(libs.versions.asciidoctorj.diagram.get())
     }
     attributes(mapOf("source-highlighter" to "rouge"))
 }
