@@ -16,15 +16,19 @@
 
 package com.webauthn4j.data.attestation.authenticator;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.ECUtil;
 import org.jetbrains.annotations.NotNull;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.NamedParameterSpec;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public enum Curve {
 
     SECP256R1(1, 32),
@@ -59,8 +63,11 @@ public enum Curve {
         }
     }
 
-    @JsonCreator
-    public static @NotNull Curve deserialize(int value) throws InvalidFormatException {
+    /**
+     * @deprecated Use {@link #create(int)} instead. Jackson deserialization is now handled by a dedicated deserializer class.
+     */
+    @Deprecated
+    public static @NotNull Curve deserialize(int value) {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -68,7 +75,6 @@ public enum Curve {
         }
     }
 
-    @JsonValue
     public int getValue() {
         return value;
     }

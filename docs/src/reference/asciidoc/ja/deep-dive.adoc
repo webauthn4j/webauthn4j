@@ -456,7 +456,18 @@ String value = example.getExampleValue();
 
 ==== Converter, WebAuthnModule
 
-データパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。 一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 `converter` パッケージ配下に集約されています。 カスタムシリアライザ、デシリアライザは `WebAuthnJSONModule` と `WebAuthnCBORModule` というJacksonのModuleにまとめられています。 WebAuthn4Jは内部で使用するJacksonの `JsonMapper`, `CBORMapper` に自動で `WebAuthnJSONModule` と `WebAuthnCBORModule` を適用しますが、`WebAuthnManager` の外部で WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合は、Jacksonの `JsonMapper`, `CBORMapper` に `WebAuthnJSONModule` と `WebAuthnCBORModule` を登録すると良いでしょう。
+データパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。 一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 `converter` パッケージ配下に集約されています。 カスタムシリアライザ、デシリアライザは `WebAuthnJSONModule` と `WebAuthnCBORModule` というJacksonのModuleにまとめられています。 `ObjectConverter` は内部で使用するJacksonの `JsonMapper`, `CBORMapper` に自動で `WebAuthnJSONModule` と `WebAuthnCBORModule` を適用しますが、`ObjectConverter` の外部で WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合は、Jacksonの `JsonMapper`, `CBORMapper` に `WebAuthnJSONModule` と `WebAuthnCBORModule` を登録すると良いでしょう。
+
+FIDO Metadata Service (MDS) の型（`AAID`、`AuthenticatorStatus` 等）を扱う場合は、`WebAuthnMetadataJSONModule` が対応するシリアライザ、デシリアライザを提供します。
+現在、`MetadataBLOBFactory`、`LocalFilesMetadataStatementsProvider`、`LocalFilesMetadataStatementsAsyncProvider` 等のメタデータエントリーポイントクラスは、`WebAuthnMetadataJSONModule` が未登録の場合にフォールバックのシリアライザ、デシリアライザを自動登録します（警告ログが出力されます）。
+将来のリリースでは `WebAuthnMetadataJSONModule` の明示的な登録が必須になる予定です。
+モジュールの登録には `ObjectConverter.rebuildWithJSONModule` を使用してください:
+
+[source,java]
+----
+ObjectConverter objectConverter = new ObjectConverter()
+    .rebuildWithJSONModule(new WebAuthnMetadataJSONModule());
+----
 
 ==== TrustAnchorsResolver
 

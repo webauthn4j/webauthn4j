@@ -23,10 +23,11 @@ import tools.jackson.databind.exc.InvalidFormatException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 
 class AAIDTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule());
 
     @Test
     void constructor_test() {

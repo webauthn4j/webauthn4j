@@ -18,7 +18,6 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
-import tools.jackson.databind.exc.InvalidFormatException;
 import tools.jackson.databind.exc.MismatchedInputException;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -84,10 +83,9 @@ class AuthenticatorTransportTest {
 
     @Test
     void deserialize_test_with_null() {
-        // Actually, deserialize method is not used by ObjectMapper because ObjectMapper doesn't call custom deserializer when the value is null
         assertThatThrownBy(
-                () -> AuthenticatorTransport.deserialize(null)
-        ).isInstanceOf(InvalidFormatException.class);
+                () -> jsonMapper.readValue("{\"transport\": null}", TestDTO.class)
+        ).isInstanceOf(MismatchedInputException.class);
     }
 
     static class TestDTO {

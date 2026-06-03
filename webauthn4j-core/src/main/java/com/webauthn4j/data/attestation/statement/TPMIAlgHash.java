@@ -16,11 +16,14 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import org.jetbrains.annotations.NotNull;
-import tools.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public enum TPMIAlgHash {
 
     TPM_ALG_ERROR(0x00),
@@ -60,17 +63,6 @@ public enum TPMIAlgHash {
         }
     }
 
-    @JsonCreator
-    @SuppressWarnings("squid:S3776")
-    private static @NotNull TPMIAlgHash deserialize(int value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, TPMIAlgHash.class);
-        }
-    }
-
-    @JsonValue
     public int getValue() {
         return value;
     }

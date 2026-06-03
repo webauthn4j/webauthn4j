@@ -22,6 +22,7 @@ import com.webauthn4j.converter.jackson.WebAuthnJSONModule;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JacksonModule;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.dataformat.cbor.CBORMapper;
@@ -55,26 +56,34 @@ public class ObjectConverter {
      * Reconfigure a {@link ObjectMapper} for WebAuthn JSON type processing
      */
     private static JsonMapper reconfigureJsonMapper(@NotNull JsonMapper jsonMapper, @NotNull ObjectConverter objectConverter) {
-        return jsonMapper.rebuild()
-                .addModule(new WebAuthnJSONModule(objectConverter))
+        var builder = jsonMapper.rebuild()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .changeDefaultPropertyInclusion(incl -> incl
                         .withValueInclusion(JsonInclude.Include.NON_NULL)
-                )
-                .build();
+                );
+        boolean alreadyRegistered = jsonMapper.registeredModules().stream()
+                .anyMatch(m -> m instanceof WebAuthnJSONModule);
+        if (!alreadyRegistered) {
+            builder.addModule(new WebAuthnJSONModule(objectConverter));
+        }
+        return builder.build();
     }
 
     /**
      * Reconfigure a {@link ObjectMapper} for WebAuthn CBOR type processing
      */
     private static CBORMapper reconfigureCborMapper(@NotNull CBORMapper cborMapper, @NotNull ObjectConverter objectConverter) {
-        return cborMapper.rebuild()
-                .addModule(new WebAuthnCBORModule(objectConverter))
+        var builder = cborMapper.rebuild()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .changeDefaultPropertyInclusion(incl -> incl
                         .withValueInclusion(JsonInclude.Include.NON_NULL)
-                )
-                .build();
+                );
+        boolean alreadyRegistered = cborMapper.registeredModules().stream()
+                .anyMatch(m -> m instanceof WebAuthnCBORModule);
+        if (!alreadyRegistered) {
+            builder.addModule(new WebAuthnCBORModule(objectConverter));
+        }
+        return builder.build();
     }
 
     /**
@@ -105,6 +114,16 @@ public class ObjectConverter {
 
     public @NotNull CBORMapper getCborMapper() {
         return cborMapper;
+    }
+
+    public @NotNull ObjectConverter rebuildWithJSONModule(@NotNull JacksonModule module) {
+        JsonMapper newJsonMapper = this.jsonMapper.rebuild().addModule(module).build();
+        return new ObjectConverter(newJsonMapper, this.cborMapper);
+    }
+
+    public @NotNull ObjectConverter rebuildWithCBORModule(@NotNull JacksonModule module) {
+        CBORMapper newCborMapper = this.cborMapper.rebuild().addModule(module).build();
+        return new ObjectConverter(this.jsonMapper, newCborMapper);
     }
 
 }

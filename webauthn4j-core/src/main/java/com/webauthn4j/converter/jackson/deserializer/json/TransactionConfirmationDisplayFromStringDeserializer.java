@@ -35,7 +35,7 @@ public class TransactionConfirmationDisplayFromStringDeserializer extends StdDes
         try {
             return TransactionConfirmationDisplay.create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, TransactionConfirmationDisplay.class);
+            throw new InvalidFormatException(p, "value is out of range", value, TransactionConfirmationDisplay.class);
         }
     }
 }

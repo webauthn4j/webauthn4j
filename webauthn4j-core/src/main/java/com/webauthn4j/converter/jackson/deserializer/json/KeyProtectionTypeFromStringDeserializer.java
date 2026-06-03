@@ -36,7 +36,7 @@ public class KeyProtectionTypeFromStringDeserializer extends StdDeserializer<Key
         try {
             return KeyProtectionType.create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, AttachmentHint.class);
+            throw new InvalidFormatException(p, "value is out of range", value, AttachmentHint.class);
         }
     }
 }

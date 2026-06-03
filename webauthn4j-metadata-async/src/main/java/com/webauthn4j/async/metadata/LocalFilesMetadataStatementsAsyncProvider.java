@@ -18,7 +18,9 @@ package com.webauthn4j.async.metadata;
 
 import com.webauthn4j.async.util.internal.FileAsyncUtil;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.metadata.MetadataCodecFallbackRegistrar;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
 import java.nio.file.Path;
@@ -33,8 +35,8 @@ public class LocalFilesMetadataStatementsAsyncProvider implements MetadataStatem
     private final ObjectConverter objectConverter;
     private final Path[] paths;
 
-    public LocalFilesMetadataStatementsAsyncProvider(ObjectConverter objectConverter, Path... paths){
-        this.objectConverter = objectConverter;
+    public LocalFilesMetadataStatementsAsyncProvider(@NotNull ObjectConverter objectConverter, Path... paths){
+        this.objectConverter = MetadataCodecFallbackRegistrar.registerFallbackMetadataCodecsIfNeeded(objectConverter);
         this.paths = paths;
     }
 

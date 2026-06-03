@@ -21,10 +21,11 @@ import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 
 class StatusReportTest {
 
-    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
+    private final JsonMapper jsonMapper = new ObjectConverter().rebuildWithJSONModule(new WebAuthnMetadataJSONModule()).getJsonMapper();
 
     @Test
     void getter_test(){

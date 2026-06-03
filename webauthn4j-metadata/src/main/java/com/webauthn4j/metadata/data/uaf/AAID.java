@@ -16,14 +16,17 @@
 
 package com.webauthn4j.metadata.data.uaf;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Objects;
 
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public class AAID {
 
     private final int v;
@@ -44,15 +47,6 @@ public class AAID {
         m = Integer.parseInt(array[1], 16);
     }
 
-    @JsonCreator
-    static AAID deserialize(@NotNull String aaid) throws InvalidFormatException {
-        try {
-            return new AAID(aaid);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "invalid aaid", aaid, AAID.class);
-        }
-    }
-
     public int getV() {
         return v;
     }
@@ -62,7 +56,6 @@ public class AAID {
     }
 
     @NotNull
-    @JsonValue
     @Override
     public String toString() {
         return String.format("%04X", v) + "#" + String.format("%04X", m);

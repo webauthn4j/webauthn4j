@@ -35,7 +35,7 @@ public class MatcherProtectionTypeFromStringDeserializer extends StdDeserializer
         try {
             return MatcherProtectionType.create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, MatcherProtectionType.class);
+            throw new InvalidFormatException(p, "value is out of range", value, MatcherProtectionType.class);
         }
     }
 }

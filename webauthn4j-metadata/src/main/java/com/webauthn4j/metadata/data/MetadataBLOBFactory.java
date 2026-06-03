@@ -19,6 +19,7 @@ package com.webauthn4j.metadata.data;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
+import com.webauthn4j.metadata.MetadataCodecFallbackRegistrar;
 import org.jetbrains.annotations.NotNull;
 
 public class MetadataBLOBFactory {
@@ -27,7 +28,7 @@ public class MetadataBLOBFactory {
     private final JWSFactory jwsFactory;
 
     public MetadataBLOBFactory(@NotNull ObjectConverter objectConverter) {
-        this.jwsFactory = new JWSFactory(objectConverter);
+        this.jwsFactory = new JWSFactory(MetadataCodecFallbackRegistrar.registerFallbackMetadataCodecsIfNeeded(objectConverter));
     }
 
     public @NotNull MetadataBLOB parse(@NotNull String value){

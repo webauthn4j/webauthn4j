@@ -35,7 +35,7 @@ public class UserVerificationMethodFromStringDeserializer extends StdDeserialize
         try {
             return UserVerificationMethod.create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, UserVerificationMethod.class);
+            throw new InvalidFormatException(p, "value is out of range", value, UserVerificationMethod.class);
         }
     }
 }

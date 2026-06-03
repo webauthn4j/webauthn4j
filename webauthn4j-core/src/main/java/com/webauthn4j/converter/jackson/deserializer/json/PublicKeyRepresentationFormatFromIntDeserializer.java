@@ -35,7 +35,7 @@ public class PublicKeyRepresentationFormatFromIntDeserializer extends StdDeseria
         try {
             return PublicKeyRepresentationFormat.create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, PublicKeyRepresentationFormat.class);
+            throw new InvalidFormatException(p, "value is out of range", value, PublicKeyRepresentationFormat.class);
         }
     }
 }

@@ -9,6 +9,7 @@ module com.webauthn4j.metadata {
     exports com.webauthn4j.metadata.anchor;
     exports com.webauthn4j.metadata.converter.jackson;
     exports com.webauthn4j.metadata.converter.jackson.deserializer;
+    exports com.webauthn4j.metadata.converter.jackson.serializer;
     exports com.webauthn4j.metadata.data;
     exports com.webauthn4j.metadata.data.statement;
     exports com.webauthn4j.metadata.data.toc;
@@ -17,6 +18,7 @@ module com.webauthn4j.metadata {
     exports com.webauthn4j.metadata.util.internal to com.webauthn4j.metadata.async;
 
     opens com.webauthn4j.metadata.converter.jackson.deserializer;
+    opens com.webauthn4j.metadata.converter.jackson.serializer;
 
     opens com.webauthn4j.metadata.data;
     opens com.webauthn4j.metadata.data.statement;

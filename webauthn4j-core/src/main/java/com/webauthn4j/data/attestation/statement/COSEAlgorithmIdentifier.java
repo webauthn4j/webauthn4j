@@ -16,18 +16,21 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.data.SignatureAlgorithm;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public class COSEAlgorithmIdentifier {
 
     public static final COSEAlgorithmIdentifier RS1;
@@ -110,18 +113,6 @@ public class COSEAlgorithmIdentifier {
         return coseAlgorithmIdentifier;
     }
 
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NotNull COSEAlgorithmIdentifier deserialize(long value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, COSEAlgorithmIdentifier.class);
-        }
-
-    }
-
-    @JsonValue
     public long getValue() {
         return value;
     }

@@ -16,15 +16,16 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.util.Objects;
 
 import static com.webauthn4j.data.MessageDigestAlgorithm.*;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Represents a signature algorithm as a pair of a JCA algorithm name and an optional pre-hash
@@ -43,6 +44,8 @@ import static com.webauthn4j.data.MessageDigestAlgorithm.*;
  * Note that pure schemes may still use hash functions internally (e.g., Ed25519 uses SHA-512
  * for nonce and challenge computation), but this is not an external pre-hash step.
  */
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public class SignatureAlgorithm {
 
     private static final String JCA_SHA_256_WITH_ECDSA = "SHA256withECDSA";
@@ -115,43 +118,6 @@ public class SignatureAlgorithm {
         return new SignatureAlgorithm(jcaName, MessageDigestAlgorithm.create(messageDigestJcaName));
     }
 
-    @SuppressWarnings("unused")
-    @JsonCreator
-    static @NotNull SignatureAlgorithm deserialize(String value) throws InvalidFormatException {
-        try {
-            switch (value) {
-                case JCA_SHA_256_WITH_ECDSA:
-                    return ES256;
-                case JCA_SHA_384_WITH_ECDSA:
-                    return ES384;
-                case JCA_SHA_512_WITH_ECDSA:
-                    return ES512;
-                case JCA_SHA_1_WITH_RSA:
-                    return RS1;
-                case JCA_SHA_256_WITH_RSA:
-                    return RS256;
-                case JCA_SHA_384_WITH_RSA:
-                    return RS384;
-                case JCA_SHA_512_WITH_RSA:
-                    return RS512;
-                case JCA_ED_25519:
-                    return Ed25519;
-                case SHA_256_WITH_RSA_PSS:
-                    return PS256;
-                case SHA_384_WITH_RSA_PSS:
-                    return PS384;
-                case SHA_512_WITH_RSA_PSS:
-                    return PS512;
-                case JCA_RSA_SSA_PSS:
-                    throw new IllegalArgumentException(String.format("value %s is not valid text representation of SignatureAlgorithm.", value));
-                default:
-                    throw new IllegalArgumentException(String.format("value %s is not supported.", value));
-            }
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, SignatureAlgorithm.class);
-        }
-    }
-
     /**
      * Convert SignatureAlgorithm into text representation
      * In the earlier implementation, jcaName was used as a serialized text representation directly.
@@ -159,7 +125,6 @@ public class SignatureAlgorithm {
      *
      * @return text representation of SignatureAlgorithm
      */
-    @JsonValue
     public @NotNull String serialize() {
         if(jcaName.equals(JCA_RSA_SSA_PSS)){
             if (messageDigestAlgorithm == null){

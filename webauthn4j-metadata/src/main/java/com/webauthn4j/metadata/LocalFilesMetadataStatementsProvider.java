@@ -34,8 +34,8 @@ public class LocalFilesMetadataStatementsProvider implements MetadataStatementsP
     private final ObjectConverter objectConverter;
     private final Path[] paths;
 
-    public LocalFilesMetadataStatementsProvider(ObjectConverter objectConverter, Path... paths){
-        this.objectConverter = objectConverter;
+    public LocalFilesMetadataStatementsProvider(@NotNull ObjectConverter objectConverter, Path... paths){
+        this.objectConverter = MetadataCodecFallbackRegistrar.registerFallbackMetadataCodecsIfNeeded(objectConverter);
         this.paths = paths;
     }
 

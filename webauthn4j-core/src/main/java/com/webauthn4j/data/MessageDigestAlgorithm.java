@@ -16,17 +16,19 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.jackson.databind.exc.InvalidFormatException;
-
 import java.security.MessageDigest;
 import java.util.Objects;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardDeserializer;
+import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardSerializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
+@JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
+@JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
 public class MessageDigestAlgorithm {
 
     public static final MessageDigestAlgorithm SHA1 = new MessageDigestAlgorithm("SHA-1");
@@ -45,17 +47,6 @@ public class MessageDigestAlgorithm {
         return new MessageDigestAlgorithm(jcaName);
     }
 
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NotNull MessageDigestAlgorithm deserialize(String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, MessageDigestAlgorithm.class);
-        }
-    }
-
-    @JsonValue
     public @NotNull String getJcaName() {
         return jcaName;
     }
