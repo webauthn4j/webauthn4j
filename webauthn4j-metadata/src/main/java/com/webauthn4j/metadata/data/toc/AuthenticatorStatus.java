@@ -23,7 +23,11 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
- * This enumeration describes the status of an authenticator webauthn as identified by its AAID and potentially some additional information (such as a specific attestation key).
+ * This enumeration describes the status of an authenticator as identified by its AAID/AAGUID
+ * and potentially some additional information (such as a specific attestation key).
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-service-v3.1.1-ps-20260105.html#enumdef-authenticatorstatus">
+ * §3.1.2. AuthenticatorStatus enum</a>
  */
 @JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class)
 @JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class)
@@ -102,7 +106,12 @@ public enum AuthenticatorStatus {
     /**
      * The authenticator has passed FIDO Authenticator certification at level 3+. This level is more strict than level 3.
      */
-    FIDO_CERTIFIED_L3_PLUS("FIDO_CERTIFIED_L3plus");
+    FIDO_CERTIFIED_L3_PLUS("FIDO_CERTIFIED_L3plus"),
+    RETIRED("RETIRED"),
+    FIPS140_CERTIFIED_L1("FIPS140_CERTIFIED_L1"),
+    FIPS140_CERTIFIED_L2("FIPS140_CERTIFIED_L2"),
+    FIPS140_CERTIFIED_L3("FIPS140_CERTIFIED_L3"),
+    FIPS140_CERTIFIED_L4("FIPS140_CERTIFIED_L4");
 
     @NotNull
     private final String value;
@@ -144,6 +153,16 @@ public enum AuthenticatorStatus {
                 return FIDO_CERTIFIED_L3;
             case "FIDO_CERTIFIED_L3plus":
                 return FIDO_CERTIFIED_L3_PLUS;
+            case "RETIRED":
+                return RETIRED;
+            case "FIPS140_CERTIFIED_L1":
+                return FIPS140_CERTIFIED_L1;
+            case "FIPS140_CERTIFIED_L2":
+                return FIPS140_CERTIFIED_L2;
+            case "FIPS140_CERTIFIED_L3":
+                return FIPS140_CERTIFIED_L3;
+            case "FIPS140_CERTIFIED_L4":
+                return FIPS140_CERTIFIED_L4;
             default:
                 throw new IllegalArgumentException("value '" + value + "' is out of range");
         }

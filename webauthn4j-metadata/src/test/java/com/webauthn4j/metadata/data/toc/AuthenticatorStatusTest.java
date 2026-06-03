@@ -50,6 +50,11 @@ class AuthenticatorStatusTest {
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED_L2plus")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED_L2_PLUS),
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED_L3")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED_L3),
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED_L3plus")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED_L3_PLUS),
+                () -> assertThat(AuthenticatorStatus.create("RETIRED")).isEqualTo(AuthenticatorStatus.RETIRED),
+                () -> assertThat(AuthenticatorStatus.create("FIPS140_CERTIFIED_L1")).isEqualTo(AuthenticatorStatus.FIPS140_CERTIFIED_L1),
+                () -> assertThat(AuthenticatorStatus.create("FIPS140_CERTIFIED_L2")).isEqualTo(AuthenticatorStatus.FIPS140_CERTIFIED_L2),
+                () -> assertThat(AuthenticatorStatus.create("FIPS140_CERTIFIED_L3")).isEqualTo(AuthenticatorStatus.FIPS140_CERTIFIED_L3),
+                () -> assertThat(AuthenticatorStatus.create("FIPS140_CERTIFIED_L4")).isEqualTo(AuthenticatorStatus.FIPS140_CERTIFIED_L4),
                 () -> assertThatThrownBy(() -> AuthenticatorStatus.create("FIDO_CERTIFIED_L1PLUS")).isInstanceOf(IllegalArgumentException.class)
         );
     }
