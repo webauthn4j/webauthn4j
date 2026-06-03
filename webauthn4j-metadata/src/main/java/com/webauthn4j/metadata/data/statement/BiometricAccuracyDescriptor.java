@@ -16,6 +16,7 @@
 
 package com.webauthn4j.metadata.data.statement;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.Nullable;
@@ -23,34 +24,45 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * BiometricAccuracyDescriptor
+ * Describes the relevant accuracy/complexity aspects of an authenticator's biometric user verification methods.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-rd-20251016.html#dictdef-biometricaccuracydescriptor">
+ * §3.3. BiometricAccuracyDescriptor dictionary</a>
  */
 @SuppressWarnings("squid:S00116")
 public class BiometricAccuracyDescriptor {
 
-    @Nullable private final Double selfAttestedFAR;
     @Nullable private final Double selfAttestedFRR;
-    @Nullable private final Integer maxTemplate;
+    @Nullable private final Double selfAttestedFAR;
+    @Nullable private final Double iAPARThreshold;
+    @Nullable private final Integer maxTemplates;
     @Nullable private final Integer maxRetries;
     @Nullable private final Integer blockSlowdown;
 
     @JsonCreator
     public BiometricAccuracyDescriptor(
-            @JsonProperty("selfAttestedFAR") @Nullable Double selfAttestedFAR,
             @JsonProperty("selfAttestedFRR") @Nullable Double selfAttestedFRR,
-            @JsonProperty("maxTemplate") @Nullable Integer maxTemplate,
+            @JsonProperty("selfAttestedFAR") @Nullable Double selfAttestedFAR,
+            @JsonProperty("iAPARThreshold") @Nullable Double iAPARThreshold,
+            @JsonProperty("maxTemplates") @JsonAlias("maxTemplate") @Nullable Integer maxTemplates,
             @JsonProperty("maxRetries") @Nullable Integer maxRetries,
             @JsonProperty("blockSlowdown") @Nullable Integer blockSlowdown) {
-        this.selfAttestedFAR = selfAttestedFAR;
         this.selfAttestedFRR = selfAttestedFRR;
-        this.maxTemplate = maxTemplate;
+        this.selfAttestedFAR = selfAttestedFAR;
+        this.iAPARThreshold = iAPARThreshold;
+        this.maxTemplates = maxTemplates;
         this.maxRetries = maxRetries;
         this.blockSlowdown = blockSlowdown;
     }
 
-    @Nullable
-    public Double getSelfAttestedFAR() {
-        return selfAttestedFAR;
+    @Deprecated
+    public BiometricAccuracyDescriptor(
+            @Nullable Double selfAttestedFAR,
+            @Nullable Double selfAttestedFRR,
+            @Nullable Integer maxTemplates,
+            @Nullable Integer maxRetries,
+            @Nullable Integer blockSlowdown) {
+        this(selfAttestedFRR, selfAttestedFAR, null, maxTemplates, maxRetries, blockSlowdown);
     }
 
     @Nullable
@@ -59,8 +71,28 @@ public class BiometricAccuracyDescriptor {
     }
 
     @Nullable
+    public Double getSelfAttestedFAR() {
+        return selfAttestedFAR;
+    }
+
+    @Nullable
+    public Double getIAPARThreshold() {
+        return iAPARThreshold;
+    }
+
+    @Nullable
+    public Integer getMaxTemplates() {
+        return maxTemplates;
+    }
+
+    /**
+     * @deprecated Incorrectly named due to a typo; the spec field has always been "maxTemplates" (plural).
+     * Use {@link #getMaxTemplates()} instead. This method will be removed in a future release.
+     */
+    @Deprecated
+    @Nullable
     public Integer getMaxTemplate() {
-        return maxTemplate;
+        return getMaxTemplates();
     }
 
     @Nullable
@@ -78,11 +110,11 @@ public class BiometricAccuracyDescriptor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BiometricAccuracyDescriptor that = (BiometricAccuracyDescriptor) o;
-        return Objects.equals(selfAttestedFAR, that.selfAttestedFAR) && Objects.equals(selfAttestedFRR, that.selfAttestedFRR) && Objects.equals(maxTemplate, that.maxTemplate) && Objects.equals(maxRetries, that.maxRetries) && Objects.equals(blockSlowdown, that.blockSlowdown);
+        return Objects.equals(selfAttestedFRR, that.selfAttestedFRR) && Objects.equals(selfAttestedFAR, that.selfAttestedFAR) && Objects.equals(iAPARThreshold, that.iAPARThreshold) && Objects.equals(maxTemplates, that.maxTemplates) && Objects.equals(maxRetries, that.maxRetries) && Objects.equals(blockSlowdown, that.blockSlowdown);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(selfAttestedFAR, selfAttestedFRR, maxTemplate, maxRetries, blockSlowdown);
+        return Objects.hash(selfAttestedFRR, selfAttestedFAR, iAPARThreshold, maxTemplates, maxRetries, blockSlowdown);
     }
 }
