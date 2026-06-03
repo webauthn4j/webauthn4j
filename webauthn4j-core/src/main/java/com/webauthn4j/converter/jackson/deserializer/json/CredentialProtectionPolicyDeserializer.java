@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.webauthn4j.data.AuthenticatorAttachment;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import org.jetbrains.annotations.NotNull;
 import tools.jackson.core.JsonParser;
@@ -35,7 +34,7 @@ public class CredentialProtectionPolicyDeserializer extends StdDeserializer<Cred
         try {
             return CredentialProtectionPolicy.create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(p, "value is out of range", value, AuthenticatorAttachment.class);
+            throw new InvalidFormatException(p, "value is out of range", value, CredentialProtectionPolicy.class);
         }
     }
 }

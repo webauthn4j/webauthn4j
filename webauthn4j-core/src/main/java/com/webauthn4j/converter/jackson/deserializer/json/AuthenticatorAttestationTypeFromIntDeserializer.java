@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.webauthn4j.data.AttachmentHint;
 import com.webauthn4j.data.AuthenticatorAttestationType;
 import org.jetbrains.annotations.NotNull;
 import tools.jackson.core.JsonParser;
@@ -36,7 +35,7 @@ public class AuthenticatorAttestationTypeFromIntDeserializer extends StdDeserial
         try {
             return AuthenticatorAttestationType.create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(p, "value is out of range", value, AttachmentHint.class);
+            throw new InvalidFormatException(p, "value is out of range", value, AuthenticatorAttestationType.class);
         }
     }
 }
