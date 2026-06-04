@@ -16,7 +16,9 @@
 
 package com.webauthn4j.metadata.data.statement;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.data.PinProtocolVersion;
@@ -110,6 +112,12 @@ public class AuthenticatorGetInfo {
         return Objects.hash(versions, extensions, aaguid, options, maxMsgSize, pinUvAuthProtocols);
     }
 
+    /**
+     * Represents the map of supported options returned by the authenticator in the authenticatorGetInfo response.
+     *
+     * @see <a href="https://fidoalliance.org/specs/fido-v2.3-ps-20260226/fido-client-to-authenticator-protocol-v2.3-ps-20260226.html#getinfo-options">
+     * CTAP 2.3 §6.4. authenticatorGetInfo - options</a>
+     */
     public static class Options {
 
         @JsonProperty("plat")
@@ -132,13 +140,67 @@ public class AuthenticatorGetInfo {
         @Nullable
         private final UserVerificationOption uv;
 
-        @JsonProperty("uvToken")
+        @JsonProperty("pinUvAuthToken")
+        @JsonAlias("uvToken")
         @Nullable
-        private final UVTokenOption uvToken;
+        private final PinUvAuthTokenOption pinUvAuthToken;
 
-        @JsonProperty("config")
+        @JsonProperty("noMcGaPermissionsWithClientPin")
         @Nullable
-        private final ConfigOption config;
+        private final NoMcGaPermissionsWithClientPinOption noMcGaPermissionsWithClientPin;
+
+        @JsonProperty("largeBlobs")
+        @Nullable
+        private final LargeBlobsOption largeBlobs;
+
+        @JsonProperty("ep")
+        @Nullable
+        private final EnterpriseAttestationOption ep;
+
+        @JsonProperty("bioEnroll")
+        @Nullable
+        private final BioEnrollOption bioEnroll;
+
+        @JsonProperty("userVerificationMgmtPreview")
+        @Nullable
+        private final UserVerificationMgmtPreviewOption userVerificationMgmtPreview;
+
+        @JsonProperty("uvBioEnroll")
+        @Nullable
+        private final UvBioEnrollOption uvBioEnroll;
+
+        @JsonProperty("authnrCfg")
+        @JsonAlias("config")
+        @Nullable
+        private final AuthnrCfgOption authnrCfg;
+
+        @JsonProperty("uvAcfg")
+        @Nullable
+        private final UvAcfgOption uvAcfg;
+
+        @JsonProperty("credMgmt")
+        @Nullable
+        private final CredMgmtOption credMgmt;
+
+        @JsonProperty("perCredMgmtRO")
+        @Nullable
+        private final PerCredMgmtROOption perCredMgmtRO;
+
+        @JsonProperty("credentialMgmtPreview")
+        @Nullable
+        private final CredentialMgmtPreviewOption credentialMgmtPreview;
+
+        @JsonProperty("setMinPINLength")
+        @Nullable
+        private final SetMinPINLengthOption setMinPINLength;
+
+        @JsonProperty("makeCredUvNotRqd")
+        @Nullable
+        private final MakeCredUvNotRqdOption makeCredUvNotRqd;
+
+        @JsonProperty("alwaysUv")
+        @Nullable
+        private final AlwaysUvOption alwaysUv;
 
         @JsonCreator
         public Options(
@@ -147,44 +209,221 @@ public class AuthenticatorGetInfo {
                 @JsonProperty("clientPin") @Nullable ClientPINOption clientPIN,
                 @JsonProperty("up") @Nullable UserPresenceOption up,
                 @JsonProperty("uv") @Nullable UserVerificationOption uv,
-                @JsonProperty("uvToken") @Nullable UVTokenOption uvToken,
-                @JsonProperty("config") @Nullable ConfigOption config
+                @JsonProperty("pinUvAuthToken") @Nullable PinUvAuthTokenOption pinUvAuthToken,
+                @JsonProperty("noMcGaPermissionsWithClientPin") @Nullable NoMcGaPermissionsWithClientPinOption noMcGaPermissionsWithClientPin,
+                @JsonProperty("largeBlobs") @Nullable LargeBlobsOption largeBlobs,
+                @JsonProperty("ep") @Nullable EnterpriseAttestationOption ep,
+                @JsonProperty("bioEnroll") @Nullable BioEnrollOption bioEnroll,
+                @JsonProperty("userVerificationMgmtPreview") @Nullable UserVerificationMgmtPreviewOption userVerificationMgmtPreview,
+                @JsonProperty("uvBioEnroll") @Nullable UvBioEnrollOption uvBioEnroll,
+                @JsonProperty("authnrCfg") @Nullable AuthnrCfgOption authnrCfg,
+                @JsonProperty("uvAcfg") @Nullable UvAcfgOption uvAcfg,
+                @JsonProperty("credMgmt") @Nullable CredMgmtOption credMgmt,
+                @JsonProperty("perCredMgmtRO") @Nullable PerCredMgmtROOption perCredMgmtRO,
+                @JsonProperty("credentialMgmtPreview") @Nullable CredentialMgmtPreviewOption credentialMgmtPreview,
+                @JsonProperty("setMinPINLength") @Nullable SetMinPINLengthOption setMinPINLength,
+                @JsonProperty("makeCredUvNotRqd") @Nullable MakeCredUvNotRqdOption makeCredUvNotRqd,
+                @JsonProperty("alwaysUv") @Nullable AlwaysUvOption alwaysUv
         ) {
             this.plat = plat;
             this.rk = rk;
             this.clientPIN = clientPIN;
             this.up = up;
             this.uv = uv;
-            this.uvToken = uvToken;
-            this.config = config;
+            this.pinUvAuthToken = pinUvAuthToken;
+            this.noMcGaPermissionsWithClientPin = noMcGaPermissionsWithClientPin;
+            this.largeBlobs = largeBlobs;
+            this.ep = ep;
+            this.bioEnroll = bioEnroll;
+            this.userVerificationMgmtPreview = userVerificationMgmtPreview;
+            this.uvBioEnroll = uvBioEnroll;
+            this.authnrCfg = authnrCfg;
+            this.uvAcfg = uvAcfg;
+            this.credMgmt = credMgmt;
+            this.perCredMgmtRO = perCredMgmtRO;
+            this.credentialMgmtPreview = credentialMgmtPreview;
+            this.setMinPINLength = setMinPINLength;
+            this.makeCredUvNotRqd = makeCredUvNotRqd;
+            this.alwaysUv = alwaysUv;
         }
 
-        public PlatformOption getPlat() {
+        @Deprecated
+        public Options(
+                @Nullable PlatformOption plat,
+                @Nullable ResidentKeyOption rk,
+                @Nullable ClientPINOption clientPIN,
+                @Nullable UserPresenceOption up,
+                @Nullable UserVerificationOption uv,
+                @Nullable UVTokenOption uvToken,
+                @Nullable ConfigOption config
+        ) {
+            this(plat, rk, clientPIN, up, uv,
+                    uvToken != null ? new PinUvAuthTokenOption(uvToken.getValue()) : null,
+                    null, null, null, null, null, null,
+                    config != null ? new AuthnrCfgOption(config.getValue()) : null,
+                    null, null, null, null, null, null, null);
+        }
+
+        public @Nullable PlatformOption getPlat() {
             return plat;
         }
 
-        public ResidentKeyOption getRk() {
+        public @Nullable ResidentKeyOption getRk() {
             return rk;
         }
 
-        public ClientPINOption getClientPIN() {
+        public @Nullable ClientPINOption getClientPIN() {
             return clientPIN;
         }
 
-        public UserPresenceOption getUp() {
+        public @Nullable UserPresenceOption getUp() {
             return up;
         }
 
-        public UserVerificationOption getUv() {
+        public @Nullable UserVerificationOption getUv() {
             return uv;
         }
 
-        public UVTokenOption getUvToken() {
-            return uvToken;
+        public @Nullable PinUvAuthTokenOption getPinUvAuthToken() {
+            return pinUvAuthToken;
         }
 
-        public ConfigOption getConfig() {
-            return config;
+        @Deprecated
+        @JsonIgnore
+        public @Nullable UVTokenOption getUvToken() {
+            return pinUvAuthToken != null ? new UVTokenOption(pinUvAuthToken.getValue()) : null;
+        }
+
+        public @Nullable NoMcGaPermissionsWithClientPinOption getNoMcGaPermissionsWithClientPin() {
+            return noMcGaPermissionsWithClientPin;
+        }
+
+        public @Nullable LargeBlobsOption getLargeBlobs() {
+            return largeBlobs;
+        }
+
+        public @Nullable EnterpriseAttestationOption getEp() {
+            return ep;
+        }
+
+        public @Nullable BioEnrollOption getBioEnroll() {
+            return bioEnroll;
+        }
+
+        public @Nullable UserVerificationMgmtPreviewOption getUserVerificationMgmtPreview() {
+            return userVerificationMgmtPreview;
+        }
+
+        public @Nullable UvBioEnrollOption getUvBioEnroll() {
+            return uvBioEnroll;
+        }
+
+        public @Nullable AuthnrCfgOption getAuthnrCfg() {
+            return authnrCfg;
+        }
+
+        @Deprecated
+        @JsonIgnore
+        public @Nullable ConfigOption getConfig() {
+            return authnrCfg != null ? new ConfigOption(authnrCfg.getValue()) : null;
+        }
+
+        public @Nullable UvAcfgOption getUvAcfg() {
+            return uvAcfg;
+        }
+
+        public @Nullable CredMgmtOption getCredMgmt() {
+            return credMgmt;
+        }
+
+        public @Nullable PerCredMgmtROOption getPerCredMgmtRO() {
+            return perCredMgmtRO;
+        }
+
+        public @Nullable CredentialMgmtPreviewOption getCredentialMgmtPreview() {
+            return credentialMgmtPreview;
+        }
+
+        public @Nullable SetMinPINLengthOption getSetMinPINLength() {
+            return setMinPINLength;
+        }
+
+        public @Nullable MakeCredUvNotRqdOption getMakeCredUvNotRqd() {
+            return makeCredUvNotRqd;
+        }
+
+        public @Nullable AlwaysUvOption getAlwaysUv() {
+            return alwaysUv;
+        }
+
+        @JsonIgnore
+        public boolean isPlatform() {
+            return PlatformOption.PLATFORM.equals(plat);
+        }
+
+        @JsonIgnore
+        public boolean isResidentKeySupported() {
+            return ResidentKeyOption.SUPPORTED.equals(rk);
+        }
+
+        @JsonIgnore
+        public boolean isUserPresenceSupported() {
+            return up == null || UserPresenceOption.SUPPORTED.equals(up);
+        }
+
+        @JsonIgnore
+        public boolean isPinUvAuthTokenSupported() {
+            return PinUvAuthTokenOption.SUPPORTED.equals(pinUvAuthToken);
+        }
+
+        @JsonIgnore
+        public boolean isMcGaNotPermittedForClientPin() {
+            return NoMcGaPermissionsWithClientPinOption.MC_GA_NOT_PERMITTED_FOR_CLIENT_PIN.equals(noMcGaPermissionsWithClientPin);
+        }
+
+        @JsonIgnore
+        public boolean isLargeBlobsSupported() {
+            return LargeBlobsOption.SUPPORTED.equals(largeBlobs);
+        }
+
+        @JsonIgnore
+        public boolean isUvBioEnrollSupported() {
+            return UvBioEnrollOption.SUPPORTED.equals(uvBioEnroll);
+        }
+
+        @JsonIgnore
+        public boolean isAuthnrCfgSupported() {
+            return AuthnrCfgOption.SUPPORTED.equals(authnrCfg);
+        }
+
+        @JsonIgnore
+        public boolean isUvAcfgSupported() {
+            return UvAcfgOption.SUPPORTED.equals(uvAcfg);
+        }
+
+        @JsonIgnore
+        public boolean isCredMgmtSupported() {
+            return CredMgmtOption.SUPPORTED.equals(credMgmt);
+        }
+
+        @JsonIgnore
+        public boolean isPerCredMgmtROSupported() {
+            return PerCredMgmtROOption.SUPPORTED.equals(perCredMgmtRO);
+        }
+
+        @JsonIgnore
+        public boolean isCredentialMgmtPreviewSupported() {
+            return CredentialMgmtPreviewOption.SUPPORTED.equals(credentialMgmtPreview);
+        }
+
+        @JsonIgnore
+        public boolean isSetMinPINLengthSupported() {
+            return SetMinPINLengthOption.SUPPORTED.equals(setMinPINLength);
+        }
+
+        @JsonIgnore
+        public boolean isMakeCredUvNotRequired() {
+            return MakeCredUvNotRqdOption.UV_NOT_REQUIRED.equals(makeCredUvNotRqd);
         }
 
         @Override
@@ -192,12 +431,34 @@ public class AuthenticatorGetInfo {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Options options = (Options) o;
-            return Objects.equals(plat, options.plat) && Objects.equals(rk, options.rk) && Objects.equals(clientPIN, options.clientPIN) && Objects.equals(up, options.up) && Objects.equals(uv, options.uv) && Objects.equals(uvToken, options.uvToken) && Objects.equals(config, options.config);
+            return Objects.equals(plat, options.plat) &&
+                    Objects.equals(rk, options.rk) &&
+                    Objects.equals(clientPIN, options.clientPIN) &&
+                    Objects.equals(up, options.up) &&
+                    Objects.equals(uv, options.uv) &&
+                    Objects.equals(pinUvAuthToken, options.pinUvAuthToken) &&
+                    Objects.equals(noMcGaPermissionsWithClientPin, options.noMcGaPermissionsWithClientPin) &&
+                    Objects.equals(largeBlobs, options.largeBlobs) &&
+                    Objects.equals(ep, options.ep) &&
+                    Objects.equals(bioEnroll, options.bioEnroll) &&
+                    Objects.equals(userVerificationMgmtPreview, options.userVerificationMgmtPreview) &&
+                    Objects.equals(uvBioEnroll, options.uvBioEnroll) &&
+                    Objects.equals(authnrCfg, options.authnrCfg) &&
+                    Objects.equals(uvAcfg, options.uvAcfg) &&
+                    Objects.equals(credMgmt, options.credMgmt) &&
+                    Objects.equals(perCredMgmtRO, options.perCredMgmtRO) &&
+                    Objects.equals(credentialMgmtPreview, options.credentialMgmtPreview) &&
+                    Objects.equals(setMinPINLength, options.setMinPINLength) &&
+                    Objects.equals(makeCredUvNotRqd, options.makeCredUvNotRqd) &&
+                    Objects.equals(alwaysUv, options.alwaysUv);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(plat, rk, clientPIN, up, uv, uvToken, config);
+            return Objects.hash(plat, rk, clientPIN, up, uv, pinUvAuthToken,
+                    noMcGaPermissionsWithClientPin, largeBlobs, ep, bioEnroll,
+                    userVerificationMgmtPreview, uvBioEnroll, authnrCfg, uvAcfg, credMgmt,
+                    perCredMgmtRO, credentialMgmtPreview, setMinPINLength, makeCredUvNotRqd, alwaysUv);
         }
 
         public static class PlatformOption {
@@ -209,7 +470,7 @@ public class AuthenticatorGetInfo {
             private final boolean value;
 
             @JsonCreator
-            public PlatformOption(boolean value){
+            public PlatformOption(boolean value) {
                 this.value = value;
             }
 
@@ -241,7 +502,7 @@ public class AuthenticatorGetInfo {
             private final boolean value;
 
             @JsonCreator
-            public ResidentKeyOption(boolean value){
+            public ResidentKeyOption(boolean value) {
                 this.value = value;
             }
 
@@ -273,7 +534,7 @@ public class AuthenticatorGetInfo {
             private final boolean value;
 
             @JsonCreator
-            public ClientPINOption(boolean value){
+            public ClientPINOption(boolean value) {
                 this.value = value;
             }
 
@@ -305,7 +566,7 @@ public class AuthenticatorGetInfo {
             private final boolean value;
 
             @JsonCreator
-            public UserPresenceOption(boolean value){
+            public UserPresenceOption(boolean value) {
                 this.value = value;
             }
 
@@ -337,7 +598,7 @@ public class AuthenticatorGetInfo {
             private final boolean value;
 
             @JsonCreator
-            public UserVerificationOption(boolean value){
+            public UserVerificationOption(boolean value) {
                 this.value = value;
             }
 
@@ -360,6 +621,7 @@ public class AuthenticatorGetInfo {
             }
         }
 
+        @Deprecated
         public static class UVTokenOption {
 
             public static final UVTokenOption SUPPORTED = new UVTokenOption(true);
@@ -369,7 +631,7 @@ public class AuthenticatorGetInfo {
             private final boolean value;
 
             @JsonCreator
-            public UVTokenOption(boolean value){
+            public UVTokenOption(boolean value) {
                 this.value = value;
             }
 
@@ -392,6 +654,7 @@ public class AuthenticatorGetInfo {
             }
         }
 
+        @Deprecated
         public static class ConfigOption {
 
             public static final ConfigOption SUPPORTED = new ConfigOption(true);
@@ -401,7 +664,7 @@ public class AuthenticatorGetInfo {
             private final boolean value;
 
             @JsonCreator
-            public ConfigOption(boolean value){
+            public ConfigOption(boolean value) {
                 this.value = value;
             }
 
@@ -423,7 +686,486 @@ public class AuthenticatorGetInfo {
                 return Objects.hash(value);
             }
         }
-    }
 
+        public static class PinUvAuthTokenOption {
+
+            public static final PinUvAuthTokenOption SUPPORTED = new PinUvAuthTokenOption(true);
+            public static final PinUvAuthTokenOption NOT_SUPPORTED = new PinUvAuthTokenOption(false);
+            public static final PinUvAuthTokenOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public PinUvAuthTokenOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                PinUvAuthTokenOption that = (PinUvAuthTokenOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class AuthnrCfgOption {
+
+            public static final AuthnrCfgOption SUPPORTED = new AuthnrCfgOption(true);
+            public static final AuthnrCfgOption NOT_SUPPORTED = new AuthnrCfgOption(false);
+            public static final AuthnrCfgOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public AuthnrCfgOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                AuthnrCfgOption that = (AuthnrCfgOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class NoMcGaPermissionsWithClientPinOption {
+
+            public static final NoMcGaPermissionsWithClientPinOption MC_GA_NOT_PERMITTED_FOR_CLIENT_PIN = new NoMcGaPermissionsWithClientPinOption(true);
+            public static final NoMcGaPermissionsWithClientPinOption MC_GA_PERMITTED_FOR_CLIENT_PIN = new NoMcGaPermissionsWithClientPinOption(false);
+            public static final NoMcGaPermissionsWithClientPinOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public NoMcGaPermissionsWithClientPinOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                NoMcGaPermissionsWithClientPinOption that = (NoMcGaPermissionsWithClientPinOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class LargeBlobsOption {
+
+            public static final LargeBlobsOption SUPPORTED = new LargeBlobsOption(true);
+            public static final LargeBlobsOption NOT_SUPPORTED = new LargeBlobsOption(false);
+            public static final LargeBlobsOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public LargeBlobsOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                LargeBlobsOption that = (LargeBlobsOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class EnterpriseAttestationOption {
+
+            public static final EnterpriseAttestationOption ENABLED = new EnterpriseAttestationOption(true);
+            public static final EnterpriseAttestationOption DISABLED = new EnterpriseAttestationOption(false);
+            public static final EnterpriseAttestationOption NOT_SUPPORTED = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public EnterpriseAttestationOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                EnterpriseAttestationOption that = (EnterpriseAttestationOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class BioEnrollOption {
+
+            public static final BioEnrollOption PROVISIONED = new BioEnrollOption(true);
+            public static final BioEnrollOption NOT_PROVISIONED = new BioEnrollOption(false);
+            public static final BioEnrollOption NOT_SUPPORTED = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public BioEnrollOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                BioEnrollOption that = (BioEnrollOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class UserVerificationMgmtPreviewOption {
+
+            public static final UserVerificationMgmtPreviewOption PROVISIONED = new UserVerificationMgmtPreviewOption(true);
+            public static final UserVerificationMgmtPreviewOption NOT_PROVISIONED = new UserVerificationMgmtPreviewOption(false);
+            public static final UserVerificationMgmtPreviewOption NOT_SUPPORTED = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public UserVerificationMgmtPreviewOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                UserVerificationMgmtPreviewOption that = (UserVerificationMgmtPreviewOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class UvBioEnrollOption {
+
+            public static final UvBioEnrollOption SUPPORTED = new UvBioEnrollOption(true);
+            public static final UvBioEnrollOption NOT_SUPPORTED = new UvBioEnrollOption(false);
+            public static final UvBioEnrollOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public UvBioEnrollOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                UvBioEnrollOption that = (UvBioEnrollOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class UvAcfgOption {
+
+            public static final UvAcfgOption SUPPORTED = new UvAcfgOption(true);
+            public static final UvAcfgOption NOT_SUPPORTED = new UvAcfgOption(false);
+            public static final UvAcfgOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public UvAcfgOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                UvAcfgOption that = (UvAcfgOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class CredMgmtOption {
+
+            public static final CredMgmtOption SUPPORTED = new CredMgmtOption(true);
+            public static final CredMgmtOption NOT_SUPPORTED = new CredMgmtOption(false);
+            public static final CredMgmtOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public CredMgmtOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                CredMgmtOption that = (CredMgmtOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class CredentialMgmtPreviewOption {
+
+            public static final CredentialMgmtPreviewOption SUPPORTED = new CredentialMgmtPreviewOption(true);
+            public static final CredentialMgmtPreviewOption NOT_SUPPORTED = new CredentialMgmtPreviewOption(false);
+            public static final CredentialMgmtPreviewOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public CredentialMgmtPreviewOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                CredentialMgmtPreviewOption that = (CredentialMgmtPreviewOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class SetMinPINLengthOption {
+
+            public static final SetMinPINLengthOption SUPPORTED = new SetMinPINLengthOption(true);
+            public static final SetMinPINLengthOption NOT_SUPPORTED = new SetMinPINLengthOption(false);
+            public static final SetMinPINLengthOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public SetMinPINLengthOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                SetMinPINLengthOption that = (SetMinPINLengthOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class MakeCredUvNotRqdOption {
+
+            public static final MakeCredUvNotRqdOption UV_NOT_REQUIRED = new MakeCredUvNotRqdOption(true);
+            public static final MakeCredUvNotRqdOption UV_REQUIRED = new MakeCredUvNotRqdOption(false);
+            public static final MakeCredUvNotRqdOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public MakeCredUvNotRqdOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                MakeCredUvNotRqdOption that = (MakeCredUvNotRqdOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class AlwaysUvOption {
+
+            public static final AlwaysUvOption ENABLED = new AlwaysUvOption(true);
+            public static final AlwaysUvOption DISABLED = new AlwaysUvOption(false);
+            public static final AlwaysUvOption NOT_SUPPORTED = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public AlwaysUvOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                AlwaysUvOption that = (AlwaysUvOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class PerCredMgmtROOption {
+
+            public static final PerCredMgmtROOption SUPPORTED = new PerCredMgmtROOption(true);
+            public static final PerCredMgmtROOption NOT_SUPPORTED = new PerCredMgmtROOption(false);
+            public static final PerCredMgmtROOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public PerCredMgmtROOption(boolean value) {
+                this.value = value;
+            }
+
+            @JsonValue
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                PerCredMgmtROOption that = (PerCredMgmtROOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+    }
 
 }
