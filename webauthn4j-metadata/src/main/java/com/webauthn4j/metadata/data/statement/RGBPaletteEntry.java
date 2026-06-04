@@ -25,6 +25,8 @@ import java.util.Objects;
 
 /**
  * The RGBPaletteEntry is an RGB three-sample tuple palette entry
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-rgbpaletteentry">§3.7. rgbPaletteEntry dictionary</a>
  */
 public class RGBPaletteEntry {
 

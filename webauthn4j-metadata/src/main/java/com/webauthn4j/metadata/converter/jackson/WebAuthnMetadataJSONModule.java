@@ -17,6 +17,9 @@
 package com.webauthn4j.metadata.converter.jackson;
 
 import com.webauthn4j.converter.jackson.ModuleNotRegisteredGuardClearingMixin;
+import com.webauthn4j.converter.jackson.deserializer.json.UserVerificationMethodSetFromLongDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.UserVerificationMethodSetToLongSerializer;
+import com.webauthn4j.data.UserVerificationMethod;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.AAIDDeserializer;
 import com.webauthn4j.metadata.converter.jackson.deserializer.AuthenticatorStatusDeserializer;
@@ -26,7 +29,14 @@ import com.webauthn4j.metadata.converter.jackson.serializer.AuthenticatorStatusS
 import com.webauthn4j.metadata.converter.jackson.serializer.MetadataAAGUIDSerializer;
 import com.webauthn4j.metadata.data.toc.AuthenticatorStatus;
 import com.webauthn4j.metadata.data.uaf.AAID;
+import tools.jackson.databind.*;
+import tools.jackson.databind.deser.Deserializers;
+import tools.jackson.databind.jsontype.TypeDeserializer;
 import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.Serializers;
+import tools.jackson.databind.type.CollectionType;
+
+import java.util.Set;
 
 public class WebAuthnMetadataJSONModule extends SimpleModule {
 
@@ -47,14 +57,53 @@ public class WebAuthnMetadataJSONModule extends SimpleModule {
     @Override
     public void setupModule(SetupContext context) {
         super.setupModule(context);
-        // These classes have @JsonSerialize(using = ModuleNotRegisteredGuardSerializer.class) /
-        // @JsonDeserialize(using = ModuleNotRegisteredGuardDeserializer.class) annotations that throw
-        // if no module is registered. Clear them so that the serializers/deserializers registered above
-        // via addSerializer/addDeserializer take effect instead.
-        // This is necessary because Jackson resolves annotation-based serializers before module-registered ones.
-        // Only set the clearing MixIn if the user hasn't already provided their own MixIn for the type.
         ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, AAID.class);
         ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, AuthenticatorStatus.class);
+
+        addCollectionSerializer(context, Set.class, UserVerificationMethod.class,
+                new UserVerificationMethodSetToLongSerializer());
+        addCollectionDeserializer(context, Set.class, UserVerificationMethod.class,
+                new UserVerificationMethodSetFromLongDeserializer());
+    }
+
+    private static void addCollectionSerializer(SetupContext context,
+            Class<?> collectionType, Class<?> elementType, ValueSerializer<?> serializer) {
+        context.addSerializers(new Serializers.Base() {
+            @Override
+            public ValueSerializer<?> findCollectionSerializer(SerializationConfig config,
+                    CollectionType type, BeanDescription.Supplier beanDescRef,
+                    com.fasterxml.jackson.annotation.JsonFormat.Value formatOverrides,
+                    tools.jackson.databind.jsontype.TypeSerializer elementTypeSerializer,
+                    ValueSerializer<Object> elementValueSerializer) {
+                if (collectionType.isAssignableFrom(type.getRawClass())
+                        && type.getContentType().getRawClass() == elementType) {
+                    return serializer;
+                }
+                return null;
+            }
+        });
+    }
+
+    private static void addCollectionDeserializer(SetupContext context,
+            Class<?> collectionType, Class<?> elementType, ValueDeserializer<?> deserializer) {
+        context.addDeserializers(new Deserializers.Base() {
+            @Override
+            public ValueDeserializer<?> findCollectionDeserializer(CollectionType type,
+                    DeserializationConfig config, BeanDescription.Supplier beanDescRef,
+                    TypeDeserializer elementTypeDeserializer,
+                    ValueDeserializer<?> elementDeserializer) {
+                if (collectionType.isAssignableFrom(type.getRawClass())
+                        && type.getContentType().getRawClass() == elementType) {
+                    return deserializer;
+                }
+                return null;
+            }
+
+            @Override
+            public boolean hasDeserializerFor(DeserializationConfig config, Class<?> valueType) {
+                return collectionType.isAssignableFrom(valueType);
+            }
+        });
     }
 
 }

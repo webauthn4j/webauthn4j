@@ -36,7 +36,7 @@ import java.util.Objects;
 /**
  * This metadata statement contains a subset of verifiable information for authenticators certified by the FIDO Alliance.
  *
- * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-rd-20251016.html#dictdef-metadatastatement">Metadata Statement v3.1.1</a>
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-metadatastatement">Metadata Statement v3.1.1</a>
  */
 public class MetadataStatement {
     @Nullable private final String legalHeader;

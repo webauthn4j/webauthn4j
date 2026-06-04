@@ -26,7 +26,7 @@ import java.util.Objects;
 /**
  * Describes the relevant accuracy/complexity aspects of an authenticator's biometric user verification methods.
  *
- * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-rd-20251016.html#dictdef-biometricaccuracydescriptor">
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-biometricaccuracydescriptor">
  * §3.3. BiometricAccuracyDescriptor dictionary</a>
  */
 @SuppressWarnings("squid:S00116")

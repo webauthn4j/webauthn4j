@@ -21,17 +21,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.PinProtocolVersion;
+import com.webauthn4j.data.PublicKeyCredentialParameters;
+import com.webauthn4j.data.UserVerificationMethod;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
-import java.util.List;
-import java.util.Objects;
 
-//TODO: support CTAP 2.1
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
+@SuppressWarnings("java:S107")
 public class AuthenticatorGetInfo {
 
     @JsonProperty("versions")
@@ -59,6 +65,106 @@ public class AuthenticatorGetInfo {
     @Nullable
     private final List<PinProtocolVersion> pinUvAuthProtocols;
 
+    @JsonProperty("maxCredentialCountInList")
+    @Nullable
+    private final Integer maxCredentialCountInList;
+
+    @JsonProperty("maxCredentialIdLength")
+    @Nullable
+    private final Integer maxCredentialIdLength;
+
+    @JsonProperty("transports")
+    @Nullable
+    private final List<AuthenticatorTransport> transports;
+
+    @JsonProperty("algorithms")
+    @Nullable
+    private final List<PublicKeyCredentialParameters> algorithms;
+
+    @JsonProperty("maxSerializedLargeBlobArray")
+    @Nullable
+    private final Integer maxSerializedLargeBlobArray;
+
+    @JsonProperty("forcePINChange")
+    @Nullable
+    private final Boolean forcePINChange;
+
+    @JsonProperty("minPINLength")
+    @Nullable
+    private final Integer minPINLength;
+
+    @JsonProperty("firmwareVersion")
+    @Nullable
+    private final Integer firmwareVersion;
+
+    @JsonProperty("maxCredBlobLength")
+    @Nullable
+    private final Integer maxCredBlobLength;
+
+    @JsonProperty("maxRPIDsForSetMinPINLength")
+    @Nullable
+    private final Integer maxRPIDsForSetMinPINLength;
+
+    @JsonProperty("preferredPlatformUvAttempts")
+    @Nullable
+    private final Integer preferredPlatformUvAttempts;
+
+    @JsonProperty("uvModality")
+    @Nullable
+    private final Set<UserVerificationMethod> uvModality;
+
+    @JsonProperty("certifications")
+    @Nullable
+    private final Map<String, Object> certifications;
+
+    @JsonProperty("remainingDiscoverableCredentials")
+    @Nullable
+    private final Integer remainingDiscoverableCredentials;
+
+    @JsonProperty("vendorPrototypeConfigCommands")
+    @Nullable
+    private final List<Integer> vendorPrototypeConfigCommands;
+
+    @JsonProperty("attestationFormats")
+    @Nullable
+    private final List<String> attestationFormats;
+
+    @JsonProperty("uvCountSinceLastPinEntry")
+    @Nullable
+    private final Integer uvCountSinceLastPinEntry;
+
+    @JsonProperty("longTouchForReset")
+    @Nullable
+    private final Boolean longTouchForReset;
+
+    @JsonProperty("encIdentifier")
+    @Nullable
+    private final String encIdentifier;
+
+    @JsonProperty("transportsForReset")
+    @Nullable
+    private final List<AuthenticatorTransport> transportsForReset;
+
+    @JsonProperty("pinComplexityPolicy")
+    @Nullable
+    private final Boolean pinComplexityPolicy;
+
+    @JsonProperty("pinComplexityPolicyURL")
+    @Nullable
+    private final String pinComplexityPolicyURL;
+
+    @JsonProperty("maxPINLength")
+    @Nullable
+    private final Integer maxPINLength;
+
+    @JsonProperty("encCredStoreState")
+    @Nullable
+    private final String encCredStoreState;
+
+    @JsonProperty("authenticatorConfigCommands")
+    @Nullable
+    private final List<Integer> authenticatorConfigCommands;
+
     @JsonCreator
     public AuthenticatorGetInfo(
             @JsonProperty("versions") @NotNull List<String> versions,
@@ -66,37 +172,201 @@ public class AuthenticatorGetInfo {
             @JsonProperty("aaguid") @NotNull AAGUID aaguid,
             @JsonProperty("options") @Nullable Options options,
             @JsonProperty("maxMsgSize") @Nullable Integer maxMsgSize,
-            @JsonProperty("pinUvAuthProtocols") @Nullable List<PinProtocolVersion> pinUvAuthProtocols) {
+            @JsonProperty("pinUvAuthProtocols") @Nullable List<PinProtocolVersion> pinUvAuthProtocols,
+            @JsonProperty("maxCredentialCountInList") @Nullable Integer maxCredentialCountInList,
+            @JsonProperty("maxCredentialIdLength") @Nullable Integer maxCredentialIdLength,
+            @JsonProperty("transports") @Nullable List<AuthenticatorTransport> transports,
+            @JsonProperty("algorithms") @Nullable List<PublicKeyCredentialParameters> algorithms,
+            @JsonProperty("maxSerializedLargeBlobArray") @Nullable Integer maxSerializedLargeBlobArray,
+            @JsonProperty("forcePINChange") @Nullable Boolean forcePINChange,
+            @JsonProperty("minPINLength") @Nullable Integer minPINLength,
+            @JsonProperty("firmwareVersion") @Nullable Integer firmwareVersion,
+            @JsonProperty("maxCredBlobLength") @Nullable Integer maxCredBlobLength,
+            @JsonProperty("maxRPIDsForSetMinPINLength") @Nullable Integer maxRPIDsForSetMinPINLength,
+            @JsonProperty("preferredPlatformUvAttempts") @Nullable Integer preferredPlatformUvAttempts,
+            @JsonProperty("uvModality") @Nullable Set<UserVerificationMethod> uvModality,
+            @JsonProperty("certifications") @Nullable Map<String, Object> certifications,
+            @JsonProperty("remainingDiscoverableCredentials") @Nullable Integer remainingDiscoverableCredentials,
+            @JsonProperty("vendorPrototypeConfigCommands") @Nullable List<Integer> vendorPrototypeConfigCommands,
+            @JsonProperty("attestationFormats") @Nullable List<String> attestationFormats,
+            @JsonProperty("uvCountSinceLastPinEntry") @Nullable Integer uvCountSinceLastPinEntry,
+            @JsonProperty("longTouchForReset") @Nullable Boolean longTouchForReset,
+            @JsonProperty("encIdentifier") @Nullable String encIdentifier,
+            @JsonProperty("transportsForReset") @Nullable List<AuthenticatorTransport> transportsForReset,
+            @JsonProperty("pinComplexityPolicy") @Nullable Boolean pinComplexityPolicy,
+            @JsonProperty("pinComplexityPolicyURL") @Nullable String pinComplexityPolicyURL,
+            @JsonProperty("maxPINLength") @Nullable Integer maxPINLength,
+            @JsonProperty("encCredStoreState") @Nullable String encCredStoreState,
+            @JsonProperty("authenticatorConfigCommands") @Nullable List<Integer> authenticatorConfigCommands) {
         this.versions = versions;
         this.extensions = extensions;
         this.aaguid = aaguid;
         this.options = options;
         this.maxMsgSize = maxMsgSize;
         this.pinUvAuthProtocols = pinUvAuthProtocols;
+        this.maxCredentialCountInList = maxCredentialCountInList;
+        this.maxCredentialIdLength = maxCredentialIdLength;
+        this.transports = transports;
+        this.algorithms = algorithms;
+        this.maxSerializedLargeBlobArray = maxSerializedLargeBlobArray;
+        this.forcePINChange = forcePINChange;
+        this.minPINLength = minPINLength;
+        this.firmwareVersion = firmwareVersion;
+        this.maxCredBlobLength = maxCredBlobLength;
+        this.maxRPIDsForSetMinPINLength = maxRPIDsForSetMinPINLength;
+        this.preferredPlatformUvAttempts = preferredPlatformUvAttempts;
+        this.uvModality = uvModality;
+        this.certifications = certifications;
+        this.remainingDiscoverableCredentials = remainingDiscoverableCredentials;
+        this.vendorPrototypeConfigCommands = vendorPrototypeConfigCommands;
+        this.attestationFormats = attestationFormats;
+        this.uvCountSinceLastPinEntry = uvCountSinceLastPinEntry;
+        this.longTouchForReset = longTouchForReset;
+        this.encIdentifier = encIdentifier;
+        this.transportsForReset = transportsForReset;
+        this.pinComplexityPolicy = pinComplexityPolicy;
+        this.pinComplexityPolicyURL = pinComplexityPolicyURL;
+        this.maxPINLength = maxPINLength;
+        this.encCredStoreState = encCredStoreState;
+        this.authenticatorConfigCommands = authenticatorConfigCommands;
     }
 
-    public List<String> getVersions() {
+    @Deprecated
+    public AuthenticatorGetInfo(
+            @NotNull List<String> versions,
+            @Nullable List<String> extensions,
+            @NotNull AAGUID aaguid,
+            @Nullable Options options,
+            @Nullable Integer maxMsgSize,
+            @Nullable List<PinProtocolVersion> pinUvAuthProtocols) {
+        this(versions, extensions, aaguid, options, maxMsgSize, pinUvAuthProtocols,
+                null, null, null, null, null, null, null, null, null, null,
+                null, null, null, null, null, null, null, null, null, null,
+                null, null, null, null, null);
+    }
+
+    public @NotNull List<String> getVersions() {
         return versions;
     }
 
-    public List<String> getExtensions() {
+    public @Nullable List<String> getExtensions() {
         return extensions;
     }
 
-    public AAGUID getAaguid() {
+    public @NotNull AAGUID getAaguid() {
         return aaguid;
     }
 
-    public Options getOptions() {
+    public @Nullable Options getOptions() {
         return options;
     }
 
-    public Integer getMaxMsgSize() {
+    public @Nullable Integer getMaxMsgSize() {
         return maxMsgSize;
     }
 
-    public List<PinProtocolVersion> getPinUvAuthProtocols() {
+    public @Nullable List<PinProtocolVersion> getPinUvAuthProtocols() {
         return pinUvAuthProtocols;
+    }
+
+    public @Nullable Integer getMaxCredentialCountInList() {
+        return maxCredentialCountInList;
+    }
+
+    public @Nullable Integer getMaxCredentialIdLength() {
+        return maxCredentialIdLength;
+    }
+
+    public @Nullable List<AuthenticatorTransport> getTransports() {
+        return transports;
+    }
+
+    public @Nullable List<PublicKeyCredentialParameters> getAlgorithms() {
+        return algorithms;
+    }
+
+    public @Nullable Integer getMaxSerializedLargeBlobArray() {
+        return maxSerializedLargeBlobArray;
+    }
+
+    public @Nullable Boolean getForcePINChange() {
+        return forcePINChange;
+    }
+
+    public @Nullable Integer getMinPINLength() {
+        return minPINLength;
+    }
+
+    public @Nullable Integer getFirmwareVersion() {
+        return firmwareVersion;
+    }
+
+    public @Nullable Integer getMaxCredBlobLength() {
+        return maxCredBlobLength;
+    }
+
+    public @Nullable Integer getMaxRPIDsForSetMinPINLength() {
+        return maxRPIDsForSetMinPINLength;
+    }
+
+    public @Nullable Integer getPreferredPlatformUvAttempts() {
+        return preferredPlatformUvAttempts;
+    }
+
+    public @Nullable Set<UserVerificationMethod> getUvModality() {
+        return uvModality;
+    }
+
+    public @Nullable Map<String, Object> getCertifications() {
+        return certifications;
+    }
+
+    public @Nullable Integer getRemainingDiscoverableCredentials() {
+        return remainingDiscoverableCredentials;
+    }
+
+    public @Nullable List<Integer> getVendorPrototypeConfigCommands() {
+        return vendorPrototypeConfigCommands;
+    }
+
+    public @Nullable List<String> getAttestationFormats() {
+        return attestationFormats;
+    }
+
+    public @Nullable Integer getUvCountSinceLastPinEntry() {
+        return uvCountSinceLastPinEntry;
+    }
+
+    public @Nullable Boolean getLongTouchForReset() {
+        return longTouchForReset;
+    }
+
+    public @Nullable String getEncIdentifier() {
+        return encIdentifier;
+    }
+
+    public @Nullable List<AuthenticatorTransport> getTransportsForReset() {
+        return transportsForReset;
+    }
+
+    public @Nullable Boolean getPinComplexityPolicy() {
+        return pinComplexityPolicy;
+    }
+
+    public @Nullable String getPinComplexityPolicyURL() {
+        return pinComplexityPolicyURL;
+    }
+
+    public @Nullable Integer getMaxPINLength() {
+        return maxPINLength;
+    }
+
+    public @Nullable String getEncCredStoreState() {
+        return encCredStoreState;
+    }
+
+    public @Nullable List<Integer> getAuthenticatorConfigCommands() {
+        return authenticatorConfigCommands;
     }
 
     @Override
@@ -104,12 +374,49 @@ public class AuthenticatorGetInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorGetInfo that = (AuthenticatorGetInfo) o;
-        return versions.equals(that.versions) && Objects.equals(extensions, that.extensions) && aaguid.equals(that.aaguid) && Objects.equals(options, that.options) && Objects.equals(maxMsgSize, that.maxMsgSize) && Objects.equals(pinUvAuthProtocols, that.pinUvAuthProtocols);
+        return versions.equals(that.versions) &&
+                Objects.equals(extensions, that.extensions) &&
+                aaguid.equals(that.aaguid) &&
+                Objects.equals(options, that.options) &&
+                Objects.equals(maxMsgSize, that.maxMsgSize) &&
+                Objects.equals(pinUvAuthProtocols, that.pinUvAuthProtocols) &&
+                Objects.equals(maxCredentialCountInList, that.maxCredentialCountInList) &&
+                Objects.equals(maxCredentialIdLength, that.maxCredentialIdLength) &&
+                Objects.equals(transports, that.transports) &&
+                Objects.equals(algorithms, that.algorithms) &&
+                Objects.equals(maxSerializedLargeBlobArray, that.maxSerializedLargeBlobArray) &&
+                Objects.equals(forcePINChange, that.forcePINChange) &&
+                Objects.equals(minPINLength, that.minPINLength) &&
+                Objects.equals(firmwareVersion, that.firmwareVersion) &&
+                Objects.equals(maxCredBlobLength, that.maxCredBlobLength) &&
+                Objects.equals(maxRPIDsForSetMinPINLength, that.maxRPIDsForSetMinPINLength) &&
+                Objects.equals(preferredPlatformUvAttempts, that.preferredPlatformUvAttempts) &&
+                Objects.equals(uvModality, that.uvModality) &&
+                Objects.equals(certifications, that.certifications) &&
+                Objects.equals(remainingDiscoverableCredentials, that.remainingDiscoverableCredentials) &&
+                Objects.equals(vendorPrototypeConfigCommands, that.vendorPrototypeConfigCommands) &&
+                Objects.equals(attestationFormats, that.attestationFormats) &&
+                Objects.equals(uvCountSinceLastPinEntry, that.uvCountSinceLastPinEntry) &&
+                Objects.equals(longTouchForReset, that.longTouchForReset) &&
+                Objects.equals(encIdentifier, that.encIdentifier) &&
+                Objects.equals(transportsForReset, that.transportsForReset) &&
+                Objects.equals(pinComplexityPolicy, that.pinComplexityPolicy) &&
+                Objects.equals(pinComplexityPolicyURL, that.pinComplexityPolicyURL) &&
+                Objects.equals(maxPINLength, that.maxPINLength) &&
+                Objects.equals(encCredStoreState, that.encCredStoreState) &&
+                Objects.equals(authenticatorConfigCommands, that.authenticatorConfigCommands);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(versions, extensions, aaguid, options, maxMsgSize, pinUvAuthProtocols);
+        return Objects.hash(versions, extensions, aaguid, options, maxMsgSize, pinUvAuthProtocols,
+                maxCredentialCountInList, maxCredentialIdLength, transports, algorithms,
+                maxSerializedLargeBlobArray, forcePINChange, minPINLength, firmwareVersion,
+                maxCredBlobLength, maxRPIDsForSetMinPINLength, preferredPlatformUvAttempts,
+                uvModality, certifications, remainingDiscoverableCredentials,
+                vendorPrototypeConfigCommands, attestationFormats, uvCountSinceLastPinEntry,
+                longTouchForReset, encIdentifier, transportsForReset, pinComplexityPolicy,
+                pinComplexityPolicyURL, maxPINLength, encCredStoreState, authenticatorConfigCommands);
     }
 
     /**

@@ -19,6 +19,7 @@ package com.webauthn4j.metadata.data.statement;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -26,7 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MetadataStatementTest {
 
-    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
+    private final JsonMapper jsonMapper = new ObjectConverter()
+            .rebuildWithJSONModule(new WebAuthnMetadataJSONModule())
+            .getJsonMapper();
 
     @SuppressWarnings("java:S5961")
     @Test
