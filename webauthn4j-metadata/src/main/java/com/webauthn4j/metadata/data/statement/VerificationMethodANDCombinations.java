@@ -23,6 +23,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+/**
+ * Represents a combination of verification method descriptors that must all be satisfied.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#typedefdef-verificationmethodandcombinations">
+ * §3.6. VerificationMethodANDCombinations typedef</a>
+ */
 public class VerificationMethodANDCombinations extends AbstractList<VerificationMethodDescriptor> {
 
     private final int size;

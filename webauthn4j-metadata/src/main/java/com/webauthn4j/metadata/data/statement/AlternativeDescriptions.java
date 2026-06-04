@@ -25,6 +25,8 @@ import java.util.Map;
 
 /**
  * This descriptor contains description in alternative languages.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dom-metadatastatement-alternativedescriptions">§4. MetadataStatement - alternativeDescriptions</a>
  */
 public class AlternativeDescriptions extends AbstractImmutableMap<String, String> {
 

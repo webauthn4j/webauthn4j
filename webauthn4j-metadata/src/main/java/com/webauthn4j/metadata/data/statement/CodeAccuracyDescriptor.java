@@ -25,6 +25,9 @@ import java.util.Objects;
 
 /**
  * The CodeAccuracyDescriptor describes the relevant accuracy/complexity aspects of passcode user verification methods.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-codeaccuracydescriptor">
+ * §3.2. CodeAccuracyDescriptor dictionary</a>
  */
 public class CodeAccuracyDescriptor {
 

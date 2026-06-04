@@ -26,6 +26,8 @@ import java.util.Objects;
 
 /**
  * This descriptor contains an extension supported by the authenticator.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-extensiondescriptor">§3.10. ExtensionDescriptor dictionary</a>
  */
 public class ExtensionDescriptor {
 

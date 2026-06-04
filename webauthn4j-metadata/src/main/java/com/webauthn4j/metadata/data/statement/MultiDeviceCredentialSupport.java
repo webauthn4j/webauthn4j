@@ -25,7 +25,7 @@ import java.util.Objects;
 /**
  * Indicates whether the authenticator supports multi-device credentials.
  *
- * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-rd-20251016.html#dom-metadatastatement-multidevicecredentialsupport">
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dom-metadatastatement-multidevicecredentialsupport">
  * §4. MetadataStatement - multiDeviceCredentialSupport</a>
  */
 public class MultiDeviceCredentialSupport {

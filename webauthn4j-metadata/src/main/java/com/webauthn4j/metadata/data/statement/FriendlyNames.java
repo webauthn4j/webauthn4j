@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Represents a map of friendly names for an authenticator, keyed by language tag.
  *
- * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-rd-20251016.html#dictdef-friendlynames">FriendlyNames in Metadata Statement v3.1.1</a>
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-friendlynames">FriendlyNames in Metadata Statement v3.1.1</a>
  */
 public class FriendlyNames extends AbstractImmutableMap<String, String> {
 

@@ -17,7 +17,9 @@
 package com.webauthn4j.metadata.data.statement;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.PinProtocolVersion;
+import com.webauthn4j.data.UserVerificationMethod;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import org.junit.jupiter.api.Test;
@@ -44,7 +46,7 @@ class AuthenticatorGetInfoTest {
         assertThat(info.getPinUvAuthProtocols()).containsExactly(PinProtocolVersion.VERSION_1);
         assertThat(info.getMaxCredentialCountInList()).isEqualTo(16);
         assertThat(info.getMaxCredentialIdLength()).isEqualTo(128);
-        assertThat(info.getTransports()).containsExactly("usb", "nfc");
+        assertThat(info.getTransports()).containsExactly(AuthenticatorTransport.USB, AuthenticatorTransport.NFC);
         assertThat(info.getAlgorithms()).hasSize(2);
         assertThat(info.getFirmwareVersion()).isEqualTo(5);
         assertThat(info.getMaxSerializedLargeBlobArray()).isEqualTo(4096);
@@ -53,7 +55,7 @@ class AuthenticatorGetInfoTest {
         assertThat(info.getMaxCredBlobLength()).isEqualTo(32);
         assertThat(info.getMaxRPIDsForSetMinPINLength()).isEqualTo(3);
         assertThat(info.getPreferredPlatformUvAttempts()).isEqualTo(5);
-        assertThat(info.getUvModality()).isEqualTo(2);
+        assertThat(info.getUvModality()).containsExactly(UserVerificationMethod.FINGERPRINT_INTERNAL);
         assertThat(info.getCertifications()).containsKey("FIDO");
         assertThat(info.getRemainingDiscoverableCredentials()).isEqualTo(25);
         assertThat(info.getVendorPrototypeConfigCommands()).containsExactly(1, 2);
@@ -61,7 +63,7 @@ class AuthenticatorGetInfoTest {
         assertThat(info.getUvCountSinceLastPinEntry()).isEqualTo(3);
         assertThat(info.getLongTouchForReset()).isTrue();
         assertThat(info.getEncIdentifier()).isEqualTo("abc123");
-        assertThat(info.getTransportsForReset()).containsExactly("usb");
+        assertThat(info.getTransportsForReset()).containsExactly(AuthenticatorTransport.USB);
         assertThat(info.getPinComplexityPolicy()).isTrue();
         assertThat(info.getPinComplexityPolicyURL()).isEqualTo("https://example.com/policy");
         assertThat(info.getMaxPINLength()).isEqualTo(64);

@@ -29,6 +29,8 @@ import java.util.Objects;
 
 /**
  * A descriptor for a specific base user verification method as implemented by the authenticator.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-verificationmethoddescriptor">§3.5. VerificationMethodDescriptor dictionary</a>
  */
 public class VerificationMethodDescriptor {
 

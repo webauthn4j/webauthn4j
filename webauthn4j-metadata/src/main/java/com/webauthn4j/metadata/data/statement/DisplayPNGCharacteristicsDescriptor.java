@@ -28,6 +28,8 @@ import java.util.Objects;
 
 /**
  * The DisplayPNGCharacteristicsDescriptor describes a PNG image characteristics as defined in the PNG spec for IHDR (image header) and PLTE (palette table)
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-displaypngcharacteristicsdescriptor">§3.8. DisplayPNGCharacteristicsDescriptor dictionary</a>
  */
 public class DisplayPNGCharacteristicsDescriptor {
 

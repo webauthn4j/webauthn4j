@@ -26,6 +26,8 @@ import java.util.Objects;
 
 /**
  * The PatternAccuracyDescriptor describes relevant accuracy/complexity aspects in the case that a pattern is used as the user verification method.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-patternaccuracydescriptor">§3.4. PatternAccuracyDescriptor dictionary</a>
  */
 public class PatternAccuracyDescriptor {
 

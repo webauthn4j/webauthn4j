@@ -26,6 +26,8 @@ import java.util.Objects;
 
 /**
  * In the case of ECDAA attestation, the ECDAA-Issuer's trust anchor must be specified in this field.
+ *
+ * @see <a href="https://fidoalliance.org/specs/mds/fido-metadata-statement-v3.1.1-ps-20260105.html#dictdef-ecdaatrustanchor">§3.9. EcdaaTrustAnchor dictionary</a>
  */
 public class EcdaaTrustAnchor {
     @NotNull private final String x;

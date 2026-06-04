@@ -4,18 +4,24 @@ import com.webauthn4j.async.metadata.FidoMDS3MetadataBLOBAsyncProvider;
 import com.webauthn4j.async.metadata.HttpAsyncClient;
 import com.webauthn4j.async.util.internal.FileAsyncUtil;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.metadata.data.MetadataBLOB;
+import com.webauthn4j.metadata.data.MetadataBLOBPayload;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.CertificateUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -74,6 +80,23 @@ class FidoMDS3MetadataBLOBIntegrationTest {
                 Collections.singleton(new TrustAnchor(ROOT_CERTIFICATE, null)));
         MetadataBLOB metadataBLOB = target.provide();
         assertThat(metadataBLOB).isNotNull();
+    }
+
+    @Test
+    void metadata_blob_payload_should_cover_all_fields() {
+        String blobJwt = new String(blobBytes, StandardCharsets.UTF_8).trim();
+
+        JsonMapper strictMapper = new ObjectConverter()
+                .rebuildWithJSONModule(new WebAuthnMetadataJSONModule())
+                .getJsonMapper().rebuild()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
+                .build();
+
+        String[] parts = blobJwt.split("\\.");
+        String payloadJson = new String(Base64.getUrlDecoder().decode(parts[1]), StandardCharsets.UTF_8);
+
+        assertThatCode(() -> strictMapper.readValue(payloadJson, MetadataBLOBPayload.class))
+                .doesNotThrowAnyException();
     }
 
     @Test

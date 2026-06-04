@@ -21,17 +21,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.PublicKeyCredentialParameters;
+import com.webauthn4j.data.UserVerificationMethod;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 @SuppressWarnings("java:S107")
 public class AuthenticatorGetInfo {
@@ -71,7 +75,7 @@ public class AuthenticatorGetInfo {
 
     @JsonProperty("transports")
     @Nullable
-    private final List<String> transports;
+    private final List<AuthenticatorTransport> transports;
 
     @JsonProperty("algorithms")
     @Nullable
@@ -107,7 +111,7 @@ public class AuthenticatorGetInfo {
 
     @JsonProperty("uvModality")
     @Nullable
-    private final Integer uvModality;
+    private final Set<UserVerificationMethod> uvModality;
 
     @JsonProperty("certifications")
     @Nullable
@@ -139,7 +143,7 @@ public class AuthenticatorGetInfo {
 
     @JsonProperty("transportsForReset")
     @Nullable
-    private final List<String> transportsForReset;
+    private final List<AuthenticatorTransport> transportsForReset;
 
     @JsonProperty("pinComplexityPolicy")
     @Nullable
@@ -171,7 +175,7 @@ public class AuthenticatorGetInfo {
             @JsonProperty("pinUvAuthProtocols") @Nullable List<PinProtocolVersion> pinUvAuthProtocols,
             @JsonProperty("maxCredentialCountInList") @Nullable Integer maxCredentialCountInList,
             @JsonProperty("maxCredentialIdLength") @Nullable Integer maxCredentialIdLength,
-            @JsonProperty("transports") @Nullable List<String> transports,
+            @JsonProperty("transports") @Nullable List<AuthenticatorTransport> transports,
             @JsonProperty("algorithms") @Nullable List<PublicKeyCredentialParameters> algorithms,
             @JsonProperty("maxSerializedLargeBlobArray") @Nullable Integer maxSerializedLargeBlobArray,
             @JsonProperty("forcePINChange") @Nullable Boolean forcePINChange,
@@ -180,7 +184,7 @@ public class AuthenticatorGetInfo {
             @JsonProperty("maxCredBlobLength") @Nullable Integer maxCredBlobLength,
             @JsonProperty("maxRPIDsForSetMinPINLength") @Nullable Integer maxRPIDsForSetMinPINLength,
             @JsonProperty("preferredPlatformUvAttempts") @Nullable Integer preferredPlatformUvAttempts,
-            @JsonProperty("uvModality") @Nullable Integer uvModality,
+            @JsonProperty("uvModality") @Nullable Set<UserVerificationMethod> uvModality,
             @JsonProperty("certifications") @Nullable Map<String, Object> certifications,
             @JsonProperty("remainingDiscoverableCredentials") @Nullable Integer remainingDiscoverableCredentials,
             @JsonProperty("vendorPrototypeConfigCommands") @Nullable List<Integer> vendorPrototypeConfigCommands,
@@ -188,7 +192,7 @@ public class AuthenticatorGetInfo {
             @JsonProperty("uvCountSinceLastPinEntry") @Nullable Integer uvCountSinceLastPinEntry,
             @JsonProperty("longTouchForReset") @Nullable Boolean longTouchForReset,
             @JsonProperty("encIdentifier") @Nullable String encIdentifier,
-            @JsonProperty("transportsForReset") @Nullable List<String> transportsForReset,
+            @JsonProperty("transportsForReset") @Nullable List<AuthenticatorTransport> transportsForReset,
             @JsonProperty("pinComplexityPolicy") @Nullable Boolean pinComplexityPolicy,
             @JsonProperty("pinComplexityPolicyURL") @Nullable String pinComplexityPolicyURL,
             @JsonProperty("maxPINLength") @Nullable Integer maxPINLength,
@@ -273,7 +277,7 @@ public class AuthenticatorGetInfo {
         return maxCredentialIdLength;
     }
 
-    public @Nullable List<String> getTransports() {
+    public @Nullable List<AuthenticatorTransport> getTransports() {
         return transports;
     }
 
@@ -309,7 +313,7 @@ public class AuthenticatorGetInfo {
         return preferredPlatformUvAttempts;
     }
 
-    public @Nullable Integer getUvModality() {
+    public @Nullable Set<UserVerificationMethod> getUvModality() {
         return uvModality;
     }
 
@@ -341,7 +345,7 @@ public class AuthenticatorGetInfo {
         return encIdentifier;
     }
 
-    public @Nullable List<String> getTransportsForReset() {
+    public @Nullable List<AuthenticatorTransport> getTransportsForReset() {
         return transportsForReset;
     }
 
