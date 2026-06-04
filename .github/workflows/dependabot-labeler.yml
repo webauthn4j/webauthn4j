@@ -16,15 +16,34 @@ jobs:
         id: metadata
         uses: dependabot/fetch-metadata@v3
 
+      - name: Check if production dependency
+        id: check
+        env:
+          DEPENDENCY_NAMES: ${{ steps.metadata.outputs.dependency-names }}
+          PRODUCTION_DEPENDENCY_PATTERNS: |
+            tools.jackson
+            org.slf4j
+            org.bouncycastle
+        run: |
+          is_production=false
+          while IFS= read -r pattern; do
+            [ -z "$pattern" ] && continue
+            if echo "$DEPENDENCY_NAMES" | grep -q "$pattern"; then
+              is_production=true
+              break
+            fi
+          done <<< "$PRODUCTION_DEPENDENCY_PATTERNS"
+          echo "is-production=$is_production" >> "$GITHUB_OUTPUT"
+
       - name: Add dev-dependencies label
-        if: steps.metadata.outputs.dependency-group == 'dev-dependencies'
+        if: steps.check.outputs.is-production == 'false'
         run: gh pr edit "$PR_URL" --add-label "dev-dependencies"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add dependencies label
-        if: steps.metadata.outputs.dependency-group != 'dev-dependencies'
+        if: steps.check.outputs.is-production == 'true'
         run: gh pr edit "$PR_URL" --add-label "dependencies"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}

@@ -5,11 +5,6 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
-    groups:
-      dev-dependencies:
-        exclude-patterns:
-          - "tools.jackson*"
-          - "org.slf4j*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
