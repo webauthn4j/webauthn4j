@@ -90,6 +90,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(HMACSecretRegistrationExtensionClientInput.class, new HMACSecretRegistrationExtensionClientInputDeserializer());
         this.addDeserializer(HMACSecretAuthenticationExtensionClientInput.class, new HMACSecretAuthenticationExtensionClientInputDeserializer());
         this.addDeserializer(LargeBlobExtensionClientInput.class, new LargeBlobExtensionClientInputDeserializer());
+        this.addDeserializer(PRFExtensionClientInput.class, new PRFExtensionClientInputDeserializer());
 
         // Extension output deserializers
         this.addDeserializer(FIDOAppIDExtensionClientOutput.class, new FIDOAppIDExtensionClientOutputDeserializer());
@@ -99,6 +100,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(HMACSecretRegistrationExtensionClientOutput.class, new HMACSecretRegistrationExtensionClientOutputDeserializer());
         this.addDeserializer(HMACSecretAuthenticationExtensionClientOutput.class, new HMACSecretAuthenticationExtensionClientOutputDeserializer());
         this.addDeserializer(LargeBlobExtensionClientOutput.class, new LargeBlobExtensionClientOutputDeserializer());
+        this.addDeserializer(PRFExtensionClientOutput.class, new PRFExtensionClientOutputDeserializer());
 
         this.addSerializer(AttachmentHint.class, new AttachmentHintToLongSerializer());
         this.addSerializer(AuthenticatorAttestationType.class, new AuthenticatorAttestationTypeToIntSerializer());
