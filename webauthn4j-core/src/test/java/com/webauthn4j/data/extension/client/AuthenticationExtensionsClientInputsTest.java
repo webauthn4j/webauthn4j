@@ -19,6 +19,7 @@ package com.webauthn4j.data.extension.client;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.HMACGetSecretInput;
+import com.webauthn4j.data.extension.LargeBlobSupport;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
@@ -132,6 +133,36 @@ class AuthenticationExtensionsClientInputsTest {
         assertThatThrownBy(()->hmacSecretAuthenticationExtensionClientInput.getValue("hmacCreateSecret")).isInstanceOf(IllegalArgumentException.class);
         assertThat(hmacSecretAuthenticationExtensionClientInput.getValue("hmacGetSecret")).isEqualTo(new HMACGetSecretInput(new byte[32], new byte[32]));
 
+    }
+
+    @Test
+    void registration_largeBlob_test() {
+        AuthenticationExtensionsClientInputs.BuilderForRegistration builder = new AuthenticationExtensionsClientInputs.BuilderForRegistration();
+        builder.setLargeBlob(new AuthenticationExtensionsLargeBlobInputs(LargeBlobSupport.REQUIRED, null, null));
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> target = builder.build();
+
+        assertThat(target.getLargeBlob()).isNotNull();
+        assertThat(target.getLargeBlob().getSupport()).isEqualTo(LargeBlobSupport.REQUIRED);
+    }
+
+    @Test
+    void authentication_largeBlob_read_test() {
+        AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
+        builder.setLargeBlob(new AuthenticationExtensionsLargeBlobInputs(null, true, null));
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> target = builder.build();
+
+        assertThat(target.getLargeBlob()).isNotNull();
+        assertThat(target.getLargeBlob().getRead()).isTrue();
+    }
+
+    @Test
+    void authentication_largeBlob_write_test() {
+        AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
+        builder.setLargeBlob(new AuthenticationExtensionsLargeBlobInputs(null, null, new byte[]{1, 2, 3}));
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> target = builder.build();
+
+        assertThat(target.getLargeBlob()).isNotNull();
+        assertThat(target.getLargeBlob().getWrite()).isEqualTo(new byte[]{1, 2, 3});
     }
 
     @Test

@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer.json;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.extension.LargeBlobSupport;
 import com.webauthn4j.data.extension.client.*;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.exc.StreamReadException;
@@ -75,6 +76,63 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
         //Then
         assertAll(
                 () -> assertThat(extensionInputs.getExtension(FIDOAppIDExtensionClientInput.class).getValue()).isEqualTo("dummy")
+        );
+    }
+
+    @Test
+    void shouldDeserializeLargeBlobRegistrationInput() {
+        //Given
+        String json = "{ \"largeBlob\": { \"support\": \"preferred\" } }";
+
+        //When
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensionInputs =
+                jsonMapper.readValue(
+                        json,
+                        new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {
+                        }
+                );
+
+        //Then
+        assertAll(
+                () -> assertThat(extensionInputs.getExtension(LargeBlobExtensionClientInput.class).getValue().getSupport()).isEqualTo(LargeBlobSupport.PREFERRED)
+        );
+    }
+
+    @Test
+    void shouldDeserializeLargeBlobAuthenticationReadInput() {
+        //Given
+        String json = "{ \"largeBlob\": { \"read\": true } }";
+
+        //When
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensionInputs =
+                jsonMapper.readValue(
+                        json,
+                        new TypeReference<AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>>() {
+                        }
+                );
+
+        //Then
+        assertAll(
+                () -> assertThat(extensionInputs.getExtension(LargeBlobExtensionClientInput.class).getValue().getRead()).isTrue()
+        );
+    }
+
+    @Test
+    void shouldDeserializeLargeBlobAuthenticationWriteInput() {
+        //Given
+        String json = "{ \"largeBlob\": { \"write\": \"AQID\" } }";
+
+        //When
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensionInputs =
+                jsonMapper.readValue(
+                        json,
+                        new TypeReference<AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>>() {
+                        }
+                );
+
+        //Then
+        assertAll(
+                () -> assertThat(extensionInputs.getExtension(LargeBlobExtensionClientInput.class).getValue().getWrite()).isEqualTo(new byte[]{1, 2, 3})
         );
     }
 

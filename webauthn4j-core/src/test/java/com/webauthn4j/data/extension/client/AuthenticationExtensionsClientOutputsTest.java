@@ -23,6 +23,7 @@ import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.data.extension.UvmEntry;
 import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -123,6 +124,36 @@ class AuthenticationExtensionsClientOutputsTest {
         assertThatThrownBy(()->hmacSecretAuthenticationExtensionClientOutput.getValue("hmac-secret")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(()->hmacSecretAuthenticationExtensionClientOutput.getValue("hmacCreateSecret")).isInstanceOf(IllegalArgumentException.class);
         assertThat(hmacSecretAuthenticationExtensionClientOutput.getValue("hmacGetSecret")).isEqualTo(new HMACGetSecretOutput(new byte[32], new byte[32]));
+    }
+
+    @Test
+    void registration_largeBlob_test() {
+        AuthenticationExtensionsClientOutputs.BuilderForRegistration builder = new AuthenticationExtensionsClientOutputs.BuilderForRegistration();
+        builder.setLargeBlob(new AuthenticationExtensionsLargeBlobOutputs(true, null, null));
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> target = builder.build();
+
+        assertThat(target.getLargeBlob()).isNotNull();
+        assertThat(target.getLargeBlob().getSupported()).isTrue();
+    }
+
+    @Test
+    void authentication_largeBlob_blob_test() {
+        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
+        builder.setLargeBlob(new AuthenticationExtensionsLargeBlobOutputs(null, new byte[]{1, 2, 3}, null));
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> target = builder.build();
+
+        assertThat(target.getLargeBlob()).isNotNull();
+        assertThat(target.getLargeBlob().getBlob()).isEqualTo(new byte[]{1, 2, 3});
+    }
+
+    @Test
+    void authentication_largeBlob_written_test() {
+        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
+        builder.setLargeBlob(new AuthenticationExtensionsLargeBlobOutputs(null, null, true));
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> target = builder.build();
+
+        assertThat(target.getLargeBlob()).isNotNull();
+        assertThat(target.getLargeBlob().getWritten()).isTrue();
     }
 
     @Test
