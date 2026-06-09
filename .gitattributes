@@ -1,0 +1,4 @@
+# Enforce LF line endings on all platforms for reproducible builds.
+# Without this, text resource files (e.g. .pem, .conf) checked out with
+# OS-native line endings produce different JARs on Windows vs Linux.
+* text=auto eol=lf
