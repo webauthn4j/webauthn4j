@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SPC Payment - Merchant</title>
+</head>
+<body>
+    <h1>SPC Payment (merchant.localhost)</h1>
+    <div id="status">Ready</div>
+    <button id="pay-btn" onclick="authenticateSPC()">Pay with SPC</button>
+    <div id="result"></div>
+
+    <script>
+        async function authenticateSPC() {
+            const status = document.getElementById('status');
+            const result = document.getElementById('result');
+            try {
+                status.textContent = 'Authenticating...';
+
+                const response = await fetch('/api/authenticate/options');
+                const options = await response.json();
+
+                const spcData = options.spcData;
+                spcData.credentialIds = spcData.credentialIds.map(id => base64urlToBuffer(id));
+                spcData.challenge = base64urlToBuffer(spcData.challenge);
+
+                const request = new PaymentRequest([{
+                    supportedMethods: 'secure-payment-confirmation',
+                    data: spcData
+                }], { total: options.total });
+
+                const paymentResponse = await request.show();
+                await paymentResponse.complete('success');
+
+                const verifyResp = await fetch('/api/authenticate/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(paymentResponse.details.toJSON())
+                });
+
+                if (verifyResp.ok) {
+                    status.textContent = 'Authentication successful';
+                    result.textContent = 'SPC payment verified!';
+                } else {
+                    const err = await verifyResp.text();
+                    status.textContent = 'Authentication verification failed';
+                    result.textContent = 'Error: ' + err;
+                }
+            } catch (e) {
+                status.textContent = 'Authentication failed';
+                result.textContent = 'Error: ' + e.message;
+            }
+        }
+
+        function base64urlToBuffer(base64url) {
+            const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+            const padLen = (4 - base64.length % 4) % 4;
+            const padded = base64 + '='.repeat(padLen);
+            const binary = atob(padded);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            return bytes.buffer;
+        }
+
+    </script>
+</body>
+</html>

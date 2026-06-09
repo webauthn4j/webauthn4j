@@ -408,6 +408,284 @@ updateCounter(
 その後、認証済セッションを作成するなど、ユーザー認証成功時の処理を実施下さい。
 検証に失敗した場合は、 `VerificationException` のサブクラスの例外が発生します。
 
+=== Secure Payment Confirmation (SPC) の検証
+
+https://www.w3.org/TR/secure-payment-confirmation/[Secure Payment Confirmation (SPC)] は、WebAuthnを決済認証向けに拡張するW3C仕様です。
+通常のWebAuthnがユーザーとRelying Party（RP）間の認証を行うのに対し、SPCはさらに決済の詳細情報（金額・通貨・販売者）を認証に紐付け、ユーザーが特定の取引に同意したことの暗号的な証拠を提供します。
+
+==== SPC認証フロー
+
+SPC認証は標準WebAuthnといくつかの重要な点で異なります：
+
+* クライアントは `navigator.credentials.get()` の代わりに `PaymentRequest` APIを使用
+* `CollectedClientData` に取引詳細を含む `payment` フィールドが追加される
+* `ClientData.type` が `"webauthn.get"` ではなく `"payment.get"` になる
+* 第三者（販売者など）がRelying Party（決済事業者など）に代わって認証を開始できる
+
+[plantuml,spc authentication sequence ja,svg]
+....
+@startuml
+title Secure Payment Confirmation 認証フロー
+autonumber
+actor "ユーザー"
+participant "認証器"
+participant "クライアント\n(ブラウザ)" as Client
+participant "販売者\n(フロントエンド)" as MerchantFE
+participant "販売者\nサーバー" as MerchantBE
+participant "Relying Party\n(決済事業者)" as RP
+database "RPストレージ" as Storage
+
+MerchantFE -> MerchantBE: 決済要求\n(カート情報)
+MerchantBE -> RP: 認証要求\n(取引情報)
+RP -> RP: チャレンジ生成
+RP -> Storage: チャレンジ保存\n(トランザクションIDに紐付け)
+RP -> MerchantBE: チャレンジ、クレデンシャルID\n(決済プロトコル経由、例: 3Dセキュア)
+MerchantBE -> MerchantFE: SPCオプション\n(チャレンジ、クレデンシャルID、決済手段、金額、販売者)
+
+MerchantFE -> Client: PaymentRequest.show()\n("secure-payment-confirmation"メソッド)
+Client -> Client: 取引確認UX表示\n(金額、販売者、決済手段)
+Client -> "ユーザー": 同意要求\n(決済情報を表示)
+"ユーザー" -> Client: 取引を承認
+Client -> Client: クライアントデータ生成\n(チャレンジ、オリジン、決済情報)
+Client -> "認証器": クレデンシャル要求
+"認証器" -> "ユーザー": ユーザー検証
+"ユーザー" -> "認証器": 認証ジェスチャ
+"認証器" -> "認証器": authenticatorDataと\nclientDataHashに署名
+"認証器" -> Client: クレデンシャル応答\n(authenticatorData、署名など)
+Client -> MerchantFE: PaymentResponse\n(authenticatorData、clientData、署名)
+MerchantFE -> MerchantBE: SPCアサーション\n(authenticatorData、clientData、署名)
+MerchantBE -> RP: アサーション転送\n(トランザクションID付き)
+Storage -> RP: チャレンジ読み込み
+RP -> RP: 署名、チャレンジ、オリジン、\n決済情報（金額、決済手段、販売者）を検証
+
+@enduml
+....
+
+==== Maven Centralからの取得
+
+SPC検証サポートは専用の `webauthn4j-spc` モジュールに含まれています。
+
+[source,xml]
+----
+<properties>
+  ...
+  <!-- Use the latest version whenever possible. -->
+  <webauthn4j.version>0.31.5.RELEASE</webauthn4j.version>
+  ...
+</properties>
+
+<dependencies>
+  ...
+  <dependency>
+    <groupId>com.webauthn4j</groupId>
+    <artifactId>webauthn4j-spc</artifactId>
+    <version>${webauthn4j.version}</version>
+  </dependency>
+  ...
+</dependencies>
+----
+
+==== SPC Registration
+
+SPC Registrationは標準WebAuthnの `navigator.credentials.create()` APIに `payment` 拡張を指定して行います。
+Relying Party（決済事業者など）は通常、販売者サイト上の自身のiframe内でRegistrationを実行します。
+
+サーバーは `PublicKeyCredentialCreationOptions` を `payment` 拡張を含む JSON として返します。
+フロントエンドは `PublicKeyCredential.parseCreationOptionsFromJSON()` でJSONをパースし、
+`navigator.credentials.create()` に渡します。
+
+.フロントエンド: SPCクレデンシャルの登録
+[source,javascript,caption="Example {counter:number}: "]
+----
+// サーバーからRegistrationオプションを取得
+// サーバーは PublicKeyCredentialCreationOptions の JSON を返す:
+// {
+//   "rp": { "id": "bank.example", "name": "Example Bank" },
+//   "user": { "id": "AQIDBA", "name": "user@example.com", "displayName": "Jane Doe" },
+//   "challenge": "dGVzdC1jaGFsbGVuZ2U",
+//   "pubKeyCredParams": [{ "type": "public-key", "alg": -7 }],
+//   "authenticatorSelection": {
+//     "authenticatorAttachment": "platform",
+//     "residentKey": "required",
+//     "userVerification": "required"
+//   },
+//   "extensions": { "payment": { "isPayment": true } }
+// }
+const response = await fetch("/spc/registrationOptions");
+const optionsJSON = await response.json();
+const credential = await navigator.credentials.create(
+    PublicKeyCredential.parseCreationOptionsFromJSON(optionsJSON));
+
+// クレデンシャルをサーバーに送信して検証
+const registrationResponseJSON = credential.toJSON();
+await fetch("/spc/register", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(registrationResponseJSON)
+});
+----
+
+.サーバーサイド: SPC Registrationの検証
+[source,java,caption="Example {counter:number}: "]
+----
+SPCManager spcManager = new SPCManager();
+
+String registrationResponseJSON = "<registrationResponseJSON>"; /* フロントエンドから受信 */
+RegistrationData registrationData;
+try {
+    registrationData = spcManager.parse(registrationRequest);
+} catch (DataConversionException e) {
+    throw e;
+}
+
+// サーバープロパティ
+Origin origin = null /* set origin */;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .build();
+
+List<PublicKeyCredentialParameters> pubKeyCredParams = null;
+SPCRegistrationParameters registrationParameters = new SPCRegistrationParameters(
+        serverProperty,
+        pubKeyCredParams
+);
+
+try {
+    spcManager.verify(registrationData, registrationParameters);
+} catch (VerificationException e) {
+    throw e;
+}
+
+// CredentialRecordを永続化（認証時に使用）
+CredentialRecord credentialRecord = new CredentialRecordImpl(
+        registrationData.getAttestationObject(),
+        registrationData.getCollectedClientData(),
+        registrationData.getClientExtensions(),
+        registrationData.getTransports()
+);
+save(credentialRecord);
+----
+
+==== SPC Authentication
+
+SPC Authenticationは販売者が `PaymentRequest` APIで `"secure-payment-confirmation"` メソッドを使って開始します。
+ブラウザは決済情報をユーザーに表示する取引確認UXを表示します。
+
+サーバーは `SecurePaymentConfirmationRequest` のデータ（`spcData`）と `PaymentDetailsInit`（`total`）を含む
+JSON オブジェクトを返します。フロントエンドは base64url エンコードされたバイナリフィールドを `ArrayBuffer` に変換し、
+`PaymentRequest` コンストラクタに渡します。
+
+.フロントエンド: SPCによる認証
+[source,javascript,caption="Example {counter:number}: "]
+----
+// サーバーからSPC認証オプションを取得
+// サーバーは以下のような JSON を返す:
+// {
+//   "spcData": {
+//     "credentialIds": ["AQIDBA..."],
+//     "challenge": "dGVzdC1jaGFsbGVuZ2U",
+//     "rpId": "bank.example",
+//     "instrument": { "displayName": "銀行カード ****1234", "icon": "https://bank.example/card-art.png" },
+//     "payeeName": "販売者ショップ",
+//     "payeeOrigin": "https://merchant.example",
+//     "timeout": 60000
+//   },
+//   "total": { "label": "合計", "amount": { "currency": "JPY", "value": "500" } }
+// }
+const response = await fetch("/spc/authenticationOptions");
+const options = await response.json();
+
+// base64urlエンコードされたフィールドをArrayBufferに変換
+const spcData = options.spcData;
+spcData.credentialIds = spcData.credentialIds.map(id => base64urlToBuffer(id));
+spcData.challenge = base64urlToBuffer(spcData.challenge);
+
+const request = new PaymentRequest([{
+    supportedMethods: 'secure-payment-confirmation',
+    data: spcData
+}], { total: options.total });
+
+const paymentResponse = await request.show();
+await paymentResponse.complete('success');
+
+// paymentResponse.details は PublicKeyCredential
+const authenticationResponseJSON = paymentResponse.details.toJSON();
+await fetch("/spc/authenticate", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(authenticationResponseJSON)
+});
+----
+
+.サーバーサイド: SPC Authenticationの検証
+[source,java,caption="Example {counter:number}: "]
+----
+SPCManager spcManager = new SPCManager();
+
+AuthenticationData authenticationData;
+try {
+    authenticationData = spcManager.parse(authenticationRequest);
+} catch (DataConversionException e) {
+    throw e;
+}
+
+// サーバープロパティ
+Origin origin = null /* set origin（販売者のオリジン）*/;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+Origin topOrigin = null /* set topOrigin（SPCが呼び出されたトップレベルオリジン）*/;
+ServerProperty serverProperty = ServerProperty.builder()
+        .origin(origin)
+        .rpId(rpId)
+        .challenge(challenge)
+        .topOrigin(topOrigin)
+        .build();
+
+CredentialRecord credentialRecord = load(authenticationData.getCredentialId());
+
+// SPC固有のパラメータ：期待する決済情報
+SPCAuthenticationParameters authenticationParameters = new SPCAuthenticationParameters(
+        serverProperty,
+        credentialRecord,
+        new PaymentCurrencyAmount("JPY", "500"),               // 期待する取引金額
+        new PaymentCredentialInstrument("銀行カード ****1234",   // 期待する決済手段
+                "https://bank.example/card-art.png"),
+        "販売者ショップ",                                        // 期待する販売者名
+        new Origin("https://merchant.example")                  // 期待する販売者オリジン
+);
+
+try {
+    spcManager.verify(authenticationData, authenticationParameters);
+} catch (VerificationException e) {
+    throw e;
+}
+
+// カウンタの更新
+updateCounter(
+        authenticationData.getCredentialId(),
+        authenticationData.getAuthenticatorData().getSignCount()
+);
+----
+
+`SPCAuthenticationParameters` は `AuthenticationParameters` をSPC固有の期待値で拡張したクラスです。
+簡易コンストラクタでは `userVerificationRequired` と `userPresenceRequired` がデフォルトで `true` に設定されます。
+`SPCManager` は内部で以下を検証します：
+
+* `ClientData.type` が `"payment.get"` であること
+* `payment.rpId` が期待するRP IDと一致すること
+* `payment.topOrigin` が期待するトップレベルオリジンと一致すること（`ServerProperty.topOriginPredicate` で検証。設定必須）
+* `payment.total` が期待する取引金額と一致すること
+* `payment.instrument` が期待する決済手段と一致すること
+* `payment.payeeName` と `payment.payeeOrigin` が期待する値と一致すること（指定時）
+
+NOTE: SPC認証では、`ServerProperty` に `topOrigin`（または `topOriginPredicate`）を設定する必要があります。SPCは常にクロスオリジンの決済コンテキストを伴うため、`SPCAuthenticationVerifier` がこの設定を必須としています。
+
+検証に成功すれば、Relying Partyはユーザーが特定の取引内容に同意したことの暗号的な証拠を得たことになります。
+
 === Apple App Attestの検証
 
 続いて、Apple App Attestの検証方法について解説します。 Apple App Attestは、WebAuthnに類似したデータ構造を持つため、Verifierの設計も、WebAuthn用のVerifierを踏襲しています。 なお、リスクメトリックの評価には対応していません。

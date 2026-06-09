@@ -7,7 +7,7 @@
 [![Build Status](https://img.shields.io/maven-central/v/com.webauthn4j/webauthn4j-core.svg)](https://search.maven.org/#search%7Cga%7C1%7Cwebauthn4j)
 [![license](https://img.shields.io/github/license/webauthn4j/webauthn4j.svg)](https://github.com/webauthn4j/webauthn4j/blob/master/LICENSE.txt)
 
-A portable Java library for WebAuthn(Passkeys) server side verification
+A portable Java library for [WebAuthn](https://www.w3.org/TR/webauthn-3/)(Passkeys) and [Secure Payment Confirmation (SPC)](https://www.w3.org/TR/secure-payment-confirmation/) server side verification
 
 ### Conformance
 

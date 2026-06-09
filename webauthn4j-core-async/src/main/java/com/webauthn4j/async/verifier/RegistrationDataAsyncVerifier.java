@@ -17,7 +17,6 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.RegistrationObject;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
@@ -159,7 +158,6 @@ public class RegistrationDataAsyncVerifier {
             collectedClientData = registrationData.getCollectedClientData();
 
             authenticatorData = attestationObject.getAuthenticatorData();
-            ServerProperty serverProperty = registrationParameters.getServerProperty();
             Set<AuthenticatorTransport> transports = registrationData.getTransports();
 
             byte[] clientDataBytes = registrationData.getCollectedClientDataBytes();
@@ -172,7 +170,7 @@ public class RegistrationDataAsyncVerifier {
                     clientDataBytes,
                     clientExtensions,
                     transports,
-                    serverProperty
+                    registrationParameters
             );
 
             //spec| Step7

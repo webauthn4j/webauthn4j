@@ -38,6 +38,7 @@ public class AuthenticationDataAsyncVerifier {
     private OriginAsyncVerifier originAsyncVerifier = new OriginAsyncVerifierImpl();
     private TopOriginVerifier topOriginVerifier = new TopOriginVerifier();
     private DefaultMaliciousCounterValueAsyncHandler maliciousCounterValueAsyncHandler = new DefaultMaliciousCounterValueAsyncHandler();
+    private @NotNull ClientDataType expectedClientDataType = ClientDataType.WEBAUTHN_GET;
 
 
     public AuthenticationDataAsyncVerifier(@NotNull List<CustomAuthenticationAsyncVerifier> customAuthenticationAsyncVerifiers) {
@@ -51,6 +52,15 @@ public class AuthenticationDataAsyncVerifier {
 
     public CompletionStage<AuthenticationData> verify(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) {
         return new AuthenticationDataVerification(authenticationData, authenticationParameters).execute();
+    }
+
+    public @NotNull ClientDataType getExpectedClientDataType() {
+        return expectedClientDataType;
+    }
+
+    public void setExpectedClientDataType(@NotNull ClientDataType expectedClientDataType) {
+        AssertUtil.notNull(expectedClientDataType, "expectedClientDataType must not be null");
+        this.expectedClientDataType = expectedClientDataType;
     }
 
     static void updateRecord(Authenticator authenticator, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
@@ -168,13 +178,14 @@ public class AuthenticationDataAsyncVerifier {
 
             authenticationObject = new AuthenticationObject(
                     credentialId, authenticatorData, aData, collectedClientData, cData, clientExtensions,
-                    serverProperty, authenticator
+                    authenticationParameters
             );
 
             //spec| Step12
             //spec| Verify that the value of C.type is the string webauthn.get.
-            if (!Objects.equals(collectedClientData.getType(), ClientDataType.WEBAUTHN_GET)) {
-                throw new InconsistentClientDataTypeException("ClientData.type must be 'get' on authentication, but it isn't.");
+            if (!Objects.equals(collectedClientData.getType(), expectedClientDataType)) {
+                throw new InconsistentClientDataTypeException(
+                        String.format("ClientData.type must be '%s' on authentication, but it isn't.", expectedClientDataType.getValue()));
             }
 
             //spec| Step13

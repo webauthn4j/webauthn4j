@@ -26,7 +26,7 @@ jobs:
           cache: 'gradle'
 
       - name: Build with Gradle
-        run: ./gradlew build javadoc generateReferenceEN generateReferenceJA -PfailBuildOnCVSS=4 -x :integration-tests:fido-mds-integration:check
+        run: ./gradlew build javadoc generateReferenceEN generateReferenceJA -PfailBuildOnCVSS=4 -x :integration-tests:fido-mds-integration:check -x :integration-tests:spc:check
 
   matrix-test:
     name: Test on java ${{ matrix.java_version }} and ${{ matrix.os }}
@@ -48,7 +48,7 @@ jobs:
           cache: 'gradle'
 
       - name: Build with Gradle
-        run: ./gradlew check -x :integration-tests:fido-mds-integration:check
+        run: ./gradlew check -x :integration-tests:fido-mds-integration:check -x :integration-tests:spc:check
 
   # Run FIDO MDS integration tests separately to avoid rate limiting
   # from the FIDO Metadata Service (https://mds.fidoalliance.org/).
@@ -70,6 +70,23 @@ jobs:
       - name: Run FIDO MDS integration tests
         run: ./gradlew :integration-tests:fido-mds-integration:check
 
+  spc-e2e-test:
+    name: SPC E2E Test
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'gradle'
+
+      - name: Run SPC E2E test
+        run: ./gradlew :integration-tests:spc:check
+
   code-analysis:
     name: Code Analysis
     runs-on: ubuntu-24.04
@@ -89,7 +106,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: if [ "$SONAR_TOKEN" != "" ]; then ./gradlew jacocoTestReport check sonar -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -x :integration-tests:fido-mds-integration:check ; fi
+        run: if [ "$SONAR_TOKEN" != "" ]; then ./gradlew jacocoTestReport check sonar -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -x :integration-tests:fido-mds-integration:check -x :integration-tests:spc:check ; fi
 
   jitpack-comment:
     name: Comment with JitPack info

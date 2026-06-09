@@ -18,6 +18,7 @@ package com.webauthn4j.data.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,7 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-3/#dictionary-client-data">§5.8.1. Client Data Used in WebAuthn Signatures (dictionary CollectedClientData)</a>
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION, defaultImpl = CollectedClientData.class)
 public class CollectedClientData {
 
     //~ Instance fields ================================================================================================
