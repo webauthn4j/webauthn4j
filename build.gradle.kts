@@ -34,6 +34,18 @@ subprojects {
     apply(plugin = "jacoco")
 
     java {
+        // Pin the compilation JDK via Gradle Toolchains to ensure reproducible builds.
+        // module-info.class embeds the compiler JDK version string, so using different
+        // JDKs produces different bytecode even with the same source/target compatibility.
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+            vendor = JvmVendorSpec.ADOPTIUM
+        }
+
+        // Use sourceCompatibility/targetCompatibility instead of options.release so that
+        // APIs introduced after JDK 17 (e.g. ML-DSA in JDK 24) remain accessible at compile
+        // time. --release would restrict the API surface to JDK 17. Users who call those newer
+        // APIs must run on a JDK that provides them.
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
 
@@ -41,9 +53,29 @@ subprojects {
         withJavadocJar()
     }
 
-    tasks.compileJava {
+    tasks.withType<JavaCompile>().configureEach {
         options.compilerArgs.add("-Xlint:-module") // Suppress 'module not found' warning regarding 'exports to' directive on multi-module projects.
         options.compilerArgs.add("-Werror") // Treat all warnings as errors
+    }
+
+    // Allow overriding the JDK used for test execution via -PtestJavaVersion=XX.
+    // This enables matrix testing across multiple JDK versions while keeping
+    // compilation fixed to the toolchain JDK for reproducible builds.
+    val testJavaVersion = findProperty("testJavaVersion")?.toString()
+    if (testJavaVersion != null) {
+        tasks.withType<Test>().configureEach {
+            javaLauncher = javaToolchains.launcherFor {
+                languageVersion = JavaLanguageVersion.of(testJavaVersion)
+            }
+        }
+    }
+
+    // Ensure reproducible builds: deterministic file order and fixed timestamps in archives.
+    // This is the default since Gradle 9.0, but stated explicitly for clarity and to prevent
+    // accidental regression if defaults change.
+    tasks.withType<AbstractArchiveTask>().configureEach {
+        isReproducibleFileOrder = true
+        isPreserveFileTimestamps = false
     }
 
     tasks.test {

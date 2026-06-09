@@ -18,6 +18,12 @@ pluginManagement {
     includeBuild("maven-central-publish-plugin")
 }
 
+plugins {
+    // Enable automatic JDK download for Gradle Toolchains.
+    // Without this, CI environments fail when the toolchain JDK is not pre-installed.
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
 include("webauthn4j-core")
 include("webauthn4j-core-async")
 include("webauthn4j-metadata")
