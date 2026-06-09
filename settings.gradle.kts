@@ -16,12 +16,15 @@
 
 pluginManagement {
     includeBuild("maven-central-publish-plugin")
+    includeBuild("toolchain-pinning-plugin")
 }
 
 plugins {
-    // Enable automatic JDK download for Gradle Toolchains.
-    // Without this, CI environments fail when the toolchain JDK is not pre-installed.
-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+    id("com.webauthn4j.toolchain-pinning")
+}
+
+toolchainPinning {
+    toolchainJdkVersion = providers.gradleProperty("toolchainJdkVersion")
 }
 
 include("webauthn4j-core")
