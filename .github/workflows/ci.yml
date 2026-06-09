@@ -57,7 +57,7 @@ jobs:
           cache: 'gradle'
 
       - name: Build with Gradle
-        run: ./gradlew check -PtestJavaVersion=${{ matrix.java_version }} -x :integration-tests:fido-mds-integration:check
+        run: ./gradlew check -PtoolchainJdkVersion=${{ matrix.java_version }} -x :integration-tests:fido-mds-integration:check
 
   # Run FIDO MDS integration tests separately to avoid rate limiting
   # from the FIDO Metadata Service (https://mds.fidoalliance.org/).
