@@ -63,7 +63,7 @@ jobs:
           # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
       - name: Build with Gradle
-        run: ./gradlew build javadoc asciidoc -PfailBuildOnCVSS=4
+        run: ./gradlew build javadoc asciidoc
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4

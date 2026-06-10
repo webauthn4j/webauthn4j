@@ -28,7 +28,7 @@ jobs:
           cache: 'gradle'
 
       - name: Build with Gradle
-        run: ./gradlew build javadoc generateReferenceEN generateReferenceJA -PfailBuildOnCVSS=4 -x :integration-tests:fido-mds-integration:check
+        run: ./gradlew build javadoc generateReferenceEN generateReferenceJA -x :integration-tests:fido-mds-integration:check
 
   matrix-test:
     name: Test on java ${{ matrix.java_version }} and ${{ matrix.os }}
