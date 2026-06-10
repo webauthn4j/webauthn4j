@@ -27,6 +27,7 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Set up JDK ${{ env.JAVA_VERSION }}
+        id: setup-java
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
           distribution: 'temurin'
@@ -84,3 +85,28 @@ jobs:
           PGP_SIGNING_KEY_PASSPHRASE: ${{ secrets.PGP_SIGNING_KEY_PASSPHRASE }}
         run: |
           ./gradlew publishToCentralPortal
+
+      - name: Create draft release
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        shell: bash
+        run: |
+          VERSION=$(grep "webAuthn4JVersion" gradle.properties | cut -d'=' -f2)
+          JDK_VERSION="${{ steps.setup-java.outputs.version }}"
+          gh release create "${VERSION}.RELEASE" \
+            --draft \
+            --generate-notes \
+            --title "${VERSION}.RELEASE"
+          EXISTING_NOTES=$(gh release view "${VERSION}.RELEASE" --json body --jq .body)
+          GRADLE_VERSION=$(grep "distributionUrl" gradle/wrapper/gradle-wrapper.properties | sed 's/.*gradle-\(.*\)-bin.zip/\1/')
+          gh release edit "${VERSION}.RELEASE" --notes "$(cat <<EOF
+          ${EXISTING_NOTES}
+
+          ## Build Configuration
+
+          | Item | Value |
+          |------|-------|
+          | JDK | Eclipse Temurin \`${JDK_VERSION}\` |
+          | Gradle | \`${GRADLE_VERSION}\` |
+          EOF
+          )"

@@ -96,6 +96,36 @@ git clone https://github.com/webauthn4j/webauthn4j
 ./gradlew build
 ```
 
+### Reproducible builds
+
+WebAuthn4J is committed to software supply chain security. All release artifacts support
+reproducible builds — you can rebuild from source and verify that the result is bit-for-bit
+identical to the artifacts published on Maven Central.
+
+The exact JDK version used for each release is listed in the [release notes](https://github.com/webauthn4j/webauthn4j/releases).
+
+```sh
+git clone https://github.com/webauthn4j/webauthn4j.git
+cd webauthn4j
+git checkout <VERSION>.RELEASE
+./gradlew jar -PtoolchainJdkVersion=<JDK_VERSION>
+```
+
+Then compare the locally built JARs against Maven Central:
+
+```sh
+VERSION=<VERSION>.RELEASE
+find . -path "*/build/libs/webauthn4j-*-${VERSION}.jar" | while read jar; do
+  module=$(basename "$jar" "-${VERSION}.jar")
+  local=$(sha256sum "$jar" | cut -d' ' -f1)
+  central=$(curl -sL "https://repo1.maven.org/maven2/com/webauthn4j/${module}/${VERSION}/${module}-${VERSION}.jar" \
+    | sha256sum | cut -d' ' -f1)
+  echo "$module: $([ "$local" = "$central" ] && echo MATCH || echo MISMATCH)"
+done
+```
+
+All modules should show `MATCH`.
+
 ## How to use
 
 Parse and Validation on WebAuthn registration
