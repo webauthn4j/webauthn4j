@@ -25,6 +25,7 @@ import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
+import com.webauthn4j.data.extension.LargeBlobSupport;
 import com.webauthn4j.data.extension.client.*;
 import com.webauthn4j.data.jws.JWAIdentifier;
 import com.webauthn4j.data.jws.JWSHeader;
@@ -49,6 +50,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(AuthenticationAlgorithm.class, new AuthenticationAlgorithmFromIntDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
+        this.addDeserializer(LargeBlobSupport.class, new LargeBlobSupportDeserializer());
         this.addDeserializer(JWSHeader.class, new JWSHeaderDeserializer());
         this.addDeserializer(KeyProtectionType.class, new KeyProtectionTypeFromIntDeserializer());
         this.addDeserializer(MatcherProtectionType.class, new MatcherProtectionTypeFromIntDeserializer());
@@ -87,6 +89,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(CredentialProtectionExtensionClientInput.class, new CredentialProtectionExtensionClientInputDeserializer());
         this.addDeserializer(HMACSecretRegistrationExtensionClientInput.class, new HMACSecretRegistrationExtensionClientInputDeserializer());
         this.addDeserializer(HMACSecretAuthenticationExtensionClientInput.class, new HMACSecretAuthenticationExtensionClientInputDeserializer());
+        this.addDeserializer(LargeBlobExtensionClientInput.class, new LargeBlobExtensionClientInputDeserializer());
 
         // Extension output deserializers
         this.addDeserializer(FIDOAppIDExtensionClientOutput.class, new FIDOAppIDExtensionClientOutputDeserializer());
@@ -95,12 +98,14 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(CredentialPropertiesExtensionClientOutput.class, new CredentialPropertiesExtensionClientOutputDeserializer());
         this.addDeserializer(HMACSecretRegistrationExtensionClientOutput.class, new HMACSecretRegistrationExtensionClientOutputDeserializer());
         this.addDeserializer(HMACSecretAuthenticationExtensionClientOutput.class, new HMACSecretAuthenticationExtensionClientOutputDeserializer());
+        this.addDeserializer(LargeBlobExtensionClientOutput.class, new LargeBlobExtensionClientOutputDeserializer());
 
         this.addSerializer(AttachmentHint.class, new AttachmentHintToLongSerializer());
         this.addSerializer(AuthenticatorAttestationType.class, new AuthenticatorAttestationTypeToIntSerializer());
         this.addSerializer(AuthenticationAlgorithm.class, new AuthenticationAlgorithmToIntSerializer());
         this.addSerializer(new ChallengeSerializer());
         this.addSerializer(new CredentialProtectionPolicySerializer());
+        this.addSerializer(new LargeBlobSupportSerializer());
         this.addSerializer(new JWSHeaderSerializer());
         this.addSerializer(new KeyProtectionTypeToIntSerializer());
         this.addSerializer(new MatcherProtectionTypeToIntSerializer());

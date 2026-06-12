@@ -47,7 +47,8 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             CredentialPropertiesExtensionClientInput.class,
             CredentialProtectionExtensionClientInput.class,
             HMACSecretRegistrationExtensionClientInput.class,
-            HMACSecretAuthenticationExtensionClientInput.class
+            HMACSecretAuthenticationExtensionClientInput.class,
+            LargeBlobExtensionClientInput.class
     );
 
     private static final Set<String> KNOWN_KEYS = Set.of(
@@ -58,7 +59,8 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             CredentialProtectionExtensionClientInput.KEY_CREDENTIAL_PROTECTION_POLICY,
             CredentialProtectionExtensionClientInput.KEY_ENFORCE_CREDENTIAL_PROTECTION_POLICY,
             HMACSecretRegistrationExtensionClientInput.KEY_HMAC_CREATE_SECRET,
-            HMACSecretAuthenticationExtensionClientInput.KEY_HMAC_GET_SECRET
+            HMACSecretAuthenticationExtensionClientInput.KEY_HMAC_GET_SECRET,
+            LargeBlobExtensionClientInput.KEY_LARGE_BLOB
     );
 
     @JsonIgnore
@@ -136,6 +138,8 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
                 return getHMACCreateSecret();
             case HMACSecretAuthenticationExtensionClientInput.KEY_HMAC_GET_SECRET:
                 return getHMACGetSecret();
+            case LargeBlobExtensionClientInput.KEY_LARGE_BLOB:
+                return getLargeBlob();
             default:
                 JsonNode node = rawData.get(key);
                 if (node == null || node.isNull()) return null;
@@ -197,6 +201,14 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         HMACSecretAuthenticationExtensionClientInput ext = lookupExtension(HMACSecretAuthenticationExtensionClientInput.class);
         return ext != null ? ext.getValue() : null;
     }
+
+    @JsonIgnore
+    public @Nullable AuthenticationExtensionsLargeBlobInputs getLargeBlob() {
+        LargeBlobExtensionClientInput ext = lookupExtension(LargeBlobExtensionClientInput.class);
+        return ext != null ? ext.getValue() : null;
+    }
+
+
 
     @SuppressWarnings("unchecked")
     public @Nullable <E extends T> E getExtension(Class<E> tClass) {
@@ -300,6 +312,11 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return this;
         }
 
+        public @NotNull BuilderForRegistration setLargeBlob(@Nullable AuthenticationExtensionsLargeBlobInputs largeBlob) {
+            if (largeBlob != null) values.put("largeBlob", largeBlob);
+            return this;
+        }
+
         public @NotNull BuilderForRegistration set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
@@ -340,6 +357,11 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
 
         public @NotNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretInput hmacGetSecret) {
             if (hmacGetSecret != null) values.put("hmacGetSecret", hmacGetSecret);
+            return this;
+        }
+
+        public @NotNull BuilderForAuthentication setLargeBlob(@Nullable AuthenticationExtensionsLargeBlobInputs largeBlob) {
+            if (largeBlob != null) values.put("largeBlob", largeBlob);
             return this;
         }
 
