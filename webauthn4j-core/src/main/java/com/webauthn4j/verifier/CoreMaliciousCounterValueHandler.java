@@ -21,12 +21,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * strategy interface to handle malicious counter value detection during authentication.
  * <p>
- * This interface is similar to {@link MaliciousCounterValueHandler} but works with 
+ * This interface is similar to {@link MaliciousCounterValueHandler} but works with
  * {@link CoreAuthenticationObject} instead of {@link AuthenticationObject}
+ * </p>
  * <p>
  * Implementations of this interface define strategies for handling suspicious counter
  * values, whether to throw an exception, log a warning, or take other mitigating actions.
- * <p>
+ * </p>
  */
 public interface CoreMaliciousCounterValueHandler {
 
