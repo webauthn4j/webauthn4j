@@ -28,20 +28,19 @@ public class CollectionUtil {
     }
 
     public static <T> @Nullable List<T> unmodifiableList(@Nullable List<? extends T> list) {
-        return list == null ? null : Collections.unmodifiableList(list);
+        return list == null ? null : Collections.unmodifiableList(new ArrayList<>(list));
     }
 
     public static <T> @Nullable Set<T> unmodifiableSet(@Nullable Set<? extends T> set) {
-        return set == null ? null : Collections.unmodifiableSet(set);
+        return set == null ? null : Collections.unmodifiableSet(new LinkedHashSet<>(set));
     }
 
     @SafeVarargs
     public static <T> @NotNull Set<T> unmodifiableSet(@NotNull T... items) {
-        Set<T> set = new HashSet<>(Arrays.asList(items));
-        return Collections.unmodifiableSet(set);
+        return Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(items)));
     }
 
     public static <K, V> @Nullable Map<K, V> unmodifiableMap(@Nullable Map<? extends K, ? extends V> map) {
-        return map == null ? null : Collections.unmodifiableMap(map);
+        return map == null ? null : Collections.unmodifiableMap(new LinkedHashMap<>(map));
     }
 }

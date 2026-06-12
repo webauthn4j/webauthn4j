@@ -3,6 +3,7 @@ package com.webauthn4j.server;
 import com.webauthn4j.data.client.Origin;
 
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class SimpleOriginPredicate implements OriginPredicate {
      * @param origins the set of allowed origins
      */
     SimpleOriginPredicate(Set<Origin> origins) {
-        this.origins = Collections.unmodifiableSet(origins);
+        this.origins = Collections.unmodifiableSet(new LinkedHashSet<>(origins));
     }
 
     /**
@@ -36,7 +37,7 @@ public class SimpleOriginPredicate implements OriginPredicate {
      * @param origin the allowed origin
      */
     SimpleOriginPredicate(Origin origin) {
-        this.origins = Collections.singleton(origin);
+        this.origins = Set.of(origin);
     }
 
     /**
