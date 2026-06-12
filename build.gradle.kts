@@ -3,6 +3,7 @@ import com.webauthn4j.gradle.VersionUtils
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import java.net.URI
+import org.gradle.external.javadoc.StandardJavadocDocletOptions
 import java.nio.charset.StandardCharsets
 
 plugins {
@@ -72,9 +73,10 @@ subprojects {
     }
 
     tasks.javadoc{
-        options {
+        (options as StandardJavadocDocletOptions).apply {
             charset("UTF-8")
             encoding("UTF-8")
+            addStringOption("Xdoclint:all,-missing", "-quiet")
         }
     }
 
