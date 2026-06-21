@@ -2,6 +2,7 @@ package com.webauthn4j.server;
 
 import com.webauthn4j.data.client.Origin;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -18,7 +19,7 @@ import java.util.Set;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-validating-origin">WebAuthn Level 3 § 13.4.9 Validating the origin of a credential</a>
  */
-public class SimpleOriginPredicate implements OriginPredicate {
+public class SimpleOriginPredicate implements OriginPredicate, Serializable {
 
     private final Set<Origin> origins;
 

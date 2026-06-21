@@ -22,11 +22,12 @@ import com.webauthn4j.util.Base64UrlUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class DefaultChallenge implements Challenge {
+public class DefaultChallenge implements Challenge, Serializable {
     private final byte[] value;
 
     /**

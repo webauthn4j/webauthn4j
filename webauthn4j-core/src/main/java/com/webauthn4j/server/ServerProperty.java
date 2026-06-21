@@ -23,6 +23,7 @@ import com.webauthn4j.util.AssertUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
@@ -31,7 +32,7 @@ import java.util.Set;
 /**
  * Data transfer object that represents relying party server property for verifiers
  */
-public class ServerProperty extends CoreServerProperty {
+public class ServerProperty extends CoreServerProperty implements Serializable {
 
     // ~ Instance fields
     // ================================================================================================
