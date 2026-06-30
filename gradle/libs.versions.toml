@@ -32,7 +32,7 @@ junit-jupiter = "6.1.0"
 
 mockwebserver = "5.4.0"
 
-playwright = "1.60.0"
+playwright = "1.61.0"
 
 # fido-integration-bdd dependencies
 
