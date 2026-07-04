@@ -47,6 +47,9 @@ public class COSEAlgorithmIdentifier {
     public static final COSEAlgorithmIdentifier PS256;
     public static final COSEAlgorithmIdentifier PS384;
     public static final COSEAlgorithmIdentifier PS512;
+    public static final COSEAlgorithmIdentifier ESP256;
+    public static final COSEAlgorithmIdentifier ESP384;
+    public static final COSEAlgorithmIdentifier ESP512;
 
     private static final Map<COSEAlgorithmIdentifier, COSEKeyType> keyTypeMap = new HashMap<>();
     private static final Map<COSEAlgorithmIdentifier, SignatureAlgorithm> algorithmMap = new HashMap<>();
@@ -64,10 +67,16 @@ public class COSEAlgorithmIdentifier {
         PS256 = new COSEAlgorithmIdentifier(-37);
         PS384 = new COSEAlgorithmIdentifier(-38);
         PS512 = new COSEAlgorithmIdentifier(-39);
+        ESP256 = new COSEAlgorithmIdentifier(-9);
+        ESP384 = new COSEAlgorithmIdentifier(-51);
+        ESP512 = new COSEAlgorithmIdentifier(-52);
 
         keyTypeMap.put(COSEAlgorithmIdentifier.ES256, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ES384, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ES512, COSEKeyType.EC2);
+        keyTypeMap.put(COSEAlgorithmIdentifier.ESP256, COSEKeyType.EC2);
+        keyTypeMap.put(COSEAlgorithmIdentifier.ESP384, COSEKeyType.EC2);
+        keyTypeMap.put(COSEAlgorithmIdentifier.ESP512, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.EdDSA, COSEKeyType.OKP);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS1, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS256, COSEKeyType.RSA);
@@ -80,6 +89,9 @@ public class COSEAlgorithmIdentifier {
         algorithmMap.put(COSEAlgorithmIdentifier.ES256, SignatureAlgorithm.ES256);
         algorithmMap.put(COSEAlgorithmIdentifier.ES384, SignatureAlgorithm.ES384);
         algorithmMap.put(COSEAlgorithmIdentifier.ES512, SignatureAlgorithm.ES512);
+        algorithmMap.put(COSEAlgorithmIdentifier.ESP256, SignatureAlgorithm.ESP256);
+        algorithmMap.put(COSEAlgorithmIdentifier.ESP384, SignatureAlgorithm.ESP384);
+        algorithmMap.put(COSEAlgorithmIdentifier.ESP512, SignatureAlgorithm.ESP512);
         algorithmMap.put(COSEAlgorithmIdentifier.EdDSA, SignatureAlgorithm.Ed25519);
         algorithmMap.put(COSEAlgorithmIdentifier.RS1, SignatureAlgorithm.RS1);
         algorithmMap.put(COSEAlgorithmIdentifier.RS256, SignatureAlgorithm.RS256);
@@ -89,9 +101,17 @@ public class COSEAlgorithmIdentifier {
         algorithmMap.put(COSEAlgorithmIdentifier.PS384, SignatureAlgorithm.PS384);
         algorithmMap.put(COSEAlgorithmIdentifier.PS512, SignatureAlgorithm.PS512);
 
-        for (Map.Entry<COSEAlgorithmIdentifier, SignatureAlgorithm> entry : algorithmMap.entrySet()) {
-            reverseAlgorithmMap.put(entry.getValue(), entry.getKey());
-        }
+        reverseAlgorithmMap.put(SignatureAlgorithm.ES256, COSEAlgorithmIdentifier.ES256);
+        reverseAlgorithmMap.put(SignatureAlgorithm.ES384, COSEAlgorithmIdentifier.ES384);
+        reverseAlgorithmMap.put(SignatureAlgorithm.ES512, COSEAlgorithmIdentifier.ES512);
+        reverseAlgorithmMap.put(SignatureAlgorithm.Ed25519, COSEAlgorithmIdentifier.EdDSA);
+        reverseAlgorithmMap.put(SignatureAlgorithm.RS1, COSEAlgorithmIdentifier.RS1);
+        reverseAlgorithmMap.put(SignatureAlgorithm.RS256, COSEAlgorithmIdentifier.RS256);
+        reverseAlgorithmMap.put(SignatureAlgorithm.RS384, COSEAlgorithmIdentifier.RS384);
+        reverseAlgorithmMap.put(SignatureAlgorithm.RS512, COSEAlgorithmIdentifier.RS512);
+        reverseAlgorithmMap.put(SignatureAlgorithm.PS256, COSEAlgorithmIdentifier.PS256);
+        reverseAlgorithmMap.put(SignatureAlgorithm.PS384, COSEAlgorithmIdentifier.PS384);
+        reverseAlgorithmMap.put(SignatureAlgorithm.PS512, COSEAlgorithmIdentifier.PS512);
     }
 
     private final long value;
@@ -105,6 +125,13 @@ public class COSEAlgorithmIdentifier {
         return new COSEAlgorithmIdentifier(value);
     }
 
+    /**
+     * @deprecated The mapping from SignatureAlgorithm to COSEAlgorithmIdentifier is no longer
+     * one-to-one since RFC 9864 introduced fully-specified identifiers (e.g. ESP256) that share
+     * the same SignatureAlgorithm as their polymorphic counterparts (e.g. ES256).
+     * Use the static constants directly (e.g. {@link #ES256}, {@link #ESP256}).
+     */
+    @Deprecated
     public static @NotNull COSEAlgorithmIdentifier create(@NotNull SignatureAlgorithm signatureAlgorithm) {
         COSEAlgorithmIdentifier coseAlgorithmIdentifier = reverseAlgorithmMap.get(signatureAlgorithm);
         if (coseAlgorithmIdentifier == null) {
@@ -181,6 +208,15 @@ public class COSEAlgorithmIdentifier {
         }
         else if(value == PS512.value){
             return "PS512";
+        }
+        else if(value == ESP256.value){
+            return "ESP256";
+        }
+        else if(value == ESP384.value){
+            return "ESP384";
+        }
+        else if(value == ESP512.value){
+            return "ESP512";
         }
         else {
             return String.format("Unknown COSEAlgorithmIdentifier(%d)", value);
