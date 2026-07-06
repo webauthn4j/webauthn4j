@@ -25,7 +25,7 @@ import java.util.Objects;
 public class EdDSACOSEKey extends AbstractCOSEKey {
 
     private static final String CURVE_NULL_CHECK_MESSAGE = "curve must not be null";
-    private static final String ALG_VALUE_CHECK_MESSAGE = "alg must be EdDSA";
+    private static final String ALG_VALUE_CHECK_MESSAGE = "alg must be EdDSA, Ed25519, or Ed448";
 
     @JsonProperty("-1")
     private final Curve curve;
@@ -68,7 +68,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
      * @return {@link EdDSACOSEKey}
      */
     public static @NotNull EdDSACOSEKey create(@NotNull EdECPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {
-        AssertUtil.isTrue(alg == COSEAlgorithmIdentifier.EdDSA, ALG_VALUE_CHECK_MESSAGE);
+        AssertUtil.isTrue(isEdDSAFamilyAlgorithm(alg), ALG_VALUE_CHECK_MESSAGE);
         byte[] d = privateKey.getBytes().orElseThrow(()-> new IllegalArgumentException("privateKey must not be null"));
         Curve curve = getCurve(privateKey.getParams());
 
@@ -90,7 +90,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
      * @return {@link EdDSACOSEKey}
      */
     public static @NotNull EdDSACOSEKey create(@NotNull EdECPublicKey publicKey, @Nullable COSEAlgorithmIdentifier alg) {
-        AssertUtil.isTrue(alg == COSEAlgorithmIdentifier.EdDSA, ALG_VALUE_CHECK_MESSAGE);
+        AssertUtil.isTrue(isEdDSAFamilyAlgorithm(alg), ALG_VALUE_CHECK_MESSAGE);
         Curve curve = getCurve(publicKey.getParams());
         byte[] x = calcCOSEXParam(publicKey);
         return new EdDSACOSEKey(
@@ -110,7 +110,7 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
      * @return {@link EdDSACOSEKey}
      */
     public static @NotNull EdDSACOSEKey create(@NotNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
-        AssertUtil.isTrue(alg == COSEAlgorithmIdentifier.EdDSA, ALG_VALUE_CHECK_MESSAGE);
+        AssertUtil.isTrue(isEdDSAFamilyAlgorithm(alg), ALG_VALUE_CHECK_MESSAGE);
         EdECPublicKey edECPublicKey = (EdECPublicKey)keyPair.getPublic();
         EdECPrivateKey edECPrivateKey = (EdECPrivateKey) keyPair.getPrivate();
         Curve curve = getCurve(edECPublicKey.getParams());
@@ -222,12 +222,14 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
         if (curve == null) {
             throw new ConstraintViolationException(CURVE_NULL_CHECK_MESSAGE);
         }
-        if (curve != Curve.ED25519) {
-            throw new ConstraintViolationException("curve must be Ed25519");
+        if (curve != Curve.ED25519 && curve != Curve.ED448) {
+            throw new ConstraintViolationException("curve must be Ed25519 or Ed448");
         }
         COSEAlgorithmIdentifier algorithm = getAlgorithm();
-        if (algorithm != null && !Objects.equals(algorithm,COSEAlgorithmIdentifier.EdDSA)) {
-            throw new ConstraintViolationException("algorithm must be EdDSA if present");
+        if (algorithm != null) {
+            if (!isEdDSAFamilyAlgorithm(algorithm)) {
+                throw new ConstraintViolationException("algorithm must be EdDSA, Ed25519, or Ed448 if present");
+            }
         }
 
         if (!hasPublicKey() && !hasPrivateKey()) {
@@ -238,12 +240,21 @@ public class EdDSACOSEKey extends AbstractCOSEKey {
         }
     }
 
+    private static boolean isEdDSAFamilyAlgorithm(COSEAlgorithmIdentifier alg) {
+        return Objects.equals(alg, COSEAlgorithmIdentifier.EdDSA) ||
+                Objects.equals(alg, COSEAlgorithmIdentifier.Ed25519) ||
+                Objects.equals(alg, COSEAlgorithmIdentifier.Ed448);
+    }
+
     static Curve getCurve(NamedParameterSpec namedParameterSpec){
         if(Objects.equals(namedParameterSpec.getName(), NamedParameterSpec.ED25519.getName())){
             return Curve.ED25519;
         }
+        else if(Objects.equals(namedParameterSpec.getName(), NamedParameterSpec.ED448.getName())){
+            return Curve.ED448;
+        }
         else {
-            throw new IllegalArgumentException(String.format("%s is not supported. Ed25519 is the only supported curve.", namedParameterSpec.getName()));
+            throw new IllegalArgumentException(String.format("%s is not supported. Ed25519 and Ed448 are the supported curves.", namedParameterSpec.getName()));
         }
     }
 

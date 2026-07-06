@@ -50,6 +50,8 @@ class COSEAlgorithmIdentifierTest {
                 () -> assertThat(COSEAlgorithmIdentifier.create(-9)).isEqualTo(COSEAlgorithmIdentifier.ESP256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-51)).isEqualTo(COSEAlgorithmIdentifier.ESP384),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-52)).isEqualTo(COSEAlgorithmIdentifier.ESP512),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-19)).isEqualTo(COSEAlgorithmIdentifier.Ed25519),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-53)).isEqualTo(COSEAlgorithmIdentifier.Ed448),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-1)).isEqualTo(COSEAlgorithmIdentifier.create(-1))
         );
     }
@@ -66,7 +68,7 @@ class COSEAlgorithmIdentifierTest {
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ES256)).isEqualTo(COSEAlgorithmIdentifier.ES256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ES384)).isEqualTo(COSEAlgorithmIdentifier.ES384),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ES512)).isEqualTo(COSEAlgorithmIdentifier.ES512),
-                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.Ed25519)).isEqualTo(COSEAlgorithmIdentifier.EdDSA),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.Ed25519)).isEqualTo(COSEAlgorithmIdentifier.Ed25519),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.PS256)).isEqualTo(COSEAlgorithmIdentifier.PS256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.PS384)).isEqualTo(COSEAlgorithmIdentifier.PS384),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.PS512)).isEqualTo(COSEAlgorithmIdentifier.PS512)
@@ -91,7 +93,9 @@ class COSEAlgorithmIdentifierTest {
                 () -> assertThat(COSEAlgorithmIdentifier.PS512).hasToString("PS512"),
                 () -> assertThat(COSEAlgorithmIdentifier.ESP256).hasToString("ESP256"),
                 () -> assertThat(COSEAlgorithmIdentifier.ESP384).hasToString("ESP384"),
-                () -> assertThat(COSEAlgorithmIdentifier.ESP512).hasToString("ESP512")
+                () -> assertThat(COSEAlgorithmIdentifier.ESP512).hasToString("ESP512"),
+                () -> assertThat(COSEAlgorithmIdentifier.Ed25519).hasToString("Ed25519"),
+                () -> assertThat(COSEAlgorithmIdentifier.Ed448).hasToString("Ed448")
         );
     }
 
@@ -104,20 +108,24 @@ class COSEAlgorithmIdentifierTest {
 
 
     @Test
-    void toSignatureAlgorithm_with_ESP_test() {
+    void toSignatureAlgorithm_with_fully_specified_test() {
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.ESP256.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ESP256),
                 () -> assertThat(COSEAlgorithmIdentifier.ESP384.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ESP384),
-                () -> assertThat(COSEAlgorithmIdentifier.ESP512.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ESP512)
+                () -> assertThat(COSEAlgorithmIdentifier.ESP512.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ESP512),
+                () -> assertThat(COSEAlgorithmIdentifier.Ed25519.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.Ed25519),
+                () -> assertThat(COSEAlgorithmIdentifier.Ed448.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.Ed448)
         );
     }
 
     @Test
-    void getKeyType_with_ESP_test() {
+    void getKeyType_with_fully_specified_test() {
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.ESP256.getKeyType()).isEqualTo(COSEKeyType.EC2),
                 () -> assertThat(COSEAlgorithmIdentifier.ESP384.getKeyType()).isEqualTo(COSEKeyType.EC2),
-                () -> assertThat(COSEAlgorithmIdentifier.ESP512.getKeyType()).isEqualTo(COSEKeyType.EC2)
+                () -> assertThat(COSEAlgorithmIdentifier.ESP512.getKeyType()).isEqualTo(COSEKeyType.EC2),
+                () -> assertThat(COSEAlgorithmIdentifier.Ed25519.getKeyType()).isEqualTo(COSEKeyType.OKP),
+                () -> assertThat(COSEAlgorithmIdentifier.Ed448.getKeyType()).isEqualTo(COSEKeyType.OKP)
         );
     }
 

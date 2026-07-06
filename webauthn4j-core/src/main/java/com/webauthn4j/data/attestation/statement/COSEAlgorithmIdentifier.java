@@ -40,16 +40,28 @@ public class COSEAlgorithmIdentifier {
     public static final COSEAlgorithmIdentifier ES256;
     public static final COSEAlgorithmIdentifier ES384;
     public static final COSEAlgorithmIdentifier ES512;
-    /**
-     * EdDSA is only supported on JDK 15 or later
-     */
-    public static final COSEAlgorithmIdentifier EdDSA;
-    public static final COSEAlgorithmIdentifier PS256;
-    public static final COSEAlgorithmIdentifier PS384;
-    public static final COSEAlgorithmIdentifier PS512;
     public static final COSEAlgorithmIdentifier ESP256;
     public static final COSEAlgorithmIdentifier ESP384;
     public static final COSEAlgorithmIdentifier ESP512;
+    /**
+     * EdDSA is a polymorphic algorithm identifier that does not specify a curve.
+     * WebAuthn Level 3 §5.8.5 restricts COSEAlgorithmIdentifier.EdDSA(-8) to the Ed25519 curve (crv=6),
+     * so this identifier is treated as equivalent to {@link #Ed25519} for
+     * signature verification purposes.
+     * For Ed448, use {@link #Ed448} instead.
+     *
+     * <p>In {@code pubKeyCredParams}, this identifier is preferred over {@link #Ed25519}
+     * for backward compatibility, as many existing authenticators support -8 but not -19.
+     *
+     * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-alg-identifier">WebAuthn Level 3 §5.8.5</a>
+     * @see <a href="https://www.rfc-editor.org/rfc/rfc9864.html">RFC 9864</a>
+     */
+    public static final COSEAlgorithmIdentifier EdDSA;
+    public static final COSEAlgorithmIdentifier Ed25519;
+    public static final COSEAlgorithmIdentifier Ed448;
+    public static final COSEAlgorithmIdentifier PS256;
+    public static final COSEAlgorithmIdentifier PS384;
+    public static final COSEAlgorithmIdentifier PS512;
 
     private static final Map<COSEAlgorithmIdentifier, COSEKeyType> keyTypeMap = new HashMap<>();
     private static final Map<COSEAlgorithmIdentifier, SignatureAlgorithm> algorithmMap = new HashMap<>();
@@ -70,6 +82,8 @@ public class COSEAlgorithmIdentifier {
         ESP256 = new COSEAlgorithmIdentifier(-9);
         ESP384 = new COSEAlgorithmIdentifier(-51);
         ESP512 = new COSEAlgorithmIdentifier(-52);
+        Ed25519 = new COSEAlgorithmIdentifier(-19);
+        Ed448 = new COSEAlgorithmIdentifier(-53);
 
         keyTypeMap.put(COSEAlgorithmIdentifier.ES256, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ES384, COSEKeyType.EC2);
@@ -78,6 +92,8 @@ public class COSEAlgorithmIdentifier {
         keyTypeMap.put(COSEAlgorithmIdentifier.ESP384, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ESP512, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.EdDSA, COSEKeyType.OKP);
+        keyTypeMap.put(COSEAlgorithmIdentifier.Ed25519, COSEKeyType.OKP);
+        keyTypeMap.put(COSEAlgorithmIdentifier.Ed448, COSEKeyType.OKP);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS1, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS256, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS384, COSEKeyType.RSA);
@@ -92,7 +108,10 @@ public class COSEAlgorithmIdentifier {
         algorithmMap.put(COSEAlgorithmIdentifier.ESP256, SignatureAlgorithm.ESP256);
         algorithmMap.put(COSEAlgorithmIdentifier.ESP384, SignatureAlgorithm.ESP384);
         algorithmMap.put(COSEAlgorithmIdentifier.ESP512, SignatureAlgorithm.ESP512);
+        // WebAuthn Level 3 §5.8.5 restricts COSEAlgorithmIdentifier.EdDSA(-8) to Ed25519 curve
         algorithmMap.put(COSEAlgorithmIdentifier.EdDSA, SignatureAlgorithm.Ed25519);
+        algorithmMap.put(COSEAlgorithmIdentifier.Ed25519, SignatureAlgorithm.Ed25519);
+        algorithmMap.put(COSEAlgorithmIdentifier.Ed448, SignatureAlgorithm.Ed448);
         algorithmMap.put(COSEAlgorithmIdentifier.RS1, SignatureAlgorithm.RS1);
         algorithmMap.put(COSEAlgorithmIdentifier.RS256, SignatureAlgorithm.RS256);
         algorithmMap.put(COSEAlgorithmIdentifier.RS384, SignatureAlgorithm.RS384);
@@ -104,7 +123,8 @@ public class COSEAlgorithmIdentifier {
         reverseAlgorithmMap.put(SignatureAlgorithm.ES256, COSEAlgorithmIdentifier.ES256);
         reverseAlgorithmMap.put(SignatureAlgorithm.ES384, COSEAlgorithmIdentifier.ES384);
         reverseAlgorithmMap.put(SignatureAlgorithm.ES512, COSEAlgorithmIdentifier.ES512);
-        reverseAlgorithmMap.put(SignatureAlgorithm.Ed25519, COSEAlgorithmIdentifier.EdDSA);
+        reverseAlgorithmMap.put(SignatureAlgorithm.Ed25519, COSEAlgorithmIdentifier.Ed25519);
+        reverseAlgorithmMap.put(SignatureAlgorithm.Ed448, COSEAlgorithmIdentifier.Ed448);
         reverseAlgorithmMap.put(SignatureAlgorithm.RS1, COSEAlgorithmIdentifier.RS1);
         reverseAlgorithmMap.put(SignatureAlgorithm.RS256, COSEAlgorithmIdentifier.RS256);
         reverseAlgorithmMap.put(SignatureAlgorithm.RS384, COSEAlgorithmIdentifier.RS384);
@@ -197,8 +217,23 @@ public class COSEAlgorithmIdentifier {
         else if(value == ES512.value){
             return "ES512";
         }
+        else if(value == ESP256.value){
+            return "ESP256";
+        }
+        else if(value == ESP384.value){
+            return "ESP384";
+        }
+        else if(value == ESP512.value){
+            return "ESP512";
+        }
         else if(value == EdDSA.value){
             return "EdDSA";
+        }
+        else if(value == Ed25519.value){
+            return "Ed25519";
+        }
+        else if(value == Ed448.value){
+            return "Ed448";
         }
         else if(value == PS256.value){
             return "PS256";
@@ -208,15 +243,6 @@ public class COSEAlgorithmIdentifier {
         }
         else if(value == PS512.value){
             return "PS512";
-        }
-        else if(value == ESP256.value){
-            return "ESP256";
-        }
-        else if(value == ESP384.value){
-            return "ESP384";
-        }
-        else if(value == ESP512.value){
-            return "ESP512";
         }
         else {
             return String.format("Unknown COSEAlgorithmIdentifier(%d)", value);
