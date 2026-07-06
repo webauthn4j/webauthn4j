@@ -79,6 +79,10 @@ public class SignatureAlgorithm {
     public static final SignatureAlgorithm PS256 = new SignatureAlgorithm(JCA_RSA_SSA_PSS, SHA256);
     public static final SignatureAlgorithm PS384 = new SignatureAlgorithm(JCA_RSA_SSA_PSS, SHA384);
     public static final SignatureAlgorithm PS512 = new SignatureAlgorithm(JCA_RSA_SSA_PSS, SHA512);
+    // RFC 9864 fully-specified aliases — cryptographically identical to ES256/ES384/ES512
+    public static final SignatureAlgorithm ESP256 = ES256;
+    public static final SignatureAlgorithm ESP384 = ES384;
+    public static final SignatureAlgorithm ESP512 = ES512;
 
     private final String jcaName;
     private final @Nullable MessageDigestAlgorithm messageDigestAlgorithm;
