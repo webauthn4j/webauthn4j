@@ -33,6 +33,8 @@ public class SignatureAlgorithmDeserializer extends StdDeserializer<SignatureAlg
                 return SignatureAlgorithm.RS512;
             case "ed25519":
                 return SignatureAlgorithm.Ed25519;
+            case "ed448":
+                return SignatureAlgorithm.Ed448;
             case "SHA256withRSA/PSS":
                 return SignatureAlgorithm.PS256;
             case "SHA384withRSA/PSS":

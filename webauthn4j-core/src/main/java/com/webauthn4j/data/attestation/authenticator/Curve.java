@@ -38,7 +38,11 @@ public enum Curve {
      * ED25519.getParameterSpec() is only supportred on JDK15+
      * @since JDK 15
      */
-    ED25519(6, 32);
+    ED25519(6, 32),
+    /**
+     * @since JDK 15
+     */
+    ED448(7, 57);
 
     private final int value;
     private final int size;
@@ -58,6 +62,8 @@ public enum Curve {
                 return SECP521R1;
             case 6:
                 return ED25519;
+            case 7:
+                return ED448;
             default:
                 throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
@@ -93,7 +99,10 @@ public enum Curve {
                 return ECUtil.P_521_SPEC;
             case ED25519:
                 //noinspection Since15
-                return new NamedParameterSpec("Ed25519");
+                return NamedParameterSpec.ED25519;
+            case ED448:
+                //noinspection Since15
+                return NamedParameterSpec.ED448;
             default:
                 throw new IllegalStateException();
         }
@@ -110,6 +119,8 @@ public enum Curve {
                 return "SECP521R1";
             case ED25519:
                 return "ED25519";
+            case ED448:
+                return "ED448";
             default:
                 return "Unknown Curve";
         }

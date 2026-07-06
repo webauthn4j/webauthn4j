@@ -226,6 +226,61 @@ class EdDSACOSEKeyTest {
 
 
     @Test
+    void ed448_keyPair_test(){
+        // Given
+        KeyPair keyPair = EdDSAUtil.createEd448KeyPair();
+
+        // When
+        COSEKey coseKey = EdDSACOSEKey.create(keyPair, COSEAlgorithmIdentifier.Ed448);
+
+        // Then
+        assertThat(coseKey.hasPublicKey()).isTrue();
+        assertThat(coseKey.hasPrivateKey()).isTrue();
+        assertThat(coseKey.getPublicKey().getEncoded()).isEqualTo(keyPair.getPublic().getEncoded());
+        assertThat(coseKey.getPrivateKey().getEncoded()).isEqualTo(keyPair.getPrivate().getEncoded());
+    }
+
+    @Test
+    void validate_with_ed448_curve_and_EdDSA_algorithm_test() {
+        // Given
+        KeyPair keyPair = EdDSAUtil.createEd448KeyPair();
+        EdDSACOSEKey instance = EdDSACOSEKey.create(keyPair, COSEAlgorithmIdentifier.EdDSA);
+
+        // When
+        // Then
+        assertThatCode(instance::validate).doesNotThrowAnyException();
+    }
+
+    @Test
+    void validate_with_ed448_curve_and_Ed448_algorithm_test() {
+        // Given
+        KeyPair keyPair = EdDSAUtil.createEd448KeyPair();
+        EdDSACOSEKey instance = EdDSACOSEKey.create(keyPair, COSEAlgorithmIdentifier.Ed448);
+
+        // When
+        // Then
+        assertThatCode(instance::validate).doesNotThrowAnyException();
+    }
+
+    @Test
+    void validate_with_ed25519_curve_and_Ed25519_algorithm_test() {
+        // Given
+        KeyPair keyPair = EdDSAUtil.createEd25519KeyPair();
+        EdDSACOSEKey instance = EdDSACOSEKey.create(keyPair, COSEAlgorithmIdentifier.Ed25519);
+
+        // When
+        // Then
+        assertThatCode(instance::validate).doesNotThrowAnyException();
+    }
+
+    @Test
+    void getCurve_ed448_test(){
+        // When
+        // Then
+        assertThat(EdDSACOSEKey.getCurve(NamedParameterSpec.ED448)).isEqualTo(Curve.ED448);
+    }
+
+    @Test
     void getCurve_not_supported_curve_test(){
         // When
         // Then

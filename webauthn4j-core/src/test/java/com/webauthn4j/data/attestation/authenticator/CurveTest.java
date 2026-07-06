@@ -42,6 +42,7 @@ class CurveTest {
                 () -> assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1),
                 () -> assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1),
                 () -> assertThat(Curve.create(6)).isEqualTo(Curve.ED25519),
+                () -> assertThat(Curve.create(7)).isEqualTo(Curve.ED448),
                 () -> assertThatThrownBy(() -> Curve.create(4)).isInstanceOf(IllegalArgumentException.class)
         );
     }
@@ -67,7 +68,8 @@ class CurveTest {
                 () -> assertThat(Curve.SECP256R1.getParameterSpec()).isEqualTo(ECUtil.P_256_SPEC),
                 () -> assertThat(Curve.SECP384R1.getParameterSpec()).isEqualTo(ECUtil.P_384_SPEC),
                 () -> assertThat(Curve.SECP521R1.getParameterSpec()).isEqualTo(ECUtil.P_521_SPEC),
-                () -> assertThat(((NamedParameterSpec)Curve.ED25519.getParameterSpec()).getName()).isEqualTo(NamedParameterSpec.ED25519.getName())
+                () -> assertThat(Curve.ED25519.getParameterSpec()).isSameAs(NamedParameterSpec.ED25519),
+                () -> assertThat(Curve.ED448.getParameterSpec()).isSameAs(NamedParameterSpec.ED448)
         );
     }
 
@@ -79,7 +81,8 @@ class CurveTest {
                 () -> assertThat(Curve.SECP256R1).hasToString("SECP256R1"),
                 () -> assertThat(Curve.SECP384R1).hasToString("SECP384R1"),
                 () -> assertThat(Curve.SECP521R1).hasToString("SECP521R1"),
-                () -> assertThat(Curve.ED25519).hasToString("ED25519")
+                () -> assertThat(Curve.ED25519).hasToString("ED25519"),
+                () -> assertThat(Curve.ED448).hasToString("ED448")
         );
     }
 
