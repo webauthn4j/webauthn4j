@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.exc.ValueInstantiationException;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,7 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class PublicKeyCredentialParametersTest {
 
-    private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final JsonMapper jsonMapper = objectConverter.getJsonMapper();
+    private final CBORMapper cborMapper = objectConverter.getCborMapper();
 
     @Test
     void deserialize_test_with_invalid_value() {
@@ -47,6 +50,15 @@ class PublicKeyCredentialParametersTest {
                 () -> assertThat(parameters.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY),
                 () -> assertThat(parameters.getAlg()).isEqualTo(COSEAlgorithmIdentifier.ES256)
         );
+    }
+
+    @Test
+    void cbor_serialize_deserialize_test() {
+        PublicKeyCredentialParameters original =
+                new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+        byte[] encoded = cborMapper.writeValueAsBytes(original);
+        PublicKeyCredentialParameters decoded = cborMapper.readValue(encoded, PublicKeyCredentialParameters.class);
+        assertThat(decoded).isEqualTo(original);
     }
 
     @Test
