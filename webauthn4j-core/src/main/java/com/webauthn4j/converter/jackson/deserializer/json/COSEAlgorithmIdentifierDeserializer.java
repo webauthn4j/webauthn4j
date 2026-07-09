@@ -16,17 +16,8 @@ public class COSEAlgorithmIdentifierDeserializer extends StdDeserializer<COSEAlg
 
     @Override
     public COSEAlgorithmIdentifier deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) {
-        if (p.currentToken() == JsonToken.VALUE_STRING) {
-            String text = p.getText();
-            try {
-                long value = Long.parseLong(text);
-                return COSEAlgorithmIdentifier.create(value);
-            } catch (NumberFormatException e) {
-                throw InvalidFormatException.from(p, "Expected a numeric value for COSEAlgorithmIdentifier", text, COSEAlgorithmIdentifier.class);
-            }
-        }
         if (p.currentToken() != JsonToken.VALUE_NUMBER_INT) {
-            throw InvalidFormatException.from(p, "Expected a numeric value for COSEAlgorithmIdentifier", p.getText(), COSEAlgorithmIdentifier.class);
+            throw InvalidFormatException.from(p, "Expected an integer value for COSEAlgorithmIdentifier", p.getText(), COSEAlgorithmIdentifier.class);
         }
         long value = p.getValueAsLong();
         return COSEAlgorithmIdentifier.create(value);
