@@ -12,3 +12,7 @@ updates:
       interval: daily
     labels:
       - "dev-dependencies"
+    groups:
+      codeql:
+        patterns:
+          - "github/codeql-action/*"
