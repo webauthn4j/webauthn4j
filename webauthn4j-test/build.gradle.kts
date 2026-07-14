@@ -24,8 +24,8 @@ dependencies {
 
     implementation(libs.slf4j.api)
 
-    implementation(libs.bouncycastle.bcprov.jdk15to18)
-    implementation(libs.bouncycastle.bcpkix.jdk15to18)
+    implementation(libs.bouncycastle.bcprov.jdk18on)
+    implementation(libs.bouncycastle.bcpkix.jdk18on)
 
     //CompileOnly
     compileOnly(libs.jetbrains.annotations)
