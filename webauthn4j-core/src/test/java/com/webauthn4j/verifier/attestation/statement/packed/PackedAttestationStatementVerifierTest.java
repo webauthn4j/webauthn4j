@@ -79,7 +79,7 @@ class PackedAttestationStatementVerifierTest {
             Date from = new Date(now);
             Date to = new Date(from.getTime() + TimeUnit.DAYS.toMillis(1));
 
-            X500Name dnName = new X500Name("C=ORG, O=Dummy Org, OU=Authenticator Attestation, CN=Dummy");
+            X500Name dnName = new X500Name("C=US, O=Dummy Org, OU=Authenticator Attestation, CN=Dummy");
             BigInteger certSerialNumber = BigInteger.ZERO;
 
             Calendar calendar = Calendar.getInstance();
