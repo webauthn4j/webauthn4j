@@ -18,6 +18,7 @@ package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -53,7 +54,7 @@ public class HKDFUtil {
      * @param salt salt
      * @return a pseudo random key
      */
-    static @NotNull byte[] extract(@NotNull byte[] ikm, @NotNull byte[] salt) {
+    static @NotNull byte[] extract(@NotNull byte[] ikm, @Nullable byte[] salt) {
         AssertUtil.notNull(ikm, "ikm must not be null");
         if (salt == null || salt.length == 0) {
             salt = new byte[HASH_LENGTH];
@@ -79,7 +80,7 @@ public class HKDFUtil {
      * @param outputLength length of output keying material in bytes
      * @return output keying material
      */
-    static @NotNull byte[] expand(@NotNull byte[] key, @NotNull byte[] info, int outputLength) {
+    static @NotNull byte[] expand(@NotNull byte[] key, @Nullable byte[] info, int outputLength) {
         AssertUtil.notNull(key, "key must not be null");
         if (outputLength <= 0) {
             throw new IllegalArgumentException("outputLength must be positive");
