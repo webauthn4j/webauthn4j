@@ -130,6 +130,9 @@ public class StatusReport {
         this.fipsPhysicalSecurityLevel = fipsPhysicalSecurityLevel;
     }
 
+    /**
+     * @deprecated Use the full constructor instead.
+     */
     @Deprecated
     public StatusReport(
             @NotNull AuthenticatorStatus status,

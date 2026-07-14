@@ -231,6 +231,9 @@ public class AuthenticatorGetInfo {
         this.authenticatorConfigCommands = authenticatorConfigCommands;
     }
 
+    /**
+     * @deprecated Use the full constructor instead.
+     */
     @Deprecated
     public AuthenticatorGetInfo(
             @NotNull List<String> versions,
@@ -554,6 +557,9 @@ public class AuthenticatorGetInfo {
             this.alwaysUv = alwaysUv;
         }
 
+        /**
+         * @deprecated Use the full constructor instead.
+         */
         @Deprecated
         public Options(
                 @Nullable PlatformOption plat,
@@ -595,6 +601,9 @@ public class AuthenticatorGetInfo {
             return pinUvAuthToken;
         }
 
+        /**
+         * @deprecated Use {@link #getPinUvAuthToken()} instead.
+         */
         @Deprecated
         @JsonIgnore
         public @Nullable UVTokenOption getUvToken() {
@@ -629,6 +638,9 @@ public class AuthenticatorGetInfo {
             return authnrCfg;
         }
 
+        /**
+         * @deprecated Use {@link #getAuthnrCfg()} instead.
+         */
         @Deprecated
         @JsonIgnore
         public @Nullable ConfigOption getConfig() {
@@ -928,6 +940,9 @@ public class AuthenticatorGetInfo {
             }
         }
 
+        /**
+         * @deprecated Use {@link PinUvAuthTokenOption} instead.
+         */
         @Deprecated
         public static class UVTokenOption {
 
@@ -961,6 +976,9 @@ public class AuthenticatorGetInfo {
             }
         }
 
+        /**
+         * @deprecated Use {@link AuthnrCfgOption} instead.
+         */
         @Deprecated
         public static class ConfigOption {
 

@@ -32,6 +32,8 @@ import java.io.InputStream;
 
 /**
  * A utility class for CBOR serialization/deserialization
+ *
+ * @deprecated Use {@link ObjectConverter#getCborMapper()} directly instead.
  */
 @Deprecated
 public class CborConverter {
@@ -45,6 +47,9 @@ public class CborConverter {
         this.objectConverter = objectConverter;
     }
 
+    /**
+     * @deprecated Use {@link ObjectConverter#rebuildWithCBORModule(JacksonModule)} instead.
+     */
     @Deprecated
     public void registerModule(JacksonModule module){
         this.objectConverter.cborMapper = objectConverter.getCborMapper().rebuild()

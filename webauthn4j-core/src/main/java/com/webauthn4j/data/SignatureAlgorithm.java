@@ -99,6 +99,9 @@ public class SignatureAlgorithm {
         this.messageDigestAlgorithm = messageDigestAlgorithm;
     }
 
+    /**
+     * @deprecated Use {@link #create(String, String)} instead.
+     */
     @Deprecated
     public static SignatureAlgorithm create(@NotNull String value) {
         switch (value) {

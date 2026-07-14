@@ -149,6 +149,9 @@ public class RegistrationObject extends CoreRegistrationObject {
         return transports;
     }
 
+    /**
+     * @deprecated Use {@link #getRegistrationParameters()} instead.
+     */
     @Deprecated
     @Override
     public @NotNull ServerProperty getServerProperty() {

@@ -114,6 +114,9 @@ public class TopOriginVerifier {
         this.forceBlockCrossOrigin = forceBlockCrossOrigin;
     }
 
+    /**
+     * @deprecated Use {@link ServerProperty.Builder#anyTopOrigin()} or {@link ServerProperty.Builder#topOriginPredicate(OriginPredicate)} instead.
+     */
     @Deprecated
     public boolean isForceBlockCrossOrigin() {
         return forceBlockCrossOrigin;
