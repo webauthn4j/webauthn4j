@@ -93,7 +93,7 @@ public class AuthenticationObject extends CoreAuthenticationObject {
     }
 
     /**
-     * @deprecated Use {@link #getAuthenticationParameters()} instead.
+     * @deprecated Use {@code getAuthenticationParameters().getServerProperty()} instead.
      */
     @Deprecated
     @Override
