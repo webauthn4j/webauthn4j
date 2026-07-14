@@ -23,7 +23,7 @@ public class HMACSecretAuthenticationExtensionClientOutputDeserializer extends E
 
     @Override
     public HMACSecretAuthenticationExtensionClientOutput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode value = node.get(HMACSecretAuthenticationExtensionClientOutput.KEY_HMAC_GET_SECRET);
         if (value == null || value.isNull()) return null;
         HMACGetSecretOutput hmacGetSecret = ctxt.readTreeAsValue(value, HMACGetSecretOutput.class);

@@ -22,7 +22,7 @@ public class CredentialPropertiesExtensionClientInputDeserializer extends Extens
 
     @Override
     public CredentialPropertiesExtensionClientInput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode value = node.get(CredentialPropertiesExtensionClientInput.KEY_CRED_PROPS);
         if (value == null || value.isNull()) return null;
         return new CredentialPropertiesExtensionClientInput(value.asBoolean());

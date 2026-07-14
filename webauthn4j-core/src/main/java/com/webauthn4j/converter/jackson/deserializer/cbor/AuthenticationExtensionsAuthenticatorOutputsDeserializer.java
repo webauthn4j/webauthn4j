@@ -23,7 +23,7 @@ public class AuthenticationExtensionsAuthenticatorOutputsDeserializer extends St
 
     @Override
     public AuthenticationExtensionsAuthenticatorOutputs<?> deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         return new AuthenticationExtensionsAuthenticatorOutputs<>(node, objectConverter);
     }
 }

@@ -23,7 +23,7 @@ public class HMACSecretAuthenticationExtensionClientInputDeserializer extends Ex
 
     @Override
     public HMACSecretAuthenticationExtensionClientInput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode value = node.get(HMACSecretAuthenticationExtensionClientInput.KEY_HMAC_GET_SECRET);
         if (value == null || value.isNull()) return null;
         HMACGetSecretInput hmacGetSecret = ctxt.readTreeAsValue(value, HMACGetSecretInput.class);

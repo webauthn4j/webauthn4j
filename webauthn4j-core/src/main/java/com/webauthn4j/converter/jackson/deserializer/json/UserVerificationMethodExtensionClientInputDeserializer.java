@@ -22,7 +22,7 @@ public class UserVerificationMethodExtensionClientInputDeserializer extends Exte
 
     @Override
     public UserVerificationMethodExtensionClientInput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode value = node.get(UserVerificationMethodExtensionClientInput.KEY_UVM);
         if (value == null || value.isNull()) return null;
         return new UserVerificationMethodExtensionClientInput(value.asBoolean());

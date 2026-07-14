@@ -39,7 +39,7 @@ public class LargeBlobExtensionClientOutputDeserializer extends ExtensionClientO
 
     @Override
     public LargeBlobExtensionClientOutput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode largeBlobNode = node.get(LargeBlobExtensionClientOutput.KEY_LARGE_BLOB);
         if (largeBlobNode == null || largeBlobNode.isNull() || !largeBlobNode.isObject()) return null;
         AuthenticationExtensionsLargeBlobOutputs outputs = ctxt.readTreeAsValue(largeBlobNode, AuthenticationExtensionsLargeBlobOutputs.class);

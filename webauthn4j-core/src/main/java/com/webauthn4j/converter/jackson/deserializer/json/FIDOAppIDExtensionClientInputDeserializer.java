@@ -22,7 +22,7 @@ public class FIDOAppIDExtensionClientInputDeserializer extends ExtensionClientIn
 
     @Override
     public FIDOAppIDExtensionClientInput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode value = node.get(FIDOAppIDExtensionClientInput.KEY_APPID);
         if (value == null || value.isNull()) return null;
         return new FIDOAppIDExtensionClientInput(value.textValue());

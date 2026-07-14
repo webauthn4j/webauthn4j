@@ -47,6 +47,9 @@ public class BeanAssertUtil {
     // ========================================================================================================
 
 
+    // Cast to CoreRegistrationData is required for overload resolution to call the correct validate() overload.
+    // Without this cast, validate(RegistrationData) would call itself, causing infinite recursion.
+    @SuppressWarnings("java:S1905")
     public static void validate(@Nullable RegistrationData registrationData) {
         validate((CoreRegistrationData) registrationData);
         validateAuthenticationExtensionsClientOutputs(registrationData.getClientExtensions());
@@ -69,6 +72,9 @@ public class BeanAssertUtil {
         }
     }
 
+    // Cast to CoreAuthenticationData is required for overload resolution to call the correct validate() overload.
+    // Without this cast, validate(AuthenticationData) would call itself, causing infinite recursion.
+    @SuppressWarnings("java:S1905")
     public static void validate(@Nullable AuthenticationData authenticationData) {
         validate((CoreAuthenticationData) authenticationData);
         if (authenticationData.getCollectedClientData() == null) {

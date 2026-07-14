@@ -23,7 +23,7 @@ public class AuthenticationExtensionsClientInputsDeserializer extends StdDeseria
 
     @Override
     public AuthenticationExtensionsClientInputs<?> deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         return new AuthenticationExtensionsClientInputs<>(node, objectConverter);
     }
 }
