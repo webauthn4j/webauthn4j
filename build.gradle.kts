@@ -294,7 +294,7 @@ tasks.register<AsciidoctorTask>("generateReferenceEN") {
 sonarqube {
     properties {
         property("sonar.projectKey", "webauthn4j")
-        property("sonar.issue.ignore.multicriteria", "e1,e2,e3,e4")
+        property("sonar.issue.ignore.multicriteria", "e1,e2,e3,e4,e5")
         property("sonar.issue.ignore.multicriteria.e1.ruleKey", "java:S110")
         property("sonar.issue.ignore.multicriteria.e1.resourceKey", "**/*.java")
         property("sonar.issue.ignore.multicriteria.e2.ruleKey", "java:S1452")
@@ -303,6 +303,8 @@ sonarqube {
         property("sonar.issue.ignore.multicriteria.e3.resourceKey", "**/*.java")
         property("sonar.issue.ignore.multicriteria.e4.ruleKey", "java:S5778")
         property("sonar.issue.ignore.multicriteria.e4.resourceKey", "**/*.java")
+        property("sonar.issue.ignore.multicriteria.e5.ruleKey", "java:S6355")
+        property("sonar.issue.ignore.multicriteria.e5.resourceKey", "**/*.java")
     }
 }
 
