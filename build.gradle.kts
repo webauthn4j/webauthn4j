@@ -294,7 +294,7 @@ tasks.register<AsciidoctorTask>("generateReferenceEN") {
 sonarqube {
     properties {
         property("sonar.projectKey", "webauthn4j")
-        property("sonar.issue.ignore.multicriteria", "e1,e2,e3,e4,e5,e6")
+        property("sonar.issue.ignore.multicriteria", "e1,e2,e3,e4,e5,e6,e7,e8,e9")
         // Deep inheritance is acceptable for the attestation verifier hierarchy
         property("sonar.issue.ignore.multicriteria.e1.ruleKey", "java:S110")
         property("sonar.issue.ignore.multicriteria.e1.resourceKey", "**/*.java")
@@ -313,6 +313,15 @@ sonarqube {
         // Exception classes are not designed for serialization; Serializable inherited from Throwable is not intentionally used
         property("sonar.issue.ignore.multicriteria.e6.ruleKey", "java:S1948")
         property("sonar.issue.ignore.multicriteria.e6.resourceKey", "**/*.java")
+        // Nested if statements are kept separate intentionally for readability
+        property("sonar.issue.ignore.multicriteria.e7.ruleKey", "java:S1066")
+        property("sonar.issue.ignore.multicriteria.e7.resourceKey", "**/*.java")
+        // Explicit if-then-else is preferred over single return for clarity
+        property("sonar.issue.ignore.multicriteria.e8.ruleKey", "java:S1126")
+        property("sonar.issue.ignore.multicriteria.e8.resourceKey", "**/*.java")
+        // Deprecated code is retained intentionally for backward compatibility
+        property("sonar.issue.ignore.multicriteria.e9.ruleKey", "java:S1133")
+        property("sonar.issue.ignore.multicriteria.e9.resourceKey", "**/*.java")
     }
 }
 
