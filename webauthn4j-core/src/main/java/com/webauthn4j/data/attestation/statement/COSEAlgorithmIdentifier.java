@@ -194,6 +194,7 @@ public class COSEAlgorithmIdentifier {
         return Objects.hash(value);
     }
 
+    @SuppressWarnings("java:S3776") // Cognitive complexity is acceptable for simple value-to-name mapping
     @Override
     public String toString() {
         if(value == RS1.value){
