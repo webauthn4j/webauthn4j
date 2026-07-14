@@ -71,7 +71,7 @@ class COSEKeyOperationTest {
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.cose_key_op).isEqualTo(COSEKeyOperation.SIGN);
+        assertThat(dto.coseKeyOp).isEqualTo(COSEKeyOperation.SIGN);
     }
 
     @Test
@@ -87,6 +87,7 @@ class COSEKeyOperationTest {
     }
 
     static class TestDTO {
-        public COSEKeyOperation cose_key_op;
+        @com.fasterxml.jackson.annotation.JsonProperty("cose_key_op")
+        public COSEKeyOperation coseKeyOp;
     }
 }

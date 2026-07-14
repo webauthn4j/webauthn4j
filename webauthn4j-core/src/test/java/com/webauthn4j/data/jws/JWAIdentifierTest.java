@@ -69,7 +69,7 @@ class JWAIdentifierTest {
     @Test
     void fromString_test() {
         TestDTO dto = jsonMapper.readValue("{\"jwa_id\":\"ES256\"}", TestDTO.class);
-        assertThat(dto.jwa_id).isEqualTo(JWAIdentifier.ES256);
+        assertThat(dto.jwaId).isEqualTo(JWAIdentifier.ES256);
     }
 
     @Test
@@ -93,6 +93,7 @@ class JWAIdentifierTest {
     }
 
     static class TestDTO {
-        public JWAIdentifier jwa_id;
+        @com.fasterxml.jackson.annotation.JsonProperty("jwa_id")
+        public JWAIdentifier jwaId;
     }
 }

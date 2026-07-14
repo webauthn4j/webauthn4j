@@ -43,7 +43,7 @@ class ClientDataTypeTest {
     @Test
     void fromString_test() {
         TestDTO dto = jsonMapper.readValue("{\"client_data_type\":\"webauthn.create\"}", TestDTO.class);
-        assertThat(dto.client_data_type).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
+        assertThat(dto.clientDataType).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
     }
 
     @Test
@@ -54,7 +54,8 @@ class ClientDataTypeTest {
     }
 
     static class TestDTO {
-        public ClientDataType client_data_type;
+        @com.fasterxml.jackson.annotation.JsonProperty("client_data_type")
+        public ClientDataType clientDataType;
     }
 
     @Test

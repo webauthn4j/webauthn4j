@@ -61,7 +61,7 @@ class COSEKeyTypeTest {
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.cose_key_type).isEqualTo(COSEKeyType.RESERVED);
+        assertThat(dto.coseKeyType).isEqualTo(COSEKeyType.RESERVED);
     }
 
     @Test
@@ -77,6 +77,7 @@ class COSEKeyTypeTest {
     }
 
     static class TestDTO {
-        public COSEKeyType cose_key_type;
+        @com.fasterxml.jackson.annotation.JsonProperty("cose_key_type")
+        public COSEKeyType coseKeyType;
     }
 }

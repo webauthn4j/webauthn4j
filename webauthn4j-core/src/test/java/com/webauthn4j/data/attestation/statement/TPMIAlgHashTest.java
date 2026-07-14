@@ -63,7 +63,7 @@ class TPMIAlgHashTest {
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpmi_alg_hash).isEqualTo(TPMIAlgHash.TPM_ALG_SHA256);
+        assertThat(dto.tpmiAlgHash).isEqualTo(TPMIAlgHash.TPM_ALG_SHA256);
     }
 
     @Test
@@ -79,6 +79,7 @@ class TPMIAlgHashTest {
     }
 
     static class TestDTO {
-        public TPMIAlgHash tpmi_alg_hash;
+        @com.fasterxml.jackson.annotation.JsonProperty("tpmi_alg_hash")
+        public TPMIAlgHash tpmiAlgHash;
     }
 }
