@@ -6,6 +6,9 @@ import java.util.function.Supplier;
 
 public class CompletionStageUtil {
 
+    private CompletionStageUtil() {
+    }
+
     public static <U> CompletionStage<U> supply(Supplier<U> supplier) {
         try{
             U result = supplier.get();
