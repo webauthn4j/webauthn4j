@@ -29,8 +29,8 @@ dependencies {
 
     testImplementation(project(":webauthn4j-test"))
     testImplementation(project(":webauthn4j-core-async"))
-    testImplementation(libs.bouncycastle.bcprov.jdk15to18)
-    testImplementation(libs.bouncycastle.bcpkix.jdk15to18)
+    testImplementation(libs.bouncycastle.bcprov.jdk18on)
+    testImplementation(libs.bouncycastle.bcpkix.jdk18on)
     testImplementation("ch.qos.logback:logback-classic")
     testImplementation("org.projectlombok:lombok")
     testImplementation("org.mockito:mockito-junit-jupiter")
