@@ -69,8 +69,7 @@ class AuthenticationExtensionsLargeBlobOutputsTest {
         AuthenticationExtensionsLargeBlobOutputs c = new AuthenticationExtensionsLargeBlobOutputs(false, null, null);
         AuthenticationExtensionsLargeBlobOutputs d = new AuthenticationExtensionsLargeBlobOutputs(null, new byte[]{1}, null);
 
-        assertThat(a).isEqualTo(b).isNotEqualTo(c).isNotEqualTo(d).isNotEqualTo(null);
-        assertThat(a.hashCode()).isEqualTo(b.hashCode());
+        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b).isNotEqualTo(c).isNotEqualTo(d).isNotEqualTo(null);
     }
 
     @Test

@@ -40,9 +40,10 @@ class PinProtocolVersionTest {
         PinProtocolVersion instanceB = new PinProtocolVersion(1);
         PinProtocolVersion instanceC = PinProtocolVersion.create(2);
 
-        assertThat(instanceA).isEqualTo(PinProtocolVersion.VERSION_1);
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(PinProtocolVersion.VERSION_1)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
 
         assertThat(instanceA).isNotEqualTo(instanceC);
     }

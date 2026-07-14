@@ -75,8 +75,8 @@ class ClientCapabilityTest {
 
     @Test
     void toString_test() {
-        assertThat(ClientCapability.CONDITIONAL_CREATE.toString()).isEqualTo("conditionalCreate");
-        assertThat(ClientCapability.HYBRID_TRANSPORT.toString()).isEqualTo("hybridTransport");
+        assertThat(ClientCapability.CONDITIONAL_CREATE).hasToString("conditionalCreate");
+        assertThat(ClientCapability.HYBRID_TRANSPORT).hasToString("hybridTransport");
     }
 
 }
