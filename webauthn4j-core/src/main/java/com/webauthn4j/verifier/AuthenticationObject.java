@@ -92,19 +92,11 @@ public class AuthenticationObject extends CoreAuthenticationObject {
         return (AuthenticationParameters) super.getAuthenticationParameters();
     }
 
-    /**
-     * @deprecated Use {@code getAuthenticationParameters().getServerProperty()} instead.
-     */
-    @Deprecated
     @Override
     public @NotNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();
     }
 
-    /**
-     * @deprecated Use {@link #getCredentialRecord()} instead. This method will be removed in a future version.
-     */
-    @Deprecated
     @Override
     public @NotNull Authenticator getAuthenticator() {
         return (Authenticator) super.getAuthenticator();

@@ -114,10 +114,6 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
         return (ServerProperty) super.getServerProperty();
     }
 
-    /**
-     * @deprecated Use {@link #getCredentialRecord()} instead. This method will be removed in a future version.
-     */
-    @Deprecated
     @Override
     public @NotNull Authenticator getAuthenticator() {
         return (Authenticator) super.getAuthenticator();
