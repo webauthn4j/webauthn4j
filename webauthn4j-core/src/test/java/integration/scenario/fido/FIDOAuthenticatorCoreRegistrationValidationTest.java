@@ -45,7 +45,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Set;
 
 @SuppressWarnings("ConstantConditions")
 class FIDOAuthenticatorCoreRegistrationValidationTest {
@@ -105,7 +104,6 @@ class FIDOAuthenticatorCoreRegistrationValidationTest {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getResponse();
         AttestationObject attestationObject = attestationObjectConverter.convert(registrationRequest.getAttestationObject());
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         CoreRegistrationData coreRegistrationData
                 = new CoreRegistrationData(

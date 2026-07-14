@@ -102,7 +102,7 @@ class DeviceCheckManagerTest {
             mocked.when(Instant::now).thenReturn(timestamp);
 
             // When Apple App Attest Root Certificate is not set, throws CertificateException
-            DCAttestationData dcAttestationData = deviceCheckManager.validate(dcAttestationRequest, dcAttestationParameters);
+            deviceCheckManager.validate(dcAttestationRequest, dcAttestationParameters);
         }
     }
 
