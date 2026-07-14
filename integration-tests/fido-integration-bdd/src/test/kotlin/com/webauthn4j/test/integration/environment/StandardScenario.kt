@@ -5,7 +5,6 @@ import com.webauthn4j.credential.CredentialRecord
 import com.webauthn4j.credential.CredentialRecordImpl
 import com.webauthn4j.ctap.client.PublicKeyCredentialCreationContext
 import com.webauthn4j.ctap.client.PublicKeyCredentialRequestContext
-import com.webauthn4j.ctap.client.PublicKeyCredentialSelectionHandler
 import com.webauthn4j.data.*
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier
 import com.webauthn4j.data.client.Origin
@@ -205,7 +204,7 @@ class StandardScenario internal constructor(
             }
             val context = PublicKeyCredentialRequestContext(
                 overrideOrigin ?: clientPlatform.origin,
-                publicKeyCredentialSelectionHandler = PublicKeyCredentialSelectionHandler { it.first() },
+                publicKeyCredentialSelectionHandler = { it.first() },
                 clientPINProvider = { clientPlatform.clientPINValue.toByteArray() }
             )
             val credential = clientPlatform.webAuthnClient.get(effectiveOptions, context)
