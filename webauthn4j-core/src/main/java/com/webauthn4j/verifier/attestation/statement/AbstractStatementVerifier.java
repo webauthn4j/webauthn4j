@@ -34,11 +34,11 @@ public abstract class AbstractStatementVerifier<T extends AttestationStatement> 
 
     protected AbstractStatementVerifier() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
-        if (parameterizedType.getActualTypeArguments().length == 0) {
-            // Throw an exception if the class is not extending AttestationStatement
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        if (actualTypeArguments.length == 0) {
             throw new IllegalStateException("Inheriting class must extend AttestationStatement");
         }
-        Type actualTypeArgument = parameterizedType.getActualTypeArguments()[0];
+        Type actualTypeArgument = actualTypeArguments[0];
 
         if (actualTypeArgument instanceof Class) {
             this.parameterizedTypeClass = (Class<?>) actualTypeArgument;
