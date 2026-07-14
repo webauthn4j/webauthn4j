@@ -12,6 +12,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Collections;
 
 import static org.mockito.Mockito.*;
@@ -21,11 +22,11 @@ class CachingMetadataBLOBProviderTest {
 
     @Test
     void nextUpdate_is_past_date_test(){
-        LocalDate nextUpdate = LocalDate.of(2020, 1, 2);
+        LocalDate nextUpdate = LocalDate.of(2020, Month.JANUARY, 2);
         CachingMetadataBLOBProvider target = spy(CachingMetadataBLOBProvider.class);
         when(target.doProvide()).thenReturn(createMetadataBLOB(nextUpdate));
-        LocalDate firstTrialDay = LocalDate.of(2020, 1, 1);
-        LocalDate secondTrialDay = LocalDate.of(2020, 1, 3);
+        LocalDate firstTrialDay = LocalDate.of(2020, Month.JANUARY, 1);
+        LocalDate secondTrialDay = LocalDate.of(2020, Month.JANUARY, 3);
         try(MockedStatic<LocalDate> mock = Mockito.mockStatic(LocalDate.class)){
             mock.when(() -> LocalDate.now(java.time.ZoneOffset.UTC)).thenReturn(firstTrialDay);
             target.provide();
@@ -37,11 +38,11 @@ class CachingMetadataBLOBProviderTest {
 
     @Test
     void nextUpdate_is_today_test(){
-        LocalDate nextUpdate = LocalDate.of(2020, 1, 2);
+        LocalDate nextUpdate = LocalDate.of(2020, Month.JANUARY, 2);
         CachingMetadataBLOBProvider target = spy(CachingMetadataBLOBProvider.class);
         when(target.doProvide()).thenReturn(createMetadataBLOB(nextUpdate));
-        LocalDate firstTrialDay = LocalDate.of(2020, 1, 1);
-        LocalDate secondTrialDay = LocalDate.of(2020, 1, 2);
+        LocalDate firstTrialDay = LocalDate.of(2020, Month.JANUARY, 1);
+        LocalDate secondTrialDay = LocalDate.of(2020, Month.JANUARY, 2);
         try(MockedStatic<LocalDate> mock = Mockito.mockStatic(LocalDate.class)){
             mock.when(() -> LocalDate.now(java.time.ZoneOffset.UTC)).thenReturn(firstTrialDay);
             target.provide();
@@ -53,11 +54,11 @@ class CachingMetadataBLOBProviderTest {
 
     @Test
     void nextUpdate_is_future_date_test(){
-        LocalDate nextUpdate = LocalDate.of(2020, 1, 3);
+        LocalDate nextUpdate = LocalDate.of(2020, Month.JANUARY, 3);
         CachingMetadataBLOBProvider target = spy(CachingMetadataBLOBProvider.class);
         when(target.doProvide()).thenReturn(createMetadataBLOB(nextUpdate));
-        LocalDate firstTrialDay = LocalDate.of(2020, 1, 1);
-        LocalDate secondTrialDay = LocalDate.of(2020, 1, 2);
+        LocalDate firstTrialDay = LocalDate.of(2020, Month.JANUARY, 1);
+        LocalDate secondTrialDay = LocalDate.of(2020, Month.JANUARY, 2);
         try(MockedStatic<LocalDate> mock = Mockito.mockStatic(LocalDate.class)){
             mock.when(() -> LocalDate.now(java.time.ZoneOffset.UTC)).thenReturn(firstTrialDay);
             target.provide();

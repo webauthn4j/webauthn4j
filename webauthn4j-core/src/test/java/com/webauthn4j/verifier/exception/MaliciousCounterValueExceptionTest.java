@@ -52,18 +52,18 @@ class MaliciousCounterValueExceptionTest {
                 () -> assertThat(exception2.getCause()).isNull(),
 
                 () -> assertThat(exception3.getMessage()).isEqualTo("dummy"),
-                () -> assertThat(exception3.getStoredCounter()).isEqualTo(0L),  // default
-                () -> assertThat(exception3.getPresentedCounter()).isEqualTo(0L),  // default
+                () -> assertThat(exception3.getStoredCounter()).isZero(),  // default
+                () -> assertThat(exception3.getPresentedCounter()).isZero(),  // default
                 () -> assertThat(exception3.getCause()).isEqualTo(cause),
 
                 () -> assertThat(exception4.getMessage()).isEqualTo("dummy"),
-                () -> assertThat(exception4.getStoredCounter()).isEqualTo(0L),
-                () -> assertThat(exception4.getPresentedCounter()).isEqualTo(0L),
+                () -> assertThat(exception4.getStoredCounter()).isZero(),
+                () -> assertThat(exception4.getPresentedCounter()).isZero(),
                 () -> assertThat(exception4.getCause()).isNull(),
 
                 () -> assertThat(exception5.getMessage()).isEqualTo(cause.toString()),
-                () -> assertThat(exception5.getStoredCounter()).isEqualTo(0L),
-                () -> assertThat(exception5.getPresentedCounter()).isEqualTo(0L),
+                () -> assertThat(exception5.getStoredCounter()).isZero(),
+                () -> assertThat(exception5.getPresentedCounter()).isZero(),
                 () -> assertThat(exception5.getCause()).isEqualTo(cause)
         );
     }
