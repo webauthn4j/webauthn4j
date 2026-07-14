@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer.cbor;
 
 import com.webauthn4j.data.attestation.statement.*;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,7 @@ import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.deser.std.StdDeserializer;
 import tools.jackson.databind.exc.InvalidFormatException;
 
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 /**
@@ -47,22 +49,28 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
     }
 
     @NotNull TPMTPublic deserialize(@NotNull byte[] value) {
-        ByteBuffer buffer = ByteBuffer.wrap(value);
+        AssertUtil.notNull(value, "value must not be null");
+        try {
+            ByteBuffer buffer = ByteBuffer.wrap(value);
 
-        int typeValue = UnsignedNumberUtil.getUnsignedShort(buffer);
-        TPMIAlgPublic type = TPMIAlgPublic.create(typeValue);
-        TPMIAlgHash nameAlgValue = TPMIAlgHash.create(UnsignedNumberUtil.getUnsignedShort(buffer));
-        TPMAObject objectAttributes = extractTPMAObject(buffer);
-        int authPolicySize = UnsignedNumberUtil.getUnsignedShort(buffer);
-        byte[] authPolicy = new byte[authPolicySize];
-        buffer.get(authPolicy);
-        TPMUPublicParms parameters = extractTPMUPublicParms(type, buffer);
-        TPMUPublicId unique = extractTPMUPublicId(type, buffer);
-        if (buffer.remaining() > 0) {
-            throw new IllegalArgumentException("input byte array contains surplus data");
+            int typeValue = UnsignedNumberUtil.getUnsignedShort(buffer);
+            TPMIAlgPublic type = TPMIAlgPublic.create(typeValue);
+            TPMIAlgHash nameAlgValue = TPMIAlgHash.create(UnsignedNumberUtil.getUnsignedShort(buffer));
+            TPMAObject objectAttributes = extractTPMAObject(buffer);
+            int authPolicySize = UnsignedNumberUtil.getUnsignedShort(buffer);
+            byte[] authPolicy = new byte[authPolicySize];
+            buffer.get(authPolicy);
+            TPMUPublicParms parameters = extractTPMUPublicParms(type, buffer);
+            TPMUPublicId unique = extractTPMUPublicId(type, buffer);
+            if (buffer.remaining() > 0) {
+                throw new IllegalArgumentException("input byte array contains surplus data");
+            }
+
+            return new TPMTPublic(type, nameAlgValue, objectAttributes, authPolicy, parameters, unique);
         }
-
-        return new TPMTPublic(type, nameAlgValue, objectAttributes, authPolicy, parameters, unique);
+        catch (BufferUnderflowException e) {
+            throw new IllegalArgumentException("input byte array is too short", e);
+        }
     }
 
 

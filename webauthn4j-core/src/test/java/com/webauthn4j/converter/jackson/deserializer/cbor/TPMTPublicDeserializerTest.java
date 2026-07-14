@@ -19,7 +19,6 @@ package com.webauthn4j.converter.jackson.deserializer.cbor;
 
 import com.webauthn4j.data.attestation.statement.TPMTPublic;
 import com.webauthn4j.util.Base64Util;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +44,6 @@ class TPMTPublicDeserializerTest {
         assertThat(value.getBytes()).isEqualTo(inputBytes);
     }
 
-    @Disabled
     @Test
     void shouldThrowExceptionForInvalidInput() {
         // Given
@@ -57,7 +55,6 @@ class TPMTPublicDeserializerTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Disabled
     @Test
     void shouldThrowExceptionForNullInput() {
         // Given
