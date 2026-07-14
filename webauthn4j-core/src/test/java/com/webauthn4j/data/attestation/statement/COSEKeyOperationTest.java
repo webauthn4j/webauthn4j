@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.exc.InvalidFormatException;
@@ -66,7 +65,7 @@ class COSEKeyOperationTest {
     @Test
     void fromString_test() {
         // Given
-        String json = "{\"cose_key_op\":1}";
+        String json = "{\"coseKeyOp\":1}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
@@ -78,7 +77,7 @@ class COSEKeyOperationTest {
     @Test
     void fromString_test_with_invalid_value() {
         // Given
-        String json = "{\"cose_key_op\":0}";
+        String json = "{\"coseKeyOp\":0}";
 
         // When
         // Then
@@ -88,7 +87,6 @@ class COSEKeyOperationTest {
     }
 
     static class TestDTO {
-        @JsonProperty("cose_key_op")
         public COSEKeyOperation coseKeyOp;
     }
 }

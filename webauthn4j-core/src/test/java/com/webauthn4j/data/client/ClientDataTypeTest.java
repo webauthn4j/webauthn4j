@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.client;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
@@ -43,19 +42,18 @@ class ClientDataTypeTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonMapper.readValue("{\"client_data_type\":\"webauthn.create\"}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"clientDataType\":\"webauthn.create\"}", TestDTO.class);
         assertThat(dto.clientDataType).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
     }
 
     @Test
     void fromString_test_with_unknown_value() {
         assertThatCode(
-                () -> jsonMapper.readValue("{\"client_data_type\":\"unknown\"}", TestDTO.class)
+                () -> jsonMapper.readValue("{\"clientDataType\":\"unknown\"}", TestDTO.class)
         ).doesNotThrowAnyException();
     }
 
     static class TestDTO {
-        @JsonProperty("client_data_type")
         public ClientDataType clientDataType;
     }
 

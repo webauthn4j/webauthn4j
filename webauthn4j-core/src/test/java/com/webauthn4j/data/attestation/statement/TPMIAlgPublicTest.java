@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.exc.InvalidFormatException;
@@ -55,7 +54,7 @@ class TPMIAlgPublicTest {
     @Test
     void fromString_test() {
         // Given
-        String json = "{\"tpmi_alg_pub\":24}";
+        String json = "{\"tpmiAlgPub\":24}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
@@ -67,7 +66,7 @@ class TPMIAlgPublicTest {
     @Test
     void fromString_test_with_invalid_value() {
         // Given
-        String json = "{\"tpmi_alg_pub\":-1}";
+        String json = "{\"tpmiAlgPub\":-1}";
 
         // When
         // Then
@@ -77,7 +76,6 @@ class TPMIAlgPublicTest {
     }
 
     static class TestDTO {
-        @JsonProperty("tpmi_alg_pub")
         public TPMIAlgPublic tpmiAlgPub;
     }
 }

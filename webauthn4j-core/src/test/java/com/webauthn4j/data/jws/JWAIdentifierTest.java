@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.jws;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
@@ -69,14 +68,14 @@ class JWAIdentifierTest {
 
     @Test
     void fromString_test() {
-        TestDTO dto = jsonMapper.readValue("{\"jwa_id\":\"ES256\"}", TestDTO.class);
+        TestDTO dto = jsonMapper.readValue("{\"jwaId\":\"ES256\"}", TestDTO.class);
         assertThat(dto.jwaId).isEqualTo(JWAIdentifier.ES256);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
         assertThrows(InvalidFormatException.class,
-                () -> jsonMapper.readValue("{\"jwa_id\":\"ES521\"}", TestDTO.class)
+                () -> jsonMapper.readValue("{\"jwaId\":\"ES521\"}", TestDTO.class)
         );
     }
 
@@ -94,7 +93,6 @@ class JWAIdentifierTest {
     }
 
     static class TestDTO {
-        @JsonProperty("jwa_id")
         public JWAIdentifier jwaId;
     }
 }

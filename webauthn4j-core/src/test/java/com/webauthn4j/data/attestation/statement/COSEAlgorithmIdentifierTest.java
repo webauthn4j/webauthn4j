@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
@@ -143,7 +142,7 @@ class COSEAlgorithmIdentifierTest {
     @Test
     void deserialize_test() {
         // Given
-        String json = "{\"cose_alg_id\":-257}";
+        String json = "{\"coseAlgId\":-257}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
@@ -155,7 +154,7 @@ class COSEAlgorithmIdentifierTest {
     @Test
     void deserialize_test_with_non_predefined_value() {
         // Given
-        String json = "{\"cose_alg_id\":0}";
+        String json = "{\"coseAlgId\":0}";
 
         // When
         // Then
@@ -167,7 +166,7 @@ class COSEAlgorithmIdentifierTest {
     @Test
     void deserialize_test_with_empty_string_value() {
         // Given
-        String json = "{\"cose_alg_id\": \"\"}";
+        String json = "{\"coseAlgId\": \"\"}";
 
         // When
         // Then
@@ -179,7 +178,7 @@ class COSEAlgorithmIdentifierTest {
     @Test
     void deserialize_test_with_invalid_value() {
         // Given
-        String json = "{\"cose_alg_id\": \"invalid\"}";
+        String json = "{\"coseAlgId\": \"invalid\"}";
 
         // When
         // Then
@@ -191,7 +190,7 @@ class COSEAlgorithmIdentifierTest {
     @Test
     void deserialize_test_with_null() {
         // Given
-        String json = "{\"cose_alg_id\":null}";
+        String json = "{\"coseAlgId\":null}";
 
         // When
         TestDTO data = jsonMapper.readValue(json, TestDTO.class);
@@ -202,7 +201,6 @@ class COSEAlgorithmIdentifierTest {
 
     static class TestDTO {
         @SuppressWarnings("WeakerAccess")
-        @JsonProperty("cose_alg_id")
         public COSEAlgorithmIdentifier coseAlgId;
     }
 }
