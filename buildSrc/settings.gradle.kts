@@ -4,5 +4,3 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
-rootProject.name = "toolchain-pinning-plugin"
