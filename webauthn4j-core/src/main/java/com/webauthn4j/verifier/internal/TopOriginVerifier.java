@@ -114,6 +114,9 @@ public class TopOriginVerifier {
         this.forceBlockCrossOrigin = forceBlockCrossOrigin;
     }
 
+    /**
+     * @deprecated Deprecated along with {@link #setForceBlockCrossOrigin(boolean)}.
+     */
     @Deprecated
     public boolean isForceBlockCrossOrigin() {
         return forceBlockCrossOrigin;

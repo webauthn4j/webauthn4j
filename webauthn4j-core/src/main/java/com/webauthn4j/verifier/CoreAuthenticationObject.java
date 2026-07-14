@@ -105,7 +105,7 @@ public class CoreAuthenticationObject {
     }
 
     /**
-     * @deprecated Use {@link #getAuthenticationParameters()} instead.
+     * @deprecated Use {@code getAuthenticationParameters().getServerProperty()} instead.
      */
     @Deprecated
     public @NotNull CoreServerProperty getServerProperty() {

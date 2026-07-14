@@ -134,7 +134,7 @@ public class CoreRegistrationObject {
     }
 
     /**
-     * @deprecated Use {@link #getRegistrationParameters()} instead.
+     * @deprecated Use {@code getRegistrationParameters().getServerProperty()} instead.
      */
     @Deprecated
     public @NotNull CoreServerProperty getServerProperty() {

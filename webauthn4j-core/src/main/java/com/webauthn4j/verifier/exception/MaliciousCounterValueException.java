@@ -39,6 +39,9 @@ public class MaliciousCounterValueException extends VerificationException {
         this.presentedCounter = presentedCounter;
     }
 
+    /**
+     * @deprecated Use {@link #MaliciousCounterValueException(String, long, long, Throwable)} instead.
+     */
     @Deprecated
     public MaliciousCounterValueException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
@@ -46,6 +49,9 @@ public class MaliciousCounterValueException extends VerificationException {
         this.presentedCounter = 0;
     }
 
+    /**
+     * @deprecated Use {@link #MaliciousCounterValueException(String, long, long)} instead.
+     */
     @Deprecated
     public MaliciousCounterValueException(@Nullable String message) {
         super(message);
@@ -53,6 +59,9 @@ public class MaliciousCounterValueException extends VerificationException {
         this.presentedCounter = 0;
     }
 
+    /**
+     * @deprecated Use {@link #MaliciousCounterValueException(String, long, long, Throwable)} instead.
+     */
     @Deprecated
     public MaliciousCounterValueException(@Nullable Throwable cause) {
         super(cause);

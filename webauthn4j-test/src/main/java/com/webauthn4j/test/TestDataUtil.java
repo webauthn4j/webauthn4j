@@ -287,6 +287,9 @@ public class TestDataUtil {
         return new AttestationObject(authenticatorData, attestationStatementProvider.apply(signature));
     }
 
+    /**
+     * @deprecated Use {@link #createAttestationObject(byte[], COSEKey, Function)} instead.
+     */
     @Deprecated(forRemoval = true)
     public static AttestationObject createAttestationObject(byte[] clientDataHash, PrivateKey attestationPrivateKey, Function<byte[], AttestationStatement> attestationStatementProvider) {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
@@ -468,6 +471,9 @@ public class TestDataUtil {
         return createCredentialRecord(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
     }
 
+    /**
+     * @deprecated Use {@link #calculateSignature(COSEKey, byte[])} instead.
+     */
     @Deprecated
     public static byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {
         try {

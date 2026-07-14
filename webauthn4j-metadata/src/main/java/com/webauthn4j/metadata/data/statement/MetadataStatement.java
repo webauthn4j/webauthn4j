@@ -200,6 +200,9 @@ public class MetadataStatement {
         this.cxConfigURL = cxConfigURL;
     }
 
+    /**
+     * @deprecated Use the full constructor instead.
+     */
     @Deprecated
     public MetadataStatement(
             @Nullable String legalHeader,

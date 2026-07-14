@@ -55,6 +55,9 @@ public class BiometricAccuracyDescriptor {
         this.blockSlowdown = blockSlowdown;
     }
 
+    /**
+     * @deprecated Use the full constructor instead.
+     */
     @Deprecated
     public BiometricAccuracyDescriptor(
             @Nullable Double selfAttestedFAR,

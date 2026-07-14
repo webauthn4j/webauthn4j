@@ -31,6 +31,8 @@ import java.io.InputStream;
 
 /**
  * A utility class for JSON serialization/deserialization
+ *
+ * @deprecated Use {@link ObjectConverter#getJsonMapper()} directly instead.
  */
 @Deprecated
 public class JsonConverter {
@@ -45,6 +47,9 @@ public class JsonConverter {
         this.objectConverter = objectConverter;
     }
 
+    /**
+     * @deprecated Use {@link ObjectConverter#rebuildWithJSONModule(JacksonModule)} instead.
+     */
     @Deprecated
     public void registerModule(JacksonModule module){
         objectConverter.jsonMapper = objectConverter.getJsonMapper().rebuild()
