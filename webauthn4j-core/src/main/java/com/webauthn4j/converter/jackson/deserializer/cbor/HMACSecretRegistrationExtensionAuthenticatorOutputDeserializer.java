@@ -22,7 +22,7 @@ public class HMACSecretRegistrationExtensionAuthenticatorOutputDeserializer exte
 
     @Override
     public HMACSecretRegistrationExtensionAuthenticatorOutput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode value = node.get(HMACSecretRegistrationExtensionAuthenticatorOutput.KEY_HMAC_SECRET);
         if (value == null || value.isNull()) return null;
         if (!value.isBoolean()) return null;

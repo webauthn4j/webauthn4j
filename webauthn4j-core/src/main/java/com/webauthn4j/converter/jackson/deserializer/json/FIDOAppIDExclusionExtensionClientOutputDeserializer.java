@@ -22,7 +22,7 @@ public class FIDOAppIDExclusionExtensionClientOutputDeserializer extends Extensi
 
     @Override
     public FIDOAppIDExclusionExtensionClientOutput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode value = node.get(FIDOAppIDExclusionExtensionClientOutput.KEY_APPID_EXCLUDE);
         if (value == null || value.isNull()) return null;
         return new FIDOAppIDExclusionExtensionClientOutput(value.asBoolean());

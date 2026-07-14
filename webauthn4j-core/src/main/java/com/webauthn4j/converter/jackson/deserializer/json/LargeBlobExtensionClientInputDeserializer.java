@@ -39,7 +39,7 @@ public class LargeBlobExtensionClientInputDeserializer extends ExtensionClientIn
 
     @Override
     public LargeBlobExtensionClientInput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode largeBlobNode = node.get(LargeBlobExtensionClientInput.KEY_LARGE_BLOB);
         if (largeBlobNode == null || largeBlobNode.isNull() || !largeBlobNode.isObject()) return null;
         AuthenticationExtensionsLargeBlobInputs inputs = ctxt.readTreeAsValue(largeBlobNode, AuthenticationExtensionsLargeBlobInputs.class);

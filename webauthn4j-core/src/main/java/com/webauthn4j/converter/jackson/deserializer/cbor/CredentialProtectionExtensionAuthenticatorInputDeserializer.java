@@ -23,7 +23,7 @@ public class CredentialProtectionExtensionAuthenticatorInputDeserializer extends
 
     @Override
     public CredentialProtectionExtensionAuthenticatorInput deserialize(JsonParser p, DeserializationContext ctxt) {
-        ObjectNode node = (ObjectNode) p.readValueAsTree();
+        ObjectNode node = p.readValueAsTree();
         JsonNode value = node.get(CredentialProtectionExtensionAuthenticatorInput.KEY_CRED_PROTECT);
         if (value == null || value.isNull()) return null;
         CredentialProtectionPolicy policy = ctxt.readTreeAsValue(value, CredentialProtectionPolicy.class);
