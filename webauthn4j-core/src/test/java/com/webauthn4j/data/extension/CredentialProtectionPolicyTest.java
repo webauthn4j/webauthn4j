@@ -43,7 +43,7 @@ class CredentialProtectionPolicyTest {
     @Test
     void toString_toByte_test() {
         assertThat(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL.toByte()).isEqualTo((byte) 0x01);
-        assertThat(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL.toString()).hasToString("userVerificationOptional");
+        assertThat(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL).hasToString("userVerificationOptional");
     }
 
 }

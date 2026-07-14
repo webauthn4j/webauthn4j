@@ -45,8 +45,7 @@ class PublicKeyCredentialHintsTest {
     @Test
     void equals_hashCode_test(){
         assertThat(PublicKeyCredentialHints.create("unknown")).isEqualTo(PublicKeyCredentialHints.create("unknown"));
-        assertThat(PublicKeyCredentialHints.create("client-device")).isEqualTo(PublicKeyCredentialHints.CLIENT_DEVICE);
-        assertThat(PublicKeyCredentialHints.create("client-device")).hasSameHashCodeAs(PublicKeyCredentialHints.CLIENT_DEVICE);
+        assertThat(PublicKeyCredentialHints.create("client-device")).isEqualTo(PublicKeyCredentialHints.CLIENT_DEVICE).hasSameHashCodeAs(PublicKeyCredentialHints.CLIENT_DEVICE);
     }
 
     @Test

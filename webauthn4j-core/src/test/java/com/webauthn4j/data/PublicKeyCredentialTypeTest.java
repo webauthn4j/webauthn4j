@@ -60,8 +60,7 @@ class PublicKeyCredentialTypeTest {
     @Test
     void equals_hashCode_test(){
         assertThat(PublicKeyCredentialType.create("unknown")).isEqualTo(PublicKeyCredentialType.create("unknown"));
-        assertThat(PublicKeyCredentialType.create("public-key")).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
-        assertThat(PublicKeyCredentialType.create("public-key")).hasSameHashCodeAs(PublicKeyCredentialType.PUBLIC_KEY);
+        assertThat(PublicKeyCredentialType.create("public-key")).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY).hasSameHashCodeAs(PublicKeyCredentialType.PUBLIC_KEY);
     }
 
     @Test

@@ -156,8 +156,7 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
         builder.setUvm(true);
         builder.set("custom", "value");
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance = builder.build();
-        assertThat(instance.toString()).contains("uvm");
-        assertThat(instance.toString()).contains("custom");
+        assertThat(instance.toString()).contains("uvm", "custom");
     }
 
     @Test

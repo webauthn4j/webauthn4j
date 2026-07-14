@@ -227,8 +227,7 @@ class AuthenticationExtensionsClientInputsTest {
         builder.setAppid("dummyAppid");
         builder.set("custom", "value");
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> instance = builder.build();
-        assertThat(instance.toString()).contains("appid");
-        assertThat(instance.toString()).contains("custom");
+        assertThat(instance.toString()).contains("appid", "custom");
     }
 
     @Test

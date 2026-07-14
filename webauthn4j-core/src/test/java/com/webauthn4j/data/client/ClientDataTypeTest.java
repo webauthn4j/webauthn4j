@@ -60,8 +60,7 @@ class ClientDataTypeTest {
     @Test
     void equals_hashCode_test(){
         assertThat(ClientDataType.create("unknown")).isEqualTo(ClientDataType.create("unknown"));
-        assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
-        assertThat(ClientDataType.create("webauthn.create")).hasSameHashCodeAs(ClientDataType.WEBAUTHN_CREATE);
+        assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.WEBAUTHN_CREATE).hasSameHashCodeAs(ClientDataType.WEBAUTHN_CREATE);
     }
 
     @Test

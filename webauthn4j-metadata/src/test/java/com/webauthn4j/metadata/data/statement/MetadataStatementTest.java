@@ -67,8 +67,7 @@ class MetadataStatementTest {
         assertThat(metadataStatement.getTcDisplayPNGCharacteristics()).isNull();
         assertThat(metadataStatement.getAttestationRootCertificates()).hasSize(1);
         assertThat(metadataStatement.getEcdaaTrustAnchors()).isNull();
-        assertThat(metadataStatement.getFriendlyNames()).isNotNull();
-        assertThat(metadataStatement.getFriendlyNames()).containsEntry("en-US", "FIDO Sample Security Key");
+        assertThat(metadataStatement.getFriendlyNames()).isNotNull().containsEntry("en-US", "FIDO Sample Security Key");
         assertThat(metadataStatement.getIconDark()).isEqualTo("data:image/png;base64,darkicon");
         assertThat(metadataStatement.getProviderLogoLight()).isEqualTo("data:image/png;base64,lightlogo");
         assertThat(metadataStatement.getProviderLogoDark()).isEqualTo("data:image/png;base64,darklogo");

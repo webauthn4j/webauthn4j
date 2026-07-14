@@ -72,8 +72,7 @@ class AuthenticatorDataConverterTest {
             AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = target.convert(input);
 
             // Then
-            assertThat(result.getRpIdHash()).isNotNull();
-            assertThat(result.getRpIdHash()).hasSize(32);
+            assertThat(result.getRpIdHash()).isNotNull().hasSize(32);
             assertThat(result.getFlags()).isEqualTo(BIT_UP);
             assertThat(result.getSignCount()).isEqualTo(325);
             assertThat(result.getAttestedCredentialData()).isNull();
@@ -112,8 +111,7 @@ class AuthenticatorDataConverterTest {
             AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = target.convert(serialized);
 
             // Then
-            assertThat(result.getRpIdHash()).isNotNull();
-            assertThat(result.getRpIdHash()).hasSize(32);
+            assertThat(result.getRpIdHash()).isNotNull().hasSize(32);
             assertThat(result.getFlags()).isEqualTo(BIT_ED);
             assertThat(result.getSignCount()).isZero();
             assertThat(result.getAttestedCredentialData()).isNull();
