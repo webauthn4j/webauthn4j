@@ -30,6 +30,7 @@ import java.util.Arrays;
 
 public class DCRegistrationObject extends CoreRegistrationObject {
 
+    private static final String KEY_ID_NULL_CHECK_MESSAGE = "keyId must not be null";
     private final byte[] keyId;
 
     public DCRegistrationObject(
@@ -41,7 +42,7 @@ public class DCRegistrationObject extends CoreRegistrationObject {
             @NotNull Instant timestamp) {
         super(attestationObject, attestationObjectBytes, clientDataHash, dcAttestationParameters, timestamp);
 
-        AssertUtil.notNull(keyId, "keyId must not be null");
+        AssertUtil.notNull(keyId, KEY_ID_NULL_CHECK_MESSAGE);
 
         this.keyId = ArrayUtil.clone(keyId);
     }
@@ -68,7 +69,7 @@ public class DCRegistrationObject extends CoreRegistrationObject {
             @NotNull Instant timestamp) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, timestamp);
 
-        AssertUtil.notNull(keyId, "keyId must not be null");
+        AssertUtil.notNull(keyId, KEY_ID_NULL_CHECK_MESSAGE);
 
         this.keyId = ArrayUtil.clone(keyId);
     }
@@ -85,7 +86,7 @@ public class DCRegistrationObject extends CoreRegistrationObject {
             @NotNull CoreServerProperty serverProperty) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty);
 
-        AssertUtil.notNull(keyId, "keyId must not be null");
+        AssertUtil.notNull(keyId, KEY_ID_NULL_CHECK_MESSAGE);
 
         this.keyId = ArrayUtil.clone(keyId);
     }

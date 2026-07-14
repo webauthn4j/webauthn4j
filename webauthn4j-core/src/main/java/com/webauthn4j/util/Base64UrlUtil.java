@@ -25,6 +25,7 @@ import java.util.Base64;
  */
 public class Base64UrlUtil {
 
+    private static final String SOURCE_NULL_CHECK_MESSAGE = "source must not be null";
     private static final java.util.Base64.Decoder decoder = Base64.getUrlDecoder();
     private static final java.util.Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
 
@@ -32,22 +33,22 @@ public class Base64UrlUtil {
     }
 
     public static @NotNull byte[] decode(@NotNull String source) {
-        AssertUtil.notNull(source, "source must not be null");
+        AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
         return decoder.decode(source);
     }
 
     public static @NotNull byte[] decode(@NotNull byte[] source) {
-        AssertUtil.notNull(source, "source must not be null");
+        AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
         return decoder.decode(source);
     }
 
     public static @NotNull byte[] encode(@NotNull byte[] source) {
-        AssertUtil.notNull(source, "source must not be null");
+        AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
         return encoder.encode(source);
     }
 
     public static @NotNull String encodeToString(@NotNull byte[] source) {
-        AssertUtil.notNull(source, "source must not be null");
+        AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
         return encoder.encodeToString(source);
     }
 }
