@@ -96,7 +96,7 @@ public class MetadataCodecFallbackRegistrar {
         return false;
     }
 
-    private static void addCollectionSerializer(SimpleModule.SetupContext context,
+    private static void addCollectionSerializer(JacksonModule.SetupContext context,
             Class<?> collectionType, Class<?> elementType, ValueSerializer<?> serializer) {
         context.addSerializers(new Serializers.Base() {
             @Override
@@ -114,7 +114,7 @@ public class MetadataCodecFallbackRegistrar {
         });
     }
 
-    private static void addCollectionDeserializer(SimpleModule.SetupContext context,
+    private static void addCollectionDeserializer(JacksonModule.SetupContext context,
             Class<?> collectionType, Class<?> elementType, ValueDeserializer<?> deserializer) {
         context.addDeserializers(new Deserializers.Base() {
             @Override
