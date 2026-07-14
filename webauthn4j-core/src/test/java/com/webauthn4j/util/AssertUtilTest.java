@@ -23,66 +23,61 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AssertUtilTest {
 
     @Test
     void notNull_test() {
         Object object = new Object();
-        AssertUtil.notNull(object, "message");
+        assertThatCode(() -> AssertUtil.notNull(object, "message")).doesNotThrowAnyException();
     }
 
     @Test
     void notNull_test_with_null() {
-        Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> AssertUtil.notNull(null, "message")
-        );
-        assertThat(t).hasMessage("message");
+        assertThatThrownBy(() -> AssertUtil.notNull(null, "message"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("message");
     }
 
     @Test
     void notEmpty_test_with_list() {
-        AssertUtil.notEmpty(Collections.singletonList(new Object()), "message");
+        assertThatCode(() -> AssertUtil.notEmpty(Collections.singletonList(new Object()), "message")).doesNotThrowAnyException();
     }
 
     @Test
     void notEmpty_test_with_array() {
-        AssertUtil.notEmpty(Arrays.array(new Object()), "message");
+        assertThatCode(() -> AssertUtil.notEmpty(Arrays.array(new Object()), "message")).doesNotThrowAnyException();
     }
 
     @Test
     void notEmpty_test_with_null_as_set() {
-        Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> AssertUtil.notEmpty((Set<?>) null, "message")
-        );
-        assertThat(t).hasMessage("message");
+        assertThatThrownBy(() -> AssertUtil.notEmpty((Set<?>) null, "message"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("message");
     }
 
     @Test
     void notEmpty_test_with_null_as_array() {
-        Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> AssertUtil.notEmpty((Object[]) null, "message")
-        );
-        assertThat(t).hasMessage("message");
+        assertThatThrownBy(() -> AssertUtil.notEmpty((Object[]) null, "message"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("message");
     }
 
     @Test
     void notEmpty_test_with_empty_set() {
-        Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> AssertUtil.notEmpty(new HashSet<>(), "message")
-        );
-        assertThat(t).hasMessage("message");
+        assertThatThrownBy(() -> AssertUtil.notEmpty(new HashSet<>(), "message"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("message");
     }
 
     @Test
     void notEmpty_test_with_empty_array() {
         Object[] value = new Object[0];
-        Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> AssertUtil.notEmpty(value, "message")
-        );
-        assertThat(t).hasMessage("message");
+        assertThatThrownBy(() -> AssertUtil.notEmpty(value, "message"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("message");
     }
 
 }

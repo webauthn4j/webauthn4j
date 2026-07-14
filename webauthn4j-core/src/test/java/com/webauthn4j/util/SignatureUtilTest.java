@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SuppressWarnings("ConstantConditions")
 class SignatureUtilTest {
@@ -40,25 +40,23 @@ class SignatureUtilTest {
         @Deprecated
         @Test
         void createSignature_test() {
-            SignatureUtil.createSignature("SHA256withRSA");
+            assertThat(SignatureUtil.createSignature("SHA256withRSA").getAlgorithm()).isEqualTo("SHA256withRSA");
         }
 
         @Deprecated
         @Test
         void createSignature_test_with_null() {
-            Throwable t = assertThrows(IllegalArgumentException.class,
-                    () -> SignatureUtil.createSignature((String) null)
-            );
-            assertThat(t).hasMessage("algorithm is required; it must not be null");
+            assertThatThrownBy(() -> SignatureUtil.createSignature((String) null))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("algorithm is required; it must not be null");
         }
 
         @Deprecated
         @Test
         void createSignature_test_with_illegal_argument() {
-            Throwable t = assertThrows(IllegalArgumentException.class,
-                    () -> SignatureUtil.createSignature("dummyAlg")
-            );
-            assertThat(t).hasMessageContaining("dummyAlg Signature not available");
+            assertThatThrownBy(() -> SignatureUtil.createSignature("dummyAlg"))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("dummyAlg Signature not available");
         }
 
     }
