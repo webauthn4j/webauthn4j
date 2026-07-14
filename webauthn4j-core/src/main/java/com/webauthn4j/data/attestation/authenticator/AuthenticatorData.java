@@ -191,7 +191,7 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> {
                 ')';
     }
 
-    private void assertRpIdHash(@Nullable @NotNull byte[] rpIdHash) {
+    private void assertRpIdHash(@NotNull byte[] rpIdHash) {
         AssertUtil.notNull(rpIdHash, "rpIdHash must not be null");
     }
 }
