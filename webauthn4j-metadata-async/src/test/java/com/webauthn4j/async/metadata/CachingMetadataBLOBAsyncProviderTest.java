@@ -28,9 +28,9 @@ class CachingMetadataBLOBAsyncProviderTest {
         LocalDate firstTrialDay = LocalDate.of(2020, 1, 1);
         LocalDate secondTrialDay = LocalDate.of(2020, 1, 3);
         try(MockedStatic<LocalDate> mock = Mockito.mockStatic(LocalDate.class)){
-            mock.when(LocalDate::now).thenReturn(firstTrialDay);
+            mock.when(() -> LocalDate.now(java.time.ZoneOffset.UTC)).thenReturn(firstTrialDay);
             target.provide().toCompletableFuture().get();
-            mock.when(LocalDate::now).thenReturn(secondTrialDay);
+            mock.when(() -> LocalDate.now(java.time.ZoneOffset.UTC)).thenReturn(secondTrialDay);
             target.provide().toCompletableFuture().get();
             verify(target, times(2)).doProvide();
         }
@@ -44,9 +44,9 @@ class CachingMetadataBLOBAsyncProviderTest {
         LocalDate firstTrialDay = LocalDate.of(2020, 1, 1);
         LocalDate secondTrialDay = LocalDate.of(2020, 1, 2);
         try(MockedStatic<LocalDate> mock = Mockito.mockStatic(LocalDate.class)){
-            mock.when(LocalDate::now).thenReturn(firstTrialDay);
+            mock.when(() -> LocalDate.now(java.time.ZoneOffset.UTC)).thenReturn(firstTrialDay);
             target.provide();
-            mock.when(LocalDate::now).thenReturn(secondTrialDay);
+            mock.when(() -> LocalDate.now(java.time.ZoneOffset.UTC)).thenReturn(secondTrialDay);
             target.provide();
             verify(target, times(2)).doProvide();
         }
@@ -60,9 +60,9 @@ class CachingMetadataBLOBAsyncProviderTest {
         LocalDate firstTrialDay = LocalDate.of(2020, 1, 1);
         LocalDate secondTrialDay = LocalDate.of(2020, 1, 2);
         try(MockedStatic<LocalDate> mock = Mockito.mockStatic(LocalDate.class)){
-            mock.when(LocalDate::now).thenReturn(firstTrialDay);
+            mock.when(() -> LocalDate.now(java.time.ZoneOffset.UTC)).thenReturn(firstTrialDay);
             target.provide();
-            mock.when(LocalDate::now).thenReturn(secondTrialDay);
+            mock.when(() -> LocalDate.now(java.time.ZoneOffset.UTC)).thenReturn(secondTrialDay);
             target.provide();
             verify(target, times(1)).doProvide();
         }
