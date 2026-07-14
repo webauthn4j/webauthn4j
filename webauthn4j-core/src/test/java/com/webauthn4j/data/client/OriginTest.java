@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for Origin
  */
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "java:S117"})
 class OriginTest {
 
     private final JsonMapper jsonMapper = new ObjectConverter().getJsonMapper();

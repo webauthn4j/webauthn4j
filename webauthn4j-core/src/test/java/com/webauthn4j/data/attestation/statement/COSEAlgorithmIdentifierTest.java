@@ -148,7 +148,7 @@ class COSEAlgorithmIdentifierTest {
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.cose_alg_id).isEqualTo(COSEAlgorithmIdentifier.RS256);
+        assertThat(dto.coseAlgId).isEqualTo(COSEAlgorithmIdentifier.RS256);
     }
 
     @Test
@@ -196,11 +196,12 @@ class COSEAlgorithmIdentifierTest {
         TestDTO data = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(data.cose_alg_id).isNull();
+        assertThat(data.coseAlgId).isNull();
     }
 
     static class TestDTO {
         @SuppressWarnings("WeakerAccess")
-        public COSEAlgorithmIdentifier cose_alg_id;
+        @com.fasterxml.jackson.annotation.JsonProperty("cose_alg_id")
+        public COSEAlgorithmIdentifier coseAlgId;
     }
 }

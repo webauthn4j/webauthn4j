@@ -82,7 +82,7 @@ class TPMEccCurveTest {
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpm_ecc_curve).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256);
+        assertThat(dto.tpmEccCurve).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256);
     }
 
     @Test
@@ -112,6 +112,7 @@ class TPMEccCurveTest {
     }
 
     static class TestDTO {
-        public TPMEccCurve tpm_ecc_curve;
+        @com.fasterxml.jackson.annotation.JsonProperty("tpm_ecc_curve")
+        public TPMEccCurve tpmEccCurve;
     }
 }

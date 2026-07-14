@@ -65,7 +65,7 @@ class TPMISTAttestTest {
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpmi_st_attest).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY);
+        assertThat(dto.tpmiStAttest).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY);
     }
 
     @Test
@@ -82,6 +82,7 @@ class TPMISTAttestTest {
     }
 
     static class TestDTO {
-        public TPMISTAttest tpmi_st_attest;
+        @com.fasterxml.jackson.annotation.JsonProperty("tpmi_st_attest")
+        public TPMISTAttest tpmiStAttest;
     }
 }

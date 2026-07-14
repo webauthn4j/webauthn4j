@@ -60,7 +60,7 @@ class TPMIAlgPublicTest {
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpmi_alg_pub).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA);
+        assertThat(dto.tpmiAlgPub).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA);
     }
 
     @Test
@@ -76,6 +76,7 @@ class TPMIAlgPublicTest {
     }
 
     static class TestDTO {
-        public TPMIAlgPublic tpmi_alg_pub;
+        @com.fasterxml.jackson.annotation.JsonProperty("tpmi_alg_pub")
+        public TPMIAlgPublic tpmiAlgPub;
     }
 }

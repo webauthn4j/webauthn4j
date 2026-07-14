@@ -52,7 +52,7 @@ class TPMGeneratedTest {
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpm_generated).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE);
+        assertThat(dto.tpmGenerated).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE);
     }
 
     @Test
@@ -69,6 +69,7 @@ class TPMGeneratedTest {
     }
 
     static class TestDTO {
-        public TPMGenerated tpm_generated;
+        @com.fasterxml.jackson.annotation.JsonProperty("tpm_generated")
+        public TPMGenerated tpmGenerated;
     }
 }
