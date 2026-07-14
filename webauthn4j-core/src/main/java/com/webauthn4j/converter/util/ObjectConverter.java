@@ -62,7 +62,7 @@ public class ObjectConverter {
                         .withValueInclusion(JsonInclude.Include.NON_NULL)
                 );
         boolean alreadyRegistered = jsonMapper.registeredModules().stream()
-                .anyMatch(m -> m instanceof WebAuthnJSONModule);
+                .anyMatch(WebAuthnJSONModule.class::isInstance);
         if (!alreadyRegistered) {
             builder.addModule(new WebAuthnJSONModule(objectConverter));
         }
@@ -79,7 +79,7 @@ public class ObjectConverter {
                         .withValueInclusion(JsonInclude.Include.NON_NULL)
                 );
         boolean alreadyRegistered = cborMapper.registeredModules().stream()
-                .anyMatch(m -> m instanceof WebAuthnCBORModule);
+                .anyMatch(WebAuthnCBORModule.class::isInstance);
         if (!alreadyRegistered) {
             builder.addModule(new WebAuthnCBORModule(objectConverter));
         }
