@@ -15,9 +15,9 @@
  */
 
 plugins {
+    id("webauthn4j.java-conventions")
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
-    id("java")
 }
 
 description = "WebAuthn4J Integration Test for Spring Security Passkey"

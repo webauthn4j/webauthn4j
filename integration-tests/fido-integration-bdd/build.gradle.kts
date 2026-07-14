@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
+    id("webauthn4j.java-conventions")
     alias(libs.plugins.kotlin.jvm)
 }
 

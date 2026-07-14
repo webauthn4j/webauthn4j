@@ -1,17 +1,8 @@
-import com.webauthn4j.gradle.BuildUtils
 import com.webauthn4j.gradle.VersionUtils
 import org.asciidoctor.gradle.jvm.AsciidoctorTask
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import java.net.URI
-import org.gradle.external.javadoc.StandardJavadocDocletOptions
 import java.nio.charset.StandardCharsets
 
 plugins {
-    id("java-library")
-    id("signing")
-    id("maven-publish")
-    id("jacoco")
-
     id("net.sharplab.maven-central-publish")
     id(libs.plugins.asciidoctor.get().pluginId) version libs.versions.asciidoctor
     id(libs.plugins.sonarqube.get().pluginId) version libs.versions.sonarqube
@@ -21,149 +12,11 @@ private val webAuthn4JVersion: String by project
 private val isSnapshot: Boolean = (findProperty("isSnapshot") as? String)?.toBoolean() ?: true
 private val effectiveVersion = VersionUtils.getEffectiveVersion(isSnapshot, webAuthn4JVersion)
 
-allprojects {
-    group = "com.webauthn4j"
-    version = effectiveVersion
+group = "com.webauthn4j"
+version = effectiveVersion
 
-    repositories {
-        mavenCentral()
-    }
-}
-
-subprojects {
-    apply(plugin = "java-library")
-    apply(plugin = "jacoco")
-
-    java {
-        // Use sourceCompatibility/targetCompatibility instead of options.release so that
-        // APIs introduced after JDK 17 (e.g. ML-DSA in JDK 24) remain accessible at compile
-        // time. --release would restrict the API surface to JDK 17. Users who call those newer
-        // APIs must run on a JDK that provides them.
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-
-        withSourcesJar()
-        withJavadocJar()
-    }
-
-    tasks.withType<JavaCompile>().configureEach {
-        options.compilerArgs.add("-Xlint:-module") // Suppress 'module not found' warning regarding 'exports to' directive on multi-module projects.
-        options.compilerArgs.add("-Werror") // Treat all warnings as errors
-    }
-
-    // Ensure reproducible builds: deterministic file order and fixed timestamps in archives.
-    // This is the default since Gradle 9.0, but stated explicitly for clarity and to prevent
-    // accidental regression if defaults change.
-    tasks.withType<AbstractArchiveTask>().configureEach {
-        isReproducibleFileOrder = true
-        isPreserveFileTimestamps = false
-    }
-
-    tasks.test {
-        useJUnitPlatform()
-        testLogging {
-            events("passed", "skipped", "failed") //, "standardOut", "standardError"
-            showExceptions = true
-            exceptionFormat = TestExceptionFormat.FULL
-            showCauses = true
-            showStackTraces = true
-
-            showStandardStreams = false
-        }
-    }
-
-    tasks.javadoc{
-        (options as StandardJavadocDocletOptions).apply {
-            charset("UTF-8")
-            encoding("UTF-8")
-            addStringOption("Xdoclint:all,-missing", "-quiet")
-        }
-    }
-
-    tasks.jacocoTestReport {
-        reports {
-            xml.required = true
-        }
-    }
-
-}
-
-configure(subprojects.filter { it.name.startsWith("webauthn4j-") }) {
-    apply(plugin = "signing")
-    apply(plugin = "maven-publish")
-
-    val githubUrl = "https://github.com/webauthn4j/webauthn4j"
-    val mavenCentralUser = BuildUtils.getVariable(project, "MAVEN_CENTRAL_USER", "mavenCentralUser")
-    val mavenCentralPassword = BuildUtils.getVariable(project, "MAVEN_CENTRAL_PASSWORD", "mavenCentralPassword")
-    val pgpSigningKey = BuildUtils.getVariable(project, "PGP_SIGNING_KEY", "pgpSigningKey")
-    val pgpSigningKeyPassphrase = BuildUtils.getVariable(project, "PGP_SIGNING_KEY_PASSPHRASE", "pgpSigningKeyPassphrase")
-
-    publishing {
-        publications{
-            create<MavenPublication>("standard") {
-                from(components["java"])
-
-                // "Resolved versions" strategy is used to define dependency version because WebAuthn4J use dependencyManagement (BOM) feature
-                // to define its dependency versions. Without "Resolved versions" strategy, version will not be exposed
-                // to dependencies.dependency.version in POM file, and it cause warning in the library consumer environment.
-                versionMapping {
-                    usage("java-api") {
-                        fromResolutionOf("runtimeClasspath")
-                    }
-                    usage("java-runtime") {
-                        fromResolutionResult()
-                    }
-                }
-
-                pom {
-                    name = project.name
-                    description.set(provider { project.description }) // use provider for lazy initialization
-                    url = githubUrl
-                    licenses {
-                        license {
-                            name = "The Apache Software License, Version 2.0"
-                            url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
-                            distribution = "repo"
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = "ynojima"
-                            name = "Yoshikazu Nojima"
-                            email = "mail@ynojima.net"
-                        }
-                    }
-                    scm {
-                        url = githubUrl
-                    }
-                }
-            }
-        }
-
-        repositories {
-            maven {
-                name = "snapshot"
-                url = URI("https://central.sonatype.com/repository/maven-snapshots/")
-                credentials {
-                    username = mavenCentralUser
-                    password = mavenCentralPassword
-                }
-            }
-        }
-
-        signing {
-            useInMemoryPgpKeys(pgpSigningKey, pgpSigningKeyPassphrase)
-            sign(publishing.publications["standard"])
-        }
-
-        tasks.withType(Sign::class.java).configureEach {
-            onlyIf { pgpSigningKey != null && pgpSigningKeyPassphrase != null }
-        }
-        tasks.named("publishStandardPublicationToSnapshotRepository") {
-            onlyIf { isSnapshot }
-        }
-
-    }
+repositories {
+    mavenCentral()
 }
 
 tasks.register("bumpPatchVersion"){

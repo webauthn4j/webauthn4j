@@ -1,5 +1,5 @@
 plugins {
-    id("java")
+    id("webauthn4j.java-conventions")
     alias(libs.plugins.quarkus)
 }
 

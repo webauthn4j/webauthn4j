@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+plugins {
+    id("webauthn4j.java-library-conventions")
+}
+
 description = "WebAuthn4J Async library"
 
 
