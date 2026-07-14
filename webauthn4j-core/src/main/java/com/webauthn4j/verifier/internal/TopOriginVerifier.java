@@ -115,7 +115,7 @@ public class TopOriginVerifier {
     }
 
     /**
-     * @deprecated Use {@link ServerProperty.Builder#anyTopOrigin()} or {@link ServerProperty.Builder#topOriginPredicate(OriginPredicate)} instead.
+     * @deprecated Deprecated along with {@link #setForceBlockCrossOrigin(boolean)}.
      */
     @Deprecated
     public boolean isForceBlockCrossOrigin() {
