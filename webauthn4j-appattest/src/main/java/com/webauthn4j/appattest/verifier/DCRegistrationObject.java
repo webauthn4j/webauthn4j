@@ -17,7 +17,6 @@
 package com.webauthn4j.appattest.verifier;
 
 import com.webauthn4j.appattest.data.DCAttestationParameters;
-import com.webauthn4j.data.CoreRegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;

@@ -17,14 +17,12 @@
 package com.webauthn4j.verifier.exception;
 
 import com.webauthn4j.test.TestAttestationUtil;
-import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.mock;
 
 class CertificateExceptionTest {
 
