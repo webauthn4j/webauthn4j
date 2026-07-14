@@ -1,8 +1,30 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <verification-metadata xmlns="https://schema.gradle.org/dependency-verification" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://schema.gradle.org/dependency-verification https://schema.gradle.org/dependency-verification/dependency-verification-1.3.xsd">
+   <!--
+      Dependency verification policy:
+
+      PGP signature verification is used to detect supply-chain attacks where a
+      dependency's signing key changes. The trusted-keys section records the PGP
+      keys in use as of initial setup; if a key changes (rotation or compromise),
+      the build fails, prompting manual review.
+
+      SHA-256 checksum verification is intentionally not used. Checksums must be
+      updated on every dependency version bump, which is impractical with
+      Dependabot-driven automated updates.
+
+      Artifacts obtained via Gradle Plugin Portal may lack PGP signatures because
+      the Portal does not enforce signing. Rather than maintaining checksums for
+      these artifacts, they are excluded from verification entirely via
+      trusted-artifacts. Partial PGP coverage is still a meaningful improvement
+      over no verification at all.
+
+      The keyring is shipped in armored (ASCII) format so that its contents are
+      human-readable and reviewable in pull request diffs.
+   -->
    <configuration>
       <verify-metadata>true</verify-metadata>
       <verify-signatures>true</verify-signatures>
+      <keyring-format>armored</keyring-format>
       <trusted-artifacts>
          <!-- POM and Gradle module metadata files contain no executable code; trusting them avoids
               checksum maintenance when dependencies are updated, while JARs remain PGP-verified -->
