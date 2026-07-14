@@ -134,6 +134,7 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
      * @return the credential record
      * @throws IllegalStateException if the internal authenticator is not an instance of {@link CredentialRecord}
      */
+    @Override
     public @NotNull CredentialRecord getCredentialRecord() {
         return (CredentialRecord) super.getCredentialRecord();
     }
