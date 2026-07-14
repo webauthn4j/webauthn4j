@@ -51,6 +51,7 @@ public class ServerProperty extends CoreServerProperty {
     }
 
     public static class Builder {
+        private static final String VALUE_NULL_CHECK_MESSAGE = "value must not be null";
         private OriginPredicate originPredicate;
         private String rpId;
         private Challenge challenge;
@@ -66,7 +67,7 @@ public class ServerProperty extends CoreServerProperty {
          * @return the builder instance for method chaining
          */
         public Builder origin(@NotNull Origin value) {
-            AssertUtil.notNull(value, "value must not be null");
+            AssertUtil.notNull(value, VALUE_NULL_CHECK_MESSAGE);
             this.originPredicate = new SimpleOriginPredicate(value);
             return this;
         }
@@ -79,7 +80,7 @@ public class ServerProperty extends CoreServerProperty {
          * @return the builder instance for method chaining
          */
         public Builder origins(@NotNull Set<Origin> value) {
-            AssertUtil.notNull(value, "value must not be null");
+            AssertUtil.notNull(value, VALUE_NULL_CHECK_MESSAGE);
             AssertUtil.notEmpty(value, "value must not be empty");
             this.originPredicate = new SimpleOriginPredicate(value);
             return this;
@@ -94,7 +95,7 @@ public class ServerProperty extends CoreServerProperty {
          * @return the builder instance for method chaining
          */
         public Builder originPredicate(@NotNull OriginPredicate value) {
-            AssertUtil.notNull(value, "value must not be null");
+            AssertUtil.notNull(value, VALUE_NULL_CHECK_MESSAGE);
             this.originPredicate = value;
             return this;
         }
