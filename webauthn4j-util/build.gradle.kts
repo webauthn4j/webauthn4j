@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-apply(plugin = "java")
+plugins {
+    id("webauthn4j.java-library-conventions")
+}
 
-description = "Deprecated package. All classes are moved to webauthnrj-core"
+description = "Deprecated package. All classes are moved to webauthn4j-core"
 
 sonarqube {
     isSkipProject = true

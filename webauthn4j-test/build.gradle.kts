@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+plugins {
+    id("webauthn4j.java-library-conventions")
+}
+
 description = "Package that contains testing classes for WebAuthn4J"
 
 dependencies {

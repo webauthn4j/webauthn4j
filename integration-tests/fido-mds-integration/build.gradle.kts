@@ -1,3 +1,7 @@
+plugins {
+    id("webauthn4j.java-conventions")
+}
+
 description = "WebAuthn4J FIDO MDS Integration Tests"
 
 dependencies {
