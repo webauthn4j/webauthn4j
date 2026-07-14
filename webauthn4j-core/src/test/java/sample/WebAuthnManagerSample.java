@@ -25,8 +25,6 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.verifier.exception.VerificationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -34,7 +32,6 @@ import java.util.List;
 public class WebAuthnManagerSample {
 
     private final WebAuthnManager webAuthnManager;
-    private Logger logger = LoggerFactory.getLogger(WebAuthnManagerSample.class);
 
     public WebAuthnManagerSample() {
         // WebAuthnManager.createNonStrictWebAuthnManager() returns a WebAuthnManager instance

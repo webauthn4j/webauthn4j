@@ -29,8 +29,6 @@ import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier;
 import com.webauthn4j.verifier.exception.VerificationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +42,6 @@ import java.util.Set;
 public class DeviceCheckManagerSample {
 
     private final DeviceCheckManager deviceCheckManager;
-    private Logger logger = LoggerFactory.getLogger(DeviceCheckManagerSample.class);
 
     public DeviceCheckManagerSample() {
         TrustAnchorRepository trustAnchorRepository = getAppleAppAttestCertFileTrustAnchorsRepository();
