@@ -27,6 +27,6 @@ class UUIDUtilTest {
     @Test
     void fromString_test() {
         UUID uuid = UUIDUtil.fromString("015bdc7e-ee2c-4344-831d-b419abc928cd");
-        assertThat(uuid.toString()).isEqualTo("015bdc7e-ee2c-4344-831d-b419abc928cd");
+        assertThat(uuid).hasToString("015bdc7e-ee2c-4344-831d-b419abc928cd");
     }
 }

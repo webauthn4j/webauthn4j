@@ -124,29 +124,30 @@ class AuthenticatorGetInfoTest {
         AuthenticatorGetInfo.Options options = jsonMapper.readValue(ALL_OPTIONS_JSON, AuthenticatorGetInfo.Options.class);
         String json = jsonMapper.writeValueAsString(options);
 
-        assertThat(json).contains("\"plat\":false");
-        assertThat(json).contains("\"rk\":true");
-        assertThat(json).contains("\"clientPin\":true");
-        assertThat(json).contains("\"up\":true");
-        assertThat(json).contains("\"uv\":true");
-        assertThat(json).contains("\"pinUvAuthToken\":true");
-        assertThat(json).contains("\"noMcGaPermissionsWithClientPin\":true");
-        assertThat(json).contains("\"largeBlobs\":true");
-        assertThat(json).contains("\"ep\":true");
-        assertThat(json).contains("\"bioEnroll\":true");
-        assertThat(json).contains("\"userVerificationMgmtPreview\":true");
-        assertThat(json).contains("\"uvBioEnroll\":true");
-        assertThat(json).contains("\"authnrCfg\":true");
-        assertThat(json).contains("\"uvAcfg\":true");
-        assertThat(json).contains("\"credMgmt\":true");
-        assertThat(json).contains("\"perCredMgmtRO\":true");
-        assertThat(json).contains("\"credentialMgmtPreview\":true");
-        assertThat(json).contains("\"setMinPINLength\":true");
-        assertThat(json).contains("\"makeCredUvNotRqd\":true");
-        assertThat(json).contains("\"alwaysUv\":true");
-        assertThat(json).doesNotContain("\"value\"");
-        assertThat(json).doesNotContain("\"uvToken\"");
-        assertThat(json).doesNotContain("\"config\"");
+        assertThat(json)
+                .contains("\"plat\":false")
+                .contains("\"rk\":true")
+                .contains("\"clientPin\":true")
+                .contains("\"up\":true")
+                .contains("\"uv\":true")
+                .contains("\"pinUvAuthToken\":true")
+                .contains("\"noMcGaPermissionsWithClientPin\":true")
+                .contains("\"largeBlobs\":true")
+                .contains("\"ep\":true")
+                .contains("\"bioEnroll\":true")
+                .contains("\"userVerificationMgmtPreview\":true")
+                .contains("\"uvBioEnroll\":true")
+                .contains("\"authnrCfg\":true")
+                .contains("\"uvAcfg\":true")
+                .contains("\"credMgmt\":true")
+                .contains("\"perCredMgmtRO\":true")
+                .contains("\"credentialMgmtPreview\":true")
+                .contains("\"setMinPINLength\":true")
+                .contains("\"makeCredUvNotRqd\":true")
+                .contains("\"alwaysUv\":true")
+                .doesNotContain("\"value\"")
+                .doesNotContain("\"uvToken\"")
+                .doesNotContain("\"config\"");
     }
 
     // ==================== Options round-trip ====================
@@ -164,10 +165,11 @@ class AuthenticatorGetInfoTest {
         String oldJson = "{\"plat\": false, \"rk\": true, \"uvToken\": true, \"config\": false}";
         AuthenticatorGetInfo.Options deserialized = jsonMapper.readValue(oldJson, AuthenticatorGetInfo.Options.class);
         String reserialized = jsonMapper.writeValueAsString(deserialized);
-        assertThat(reserialized).contains("\"pinUvAuthToken\":true");
-        assertThat(reserialized).contains("\"authnrCfg\":false");
-        assertThat(reserialized).doesNotContain("\"uvToken\"");
-        assertThat(reserialized).doesNotContain("\"config\"");
+        assertThat(reserialized)
+                .contains("\"pinUvAuthToken\":true")
+                .contains("\"authnrCfg\":false")
+                .doesNotContain("\"uvToken\"")
+                .doesNotContain("\"config\"");
 
         AuthenticatorGetInfo.Options roundTripped = jsonMapper.readValue(reserialized, AuthenticatorGetInfo.Options.class);
         assertThat(roundTripped).isEqualTo(deserialized);
@@ -275,10 +277,10 @@ class AuthenticatorGetInfoTest {
         AuthenticatorGetInfo.Options.UVTokenOption a = new AuthenticatorGetInfo.Options.UVTokenOption(true);
         AuthenticatorGetInfo.Options.UVTokenOption b = new AuthenticatorGetInfo.Options.UVTokenOption(true);
         AuthenticatorGetInfo.Options.UVTokenOption c = new AuthenticatorGetInfo.Options.UVTokenOption(false);
-        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b);
-        assertThat(a).isNotEqualTo(c);
-        assertThat(a).isNotEqualTo(null);
-        assertThat(a).isNotEqualTo("string");
+        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b)
+                .isNotEqualTo(c)
+                .isNotEqualTo(null)
+                .isNotEqualTo("string");
     }
 
     @SuppressWarnings("deprecation")
@@ -287,10 +289,10 @@ class AuthenticatorGetInfoTest {
         AuthenticatorGetInfo.Options.ConfigOption a = new AuthenticatorGetInfo.Options.ConfigOption(true);
         AuthenticatorGetInfo.Options.ConfigOption b = new AuthenticatorGetInfo.Options.ConfigOption(true);
         AuthenticatorGetInfo.Options.ConfigOption c = new AuthenticatorGetInfo.Options.ConfigOption(false);
-        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b);
-        assertThat(a).isNotEqualTo(c);
-        assertThat(a).isNotEqualTo(null);
-        assertThat(a).isNotEqualTo("string");
+        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b)
+                .isNotEqualTo(c)
+                .isNotEqualTo(null)
+                .isNotEqualTo("string");
     }
 
     // ==================== Options equals / hashCode ====================
@@ -299,10 +301,10 @@ class AuthenticatorGetInfoTest {
     void options_equals_and_hashCode_test() {
         AuthenticatorGetInfo.Options a = jsonMapper.readValue(ALL_OPTIONS_JSON, AuthenticatorGetInfo.Options.class);
         AuthenticatorGetInfo.Options b = jsonMapper.readValue(ALL_OPTIONS_JSON, AuthenticatorGetInfo.Options.class);
-        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b);
-        assertThat(a).isEqualTo(a);
-        assertThat(a).isNotEqualTo(null);
-        assertThat(a).isNotEqualTo("string");
+        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b)
+                .isEqualTo(a)
+                .isNotEqualTo(null)
+                .isNotEqualTo("string");
 
         AuthenticatorGetInfo.Options empty = jsonMapper.readValue("{}", AuthenticatorGetInfo.Options.class);
         assertThat(a).isNotEqualTo(empty);
@@ -313,10 +315,10 @@ class AuthenticatorGetInfoTest {
         AuthenticatorGetInfo.Options.PinUvAuthTokenOption a = new AuthenticatorGetInfo.Options.PinUvAuthTokenOption(true);
         AuthenticatorGetInfo.Options.PinUvAuthTokenOption b = new AuthenticatorGetInfo.Options.PinUvAuthTokenOption(true);
         AuthenticatorGetInfo.Options.PinUvAuthTokenOption c = new AuthenticatorGetInfo.Options.PinUvAuthTokenOption(false);
-        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b);
-        assertThat(a).isNotEqualTo(c);
-        assertThat(a).isNotEqualTo(null);
-        assertThat(a).isNotEqualTo("string");
+        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b)
+                .isNotEqualTo(c)
+                .isNotEqualTo(null)
+                .isNotEqualTo("string");
     }
 
     // ==================== Test data ====================

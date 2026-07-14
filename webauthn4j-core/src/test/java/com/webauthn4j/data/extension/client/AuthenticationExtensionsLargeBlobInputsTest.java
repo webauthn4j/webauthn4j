@@ -69,8 +69,7 @@ class AuthenticationExtensionsLargeBlobInputsTest {
         AuthenticationExtensionsLargeBlobInputs b = new AuthenticationExtensionsLargeBlobInputs(LargeBlobSupport.REQUIRED, null, null);
         AuthenticationExtensionsLargeBlobInputs c = new AuthenticationExtensionsLargeBlobInputs(LargeBlobSupport.PREFERRED, null, null);
 
-        assertThat(a).isEqualTo(b).isNotEqualTo(c).isNotEqualTo(null);
-        assertThat(a.hashCode()).isEqualTo(b.hashCode());
+        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b).isNotEqualTo(c).isNotEqualTo(null);
     }
 
     @Test
