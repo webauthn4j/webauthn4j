@@ -4,7 +4,6 @@ import com.webauthn4j.ctap.authenticator.data.settings.CredentialSelectorSetting
 import com.webauthn4j.ctap.authenticator.data.settings.CredentialSelectorSetting.*
 import com.webauthn4j.ctap.authenticator.data.settings.ResidentKeySetting
 import com.webauthn4j.ctap.client.PublicKeyCredentialRequestContext
-import com.webauthn4j.ctap.client.PublicKeyCredentialSelectionHandler
 import com.webauthn4j.data.ResidentKeyRequirement
 import com.webauthn4j.test.integration.environment.WebAuthnTestEnvironment
 import io.kotest.core.annotation.Tags
@@ -37,7 +36,7 @@ class CredentialSelectorSpec : BehaviorSpec({
                 val options = env.scenario.createAuthenticationOptions(allowCredentials = null)
                 val context = PublicKeyCredentialRequestContext(
                     env.clientPlatform.origin,
-                    publicKeyCredentialSelectionHandler = PublicKeyCredentialSelectionHandler {
+                    publicKeyCredentialSelectionHandler = {
                         candidateCount = it.size
                         it.first()
                     },

@@ -1,9 +1,7 @@
 package net.sharplab.gradle.mavencentral
 
-import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.publish.PublishingExtension
 
 /**
@@ -54,10 +52,10 @@ class MavenCentralPublishPlugin : Plugin<Project> {
                     val stagingDir = subproject.layout.buildDirectory.dir("maven-central-publish-staging")
 
                     subproject.extensions.configure(PublishingExtension::class.java) {
-                        repositories.maven(Action<MavenArtifactRepository> {
+                        repositories.maven {
                             name = "mavenCentralStaging"
                             url = stagingDir.get().asFile.toURI()
-                        })
+                        }
                     }
 
                     taskProvider.configure {
