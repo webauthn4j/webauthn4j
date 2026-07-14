@@ -602,7 +602,7 @@ public class AuthenticatorGetInfo {
         }
 
         /**
-         * @deprecated Use {@link #getPinUvAuthToken()} instead.
+         * @deprecated The {@code uvToken} option was deprecated in CTAP 2.1 and replaced by {@code pinUvAuthToken}. Use {@link #getPinUvAuthToken()} instead.
          */
         @Deprecated
         @JsonIgnore
@@ -639,7 +639,7 @@ public class AuthenticatorGetInfo {
         }
 
         /**
-         * @deprecated Use {@link #getAuthnrCfg()} instead.
+         * @deprecated The {@code config} option was deprecated in CTAP 2.1 and replaced by {@code authnrCfg}. Use {@link #getAuthnrCfg()} instead.
          */
         @Deprecated
         @JsonIgnore
@@ -941,7 +941,7 @@ public class AuthenticatorGetInfo {
         }
 
         /**
-         * @deprecated Use {@link PinUvAuthTokenOption} instead.
+         * @deprecated The {@code uvToken} option was deprecated in CTAP 2.1 and replaced by {@code pinUvAuthToken}. Use {@link PinUvAuthTokenOption} instead.
          */
         @Deprecated
         public static class UVTokenOption {
@@ -977,7 +977,7 @@ public class AuthenticatorGetInfo {
         }
 
         /**
-         * @deprecated Use {@link AuthnrCfgOption} instead.
+         * @deprecated The {@code config} option was deprecated in CTAP 2.1 and replaced by {@code authnrCfg}. Use {@link AuthnrCfgOption} instead.
          */
         @Deprecated
         public static class ConfigOption {
