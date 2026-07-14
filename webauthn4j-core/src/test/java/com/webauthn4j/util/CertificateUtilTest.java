@@ -25,7 +25,7 @@ import java.security.cert.X509Certificate;
 import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 class CertificateUtilTest {
@@ -47,14 +47,13 @@ class CertificateUtilTest {
     @Test
     void createPKIXParameters_test_with_empty_trustAnchors() {
         HashSet<TrustAnchor> trustAnchors = new HashSet<>();
-        Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> CertificateUtil.createPKIXParameters(trustAnchors)
-        );
-        assertThat(t).hasMessage("trustAnchors is required; it must not be empty");
+        assertThatThrownBy(() -> CertificateUtil.createPKIXParameters(trustAnchors))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("trustAnchors is required; it must not be empty");
     }
 
     @Test
     void createKeystore_test() {
-        CertificateUtil.createKeyStore();
+        assertThat(CertificateUtil.createKeyStore()).isNotNull();
     }
 }
