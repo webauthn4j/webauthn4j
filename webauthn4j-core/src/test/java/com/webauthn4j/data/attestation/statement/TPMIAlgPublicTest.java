@@ -54,19 +54,19 @@ class TPMIAlgPublicTest {
     @Test
     void fromString_test() {
         // Given
-        String json = "{\"tpmi_alg_pub\":24}";
+        String json = "{\"tpmiAlgPub\":24}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpmi_alg_pub).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA);
+        assertThat(dto.tpmiAlgPub).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
         // Given
-        String json = "{\"tpmi_alg_pub\":-1}";
+        String json = "{\"tpmiAlgPub\":-1}";
 
         // When
         // Then
@@ -76,6 +76,6 @@ class TPMIAlgPublicTest {
     }
 
     static class TestDTO {
-        public TPMIAlgPublic tpmi_alg_pub;
+        public TPMIAlgPublic tpmiAlgPub;
     }
 }

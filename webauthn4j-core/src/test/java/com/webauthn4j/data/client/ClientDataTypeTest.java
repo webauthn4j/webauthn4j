@@ -42,19 +42,19 @@ class ClientDataTypeTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
-        TestDTO dto = jsonMapper.readValue("{\"client_data_type\":\"webauthn.create\"}", TestDTO.class);
-        assertThat(dto.client_data_type).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
+        TestDTO dto = jsonMapper.readValue("{\"clientDataType\":\"webauthn.create\"}", TestDTO.class);
+        assertThat(dto.clientDataType).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
     }
 
     @Test
     void fromString_test_with_unknown_value() {
         assertThatCode(
-                () -> jsonMapper.readValue("{\"client_data_type\":\"unknown\"}", TestDTO.class)
+                () -> jsonMapper.readValue("{\"clientDataType\":\"unknown\"}", TestDTO.class)
         ).doesNotThrowAnyException();
     }
 
     static class TestDTO {
-        public ClientDataType client_data_type;
+        public ClientDataType clientDataType;
     }
 
     @Test

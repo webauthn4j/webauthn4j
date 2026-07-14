@@ -59,20 +59,20 @@ class TPMISTAttestTest {
     void fromString_test() {
         // Given
         byte[] source = new byte[]{(byte) 0x80, (byte) 0x17};
-        String json = "{\"tpmi_st_attest\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
+        String json = "{\"tpmiStAttest\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpmi_st_attest).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY);
+        assertThat(dto.tpmiStAttest).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
         // Given
         byte[] source = new byte[]{(byte) 0xff, (byte) 0xaa};
-        String sourceString = "{\"tpmi_st_attest\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
+        String sourceString = "{\"tpmiStAttest\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
 
         // When
         // Then
@@ -82,6 +82,6 @@ class TPMISTAttestTest {
     }
 
     static class TestDTO {
-        public TPMISTAttest tpmi_st_attest;
+        public TPMISTAttest tpmiStAttest;
     }
 }

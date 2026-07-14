@@ -57,19 +57,19 @@ class TPMIAlgHashTest {
     @Test
     void fromString_test() {
         // Given
-        String json = "{\"tpmi_alg_hash\":11}";
+        String json = "{\"tpmiAlgHash\":11}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpmi_alg_hash).isEqualTo(TPMIAlgHash.TPM_ALG_SHA256);
+        assertThat(dto.tpmiAlgHash).isEqualTo(TPMIAlgHash.TPM_ALG_SHA256);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
         // Given
-        String json = "{\"tpmi_alg_hash\":-1}";
+        String json = "{\"tpmiAlgHash\":-1}";
 
         // When
         // Then
@@ -79,6 +79,6 @@ class TPMIAlgHashTest {
     }
 
     static class TestDTO {
-        public TPMIAlgHash tpmi_alg_hash;
+        public TPMIAlgHash tpmiAlgHash;
     }
 }

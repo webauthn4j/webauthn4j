@@ -76,19 +76,19 @@ class TPMEccCurveTest {
     @Test
     void fromString_test() {
         // Given
-        String json = "{\"tpm_ecc_curve\":3}";
+        String json = "{\"tpmEccCurve\":3}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpm_ecc_curve).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256);
+        assertThat(dto.tpmEccCurve).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
         // Given
-        String json = "{\"tpm_ecc_curve\":-1}";
+        String json = "{\"tpmEccCurve\":-1}";
 
         // When
         // Then
@@ -112,6 +112,6 @@ class TPMEccCurveTest {
     }
 
     static class TestDTO {
-        public TPMEccCurve tpm_ecc_curve;
+        public TPMEccCurve tpmEccCurve;
     }
 }

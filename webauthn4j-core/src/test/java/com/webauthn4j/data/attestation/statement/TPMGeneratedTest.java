@@ -46,20 +46,20 @@ class TPMGeneratedTest {
     void fromString_test() {
         // Given
         byte[] source = new byte[]{(byte) 0xff, (byte) 0x54, (byte) 0x43, (byte) 0x47};
-        String json = "{\"tpm_generated\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
+        String json = "{\"tpmGenerated\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.tpm_generated).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE);
+        assertThat(dto.tpmGenerated).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
         // Given
         byte[] source = new byte[]{(byte) 0xff, (byte) 0xaa, (byte) 0xff, (byte) 0xaa};
-        String sourceString = "{\"tpm_generated\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
+        String sourceString = "{\"tpmGenerated\":\"" + Base64UrlUtil.encodeToString(source) + "\"}";
 
         // When
         // Then
@@ -69,6 +69,6 @@ class TPMGeneratedTest {
     }
 
     static class TestDTO {
-        public TPMGenerated tpm_generated;
+        public TPMGenerated tpmGenerated;
     }
 }

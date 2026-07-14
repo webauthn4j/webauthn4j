@@ -55,19 +55,19 @@ class COSEKeyTypeTest {
     @Test
     void fromString_test() {
         // Given
-        String json = "{\"cose_key_type\":0}";
+        String json = "{\"coseKeyType\":0}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.cose_key_type).isEqualTo(COSEKeyType.RESERVED);
+        assertThat(dto.coseKeyType).isEqualTo(COSEKeyType.RESERVED);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
         // Given
-        String json = "{\"cose_key_type\":-1}";
+        String json = "{\"coseKeyType\":-1}";
 
         // When
         // Then
@@ -77,6 +77,6 @@ class COSEKeyTypeTest {
     }
 
     static class TestDTO {
-        public COSEKeyType cose_key_type;
+        public COSEKeyType coseKeyType;
     }
 }

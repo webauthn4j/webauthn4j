@@ -65,19 +65,19 @@ class COSEKeyOperationTest {
     @Test
     void fromString_test() {
         // Given
-        String json = "{\"cose_key_op\":1}";
+        String json = "{\"coseKeyOp\":1}";
 
         // When
         TestDTO dto = jsonMapper.readValue(json, TestDTO.class);
 
         // Then
-        assertThat(dto.cose_key_op).isEqualTo(COSEKeyOperation.SIGN);
+        assertThat(dto.coseKeyOp).isEqualTo(COSEKeyOperation.SIGN);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
         // Given
-        String json = "{\"cose_key_op\":0}";
+        String json = "{\"coseKeyOp\":0}";
 
         // When
         // Then
@@ -87,6 +87,6 @@ class COSEKeyOperationTest {
     }
 
     static class TestDTO {
-        public COSEKeyOperation cose_key_op;
+        public COSEKeyOperation coseKeyOp;
     }
 }
