@@ -32,7 +32,7 @@ import java.security.interfaces.ECPublicKey;
 
 public class JWS<T> {
 
-    private final transient Logger logger;
+    private final Logger logger;
 
     private final JWSHeader header;
     private final T payload;
