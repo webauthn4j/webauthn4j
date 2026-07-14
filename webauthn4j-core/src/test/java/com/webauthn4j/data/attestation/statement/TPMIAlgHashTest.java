@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.exc.InvalidFormatException;
@@ -79,7 +80,7 @@ class TPMIAlgHashTest {
     }
 
     static class TestDTO {
-        @com.fasterxml.jackson.annotation.JsonProperty("tpmi_alg_hash")
+        @JsonProperty("tpmi_alg_hash")
         public TPMIAlgHash tpmiAlgHash;
     }
 }

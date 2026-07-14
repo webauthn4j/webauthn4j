@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.exc.InvalidFormatException;
@@ -87,7 +88,7 @@ class COSEKeyOperationTest {
     }
 
     static class TestDTO {
-        @com.fasterxml.jackson.annotation.JsonProperty("cose_key_op")
+        @JsonProperty("cose_key_op")
         public COSEKeyOperation coseKeyOp;
     }
 }

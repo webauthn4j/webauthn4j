@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.exc.InvalidFormatException;
@@ -76,7 +77,7 @@ class TPMIAlgPublicTest {
     }
 
     static class TestDTO {
-        @com.fasterxml.jackson.annotation.JsonProperty("tpmi_alg_pub")
+        @JsonProperty("tpmi_alg_pub")
         public TPMIAlgPublic tpmiAlgPub;
     }
 }

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,7 @@ class TPMISTAttestTest {
     }
 
     static class TestDTO {
-        @com.fasterxml.jackson.annotation.JsonProperty("tpmi_st_attest")
+        @JsonProperty("tpmi_st_attest")
         public TPMISTAttest tpmiStAttest;
     }
 }

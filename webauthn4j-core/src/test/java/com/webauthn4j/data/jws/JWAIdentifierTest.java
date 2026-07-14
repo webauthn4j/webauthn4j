@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.jws;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
@@ -93,7 +94,7 @@ class JWAIdentifierTest {
     }
 
     static class TestDTO {
-        @com.fasterxml.jackson.annotation.JsonProperty("jwa_id")
+        @JsonProperty("jwa_id")
         public JWAIdentifier jwaId;
     }
 }

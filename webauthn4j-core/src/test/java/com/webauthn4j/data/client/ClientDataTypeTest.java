@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.client;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.json.JsonMapper;
@@ -54,7 +55,7 @@ class ClientDataTypeTest {
     }
 
     static class TestDTO {
-        @com.fasterxml.jackson.annotation.JsonProperty("client_data_type")
+        @JsonProperty("client_data_type")
         public ClientDataType clientDataType;
     }
 

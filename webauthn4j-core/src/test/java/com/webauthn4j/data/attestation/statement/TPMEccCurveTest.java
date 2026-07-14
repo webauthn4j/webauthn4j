@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -112,7 +113,7 @@ class TPMEccCurveTest {
     }
 
     static class TestDTO {
-        @com.fasterxml.jackson.annotation.JsonProperty("tpm_ecc_curve")
+        @JsonProperty("tpm_ecc_curve")
         public TPMEccCurve tpmEccCurve;
     }
 }

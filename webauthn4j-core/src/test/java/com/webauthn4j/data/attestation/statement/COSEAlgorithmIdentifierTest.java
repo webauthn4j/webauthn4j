@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
@@ -201,7 +202,7 @@ class COSEAlgorithmIdentifierTest {
 
     static class TestDTO {
         @SuppressWarnings("WeakerAccess")
-        @com.fasterxml.jackson.annotation.JsonProperty("cose_alg_id")
+        @JsonProperty("cose_alg_id")
         public COSEAlgorithmIdentifier coseAlgId;
     }
 }

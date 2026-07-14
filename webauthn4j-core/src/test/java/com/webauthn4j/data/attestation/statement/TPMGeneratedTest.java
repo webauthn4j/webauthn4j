@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
@@ -69,7 +70,7 @@ class TPMGeneratedTest {
     }
 
     static class TestDTO {
-        @com.fasterxml.jackson.annotation.JsonProperty("tpm_generated")
+        @JsonProperty("tpm_generated")
         public TPMGenerated tpmGenerated;
     }
 }
