@@ -294,17 +294,25 @@ tasks.register<AsciidoctorTask>("generateReferenceEN") {
 sonarqube {
     properties {
         property("sonar.projectKey", "webauthn4j")
-        property("sonar.issue.ignore.multicriteria", "e1,e2,e3,e4,e5")
+        property("sonar.issue.ignore.multicriteria", "e1,e2,e3,e4,e5,e6")
+        // Deep inheritance is acceptable for the attestation verifier hierarchy
         property("sonar.issue.ignore.multicriteria.e1.ruleKey", "java:S110")
         property("sonar.issue.ignore.multicriteria.e1.resourceKey", "**/*.java")
+        // Generic wildcard types are used intentionally in public API signatures
         property("sonar.issue.ignore.multicriteria.e2.ruleKey", "java:S1452")
         property("sonar.issue.ignore.multicriteria.e2.resourceKey", "**/*.java")
+        // Duplicated blocks across sync/async verifier pairs are intentional
         property("sonar.issue.ignore.multicriteria.e3.ruleKey", "common-java:DuplicatedBlocks")
         property("sonar.issue.ignore.multicriteria.e3.resourceKey", "**/*.java")
+        // Multiple method invocations in exception tests are acceptable
         property("sonar.issue.ignore.multicriteria.e4.ruleKey", "java:S5778")
         property("sonar.issue.ignore.multicriteria.e4.resourceKey", "**/*.java")
+        // @Deprecated since/forRemoval are added only when meaningful, not on every annotation
         property("sonar.issue.ignore.multicriteria.e5.ruleKey", "java:S6355")
         property("sonar.issue.ignore.multicriteria.e5.resourceKey", "**/*.java")
+        // Exception classes are not designed for serialization; Serializable inherited from Throwable is not intentionally used
+        property("sonar.issue.ignore.multicriteria.e6.ruleKey", "java:S1948")
+        property("sonar.issue.ignore.multicriteria.e6.resourceKey", "**/*.java")
     }
 }
 
