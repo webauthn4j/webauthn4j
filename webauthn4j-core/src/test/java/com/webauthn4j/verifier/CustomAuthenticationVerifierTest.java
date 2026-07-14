@@ -28,8 +28,7 @@ class CustomAuthenticationVerifierTest {
     void parameter_test() {
 
         CustomAuthenticationVerifier target = authenticationObject -> {
-            assertThat(authenticationObject).hasFieldOrProperty("serverProperty");
-            assertThat(authenticationObject).hasFieldOrProperty("authenticator");
+            assertThat(authenticationObject).hasFieldOrProperty("serverProperty").hasFieldOrProperty("authenticator");
         };
 
         target.verify(mock(AuthenticationObject.class));

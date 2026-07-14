@@ -74,9 +74,7 @@ class StatusReportTest {
     @Test
     void equals_with_different_values_test(){
         StatusReport base = createStatusReport();
-        assertThat(base).isNotEqualTo(null);
-        assertThat(base).isNotEqualTo("string");
-        assertThat(base).isEqualTo(base);
+        assertThat(base).isNotEqualTo(null).isNotEqualTo("string").isEqualTo(base);
 
         String template = "{\n" +
                 "  \"status\": \"%s\",\n" +
@@ -99,21 +97,21 @@ class StatusReportTest {
                 "https://example.com/update", "FIDO Alliance Sample FIDO2 Authenticator",
                 "FIDO2100020151221001", "1.0.1", "enterprise", "1.0.1", "2030-01-01", 3, 1);
 
-        assertThat(base).isEqualTo(jsonMapper.readValue(baseJson, StatusReport.class));
-
-        // Differ by each field
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("FIDO_CERTIFIED_L1", "NOT_FIDO_CERTIFIED"), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("2020-11-19", "2021-01-01"), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"authenticatorVersion\": 2", "\"authenticatorVersion\": 99"), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"url\": \"https://example.com/update\"", "\"url\": \"https://example.com/other\""), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"certificationDescriptor\": \"FIDO Alliance Sample FIDO2 Authenticator\"", "\"certificationDescriptor\": \"Other\""), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("FIDO2100020151221001", "OTHER"), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"certificationPolicyVersion\": \"1.0.1\"", "\"certificationPolicyVersion\": \"2.0.0\""), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("enterprise", "consumer"), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"certificationRequirementsVersion\": \"1.0.1\"", "\"certificationRequirementsVersion\": \"2.0.0\""), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("2030-01-01", "2031-01-01"), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"fipsRevision\": 3", "\"fipsRevision\": 99"), StatusReport.class));
-        assertThat(base).isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"fipsPhysicalSecurityLevel\": 1", "\"fipsPhysicalSecurityLevel\": 99"), StatusReport.class));
+        assertThat(base)
+                .isEqualTo(jsonMapper.readValue(baseJson, StatusReport.class))
+                // Differ by each field
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("FIDO_CERTIFIED_L1", "NOT_FIDO_CERTIFIED"), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("2020-11-19", "2021-01-01"), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"authenticatorVersion\": 2", "\"authenticatorVersion\": 99"), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"url\": \"https://example.com/update\"", "\"url\": \"https://example.com/other\""), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"certificationDescriptor\": \"FIDO Alliance Sample FIDO2 Authenticator\"", "\"certificationDescriptor\": \"Other\""), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("FIDO2100020151221001", "OTHER"), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"certificationPolicyVersion\": \"1.0.1\"", "\"certificationPolicyVersion\": \"2.0.0\""), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("enterprise", "consumer"), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"certificationRequirementsVersion\": \"1.0.1\"", "\"certificationRequirementsVersion\": \"2.0.0\""), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("2030-01-01", "2031-01-01"), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"fipsRevision\": 3", "\"fipsRevision\": 99"), StatusReport.class))
+                .isNotEqualTo(jsonMapper.readValue(baseJson.replace("\"fipsPhysicalSecurityLevel\": 1", "\"fipsPhysicalSecurityLevel\": 99"), StatusReport.class));
     }
 
     private static final String TEST_CERTIFICATE =

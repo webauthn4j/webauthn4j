@@ -69,8 +69,7 @@ class TokenBindingStatusTest {
     @Test
     void equals_hashCode_test(){
         assertThat(TokenBindingStatus.create("unknown")).isEqualTo(TokenBindingStatus.create("unknown"));
-        assertThat(TokenBindingStatus.create("present")).isEqualTo(TokenBindingStatus.PRESENT);
-        assertThat(TokenBindingStatus.create("present")).hasSameHashCodeAs(TokenBindingStatus.PRESENT);
+        assertThat(TokenBindingStatus.create("present")).isEqualTo(TokenBindingStatus.PRESENT).hasSameHashCodeAs(TokenBindingStatus.PRESENT);
     }
 
     @Test

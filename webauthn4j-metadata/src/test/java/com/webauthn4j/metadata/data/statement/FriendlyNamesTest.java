@@ -35,8 +35,7 @@ class FriendlyNamesTest {
         Map<String, String> source = new HashMap<>();
         source.put("en-US", "FIDO Sample Security Key");
         FriendlyNames target = new FriendlyNames(source);
-        assertThat(target).containsEntry("en-US", "FIDO Sample Security Key");
-        assertThat(target).hasSize(1);
+        assertThat(target).containsEntry("en-US", "FIDO Sample Security Key").hasSize(1);
     }
 
     @Test
@@ -63,18 +62,18 @@ class FriendlyNamesTest {
         String json = jsonMapper.writeValueAsString(original);
         FriendlyNames deserialized = jsonMapper.readValue(json, FriendlyNames.class);
 
-        assertThat(deserialized).hasSize(2);
-        assertThat(deserialized).containsEntry("en-US", "FIDO Sample Security Key");
-        assertThat(deserialized).containsEntry("ja-JP", "FIDOサンプルセキュリティキー");
-        assertThat(deserialized).isEqualTo(original);
+        assertThat(deserialized)
+                .hasSize(2)
+                .containsEntry("en-US", "FIDO Sample Security Key")
+                .containsEntry("ja-JP", "FIDOサンプルセキュリティキー")
+                .isEqualTo(original);
     }
 
     @Test
     void json_deserialize_test() {
         String json = "{\"en-US\": \"Security Key\", \"fr-FR\": \"Clé de sécurité\"}";
         FriendlyNames target = jsonMapper.readValue(json, FriendlyNames.class);
-        assertThat(target).containsEntry("en-US", "Security Key");
-        assertThat(target).containsEntry("fr-FR", "Clé de sécurité");
+        assertThat(target).containsEntry("en-US", "Security Key").containsEntry("fr-FR", "Clé de sécurité");
     }
 
     @Test

@@ -62,8 +62,9 @@ class HMACGetSecretAuthenticatorInputTest {
         HMACGetSecretAuthenticatorInput instanceB = new HMACGetSecretAuthenticatorInput(key, new byte[32], new byte[32], PinProtocolVersion.VERSION_2);
         HMACGetSecretAuthenticatorInput instanceC = new HMACGetSecretAuthenticatorInput(key, new byte[32], new byte[32], null);
 
-        assertThat(instanceA).isNotEqualTo(instanceB).doesNotHaveSameHashCodeAs(instanceB);
-        assertThat(instanceA).isNotEqualTo(instanceC).doesNotHaveSameHashCodeAs(instanceC);
+        assertThat(instanceA)
+                .isNotEqualTo(instanceB).doesNotHaveSameHashCodeAs(instanceB)
+                .isNotEqualTo(instanceC).doesNotHaveSameHashCodeAs(instanceC);
     }
 
 }

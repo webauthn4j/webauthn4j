@@ -13,21 +13,21 @@ class ASN1SequenceTest {
     @Test
     void parse_test() {
         ASN1Sequence parsed = ASN1Sequence.parse(new byte[]{0x30, 0x00});
-        assertThat(parsed.size()).isZero();
+        assertThat(parsed).isEmpty();
     }
 
     @Test
     void parse_x509Certificate_test() throws CertificateEncodingException {
         X509Certificate cert = TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate();
         ASN1Sequence parsed = ASN1Sequence.parse(cert.getEncoded());
-        assertThat(parsed.size()).isGreaterThan(0);
+        assertThat(parsed).isNotEmpty();
     }
 
     @Test
     void create_empty_test() {
         ASN1Sequence seq = ASN1Sequence.create();
         assertThat(seq.isConstructed()).isTrue();
-        assertThat(seq.size()).isZero();
+        assertThat(seq).isEmpty();
         assertThat(seq.toBytes()).containsExactly(0x30, 0x00);
     }
 
@@ -37,7 +37,7 @@ class ASN1SequenceTest {
                 ASN1Integer.create(new byte[]{0x2A}),
                 ASN1OctetString.create(new byte[]{0x01, 0x02})
         );
-        assertThat(seq.size()).isEqualTo(2);
+        assertThat(seq).hasSize(2);
         assertThat(seq.toBytes()).containsExactly(0x30, 0x07, 0x02, 0x01, 0x2A, 0x04, 0x02, 0x01, 0x02);
     }
 
@@ -48,10 +48,10 @@ class ASN1SequenceTest {
                 ASN1BitString.create(new byte[]{0x0A})
         );
 
-        assertThat(outer.size()).isEqualTo(2);
+        assertThat(outer).hasSize(2);
 
         ASN1Sequence parsed = ASN1Sequence.parse(outer.toBytes());
-        assertThat(parsed.size()).isEqualTo(2);
+        assertThat(parsed).hasSize(2);
         assertThat(parsed.get(0)).isInstanceOf(ASN1Sequence.class);
         assertThat(parsed.get(1)).isInstanceOf(ASN1BitString.class);
     }
@@ -66,7 +66,7 @@ class ASN1SequenceTest {
 
         ASN1Sequence parsed = ASN1Sequence.parse(original.toBytes());
 
-        assertThat(parsed.size()).isEqualTo(3);
+        assertThat(parsed).hasSize(3);
         assertThat(parsed.toBytes()).isEqualTo(original.toBytes());
     }
 

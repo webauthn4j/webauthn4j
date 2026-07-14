@@ -183,8 +183,7 @@ class AuthenticationExtensionsClientOutputsTest {
         builder.setAppid(true);
         builder.set("custom", "value");
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = builder.build();
-        assertThat(instance.toString()).contains("appid");
-        assertThat(instance.toString()).contains("custom");
+        assertThat(instance.toString()).contains("appid", "custom");
     }
 
     @Test

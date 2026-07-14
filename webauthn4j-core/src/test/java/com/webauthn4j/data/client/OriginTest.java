@@ -107,8 +107,7 @@ class OriginTest {
 
     @Test
     void explicit_port_notation_and_non_explicit_port_notation_comparison_test() {
-        assertThat(new Origin("https://example.com:443")).isEqualTo(new Origin("https://example.com"));
-        assertThat(new Origin("https://example.com:443")).hasToString("https://example.com:443");
+        assertThat(new Origin("https://example.com:443")).isEqualTo(new Origin("https://example.com")).hasToString("https://example.com:443");
     }
 
 
@@ -235,8 +234,7 @@ class OriginTest {
 
         assertThat(originA).hasSameHashCodeAs(originB);
         assertThat(android_apk_key_hash_abc123_a).hasSameHashCodeAs(android_apk_key_hash_abc123_b);
-        assertThat(android_apk_key_hash_abc123_a.hashCode()).isNotEqualTo(android_apk_key_hash_def456.hashCode());
-        assertThat(android_apk_key_hash_abc123_a.hashCode()).isNotEqualTo(invalid_data.hashCode());
+        assertThat(android_apk_key_hash_abc123_a.hashCode()).isNotEqualTo(android_apk_key_hash_def456.hashCode()).isNotEqualTo(invalid_data.hashCode());
     }
 
     @Test

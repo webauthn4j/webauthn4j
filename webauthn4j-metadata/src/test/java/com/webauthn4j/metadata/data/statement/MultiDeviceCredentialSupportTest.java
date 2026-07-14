@@ -38,16 +38,17 @@ class MultiDeviceCredentialSupportTest {
         MultiDeviceCredentialSupport a = new MultiDeviceCredentialSupport("explicit");
         MultiDeviceCredentialSupport b = new MultiDeviceCredentialSupport("explicit");
         MultiDeviceCredentialSupport c = new MultiDeviceCredentialSupport("implicit");
-        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b);
-        assertThat(a).isEqualTo(MultiDeviceCredentialSupport.EXPLICIT);
-        assertThat(a).isNotEqualTo(c);
-        assertThat(a).isNotEqualTo(null);
-        assertThat(a).isNotEqualTo("explicit");
+        assertThat(a)
+                .isEqualTo(b).hasSameHashCodeAs(b)
+                .isEqualTo(MultiDeviceCredentialSupport.EXPLICIT)
+                .isNotEqualTo(c)
+                .isNotEqualTo(null)
+                .isNotEqualTo("explicit");
     }
 
     @Test
     void toString_test() {
-        assertThat(MultiDeviceCredentialSupport.EXPLICIT.toString()).isEqualTo("explicit");
+        assertThat(MultiDeviceCredentialSupport.EXPLICIT).hasToString("explicit");
     }
 
     @Test
