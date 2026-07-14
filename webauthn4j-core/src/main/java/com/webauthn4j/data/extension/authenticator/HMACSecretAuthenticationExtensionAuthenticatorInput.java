@@ -35,7 +35,7 @@ public class HMACSecretAuthenticationExtensionAuthenticatorInput extends SingleV
         return ID;
     }
 
-    @SuppressWarnings({"ConstantConditions", "java:S2583"})
+    @SuppressWarnings({"ConstantConditions", "java:S2583", "java:S3776"}) // Cognitive complexity is acceptable for sequential validation
     @Override
     public void validate() {
         // value can be null when deserialized by Jackson
