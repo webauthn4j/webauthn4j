@@ -76,6 +76,7 @@ public class AttestedCredentialDataConverter {
         return new AttestedCredentialData(aaguid, credentialId, coseKey);
     }
 
+    @SuppressWarnings("javabugs:S6416")
     private static void assertCoseKey(@Nullable COSEKey coseKey) {
         AssertUtil.notNull(coseKey, "coseKey must not be null");
     }
