@@ -24,7 +24,6 @@ import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import com.webauthn4j.verifier.exception.InconsistentClientDataTypeException;
 import com.webauthn4j.verifier.internal.*;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;

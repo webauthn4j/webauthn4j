@@ -18,7 +18,6 @@ package com.webauthn4j.appattest.verifier;
 
 import com.webauthn4j.appattest.authenticator.DCAppleDevice;
 import com.webauthn4j.appattest.data.DCAssertionParameters;
-import com.webauthn4j.data.CoreAuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.CoreServerProperty;
