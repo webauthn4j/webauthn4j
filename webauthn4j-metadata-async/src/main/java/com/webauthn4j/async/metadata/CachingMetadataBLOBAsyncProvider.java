@@ -20,6 +20,7 @@ import com.webauthn4j.metadata.data.MetadataBLOB;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.locks.Lock;
@@ -49,7 +50,7 @@ public abstract class CachingMetadataBLOBAsyncProvider implements MetadataBLOBAs
             doProvide()
                     .thenAccept(metadataBLOB -> {
                         cachedMetadataBLOB = metadataBLOB;
-                        metadataBLOBLastUpdate = LocalDate.now();
+                        metadataBLOBLastUpdate = LocalDate.now(ZoneOffset.UTC);
                         synchronized (metadataBLOBFutureLock){
                             metadataBLOBFuture.complete(metadataBLOB);
                             metadataBLOBFuture = new CompletableFuture<>();
@@ -73,7 +74,7 @@ public abstract class CachingMetadataBLOBAsyncProvider implements MetadataBLOBAs
         if(cachedMetadataBLOB == null){
             return true;
         }
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneOffset.UTC);
         LocalDate nextUpdate = cachedMetadataBLOB.getPayload().getNextUpdate();
         return (nextUpdate.isBefore(today) || nextUpdate.isEqual(today)) && metadataBLOBLastUpdate.isBefore(today);
     }

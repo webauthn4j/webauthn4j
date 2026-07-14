@@ -20,6 +20,7 @@ import com.webauthn4j.metadata.data.MetadataBLOB;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 
 public abstract class CachingMetadataBLOBProvider implements MetadataBLOBProvider {
 
@@ -34,7 +35,7 @@ public abstract class CachingMetadataBLOBProvider implements MetadataBLOBProvide
                 refresh();
             }
         }
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneOffset.UTC);
         LocalDate nextUpdate = cachedMetadataBLOB.getPayload().getNextUpdate();
         if((nextUpdate.isBefore(today) || nextUpdate.isEqual(today)) && cachedMetadataBLOBLastUpdate.isBefore(today)){
             refresh();
@@ -46,7 +47,7 @@ public abstract class CachingMetadataBLOBProvider implements MetadataBLOBProvide
     public void refresh(){
         synchronized (cachedMetadataBLOBLock){
             cachedMetadataBLOB = doProvide();
-            cachedMetadataBLOBLastUpdate = LocalDate.now();
+            cachedMetadataBLOBLastUpdate = LocalDate.now(ZoneOffset.UTC);
         }
     }
 
