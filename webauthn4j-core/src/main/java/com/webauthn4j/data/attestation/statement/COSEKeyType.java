@@ -29,6 +29,7 @@ public enum COSEKeyType {
     EC2(2), // https://tools.ietf.org/html/rfc8152#section-13
     RSA(3), // https://tools.ietf.org/html/rfc8230#section-4
     SYMMETRIC(4), // https://tools.ietf.org/html/rfc8152#section-13
+    AKP(7), // https://datatracker.ietf.org/doc/draft-ietf-cose-dilithium/
     RESERVED(0);  // https://tools.ietf.org/html/rfc8152#section-13
 
     private final int value;
@@ -47,6 +48,8 @@ public enum COSEKeyType {
                 return RSA;
             case 4:
                 return SYMMETRIC;
+            case 7:
+                return AKP;
             case 0:
                 return RESERVED;
             default:
