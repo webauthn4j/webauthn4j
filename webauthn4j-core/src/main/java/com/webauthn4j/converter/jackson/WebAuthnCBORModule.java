@@ -75,6 +75,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addSerializer(new CredentialProtectionPolicySerializer());
         this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
+        this.addSerializer(new AKPCOSEKeySerializer());
         this.addSerializer(new EC2COSEKeySerializer());
         this.addSerializer(new EdDSACOSEKeySerializer());
         this.addDeserializer(COSEKeyEnvelope.class, new COSEKeyEnvelopeDeserializer());
