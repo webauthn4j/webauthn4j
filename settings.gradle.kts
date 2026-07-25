@@ -20,6 +20,7 @@ pluginManagement {
         gradlePluginPortal()
     }
     includeBuild("maven-central-publish-plugin")
+    includeBuild("optional-dependencies-plugin")
     includeBuild("toolchain-pinning-plugin")
 }
 
