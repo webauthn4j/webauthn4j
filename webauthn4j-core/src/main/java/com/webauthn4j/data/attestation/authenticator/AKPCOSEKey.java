@@ -255,15 +255,6 @@ public class AKPCOSEKey extends AbstractCOSEKey {
         return ((ASN1BitString) spki.get(1)).getContent();
     }
 
-    /**
-     * Extract raw private key bytes from PKCS#8 PrivateKeyInfo DER encoding.
-     */
-    static byte[] extractRawFromPKCS8(byte[] encoded) {
-        ASN1Sequence pkcs8 = ASN1Sequence.parse(encoded);
-        ASN1OctetString outerOctet = (ASN1OctetString) pkcs8.get(2);
-        ASN1OctetString innerOctet = ASN1OctetString.parse(outerOctet.getValue());
-        return innerOctet.getValue();
-    }
 
     private static byte[] getOidForAlgorithm(String jcaName) {
         switch (jcaName) {
