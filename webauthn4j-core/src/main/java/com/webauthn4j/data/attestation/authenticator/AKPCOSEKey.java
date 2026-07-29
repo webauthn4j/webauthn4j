@@ -218,6 +218,9 @@ public class AKPCOSEKey extends AbstractCOSEKey {
                 throw new ConstraintViolationException("ML-DSA priv must be " + ML_DSA_SEED_LENGTH + " bytes (seed), but was " + priv.length);
             }
         }
+        else {
+            throw new ConstraintViolationException("ML-DSA is the only supported alg for AKP key type");
+        }
         if (!hasPublicKey() && !hasPrivateKey()) {
             throw new ConstraintViolationException("pub or priv must be present");
         }
