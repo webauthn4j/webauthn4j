@@ -36,6 +36,14 @@ class DefaultSelfAttestationTrustworthinessVerifierTest {
     }
 
     @Test
+    void verify_with_ml_dsa_65_test() {
+        DefaultSelfAttestationTrustworthinessVerifier validator = new DefaultSelfAttestationTrustworthinessVerifier();
+        PackedAttestationStatement attestationStatement = TestAttestationStatementUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ML_DSA_65, new byte[32]);
+
+        validator.verify(attestationStatement);
+    }
+
+    @Test
     void verify_basic_type_attestation_statement_test() {
         DefaultSelfAttestationTrustworthinessVerifier validator = new DefaultSelfAttestationTrustworthinessVerifier();
         PackedAttestationStatement attestationStatement = TestAttestationStatementUtil.createBasicPackedAttestationStatement();
