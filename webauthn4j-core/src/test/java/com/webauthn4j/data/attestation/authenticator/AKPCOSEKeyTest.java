@@ -375,6 +375,15 @@ class AKPCOSEKeyTest {
     }
 
     @Test
+    void validate_with_unsupported_algorithm_throws_test() {
+        // Given - ESP256 is not an ML-DSA algorithm
+        AKPCOSEKey key = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ESP256, null, DUMMY_PUB, null);
+
+        // Then
+        assertThrows(ConstraintViolationException.class, key::validate);
+    }
+
+    @Test
     void getPub_returns_clone_test() {
         // Given
         byte[] originalPub = new byte[]{0x01, 0x02, 0x03};
