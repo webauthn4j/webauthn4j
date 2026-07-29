@@ -41,12 +41,17 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.RSAUtil;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.params.MLDSAKeyGenerationParameters;
+import org.bouncycastle.crypto.generators.MLDSAKeyPairGenerator;
+import org.bouncycastle.crypto.params.MLDSAParameters;
+import org.bouncycastle.crypto.params.MLDSAPrivateKeyParameters;
+import org.bouncycastle.crypto.params.MLDSAPublicKeyParameters;
 import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -245,16 +250,23 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
                 coseKeyPair= RSACOSEKey.create(credentialKeyPair, alg);
             }
             else if(Arrays.asList(COSEAlgorithmIdentifier.ML_DSA_44, COSEAlgorithmIdentifier.ML_DSA_65, COSEAlgorithmIdentifier.ML_DSA_87).contains(alg)){
-                try {
-                    String jcaName = alg.toSignatureAlgorithm().getJcaName();
-                    KeyPairGenerator kpg = KeyPairGenerator.getInstance(jcaName);
-                    credentialKeyPair = kpg.generateKeyPair();
-                } catch (java.security.NoSuchAlgorithmException e) {
-                    throw new NotSupportedException("ML-DSA is not supported on this JDK", e);
-                }
-                cosePublicKey = AKPCOSEKey.create(credentialKeyPair.getPublic(), alg);
-                cosePrivateKey = AKPCOSEKey.create(credentialKeyPair, alg);
-                coseKeyPair = AKPCOSEKey.create(credentialKeyPair, alg);
+                String jcaName = alg.toSignatureAlgorithm().getJcaName();
+                MLDSAParameters mldsaParams = getMLDSAParameters(jcaName);
+                MLDSAKeyPairGenerator bcKpg = new MLDSAKeyPairGenerator();
+                bcKpg.init(new MLDSAKeyGenerationParameters(new SecureRandom(), mldsaParams));
+                AsymmetricCipherKeyPair bcKp = bcKpg.generateKeyPair();
+                MLDSAPrivateKeyParameters bcPriv = (MLDSAPrivateKeyParameters) bcKp.getPrivate();
+                MLDSAPublicKeyParameters bcPub = (MLDSAPublicKeyParameters) bcKp.getPublic();
+
+                byte[] seed = bcPriv.getSeed();
+                byte[] rawPub = bcPub.getEncoded();
+
+                AKPCOSEKey akpKey = new AKPCOSEKey(null, alg, null, rawPub, seed);
+                cosePublicKey = new AKPCOSEKey(null, alg, null, rawPub, null);
+                cosePrivateKey = akpKey;
+                coseKeyPair = akpKey;
+
+                credentialKeyPair = new KeyPair(akpKey.getPublicKey(), akpKey.getPrivateKey());
             }
             else{
                 throw new NotSupportedException("Specified alg are not supported");
@@ -460,6 +472,19 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     public boolean isCapableOfStoringClientSideResidentCredential() {
         return true;
+    }
+
+    private static MLDSAParameters getMLDSAParameters(String jcaName) {
+        switch (jcaName) {
+            case "ML-DSA-44":
+                return MLDSAParameters.ml_dsa_44;
+            case "ML-DSA-65":
+                return MLDSAParameters.ml_dsa_65;
+            case "ML-DSA-87":
+                return MLDSAParameters.ml_dsa_87;
+            default:
+                throw new IllegalArgumentException("Unsupported ML-DSA algorithm: " + jcaName);
+        }
     }
 
     private boolean isCapableOfHandling(PublicKeyCredentialParameters publicKeyCredentialParameters) {

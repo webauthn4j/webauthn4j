@@ -192,24 +192,6 @@ class AKPCOSEKeyTest {
 
     @Test
     @EnabledForJreRange(min = JRE.JAVA_24)
-    void create_from_keyPair_test() throws Exception {
-        // Given
-        KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65");
-        KeyPair keyPair = kpg.generateKeyPair();
-
-        // When
-        AKPCOSEKey coseKey = AKPCOSEKey.create(keyPair, COSEAlgorithmIdentifier.ML_DSA_65);
-
-        // Then
-        assertThat(coseKey.hasPublicKey()).isTrue();
-        assertThat(coseKey.hasPrivateKey()).isTrue();
-        assertThat(coseKey.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ML_DSA_65);
-        assertThat(coseKey.getPublicKey()).isNotNull();
-        assertThat(coseKey.getPrivateKey()).isNotNull();
-    }
-
-    @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
     void create_from_publicKey_test() throws Exception {
         // Given
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65");
@@ -354,13 +336,9 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
-    void getPrivateKey_throws_when_algorithm_is_null_test() throws Exception {
+    void getPrivateKey_throws_when_algorithm_is_null_test() {
         // Given
-        KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65");
-        KeyPair keyPair = kpg.generateKeyPair();
-        AKPCOSEKey original = AKPCOSEKey.create(keyPair, COSEAlgorithmIdentifier.ML_DSA_65);
-        AKPCOSEKey key = new AKPCOSEKey(null, null, null, null, original.getPriv());
+        AKPCOSEKey key = new AKPCOSEKey(null, null, null, null, DUMMY_PRIV);
 
         // Then
         assertThatThrownBy(key::getPrivateKey).isInstanceOf(IllegalStateException.class);

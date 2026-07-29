@@ -26,6 +26,7 @@ import com.webauthn4j.data.internal.asn1.der.ASN1Integer;
 import com.webauthn4j.data.internal.asn1.der.ASN1ObjectIdentifier;
 import com.webauthn4j.data.internal.asn1.der.ASN1OctetString;
 import com.webauthn4j.data.internal.asn1.der.ASN1Sequence;
+import com.webauthn4j.data.attestation.authenticator.internal.MLDSASeedExpander;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
@@ -49,6 +50,8 @@ import java.util.List;
  * @see <a href="https://datatracker.ietf.org/doc/draft-ietf-cose-dilithium/">Use of ML-DSA in COSE and JOSE</a>
  */
 public class AKPCOSEKey extends AbstractCOSEKey {
+
+    private static final int ML_DSA_SEED_LENGTH = 32;
 
     // Raw OID value bytes for ML-DSA algorithms defined in FIPS 204 (without tag and length)
     private static final byte[] ML_DSA_44_OID = {
@@ -84,9 +87,14 @@ public class AKPCOSEKey extends AbstractCOSEKey {
             @Nullable @JsonProperty("-1") byte[] pub,
             @Nullable @JsonProperty("-2") byte[] priv) {
         super(keyId, algorithm, keyOps, null);
-        this.pub = pub;
-        this.priv = priv;
+        this.pub = ArrayUtil.clone(pub);
+        this.priv = ArrayUtil.clone(priv);
     }
+
+    // No create(KeyPair, alg) method is provided because the JDK does not expose
+    // the ML-DSA seed from a generated KeyPair. RFC 9964 Section 4 requires priv
+    // to be the 32-byte seed, which cannot be extracted from JDK's PrivateKey.
+    // Use the constructor directly with a seed obtained via Bouncy Castle.
 
     /**
      * Create {@link AKPCOSEKey} from a {@link PublicKey}.
@@ -100,21 +108,6 @@ public class AKPCOSEKey extends AbstractCOSEKey {
         AssertUtil.notNull(alg, "alg must not be null");
         byte[] rawPub = extractRawFromSubjectPublicKeyInfo(publicKey.getEncoded());
         return new AKPCOSEKey(null, alg, null, rawPub, null);
-    }
-
-    /**
-     * Create {@link AKPCOSEKey} from a {@link KeyPair}.
-     *
-     * @param keyPair key pair
-     * @param alg     COSE algorithm identifier
-     * @return {@link AKPCOSEKey}
-     */
-    public static @NotNull AKPCOSEKey create(@NotNull KeyPair keyPair, @NotNull COSEAlgorithmIdentifier alg) {
-        AssertUtil.notNull(keyPair, "keyPair must not be null");
-        AssertUtil.notNull(alg, "alg must not be null");
-        byte[] rawPub = extractRawFromSubjectPublicKeyInfo(keyPair.getPublic().getEncoded());
-        byte[] rawPriv = extractRawFromPKCS8(keyPair.getPrivate().getEncoded());
-        return new AKPCOSEKey(null, alg, null, rawPub, rawPriv);
     }
 
     @Override
@@ -151,15 +144,30 @@ public class AKPCOSEKey extends AbstractCOSEKey {
         if (!hasPrivateKey()) {
             return null;
         }
+        COSEAlgorithmIdentifier alg = getAlgorithm();
+        if (alg == null) {
+            throw new IllegalStateException("algorithm must not be null for AKP key type");
+        }
+        String jcaName = alg.toSignatureAlgorithm().getJcaName();
+        return expandMLDSASeedToPrivateKey(priv, jcaName);
+    }
+
+    private static boolean isMLDSAAlgorithm(COSEAlgorithmIdentifier alg) {
+        return COSEAlgorithmIdentifier.ML_DSA_44.equals(alg)
+                || COSEAlgorithmIdentifier.ML_DSA_65.equals(alg)
+                || COSEAlgorithmIdentifier.ML_DSA_87.equals(alg);
+    }
+
+    private static PrivateKey expandMLDSASeedToPrivateKey(byte[] seed, String jcaName) {
         try {
-            COSEAlgorithmIdentifier alg = getAlgorithm();
-            if (alg == null) {
-                throw new IllegalStateException("algorithm must not be null for AKP key type");
-            }
-            String jcaName = alg.toSignatureAlgorithm().getJcaName();
+            byte[] expandedKey = MLDSASeedExpander.expand(seed, jcaName);
             KeyFactory kf = KeyFactory.getInstance(jcaName);
-            byte[] encoded = buildPKCS8PrivateKeyInfo(priv, jcaName);
-            return kf.generatePrivate(new PKCS8EncodedKeySpec(encoded));
+            byte[] pkcs8 = buildPKCS8PrivateKeyInfo(expandedKey, jcaName);
+            return kf.generatePrivate(new PKCS8EncodedKeySpec(pkcs8));
+        } catch (NoClassDefFoundError e) {
+            throw new UnsupportedOperationException(
+                    "Bouncy Castle is required to expand ML-DSA seed to a private key. " +
+                    "Add org.bouncycastle:bcprov-jdk18on to your classpath.", e);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new UnexpectedCheckedException(e);
         }
