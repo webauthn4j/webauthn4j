@@ -33,6 +33,8 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.client.ClientPlatform;
+import com.webauthn4j.verifier.exception.BadSignatureException;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,6 +44,7 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Integration test for ML-DSA (FIPS 204) post-quantum signature algorithms.
@@ -111,6 +114,47 @@ class MLDSAAuthenticatorRegistrationAndAuthenticationTest {
         );
 
         assertThatCode(() -> target.verify(authenticationRequest, authenticationParameters)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void authentication_with_bad_signature_should_throw() {
+        String rpId = "example.com";
+        COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ML_DSA_65;
+
+        // Registration
+        CredentialRecord credentialRecord = createCredentialRecord(rpId, new DefaultChallenge(), alg);
+
+        // Authentication
+        Challenge challenge = new DefaultChallenge();
+        var credentialRequestOptions = new PublicKeyCredentialRequestOptions(
+                challenge, 0L, rpId, null, UserVerificationRequirement.REQUIRED, null
+        );
+        var publicKeyCredential = clientPlatform.get(credentialRequestOptions);
+
+        ServerProperty serverProperty = ServerProperty.builder()
+                .origin(origin)
+                .rpId(rpId)
+                .challenge(challenge)
+                .build();
+
+        byte[] badSignature = new byte[publicKeyCredential.getResponse().getSignature().length];
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest(
+                publicKeyCredential.getRawId(),
+                publicKeyCredential.getResponse().getAuthenticatorData(),
+                publicKeyCredential.getResponse().getClientDataJSON(),
+                authenticationExtensionsClientOutputsConverter.convertToString(publicKeyCredential.getClientExtensionResults()),
+                badSignature
+        );
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
+                serverProperty,
+                credentialRecord,
+                null,
+                true
+        );
+
+        assertThatThrownBy(() -> target.verify(authenticationRequest, authenticationParameters))
+                .isInstanceOf(BadSignatureException.class);
     }
 
     private CredentialRecord createCredentialRecord(String rpId, Challenge challenge, COSEAlgorithmIdentifier alg) {
