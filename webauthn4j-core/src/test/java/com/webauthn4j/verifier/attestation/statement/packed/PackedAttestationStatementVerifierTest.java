@@ -30,7 +30,14 @@ import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.verifier.RegistrationObject;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
+import com.webauthn4j.data.attestation.authenticator.AKPCOSEKey;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.generators.MLDSAKeyPairGenerator;
+import org.bouncycastle.crypto.params.MLDSAKeyGenerationParameters;
+import org.bouncycastle.crypto.params.MLDSAParameters;
+import org.bouncycastle.crypto.params.MLDSAPrivateKeyParameters;
+import org.bouncycastle.crypto.params.MLDSAPublicKeyParameters;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.cert.CertIOException;
@@ -139,6 +146,29 @@ class PackedAttestationStatementVerifierTest {
         verify(clientData, attestationObject);
     }
 
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_24)
+    void verify_with_MLDSAx5C_test() throws Exception {
+        MLDSAKeyPairGenerator bcKeyPairGenerator = new MLDSAKeyPairGenerator();
+        bcKeyPairGenerator.init(new MLDSAKeyGenerationParameters(new SecureRandom(), MLDSAParameters.ml_dsa_65));
+        AsymmetricCipherKeyPair keyPair = bcKeyPairGenerator.generateKeyPair();
+        MLDSAPrivateKeyParameters bcPrivateKey = (MLDSAPrivateKeyParameters) keyPair.getPrivate();
+        MLDSAPublicKeyParameters bcPublicKey = (MLDSAPublicKeyParameters) keyPair.getPublic();
+
+        AKPCOSEKey cosePublicKey = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, bcPublicKey.getEncoded(), null);
+        AKPCOSEKey cosePrivateKey = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, bcPublicKey.getEncoded(), bcPrivateKey.getSeed());
+        KeyPair jcaKeyPair = new KeyPair(cosePublicKey.getPublicKey(), cosePrivateKey.getPrivateKey());
+
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData(cosePublicKey);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
+        byte[] signature = generateSignature("ML-DSA-65", jcaKeyPair, authenticatorData, clientData);
+
+        AttestationCertificatePath x5c = generateCertPath(jcaKeyPair, "ML-DSA-65");
+        PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ML_DSA_65, signature, x5c);
+        AttestationObject attestationObject = new AttestationObject(authenticatorData, packedAttestationStatement);
+
+        verify(clientData, attestationObject);
+    }
 
     @Test
     void verify_with_yubikey_fido2_data_test() {
