@@ -74,7 +74,14 @@ public class JWS<T> {
             if (header.getAlg() == null || header.getX5c() == null || header.getX5c().getCertificates().isEmpty()) {
                 return false;
             }
-            Signature signatureInstance = SignatureUtil.createSignature(header.getAlg().toSignatureAlgorithm());
+            Signature signatureInstance;
+            try{
+                signatureInstance = SignatureUtil.createSignature(header.getAlg().toSignatureAlgorithm());
+            }
+            catch (IllegalArgumentException e){
+                logger.debug("Signature verification failed", e);
+                return false;
+            }
             PublicKey publicKey = header.getX5c().getCertificates().get(0).getPublicKey();
             signatureInstance.initVerify(publicKey);
             signatureInstance.update(signedData.getBytes());
