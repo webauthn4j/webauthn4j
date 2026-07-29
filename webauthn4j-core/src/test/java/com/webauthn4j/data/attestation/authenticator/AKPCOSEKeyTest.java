@@ -359,6 +359,22 @@ class AKPCOSEKeyTest {
     }
 
     @Test
+    @EnabledForJreRange(min = JRE.JAVA_24)
+    void validate_with_wrong_ml_dsa_seed_length_throws_test() {
+        byte[] wrongLengthPriv = new byte[64];
+        AKPCOSEKey key = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, DUMMY_PUB, wrongLengthPriv);
+        assertThrows(ConstraintViolationException.class, key::validate);
+    }
+
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_24)
+    void validate_with_wrong_ml_dsa_pub_length_throws_test() {
+        byte[] wrongLengthPub = new byte[100];
+        AKPCOSEKey key = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, wrongLengthPub, null);
+        assertThrows(ConstraintViolationException.class, key::validate);
+    }
+
+    @Test
     void getPub_returns_clone_test() {
         // Given
         byte[] originalPub = new byte[]{0x01, 0x02, 0x03};

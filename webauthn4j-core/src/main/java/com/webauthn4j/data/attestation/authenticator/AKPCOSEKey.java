@@ -52,6 +52,9 @@ import java.util.List;
 public class AKPCOSEKey extends AbstractCOSEKey {
 
     private static final int ML_DSA_SEED_LENGTH = 32;
+    private static final int ML_DSA_44_PUBLIC_KEY_LENGTH = 1312;
+    private static final int ML_DSA_65_PUBLIC_KEY_LENGTH = 1952;
+    private static final int ML_DSA_87_PUBLIC_KEY_LENGTH = 2592;
 
     // Raw OID value bytes for ML-DSA algorithms defined in FIPS 204 (without tag and length)
     private static final byte[] ML_DSA_44_OID = {
@@ -152,10 +155,25 @@ public class AKPCOSEKey extends AbstractCOSEKey {
         return expandMLDSASeedToPrivateKey(priv, jcaName);
     }
 
-    private static boolean isMLDSAAlgorithm(COSEAlgorithmIdentifier alg) {
+    private boolean isMLDSAAlgorithm() {
+        COSEAlgorithmIdentifier alg = getAlgorithm();
         return COSEAlgorithmIdentifier.ML_DSA_44.equals(alg)
                 || COSEAlgorithmIdentifier.ML_DSA_65.equals(alg)
                 || COSEAlgorithmIdentifier.ML_DSA_87.equals(alg);
+    }
+
+    private int getExpectedMLDSAPublicKeyLength() {
+        COSEAlgorithmIdentifier alg = getAlgorithm();
+        if (COSEAlgorithmIdentifier.ML_DSA_44.equals(alg)) {
+            return ML_DSA_44_PUBLIC_KEY_LENGTH;
+        }
+        else if (COSEAlgorithmIdentifier.ML_DSA_65.equals(alg)) {
+            return ML_DSA_65_PUBLIC_KEY_LENGTH;
+        }
+        else if (COSEAlgorithmIdentifier.ML_DSA_87.equals(alg)) {
+            return ML_DSA_87_PUBLIC_KEY_LENGTH;
+        }
+        throw new IllegalArgumentException("Unsupported ML-DSA algorithm: " + alg);
     }
 
     private static PrivateKey expandMLDSASeedToPrivateKey(byte[] seed, String jcaName) {
@@ -188,9 +206,17 @@ public class AKPCOSEKey extends AbstractCOSEKey {
 
     @Override
     public void validate() {
-        COSEAlgorithmIdentifier algorithm = getAlgorithm();
-        if (algorithm == null) {
+        if (getAlgorithm() == null) {
             throw new ConstraintViolationException("algorithm must not be null for AKP key type");
+        }
+        if (isMLDSAAlgorithm()) {
+            int expectedPubLength = getExpectedMLDSAPublicKeyLength();
+            if (pub != null && pub.length != expectedPubLength) {
+                throw new ConstraintViolationException("ML-DSA pub must be " + expectedPubLength + " bytes, but was " + pub.length);
+            }
+            if (priv != null && priv.length != ML_DSA_SEED_LENGTH) {
+                throw new ConstraintViolationException("ML-DSA priv must be " + ML_DSA_SEED_LENGTH + " bytes (seed), but was " + priv.length);
+            }
         }
         if (!hasPublicKey() && !hasPrivateKey()) {
             throw new ConstraintViolationException("pub or priv must be present");
