@@ -1,6 +1,8 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.internal.asn1.der.ASN1OctetString;
+import com.webauthn4j.data.internal.asn1.der.ASN1Sequence;
 import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
@@ -138,7 +140,7 @@ class AKPCOSEKeyTest {
 
         // When
         byte[] pkcs8 = AKPCOSEKey.buildPKCS8PrivateKeyInfo(rawKey, "ML-DSA-65");
-        byte[] extracted = AKPCOSEKey.extractRawFromPKCS8(pkcs8);
+        byte[] extracted = extractRawFromPKCS8(pkcs8);
 
         // Then
         assertThat(extracted).isEqualTo(rawKey);
@@ -352,16 +354,22 @@ class AKPCOSEKeyTest {
     @Test
     @EnabledForJreRange(min = JRE.JAVA_24)
     void validate_with_wrong_ml_dsa_seed_length_throws_test() {
+        // Given - priv is not 32 bytes (not a valid ML-DSA seed)
         byte[] wrongLengthPriv = new byte[64];
         AKPCOSEKey key = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, DUMMY_PUB, wrongLengthPriv);
+
+        // Then
         assertThrows(ConstraintViolationException.class, key::validate);
     }
 
     @Test
     @EnabledForJreRange(min = JRE.JAVA_24)
     void validate_with_wrong_ml_dsa_pub_length_throws_test() {
+        // Given - pub is not the expected length for ML-DSA-65
         byte[] wrongLengthPub = new byte[100];
         AKPCOSEKey key = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, wrongLengthPub, null);
+
+        // Then
         assertThrows(ConstraintViolationException.class, key::validate);
     }
 
@@ -386,5 +394,12 @@ class AKPCOSEKeyTest {
 
         // Then - original should not be modified
         assertThat(key.getPub()[0]).isEqualTo((byte) 0x01);
+    }
+
+    private static byte[] extractRawFromPKCS8(byte[] encoded) {
+        ASN1Sequence pkcs8 = ASN1Sequence.parse(encoded);
+        ASN1OctetString outerOctet = (ASN1OctetString) pkcs8.get(2);
+        ASN1OctetString innerOctet = ASN1OctetString.parse(outerOctet.getValue());
+        return innerOctet.getValue();
     }
 }
