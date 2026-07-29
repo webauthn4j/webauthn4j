@@ -44,6 +44,12 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.params.MLDSAKeyGenerationParameters;
+import org.bouncycastle.crypto.generators.MLDSAKeyPairGenerator;
+import org.bouncycastle.crypto.params.MLDSAParameters;
+import org.bouncycastle.crypto.params.MLDSAPrivateKeyParameters;
+import org.bouncycastle.crypto.params.MLDSAPublicKeyParameters;
 import com.webauthn4j.util.*;
 import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.RegistrationObject;
@@ -269,6 +275,25 @@ public class TestDataUtil {
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
+        return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(alg, signature));
+    }
+
+    public static AttestationObject createAttestationObjectWithSelfPackedMLDSAAttestationStatement(byte[] clientDataHash) {
+        MLDSAKeyPairGenerator bcKeyPairGenerator = new MLDSAKeyPairGenerator();
+        bcKeyPairGenerator.init(new MLDSAKeyGenerationParameters(new SecureRandom(), MLDSAParameters.ml_dsa_65));
+        AsymmetricCipherKeyPair keyPair = bcKeyPairGenerator.generateKeyPair();
+        MLDSAPrivateKeyParameters bcPrivateKey = (MLDSAPrivateKeyParameters) keyPair.getPrivate();
+        MLDSAPublicKeyParameters bcPublicKey = (MLDSAPublicKeyParameters) keyPair.getPublic();
+
+        COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ML_DSA_65;
+        byte[] privateKeySeed = bcPrivateKey.getSeed();
+        byte[] rawPublicKey = bcPublicKey.getEncoded();
+        AKPCOSEKey cosePrivateKey = new AKPCOSEKey(null, alg, null, rawPublicKey, privateKeySeed);
+        AKPCOSEKey cosePublicKey = new AKPCOSEKey(null, alg, null, rawPublicKey, null);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(cosePublicKey);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignature(cosePrivateKey, signedData);
         return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(alg, signature));
     }
 
