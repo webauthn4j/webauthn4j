@@ -40,6 +40,8 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -174,6 +176,16 @@ class PackedAttestationStatementVerifierTest {
 
         verify(clientData, attestationObject);
 
+    }
+
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_24)
+    void verify_with_MLDSASelfAttestation_test() {
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
+        byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithSelfPackedMLDSAAttestationStatement(clientDataHash);
+
+        verify(clientData, attestationObject);
     }
 
     @Test
