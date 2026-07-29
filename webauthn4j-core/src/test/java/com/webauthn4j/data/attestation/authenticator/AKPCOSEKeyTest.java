@@ -74,15 +74,6 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    void validate_with_null_pub_and_null_priv_test() {
-        // Given
-        AKPCOSEKey key = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, null, null);
-
-        // When / Then
-        assertThrows(ConstraintViolationException.class, key::validate);
-    }
-
-    @Test
     @EnabledForJreRange(min = JRE.JAVA_24)
     void validate_with_null_pub_test() {
         // Given
