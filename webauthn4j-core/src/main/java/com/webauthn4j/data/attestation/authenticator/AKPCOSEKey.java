@@ -210,6 +210,15 @@ public class AKPCOSEKey extends AbstractCOSEKey {
             throw new ConstraintViolationException("algorithm must not be null for AKP key type");
         }
         if (isMLDSAAlgorithm()) {
+            // Check on every call rather than caching in a static initializer, because
+            // a provider (e.g. BouncyCastleProvider) may be registered after class loading,
+            // and GraalVM native-image bakes static initializer results at build time.
+            try {
+                KeyFactory.getInstance(getAlgorithm().toSignatureAlgorithm().getJcaName());
+            } catch (NoSuchAlgorithmException e) {
+                throw new ConstraintViolationException(
+                        "ML-DSA is not supported on this runtime. JDK 24 or later is required.", e);
+            }
             int expectedPubLength = getExpectedMLDSAPublicKeyLength();
             if (pub != null && pub.length != expectedPubLength) {
                 throw new ConstraintViolationException("ML-DSA pub must be " + expectedPubLength + " bytes, but was " + pub.length);
