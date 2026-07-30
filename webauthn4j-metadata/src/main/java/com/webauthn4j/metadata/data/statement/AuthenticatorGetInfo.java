@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.webauthn4j.data.AuthenticatorConfigSubCommand;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.PublicKeyCredentialParameters;
@@ -163,7 +164,7 @@ public class AuthenticatorGetInfo {
 
     @JsonProperty("authenticatorConfigCommands")
     @Nullable
-    private final List<Integer> authenticatorConfigCommands;
+    private final List<AuthenticatorConfigSubCommand> authenticatorConfigCommands;
 
     @JsonCreator
     public AuthenticatorGetInfo(
@@ -197,7 +198,7 @@ public class AuthenticatorGetInfo {
             @JsonProperty("pinComplexityPolicyURL") @Nullable String pinComplexityPolicyURL,
             @JsonProperty("maxPINLength") @Nullable Integer maxPINLength,
             @JsonProperty("encCredStoreState") @Nullable String encCredStoreState,
-            @JsonProperty("authenticatorConfigCommands") @Nullable List<Integer> authenticatorConfigCommands) {
+            @JsonProperty("authenticatorConfigCommands") @Nullable List<AuthenticatorConfigSubCommand> authenticatorConfigCommands) {
         this.versions = versions;
         this.extensions = extensions;
         this.aaguid = aaguid;
@@ -368,7 +369,7 @@ public class AuthenticatorGetInfo {
         return encCredStoreState;
     }
 
-    public @Nullable List<Integer> getAuthenticatorConfigCommands() {
+    public @Nullable List<AuthenticatorConfigSubCommand> getAuthenticatorConfigCommands() {
         return authenticatorConfigCommands;
     }
 

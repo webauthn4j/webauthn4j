@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata.data.statement;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AuthenticatorConfigSubCommand;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.UserVerificationMethod;
@@ -68,7 +69,7 @@ class AuthenticatorGetInfoTest {
         assertThat(info.getPinComplexityPolicyURL()).isEqualTo("https://example.com/policy");
         assertThat(info.getMaxPINLength()).isEqualTo(64);
         assertThat(info.getEncCredStoreState()).isEqualTo("state123");
-        assertThat(info.getAuthenticatorConfigCommands()).containsExactly(3, 4);
+        assertThat(info.getAuthenticatorConfigCommands()).containsExactly(AuthenticatorConfigSubCommand.SET_MIN_PIN_LENGTH, AuthenticatorConfigSubCommand.ENABLE_LONG_TOUCH_FOR_RESET);
     }
 
     @Test
