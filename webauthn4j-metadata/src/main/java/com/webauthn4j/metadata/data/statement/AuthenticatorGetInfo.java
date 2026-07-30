@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.data.AuthenticatorConfigSubCommand;
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.CertificationType;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.PublicKeyCredentialParameters;
 import com.webauthn4j.data.UserVerificationMethod;
@@ -117,7 +118,7 @@ public class AuthenticatorGetInfo {
 
     @JsonProperty("certifications")
     @Nullable
-    private final Map<String, Object> certifications;
+    private final Map<CertificationType, Integer> certifications;
 
     @JsonProperty("remainingDiscoverableCredentials")
     @Nullable
@@ -187,7 +188,7 @@ public class AuthenticatorGetInfo {
             @JsonProperty("maxRPIDsForSetMinPINLength") @Nullable Integer maxRPIDsForSetMinPINLength,
             @JsonProperty("preferredPlatformUvAttempts") @Nullable Integer preferredPlatformUvAttempts,
             @JsonProperty("uvModality") @Nullable Set<UserVerificationMethod> uvModality,
-            @JsonProperty("certifications") @Nullable Map<String, Object> certifications,
+            @JsonProperty("certifications") @Nullable Map<CertificationType, Integer> certifications,
             @JsonProperty("remainingDiscoverableCredentials") @Nullable Integer remainingDiscoverableCredentials,
             @JsonProperty("vendorPrototypeConfigCommands") @Nullable List<VendorCommandId> vendorPrototypeConfigCommands,
             @JsonProperty("attestationFormats") @Nullable List<String> attestationFormats,
@@ -322,7 +323,7 @@ public class AuthenticatorGetInfo {
         return uvModality;
     }
 
-    public @Nullable Map<String, Object> getCertifications() {
+    public @Nullable Map<CertificationType, Integer> getCertifications() {
         return certifications;
     }
 

@@ -19,6 +19,7 @@ package com.webauthn4j.metadata.data.statement;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AuthenticatorConfigSubCommand;
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.CertificationType;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.UserVerificationMethod;
 import com.webauthn4j.data.VendorCommandId;
@@ -58,7 +59,8 @@ class AuthenticatorGetInfoTest {
         assertThat(info.getMaxRPIDsForSetMinPINLength()).isEqualTo(3);
         assertThat(info.getPreferredPlatformUvAttempts()).isEqualTo(5);
         assertThat(info.getUvModality()).containsExactly(UserVerificationMethod.FINGERPRINT_INTERNAL);
-        assertThat(info.getCertifications()).containsKey("FIDO");
+        assertThat(info.getCertifications()).containsKey(CertificationType.FIDO);
+        assertThat(info.getCertifications()).containsEntry(CertificationType.FIDO, 1);
         assertThat(info.getRemainingDiscoverableCredentials()).isEqualTo(25);
         assertThat(info.getVendorPrototypeConfigCommands()).containsExactly(new VendorCommandId(1), new VendorCommandId(2));
         assertThat(info.getAttestationFormats()).containsExactly("packed", "fido-u2f");
