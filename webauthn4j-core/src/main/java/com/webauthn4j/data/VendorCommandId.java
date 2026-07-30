@@ -37,10 +37,6 @@ public class VendorCommandId {
         this.value = value;
     }
 
-    public static @NotNull VendorCommandId create(long value) {
-        return new VendorCommandId(value);
-    }
-
     public static @NotNull VendorCommandId create(@NotNull BigInteger value) {
         return new VendorCommandId(value.longValue());
     }
