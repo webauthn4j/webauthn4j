@@ -74,6 +74,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(TPMIAlgHash.class, new TPMIAlgHashDeserializer());
         this.addDeserializer(TPMIAlgPublic.class, new TPMIAlgPublicDeserializer());
         this.addDeserializer(TPMISTAttest.class, new TPMISTAttestDeserializer());
+        this.addDeserializer(VendorCommandId.class, new VendorCommandIdDeserializer());
 
         this.addDeserializer(byte[].class, new ByteArrayBase64UrlDeserializer());
 
@@ -128,6 +129,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addSerializer(new TPMIAlgHashSerializer());
         this.addSerializer(new TPMIAlgPublicSerializer());
         this.addSerializer(new TPMISTAttestSerializer());
+        this.addSerializer(new VendorCommandIdSerializer());
 
         this.addSerializer(new ByteArrayBase64UrlSerializer());
 
@@ -156,6 +158,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, TPMIAlgHash.class);
         ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, TPMIAlgPublic.class);
         ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, TPMISTAttest.class);
+        ModuleNotRegisteredGuardClearingMixin.setIfAbsent(context, VendorCommandId.class);
     }
 
 }

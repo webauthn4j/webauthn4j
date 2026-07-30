@@ -26,6 +26,7 @@ import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.PublicKeyCredentialParameters;
 import com.webauthn4j.data.UserVerificationMethod;
+import com.webauthn4j.data.VendorCommandId;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
 import org.jetbrains.annotations.NotNull;
@@ -124,7 +125,7 @@ public class AuthenticatorGetInfo {
 
     @JsonProperty("vendorPrototypeConfigCommands")
     @Nullable
-    private final List<Integer> vendorPrototypeConfigCommands;
+    private final List<VendorCommandId> vendorPrototypeConfigCommands;
 
     @JsonProperty("attestationFormats")
     @Nullable
@@ -188,7 +189,7 @@ public class AuthenticatorGetInfo {
             @JsonProperty("uvModality") @Nullable Set<UserVerificationMethod> uvModality,
             @JsonProperty("certifications") @Nullable Map<String, Object> certifications,
             @JsonProperty("remainingDiscoverableCredentials") @Nullable Integer remainingDiscoverableCredentials,
-            @JsonProperty("vendorPrototypeConfigCommands") @Nullable List<Integer> vendorPrototypeConfigCommands,
+            @JsonProperty("vendorPrototypeConfigCommands") @Nullable List<VendorCommandId> vendorPrototypeConfigCommands,
             @JsonProperty("attestationFormats") @Nullable List<String> attestationFormats,
             @JsonProperty("uvCountSinceLastPinEntry") @Nullable Integer uvCountSinceLastPinEntry,
             @JsonProperty("longTouchForReset") @Nullable Boolean longTouchForReset,
@@ -329,7 +330,7 @@ public class AuthenticatorGetInfo {
         return remainingDiscoverableCredentials;
     }
 
-    public @Nullable List<Integer> getVendorPrototypeConfigCommands() {
+    public @Nullable List<VendorCommandId> getVendorPrototypeConfigCommands() {
         return vendorPrototypeConfigCommands;
     }
 

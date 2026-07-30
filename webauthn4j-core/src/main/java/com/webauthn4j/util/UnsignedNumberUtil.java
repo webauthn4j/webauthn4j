@@ -101,6 +101,13 @@ public class UnsignedNumberUtil {
         return buffer;
     }
 
+    public static @NotNull BigInteger toUnsignedBigInteger(long value) {
+        if (value >= 0) {
+            return BigInteger.valueOf(value);
+        }
+        return new BigInteger(1, ByteBuffer.allocate(8).putLong(value).array());
+    }
+
     public static boolean isWithinUnsignedByte(int value) {
         return value <= UNSIGNED_BYTE_MAX && value >= 0;
     }
