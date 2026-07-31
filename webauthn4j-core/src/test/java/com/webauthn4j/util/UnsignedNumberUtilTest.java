@@ -197,4 +197,17 @@ class UnsignedNumberUtilTest {
         );
     }
 
+    @Test
+    void toUnsignedBigInteger_test() {
+        assertAll(
+                () -> assertThat(UnsignedNumberUtil.toUnsignedBigInteger(0L)).isEqualTo(BigInteger.ZERO),
+                () -> assertThat(UnsignedNumberUtil.toUnsignedBigInteger(1L)).isEqualTo(BigInteger.ONE),
+                () -> assertThat(UnsignedNumberUtil.toUnsignedBigInteger(Long.MAX_VALUE)).isEqualTo(BigInteger.valueOf(Long.MAX_VALUE)),
+                // -1L as unsigned = 2^64 - 1 = UNSIGNED_LONG_MAX
+                () -> assertThat(UnsignedNumberUtil.toUnsignedBigInteger(-1L)).isEqualTo(UnsignedNumberUtil.UNSIGNED_LONG_MAX),
+                // Long.MIN_VALUE as unsigned = 2^63
+                () -> assertThat(UnsignedNumberUtil.toUnsignedBigInteger(Long.MIN_VALUE)).isEqualTo(new BigInteger("9223372036854775808"))
+        );
+    }
+
 }

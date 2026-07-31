@@ -154,6 +154,7 @@
          <trusted-key id="6F538074CCEBF35F28AF9B066A0975F8B1127B83" group="org.jetbrains.kotlin" />
          <trusted-key id="7119B89FEB81209430E65C62C2AD9C8A7D4E988A" group="^io[.]quarkus($|([.].*))" regex="true" />
          <trusted-key id="71EBF1CA4125B10AAB1E17CDB7DC526C17E3608B" group="jakarta.persistence" name="jakarta.persistence-api" />
+         <trusted-key id="7464550A61C90BA385FC97A76D9567281201E5E3" group="jakarta.servlet" name="jakarta.servlet-api" />
          <trusted-key id="7616EB882DAF57A11477AAF559A252FB1199D873" group="com.google.code.findbugs" name="jsr305" />
          <trusted-key id="78DF98EF7F95578FD545B9A159A7C2A1BD98C013" group="org.jdom" name="jdom2" />
          <trusted-key id="7B121B76A7ED6CE6E60AD51784E913A8E3A748C0" group="org.bouncycastle" />
@@ -162,6 +163,11 @@
          <trusted-key id="839323A4780D5BF9A6978970152888E10EF880B3">
             <trusting group="org.attoparser" />
             <trusting group="org.unbescape" />
+         </trusted-key>
+         <trusted-key id="82F94BBDF95C247BBD21396B9A0B94DEC0FFA7EE">
+            <trusting group="org.webjars" name="bootstrap" />
+            <trusting group="org.webjars" name="webjars-locator-lite" />
+            <trusting group="org.webjars" name="webjars-locator-core" />
          </trusted-key>
          <trusted-key id="84789D24DF77A32433CE1F079EB80E92EB2135B1">
             <trusting group="org.codehaus.plexus" />
@@ -185,6 +191,7 @@
          <trusted-key id="9A762C93B8C54128A3FC73B8CED3EF3DDAF4D9AB" group="com.microsoft.playwright" />
          <trusted-key id="9B32CBC0F3F6BA4C13D611FC21871D2A9AB66A31" group="io.rsocket" name="rsocket-bom" />
          <trusted-key id="9B5D41D28D8231A341B6713BC8C127A0EC7665D6" group="org.jctools" name="jctools-core" />
+         <trusted-key id="A22931805BEA371C4B607CD9CCC16740C5666D5A" group="com.github.spullara.mustache.java" />
          <trusted-key id="A413F67D71BEEC23ADD0CE0ACB43338E060CF9FA" group="org.jacoco" />
          <trusted-key id="A5BD02B93E7A40482EB1D66A5F69AD087600B22C" group="org.ow2.asm" />
          <trusted-key id="A7892505CF1A58076453E52D7999BEFBA1039E8B" group="net.bytebuddy" />
@@ -207,6 +214,7 @@
          <trusted-key id="C89074FC8BE681B7C7EAAB6E4C5EED3C53B75933" group="org.skyscreamer" name="jsonassert" />
          <trusted-key id="C8D37E9675158FF5B29B6D6452FC3551DA8DC57E" group="org.graalvm.sdk" />
          <trusted-key id="CB56EE85705C15BF242636E3ABE791C9C7CA862C" group="com.webauthn4j" />
+         <trusted-key id="D6419D202DFA86A9210F5F04A6D79C503F80535D" group="com.webauthn4j" />
          <trusted-key id="CC57399D74CD7E4768ED6FA4CA62973FBF0451C0" group="com.vaadin.external.google" name="android-json" />
          <trusted-key id="CF6FCDD747FD9C32304B180B58BD11D32974088F" group="com.h2database" name="h2" />
          <trusted-key id="D1436C0DBACEA48702AF97C363F1DD7753B8B315" group="^org[.]sonarsource($|([.].*))" regex="true" />
@@ -225,6 +233,10 @@
          <trusted-key id="EAA526B91DD83BA3E1B9636FA730529CA355A63E" group="org.ccil.cowan.tagsoup" name="tagsoup" />
          <trusted-key id="EAFC1F3B2FCED6AFD046C7D5734AEF3D43509290" group="org.osgi" />
          <trusted-key id="ECA0016B35F518BABA29E113BD7CD21208A46F42" group="^org[.]thymeleaf($|([.].*))" regex="true" />
+         <trusted-key id="FA1703B1D287CAEA3A60F931E0130A3ED5A2079E">
+            <trusting group="org.webjars" name="font-awesome" />
+            <trusting group="org.webjars" name="jquery" />
+         </trusted-key>
          <trusted-key id="EE0CA873074092F806F59B65D364ABAA39A47320" group="com.google.errorprone" />
          <trusted-key id="F254B35617DC255D9344BCFA873A8E86B4372146" group="^org[.]eclipse[.]jetty($|([.].*))" regex="true" />
          <trusted-key id="F3D15B8FF9902805DE4BE6B18DC6F3D0ABDBD017" group="org.codehaus.plexus" name="plexus-sec-dispatcher" />

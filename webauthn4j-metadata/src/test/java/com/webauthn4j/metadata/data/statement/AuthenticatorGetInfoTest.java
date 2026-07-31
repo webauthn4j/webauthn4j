@@ -17,9 +17,12 @@
 package com.webauthn4j.metadata.data.statement;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AuthenticatorConfigSubCommand;
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.CertificationType;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.UserVerificationMethod;
+import com.webauthn4j.data.VendorCommandId;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import org.junit.jupiter.api.Test;
@@ -56,9 +59,10 @@ class AuthenticatorGetInfoTest {
         assertThat(info.getMaxRPIDsForSetMinPINLength()).isEqualTo(3);
         assertThat(info.getPreferredPlatformUvAttempts()).isEqualTo(5);
         assertThat(info.getUvModality()).containsExactly(UserVerificationMethod.FINGERPRINT_INTERNAL);
-        assertThat(info.getCertifications()).containsKey("FIDO");
+        assertThat(info.getCertifications()).containsKey(CertificationType.FIDO);
+        assertThat(info.getCertifications()).containsEntry(CertificationType.FIDO, 1);
         assertThat(info.getRemainingDiscoverableCredentials()).isEqualTo(25);
-        assertThat(info.getVendorPrototypeConfigCommands()).containsExactly(1, 2);
+        assertThat(info.getVendorPrototypeConfigCommands()).containsExactly(new VendorCommandId(1), new VendorCommandId(2));
         assertThat(info.getAttestationFormats()).containsExactly("packed", "fido-u2f");
         assertThat(info.getUvCountSinceLastPinEntry()).isEqualTo(3);
         assertThat(info.getLongTouchForReset()).isTrue();
@@ -68,7 +72,7 @@ class AuthenticatorGetInfoTest {
         assertThat(info.getPinComplexityPolicyURL()).isEqualTo("https://example.com/policy");
         assertThat(info.getMaxPINLength()).isEqualTo(64);
         assertThat(info.getEncCredStoreState()).isEqualTo("state123");
-        assertThat(info.getAuthenticatorConfigCommands()).containsExactly(3, 4);
+        assertThat(info.getAuthenticatorConfigCommands()).containsExactly(AuthenticatorConfigSubCommand.SET_MIN_PIN_LENGTH, AuthenticatorConfigSubCommand.ENABLE_LONG_TOUCH_FOR_RESET);
     }
 
     @Test
@@ -319,6 +323,46 @@ class AuthenticatorGetInfoTest {
                 .isNotEqualTo(c)
                 .isNotEqualTo(null)
                 .isNotEqualTo("string");
+    }
+
+    // ==================== Edge cases ====================
+
+    @Test
+    void authenticatorGetInfo_with_large_vendorPrototypeConfigCommands_test() {
+        // 18446744073709551614 = 2^64 - 2 (UNSIGNED_LONG_MAX - 1)
+        // 9223372036854775808  = 2^63     (Long.MAX_VALUE + 1)
+        String json = """
+                {
+                    "versions": ["FIDO_2_0"],
+                    "aaguid": "0132d110bf4e4208a403ab4f5f12efe5",
+                    "vendorPrototypeConfigCommands": [18446744073709551614, 9223372036854775808]
+                }
+                """;
+        AuthenticatorGetInfo info = jsonMapper.readValue(json, AuthenticatorGetInfo.class);
+        assertThat(info.getVendorPrototypeConfigCommands()).hasSize(2);
+        assertThat(info.getVendorPrototypeConfigCommands().get(0).asBigInteger())
+                .isEqualTo(new java.math.BigInteger("18446744073709551614"));
+        assertThat(info.getVendorPrototypeConfigCommands().get(1).asBigInteger())
+                .isEqualTo(new java.math.BigInteger("9223372036854775808"));
+    }
+
+    @Test
+    void authenticatorGetInfo_vendorPrototypeConfigCommands_roundTrip_test() {
+        String json = """
+                {
+                    "versions": ["FIDO_2_0"],
+                    "aaguid": "0132d110bf4e4208a403ab4f5f12efe5",
+                    "vendorPrototypeConfigCommands": [18446744073709551614, 42]
+                }
+                """;
+        AuthenticatorGetInfo info = jsonMapper.readValue(json, AuthenticatorGetInfo.class);
+        String reserialized = jsonMapper.writeValueAsString(info);
+        assertThat(reserialized).contains("18446744073709551614");
+        assertThat(reserialized).contains("42");
+
+        AuthenticatorGetInfo roundTripped = jsonMapper.readValue(reserialized, AuthenticatorGetInfo.class);
+        assertThat(roundTripped.getVendorPrototypeConfigCommands())
+                .isEqualTo(info.getVendorPrototypeConfigCommands());
     }
 
     // ==================== Test data ====================
