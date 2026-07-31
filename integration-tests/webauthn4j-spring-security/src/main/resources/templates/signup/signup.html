@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>WebAuthn4J Spring Security Integration Test</title>
+    <meta name="contextPath" th:content="@{/}" content="" />
+    <meta name="webAuthnChallenge" th:content="${webAuthnChallenge}" content="" />
+    <th:block th:each="webAuthnCredentialId : ${webAuthnCredentialIds}">
+        <meta name="webAuthnCredentialId" th:content="${webAuthnCredentialId}" content="" />
+    </th:block>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+    <link rel="stylesheet" th:href="@{/css/tiny.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}" />
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/base64url.js}"></script>
+    <script th:src="@{/js/webauthn.js}"></script>
+</head>
+<body class="hold-transition login-page" id="signup-signup-view">
+<div class="content-wrapper">
+    <h1 class="h3 font-weight-normal text-center">WebAuthn4J Spring Security Integration Test</h1>
+    <h2 class="h4 font-weight-normal text-center">Sign up</h2>
+
+    <form th:action="@{/signup}" th:object="${userForm}" method="post" id="signup-form" class="signup-form">
+        <div class="alert alert-danger" role="alert" th:text="${errorMessage}" th:if="${errorMessage}"></div>
+
+        <input id="userHandle" name="userHandle" th:field="*{userHandle}" type="hidden" />
+
+        <div class="form-group">
+            <label for="username" class="sr-only">Username</label>
+            <input type="text" id="username" name="username" th:field="*{username}" class="form-control" placeholder="Username" required autofocus />
+        </div>
+        <div class="form-group">
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" name="password" th:field="*{password}" class="form-control" placeholder="Password" required />
+        </div>
+
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary form-control" name="authenticator" id="authenticator">Register authenticator</button>
+        </div>
+
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="singleFactorAuthenticationAllowed" name="singleFactorAuthenticationAllowed"/>
+                <label class="form-check-label" for="singleFactorAuthenticationAllowed">Allow password authentication</label>
+            </div>
+        </div>
+
+        <div class="mt-3 mb-3">
+            <button class="btn btn-primary btn-block" id="submit" type="submit" disabled>Sign up</button>
+        </div>
+
+        <input id="clientDataJSON" name="authenticator.clientDataJSON" th:field="*{authenticator.clientDataJSON}" type="hidden" />
+        <input id="attestationObject" name="authenticator.attestationObject" th:field="*{authenticator.attestationObject}" type="hidden" />
+        <input id="clientExtensions" name="authenticator.clientExtensions" th:field="*{authenticator.clientExtensions}" type="hidden" />
+    </form>
+
+    <div class="alert alert-info" role="alert">
+        When you mark the "Allow password authentication" checkbox, authenticator is not requested on authentication.
+    </div>
+
+    <a href="./login" class="text-center">Login</a>
+</div>
+</body>
+</html>

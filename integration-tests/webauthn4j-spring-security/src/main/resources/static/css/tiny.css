@@ -1,0 +1,23 @@
+.content-wrapper{
+    max-width: 400px;
+    width: 100%;
+    padding: 15px;
+    margin: auto;
+}
+
+.login-form input#username {
+    margin-bottom: 1em;
+}
+.login-form input#password {
+    margin-bottom: 1em;
+}
+
+.signup-form input#username {
+    margin-bottom: 2em;
+}
+.signup-form input#password{
+    margin-bottom: 2em;
+}
+.signup-form input#authenticator {
+    margin-bottom: 4em;
+}

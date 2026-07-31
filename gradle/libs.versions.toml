@@ -44,6 +44,13 @@ kotlinx-coroutines = "1.11.0"
 
 webauthn4j-ctap = "0.2.0.RELEASE"
 
+webauthn4j-spring-security = "0.12.0.RELEASE"
+
+bootstrap = "5.3.8"
+jquery = "4.0.0"
+font-awesome = "7.3.0"
+webjars-locator-lite = "1.0.1"
+
 [libraries]
 # Third-party libraries
 
@@ -77,6 +84,13 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 webauthn4j-ctap-authenticator = { module = "com.webauthn4j:webauthn4j-ctap-authenticator", version.ref = "webauthn4j-ctap" }
 webauthn4j-ctap-client = { module = "com.webauthn4j:webauthn4j-ctap-client", version.ref = "webauthn4j-ctap" }
+
+# webauthn4j-spring-security integration test dependencies
+webauthn4j-spring-security-core = { module = "com.webauthn4j:webauthn4j-spring-security-core", version.ref = "webauthn4j-spring-security" }
+webjars-bootstrap = { module = "org.webjars:bootstrap", version.ref = "bootstrap" }
+webjars-jquery = { module = "org.webjars:jquery", version.ref = "jquery" }
+webjars-font-awesome = { module = "org.webjars:font-awesome", version.ref = "font-awesome" }
+webjars-locator-lite = { module = "org.webjars:webjars-locator-lite", version.ref = "webjars-locator-lite" }
 
 
 [plugins]
