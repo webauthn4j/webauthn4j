@@ -21,10 +21,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.webauthn4j.data.AuthenticatorConfigSubCommand;
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.CertificationType;
 import com.webauthn4j.data.PinProtocolVersion;
 import com.webauthn4j.data.PublicKeyCredentialParameters;
 import com.webauthn4j.data.UserVerificationMethod;
+import com.webauthn4j.data.VendorCommandId;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
 import org.jetbrains.annotations.NotNull;
@@ -115,7 +118,7 @@ public class AuthenticatorGetInfo {
 
     @JsonProperty("certifications")
     @Nullable
-    private final Map<String, Object> certifications;
+    private final Map<CertificationType, Integer> certifications;
 
     @JsonProperty("remainingDiscoverableCredentials")
     @Nullable
@@ -123,7 +126,7 @@ public class AuthenticatorGetInfo {
 
     @JsonProperty("vendorPrototypeConfigCommands")
     @Nullable
-    private final List<Integer> vendorPrototypeConfigCommands;
+    private final List<VendorCommandId> vendorPrototypeConfigCommands;
 
     @JsonProperty("attestationFormats")
     @Nullable
@@ -163,7 +166,7 @@ public class AuthenticatorGetInfo {
 
     @JsonProperty("authenticatorConfigCommands")
     @Nullable
-    private final List<Integer> authenticatorConfigCommands;
+    private final List<AuthenticatorConfigSubCommand> authenticatorConfigCommands;
 
     @JsonCreator
     public AuthenticatorGetInfo(
@@ -185,9 +188,9 @@ public class AuthenticatorGetInfo {
             @JsonProperty("maxRPIDsForSetMinPINLength") @Nullable Integer maxRPIDsForSetMinPINLength,
             @JsonProperty("preferredPlatformUvAttempts") @Nullable Integer preferredPlatformUvAttempts,
             @JsonProperty("uvModality") @Nullable Set<UserVerificationMethod> uvModality,
-            @JsonProperty("certifications") @Nullable Map<String, Object> certifications,
+            @JsonProperty("certifications") @Nullable Map<CertificationType, Integer> certifications,
             @JsonProperty("remainingDiscoverableCredentials") @Nullable Integer remainingDiscoverableCredentials,
-            @JsonProperty("vendorPrototypeConfigCommands") @Nullable List<Integer> vendorPrototypeConfigCommands,
+            @JsonProperty("vendorPrototypeConfigCommands") @Nullable List<VendorCommandId> vendorPrototypeConfigCommands,
             @JsonProperty("attestationFormats") @Nullable List<String> attestationFormats,
             @JsonProperty("uvCountSinceLastPinEntry") @Nullable Integer uvCountSinceLastPinEntry,
             @JsonProperty("longTouchForReset") @Nullable Boolean longTouchForReset,
@@ -197,7 +200,7 @@ public class AuthenticatorGetInfo {
             @JsonProperty("pinComplexityPolicyURL") @Nullable String pinComplexityPolicyURL,
             @JsonProperty("maxPINLength") @Nullable Integer maxPINLength,
             @JsonProperty("encCredStoreState") @Nullable String encCredStoreState,
-            @JsonProperty("authenticatorConfigCommands") @Nullable List<Integer> authenticatorConfigCommands) {
+            @JsonProperty("authenticatorConfigCommands") @Nullable List<AuthenticatorConfigSubCommand> authenticatorConfigCommands) {
         this.versions = versions;
         this.extensions = extensions;
         this.aaguid = aaguid;
@@ -320,7 +323,7 @@ public class AuthenticatorGetInfo {
         return uvModality;
     }
 
-    public @Nullable Map<String, Object> getCertifications() {
+    public @Nullable Map<CertificationType, Integer> getCertifications() {
         return certifications;
     }
 
@@ -328,7 +331,7 @@ public class AuthenticatorGetInfo {
         return remainingDiscoverableCredentials;
     }
 
-    public @Nullable List<Integer> getVendorPrototypeConfigCommands() {
+    public @Nullable List<VendorCommandId> getVendorPrototypeConfigCommands() {
         return vendorPrototypeConfigCommands;
     }
 
@@ -368,7 +371,7 @@ public class AuthenticatorGetInfo {
         return encCredStoreState;
     }
 
-    public @Nullable List<Integer> getAuthenticatorConfigCommands() {
+    public @Nullable List<AuthenticatorConfigSubCommand> getAuthenticatorConfigCommands() {
         return authenticatorConfigCommands;
     }
 
