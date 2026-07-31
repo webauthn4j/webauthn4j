@@ -142,7 +142,7 @@
             <trusting group="ch.qos.logback" />
             <trusting group="org.slf4j" />
          </trusted-key>
-         <trusted-key id="635EE627345F3C1DD422B2E207D3516820BCF6B1" group="com.github.ben-manes.caffeine" name="caffeine" />
+         <trusted-key id="635EE627345F3C1DD422B2E207D3516820BCF6B1" group="com.github.ben-manes.caffeine" />
          <trusted-key id="6A814B1F869C2BBEAB7CB7271A2A1C94BDE89688" group="org.apache.maven.wagon" />
          <trusted-key id="6A93161EB1990E8346E7BA2B23738DFD7C40DE43" group="org.xmlunit" />
          <trusted-key id="6D2AF456B8CB597387901C786F29F72839B3A8E7" group="^org[.]jboss($|([.].*))" regex="true" />
@@ -198,6 +198,7 @@
          <trusted-key id="BCA1F17506AF088F3A964A9C0459A2B383ED8C11" group="org.eclipse.angus" />
          <trusted-key id="BDB5FA4FE719D787FB3D3197F6D4A1D411E9D1AE" group="com.google.guava" />
          <trusted-key id="BE685132AFD2740D9095F9040CC0B712FEE75827" group="org.assertj" />
+         <trusted-key id="BE6B997EB563F4898C3C406B8DB9FA0B0718BBF9" group="javax.cache" name="cache-api" />
          <trusted-key id="C663D2F64DA2CA09DB28D9ABD3FA67D522C55256" group="org.apache.pulsar" name="pulsar-bom" />
          <trusted-key id="C668130C58722C9DC1C0FC633F1EB974E7AB9B37" group="biz.aQute.bnd" name="biz.aQute.bnd.annotation" />
          <trusted-key id="C70B844F002F21F6D2B9C87522E44AC0622B91C3" group="com.beust" name="jcommander" />
@@ -214,6 +215,7 @@
          <trusted-key id="D54A395B5CF3F86EB45F6E426B1B008864323B92" group="org.antlr" />
          <trusted-key id="D59E542DF7968F9B35ACFBD9AD18C845746FF7AA" group="org.codejive" name="java-properties" />
          <trusted-key id="D5F46BC0B86AF5DC56DF58F05E975CB00C643DBF" group="com.google.inject" />
+         <trusted-key id="DFD60A08EC2B0CECED24A01F36A22209606109DC" group="com.typesafe" name="config" />
          <trusted-key id="E226D7D229050E7A56FAACDF4A03AE60CAAD2E88" group="^io[.]quarkus($|([.].*))" regex="true" />
          <trusted-key id="E3A9F95079E84CE201F7CF60BEDE11EAF1164480" group="org.hamcrest" name="hamcrest" />
          <trusted-key id="E5138A8E9F2E7E42D38B14D99AEE152CDCCEBFCB" group="io.github.hakky54" />
