@@ -49,7 +49,7 @@ webauthn4j-spring-security = "0.12.0.RELEASE"
 bootstrap = "5.3.8"
 jquery = "4.0.0"
 font-awesome = "7.3.0"
-webjars-locator-lite = "1.0.1"
+webjars-locator-lite = "1.1.4"
 
 [libraries]
 # Third-party libraries
