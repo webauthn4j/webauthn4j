@@ -175,7 +175,7 @@ sonarqube {
     }
 }
 
-val publishedSubprojects = subprojects.filter { it.name.startsWith("webauthn4j-") }
+val publishedSubprojects = subprojects.filter { it.name.startsWith("webauthn4j-") && !it.path.startsWith(":integration-tests:") }
 
 mavenCentralPublish {
     targetProjects = publishedSubprojects
