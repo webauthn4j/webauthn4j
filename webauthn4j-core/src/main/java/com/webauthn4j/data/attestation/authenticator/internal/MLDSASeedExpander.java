@@ -22,6 +22,9 @@ public class MLDSASeedExpander {
     public static byte[] expand(byte[] seed, String jcaName) {
         MLDSAParameters params = getMLDSAParameters(jcaName);
         MLDSAPrivateKeyParameters bcPriv = new MLDSAPrivateKeyParameters(params, seed);
+        // Returns the raw expanded key (expandedKey CHOICE in PKCS#8).
+        // Do NOT replace with BCMLDSAPrivateKey.getEncoded(), which emits
+        // the "both" CHOICE (seed + expanded) that the JDK SUN provider rejects.
         return bcPriv.getEncoded();
     }
 
