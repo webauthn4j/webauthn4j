@@ -8,13 +8,16 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
+import com.webauthn4j.data.attestation.authenticator.internal.MLDSASeedExpander;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
 
 import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AKPCOSEKeyTest {
@@ -394,6 +397,23 @@ class AKPCOSEKeyTest {
 
         // Then - original should not be modified
         assertThat(key.getPub()[0]).isEqualTo((byte) 0x01);
+    }
+
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_24)
+    void seed_expansion_produces_sun_compatible_pkcs8_test() throws Exception {
+        Provider sunProvider = Security.getProvider("SUN");
+        assumeThat(sunProvider).as("SUN provider must be available").isNotNull();
+        assumeThat(sunProvider.getService("KeyFactory", "ML-DSA-65"))
+                .as("SUN provider must support ML-DSA-65").isNotNull();
+
+        byte[] seed = new byte[32];
+        byte[] expanded = MLDSASeedExpander.expand(seed, "ML-DSA-65");
+        byte[] pkcs8 = AKPCOSEKey.buildPKCS8PrivateKeyInfo(expanded, "ML-DSA-65");
+
+        KeyFactory kf = KeyFactory.getInstance("ML-DSA-65", "SUN");
+        PrivateKey key = kf.generatePrivate(new PKCS8EncodedKeySpec(pkcs8));
+        assertThat(key).isNotNull();
     }
 
     private static byte[] extractRawFromPKCS8(byte[] encoded) {
