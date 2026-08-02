@@ -18,7 +18,6 @@ package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -53,7 +52,7 @@ public class ECUtil {
     }
 
     public static @NotNull KeyPair createKeyPair() {
-        return createKeyPair((byte[]) null);
+        return createKeyPair(P_256_SPEC);
     }
 
     public static @NotNull PublicKey createPublicKey(@NotNull ECPublicKeySpec ecPublicKeySpec) {
@@ -82,30 +81,14 @@ public class ECUtil {
         }
     }
 
-    public static @NotNull KeyPair createKeyPair(@Nullable byte[] seed, @NotNull ECParameterSpec ecParameterSpec) {
+    public static @NotNull KeyPair createKeyPair(@NotNull ECParameterSpec ecParameterSpec) {
         KeyPairGenerator keyPairGenerator = createKeyPairGenerator();
-        SecureRandom random;
         try {
-            if (seed != null) {
-                random = SecureRandom.getInstance("SHA1PRNG"); // to make it deterministic
-                random.setSeed(seed);
-            }
-            else {
-                random = secureRandom;
-            }
-            keyPairGenerator.initialize(ecParameterSpec, random);
+            keyPairGenerator.initialize(ecParameterSpec, secureRandom);
             return keyPairGenerator.generateKeyPair();
-        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
+        } catch (InvalidAlgorithmParameterException e) {
             throw new UnexpectedCheckedException(e);
         }
-    }
-
-    public static @NotNull KeyPair createKeyPair(@Nullable byte[] seed) {
-        return createKeyPair(seed, ECUtil.P_256_SPEC);
-    }
-
-    public static @NotNull KeyPair createKeyPair(@NotNull ECParameterSpec ecParameterSpec) {
-        return createKeyPair(null, ecParameterSpec);
     }
 
     public static @NotNull PublicKey createPublicKeyFromUncompressed(@NotNull byte[] publicKey) {

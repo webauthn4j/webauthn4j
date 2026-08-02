@@ -42,12 +42,5 @@ class ECUtilTest {
         assertThat(keyPair).isNotNull();
     }
 
-    @Test
-    void createKeyPair_test_with_seed() {
-        byte[] seed = new byte[]{0x01, 0x23, 0x45};
-        KeyPair keyPairA = ECUtil.createKeyPair(seed);
-        KeyPair keyPairB = ECUtil.createKeyPair(seed);
-        assertThat(keyPairA.getPrivate().getEncoded()).isEqualTo(keyPairB.getPrivate().getEncoded());
-    }
 
 }
