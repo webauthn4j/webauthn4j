@@ -325,7 +325,7 @@ class AKPCOSEKeyTest {
         AKPCOSEKey key = new AKPCOSEKey(null, null, null, original.getPub(), null);
 
         // Then
-        assertThatThrownBy(key::getPublicKey).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(key::getPublicKey).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
@@ -334,7 +334,7 @@ class AKPCOSEKeyTest {
         AKPCOSEKey key = new AKPCOSEKey(null, null, null, null, DUMMY_PRIV);
 
         // Then
-        assertThatThrownBy(key::getPrivateKey).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(key::getPrivateKey).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test

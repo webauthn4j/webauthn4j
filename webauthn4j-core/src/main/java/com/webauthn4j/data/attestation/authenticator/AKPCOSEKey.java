@@ -128,12 +128,9 @@ public class AKPCOSEKey extends AbstractCOSEKey {
         if (!hasPublicKey()) {
             return null;
         }
+        validate();
         try {
-            COSEAlgorithmIdentifier alg = getAlgorithm();
-            if (alg == null) {
-                throw new IllegalStateException("algorithm must not be null for AKP key type");
-            }
-            String jcaName = alg.toSignatureAlgorithm().getJcaName();
+            String jcaName = getAlgorithm().toSignatureAlgorithm().getJcaName();
             KeyFactory kf = KeyFactory.getInstance(jcaName);
             byte[] encoded = buildSubjectPublicKeyInfo(pub, jcaName);
             return kf.generatePublic(new X509EncodedKeySpec(encoded));
@@ -147,11 +144,8 @@ public class AKPCOSEKey extends AbstractCOSEKey {
         if (!hasPrivateKey()) {
             return null;
         }
-        COSEAlgorithmIdentifier alg = getAlgorithm();
-        if (alg == null) {
-            throw new IllegalStateException("algorithm must not be null for AKP key type");
-        }
-        String jcaName = alg.toSignatureAlgorithm().getJcaName();
+        validate();
+        String jcaName = getAlgorithm().toSignatureAlgorithm().getJcaName();
         return expandMLDSASeedToPrivateKey(priv, jcaName);
     }
 
