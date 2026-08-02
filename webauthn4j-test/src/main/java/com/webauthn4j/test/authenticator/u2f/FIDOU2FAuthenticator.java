@@ -22,12 +22,19 @@ import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.*;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.math.BigInteger;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
+import java.security.spec.ECPrivateKeySpec;
 import java.util.Arrays;
 
 public class FIDOU2FAuthenticator {
@@ -35,10 +42,13 @@ public class FIDOU2FAuthenticator {
     public static final byte FLAG_OFF = (byte) 0b00000000;
     public static final byte FLAG_UP = (byte) 0b00000001; // user presence
     private static final SecureRandom secureRandom = new SecureRandom();
+    private static final int GCM_IV_LENGTH = 12;
+    private static final int GCM_TAG_BITS = 128;
 
     // property
     private final PrivateKey attestationPrivateKey;
     private final X509Certificate attestationPublicKeyCertificate;
+    private final SecretKey wrappingKey;
     private long counter;
     private byte flags = FLAG_UP;
 
@@ -52,6 +62,7 @@ public class FIDOU2FAuthenticator {
         this.attestationPrivateKey = attestationPrivateKey;
         this.attestationPublicKeyCertificate = attestationPublicKeyCertificate;
         this.counter = counter;
+        this.wrappingKey = deriveWrappingKey(attestationPrivateKey);
     }
 
     public FIDOU2FAuthenticator() {
@@ -63,16 +74,9 @@ public class FIDOU2FAuthenticator {
         byte[] challengeParameter = registrationRequest.getChallengeParameter();
         byte[] applicationParameter = registrationRequest.getApplicationParameter();
 
-        byte[] nonce = new byte[32];
-        secureRandom.nextBytes(nonce);
-        KeyPair keyPair = getKeyPair(applicationParameter, nonce);
+        KeyPair keyPair = ECUtil.createKeyPair();
 
-        byte[] rpPrivateKey = keyPair.getPrivate().getEncoded();
-
-        byte[] message = ByteBuffer.allocate(32 + rpPrivateKey.length)
-                .put(applicationParameter).put(rpPrivateKey).array();
-        byte[] mac = MACUtil.calculateHmacSHA256(message, attestationPrivateKey.getEncoded());
-        byte[] keyHandle = ByteBuffer.allocate(64).put(nonce).put(mac).array();
+        byte[] keyHandle = wrapPrivateKey((ECPrivateKey) keyPair.getPrivate());
 
         byte[] userPublicKey = getBytesFromECPublicKey((ECPublicKey) keyPair.getPublic());
 
@@ -103,11 +107,10 @@ public class FIDOU2FAuthenticator {
         byte[] challenge = authenticationRequest.getChallenge();
         byte[] keyHandle = authenticationRequest.getKeyHandle();
 
-        byte[] nonce = Arrays.copyOf(keyHandle, 32);
-        KeyPair keyPair = getKeyPair(applicationParameter, nonce);
+        PrivateKey privateKey = unwrapPrivateKey(keyHandle);
         countUp();
         byte[] signedData = ByteBuffer.allocate(32 + 1 + 4 + 32).put(applicationParameter).put(flags).put(getCounterBytes()).put(challenge).array();
-        byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
+        byte[] signature = calculateSignature(privateKey, signedData);
         return new AuthenticationResponse(flags, getCounterBytes(), signature);
     }
 
@@ -133,9 +136,44 @@ public class FIDOU2FAuthenticator {
         return byteBuffer.array();
     }
 
-    private KeyPair getKeyPair(byte[] applicationParameter, byte[] nonce) {
-        byte[] seed = ByteBuffer.allocate(64).put(applicationParameter).put(nonce).array();
-        return ECUtil.createKeyPair(seed);
+    private static SecretKey deriveWrappingKey(PrivateKey attestationPrivateKey) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(attestationPrivateKey.getEncoded());
+            return new SecretKeySpec(hash, "AES");
+        } catch (NoSuchAlgorithmException e) {
+            throw new FIDOU2FException("Failed to derive wrapping key", e);
+        }
+    }
+
+    private byte[] wrapPrivateKey(ECPrivateKey privateKey) {
+        try {
+            byte[] scalar = ArrayUtil.convertToFixedByteArray(privateKey.getS());
+            byte[] iv = new byte[GCM_IV_LENGTH];
+            secureRandom.nextBytes(iv);
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, wrappingKey, new GCMParameterSpec(GCM_TAG_BITS, iv));
+            byte[] encrypted = cipher.doFinal(scalar);
+            return ByteBuffer.allocate(GCM_IV_LENGTH + encrypted.length)
+                    .put(iv).put(encrypted).array();
+        } catch (GeneralSecurityException e) {
+            throw new FIDOU2FException("Failed to wrap private key", e);
+        }
+    }
+
+    private PrivateKey unwrapPrivateKey(byte[] keyHandle) {
+        try {
+            byte[] iv = Arrays.copyOf(keyHandle, GCM_IV_LENGTH);
+            byte[] encrypted = Arrays.copyOfRange(keyHandle, GCM_IV_LENGTH, keyHandle.length);
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, wrappingKey, new GCMParameterSpec(GCM_TAG_BITS, iv));
+            byte[] scalar = cipher.doFinal(encrypted);
+            BigInteger s = new BigInteger(1, scalar);
+            KeyFactory kf = KeyFactory.getInstance("EC");
+            return kf.generatePrivate(new ECPrivateKeySpec(s, ECUtil.P_256_SPEC));
+        } catch (GeneralSecurityException e) {
+            throw new FIDOU2FException("Failed to unwrap private key", e);
+        }
     }
 
     private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {
