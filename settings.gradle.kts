@@ -22,6 +22,7 @@ pluginManagement {
     includeBuild("maven-central-publish-plugin")
     includeBuild("optional-dependencies-plugin")
     includeBuild("toolchain-pinning-plugin")
+    includeBuild("test-with-security-provider-plugin")
 }
 
 plugins {
