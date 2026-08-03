@@ -38,6 +38,7 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
+import java.security.spec.ECParameterSpec;
 
 /**
  * Verifies the specified {@link AttestationStatement} is a valid FIDO U2F attestation
@@ -104,9 +105,16 @@ public class FIDOU2FAttestationStatementVerifier extends AbstractStatementVerifi
         if (!publicKey.getAlgorithm().equals("EC")) {
             throw new CertificateException("FIDO-U2F attestation statement supports ECDSA only.", certificate);
         }
-        if (!((ECPublicKey) publicKey).getParams().equals(ECUtil.P_256_SPEC)) {
+        if (!ecParameterSpecEquals(((ECPublicKey) publicKey).getParams(), ECUtil.P_256_SPEC)) {
             throw new CertificateException("FIDO-U2F attestation statement supports secp256r1 curve only.", certificate);
         }
+    }
+
+    private static boolean ecParameterSpecEquals(ECParameterSpec a, ECParameterSpec b) {
+        return a.getCurve().equals(b.getCurve())
+                && a.getGenerator().equals(b.getGenerator())
+                && a.getOrder().equals(b.getOrder())
+                && a.getCofactor() == b.getCofactor();
     }
 
     private void verifySignature(@NotNull CoreRegistrationObject registrationObject) {
