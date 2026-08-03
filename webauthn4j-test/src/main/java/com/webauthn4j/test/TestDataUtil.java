@@ -334,13 +334,14 @@ public class TestDataUtil {
     }
 
     public static EC2COSEKey createEC2COSEPublicKey() {
+        java.security.spec.ECPoint generator = ECUtil.P_256_SPEC.getGenerator();
         return new EC2COSEKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
                 Curve.SECP256R1,
-                new byte[32],
-                new byte[32]
+                ArrayUtil.convertToFixedByteArray(generator.getAffineX()),
+                ArrayUtil.convertToFixedByteArray(generator.getAffineY())
         );
     }
 

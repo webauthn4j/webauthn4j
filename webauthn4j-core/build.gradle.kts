@@ -20,6 +20,29 @@ plugins {
 
 description = "WebAuthn4J Core library"
 
+testing {
+    suites {
+        register<JvmTestSuite>("testWithBouncyCastle") {
+            targets {
+                all {
+                    testTask.configure {
+                        description = "Runs tests with BouncyCastle as the primary JCA provider"
+                        testClassesDirs = sourceSets["test"].output.classesDirs
+                        classpath = sourceSets["test"].runtimeClasspath
+                        systemProperty("java.security.properties",
+                            file("src/test/resources/bc-provider.security").absolutePath)
+                        systemProperty("webauthn4j.test.securityProvider", "BC")
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.named("test") {
+    dependsOn(testing.suites.named("testWithBouncyCastle"))
+}
+
 dependencies {
     api(libs.jackson.databind)
     api(libs.jackson.dataformat.cbor)
