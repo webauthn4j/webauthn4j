@@ -27,7 +27,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyStore;
+import java.security.Provider;
+import java.security.Security;
 import java.security.cert.TrustAnchor;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
@@ -93,7 +96,7 @@ class KeyStoreTrustAnchorRepositoryTest {
 
         @BeforeEach
         void setUp() throws Exception {
-            Assumptions.assumeTrue(isJksAvailable());
+            Assumptions.assumeTrue(isJksKeyStoreAvailable());
             keyStorePath = Paths.get(ClassLoader.getSystemResource(RESOURCE_DIR + "test.jks").toURI());
         }
 
@@ -105,13 +108,13 @@ class KeyStoreTrustAnchorRepositoryTest {
             assertThat(trustAnchors).hasSize(1);
         }
 
-        private boolean isJksAvailable() {
-            try {
-                KeyStore.getInstance("JKS");
-                return true;
-            } catch (java.security.KeyStoreException e) {
-                return false;
-            }
+        // BC-FIPS registers a "JKS" KeyStore type that internally tries to parse as
+        // PKCS12, so KeyStore.getInstance("JKS") alone is not a reliable check.
+        private boolean isJksKeyStoreAvailable() {
+            Provider[] providers = Security.getProviders("KeyStore.JKS");
+            if (providers == null) return false;
+            return Arrays.stream(providers)
+                    .anyMatch(p -> !"BCFIPS".equals(p.getName()));
         }
     }
 
