@@ -42,7 +42,7 @@ kotest = "5.9.1"
 
 kotlinx-coroutines = "1.11.0"
 
-webauthn4j-ctap = "0.2.0.RELEASE"
+webauthn4j-ctap = "0.2.1.RELEASE"
 
 webauthn4j-spring-security = "0.12.0.RELEASE"
 
