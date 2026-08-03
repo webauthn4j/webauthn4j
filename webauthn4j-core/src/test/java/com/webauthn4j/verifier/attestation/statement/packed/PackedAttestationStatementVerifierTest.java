@@ -1,5 +1,6 @@
 package com.webauthn4j.verifier.attestation.statement.packed;
 
+import com.webauthn4j.test.EnabledIfMLDSAAvailable;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
@@ -31,13 +32,9 @@ import com.webauthn4j.verifier.RegistrationObject;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
 import com.webauthn4j.data.attestation.authenticator.AKPCOSEKey;
+import com.webauthn4j.test.internal.MLDSAKeyMaterial;
+import com.webauthn4j.test.internal.MLDSAUtil;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.generators.MLDSAKeyPairGenerator;
-import org.bouncycastle.crypto.params.MLDSAKeyGenerationParameters;
-import org.bouncycastle.crypto.params.MLDSAParameters;
-import org.bouncycastle.crypto.params.MLDSAPrivateKeyParameters;
-import org.bouncycastle.crypto.params.MLDSAPublicKeyParameters;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.cert.CertIOException;
@@ -147,16 +144,12 @@ class PackedAttestationStatementVerifierTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void verify_with_MLDSAx5C_test() throws Exception {
-        MLDSAKeyPairGenerator bcKeyPairGenerator = new MLDSAKeyPairGenerator();
-        bcKeyPairGenerator.init(new MLDSAKeyGenerationParameters(new SecureRandom(), MLDSAParameters.ml_dsa_65));
-        AsymmetricCipherKeyPair keyPair = bcKeyPairGenerator.generateKeyPair();
-        MLDSAPrivateKeyParameters bcPrivateKey = (MLDSAPrivateKeyParameters) keyPair.getPrivate();
-        MLDSAPublicKeyParameters bcPublicKey = (MLDSAPublicKeyParameters) keyPair.getPublic();
+        MLDSAKeyMaterial keyMaterial = MLDSAUtil.generateKeyMaterial("ML-DSA-65");
 
-        AKPCOSEKey cosePublicKey = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, bcPublicKey.getEncoded(), null);
-        AKPCOSEKey cosePrivateKey = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, bcPublicKey.getEncoded(), bcPrivateKey.getSeed());
+        AKPCOSEKey cosePublicKey = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, keyMaterial.getRawPublicKey(), null);
+        AKPCOSEKey cosePrivateKey = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, keyMaterial.getRawPublicKey(), keyMaterial.getSeed());
         KeyPair jcaKeyPair = new KeyPair(cosePublicKey.getPublicKey(), cosePrivateKey.getPrivateKey());
 
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData(cosePublicKey);
@@ -209,7 +202,7 @@ class PackedAttestationStatementVerifierTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void verify_with_MLDSASelfAttestation_test() {
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
