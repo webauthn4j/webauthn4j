@@ -76,9 +76,9 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
     }
 
     private ASN1Encodable createKeyDescriptor(byte[] clientDataHash) {
-        ASN1Integer attestationVersion = new ASN1Integer(2);
+        ASN1Integer attestationVersion = new ASN1Integer(2L);
         ASN1Enumerated attestationSecurityLevel = new ASN1Enumerated(0);
-        ASN1Integer keymasterVersion = new ASN1Integer(1);
+        ASN1Integer keymasterVersion = new ASN1Integer(1L);
         ASN1Enumerated keymasterSecurityLevel = new ASN1Enumerated(0);
         DEROctetString attestationChallenge = new DEROctetString(clientDataHash);
         ASN1OctetString reserved = new DEROctetString(new byte[0]);
@@ -87,8 +87,8 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
         DLSequence softwareEnforced = new DLSequence(softwareEnforcedVector);
 
         ASN1EncodableVector teeEnforcedVector = new ASN1EncodableVector();
-        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionVerifier.KM_TAG_ORIGIN, new ASN1Integer(KeyDescriptionVerifier.KM_ORIGIN_GENERATED)));
-        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionVerifier.KM_TAG_PURPOSE, new DERSet(new ASN1Integer(KeyDescriptionVerifier.KM_PURPOSE_SIGN))));
+        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionVerifier.KM_TAG_ORIGIN, new ASN1Integer((long) KeyDescriptionVerifier.KM_ORIGIN_GENERATED)));
+        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionVerifier.KM_TAG_PURPOSE, new DERSet(new ASN1Integer((long) KeyDescriptionVerifier.KM_PURPOSE_SIGN))));
         DLSequence teeEnforced = new DLSequence(teeEnforcedVector);
 
         ASN1EncodableVector asn1EncodableVector = new ASN1EncodableVector();

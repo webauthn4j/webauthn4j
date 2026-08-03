@@ -47,7 +47,8 @@ class EdDSACOSEKeyTest {
         assertThat(coseKey.hasPrivateKey()).isTrue();
         assertThat(coseKey.getPublicKey()).isNull();
         assertThat(coseKey.getPrivateKey()).isNotNull();
-        assertThat(coseKey.getPrivateKey().getEncoded()).isEqualTo(keyPair.getPrivate().getEncoded());
+        assertThat(((EdECPrivateKey) coseKey.getPrivateKey()).getBytes().orElseThrow())
+                .isEqualTo(((EdECPrivateKey) keyPair.getPrivate()).getBytes().orElseThrow());
     }
 
     @Test
@@ -64,7 +65,8 @@ class EdDSACOSEKeyTest {
         assertThat(coseKey.getPublicKey()).isNotNull();
         assertThat(coseKey.getPrivateKey()).isNotNull();
         assertThat(coseKey.getPublicKey().getEncoded()).isEqualTo(keyPair.getPublic().getEncoded());
-        assertThat(coseKey.getPrivateKey().getEncoded()).isEqualTo(keyPair.getPrivate().getEncoded());
+        assertThat(((EdECPrivateKey) coseKey.getPrivateKey()).getBytes().orElseThrow())
+                .isEqualTo(((EdECPrivateKey) keyPair.getPrivate()).getBytes().orElseThrow());
     }
 
     @Test
@@ -237,7 +239,8 @@ class EdDSACOSEKeyTest {
         assertThat(coseKey.hasPublicKey()).isTrue();
         assertThat(coseKey.hasPrivateKey()).isTrue();
         assertThat(coseKey.getPublicKey().getEncoded()).isEqualTo(keyPair.getPublic().getEncoded());
-        assertThat(coseKey.getPrivateKey().getEncoded()).isEqualTo(keyPair.getPrivate().getEncoded());
+        assertThat(((EdECPrivateKey) coseKey.getPrivateKey()).getBytes().orElseThrow())
+                .isEqualTo(((EdECPrivateKey) keyPair.getPrivate()).getBytes().orElseThrow());
     }
 
     @Test
