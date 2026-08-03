@@ -1,5 +1,6 @@
 package com.webauthn4j.data.attestation.authenticator;
 
+import com.webauthn4j.test.EnabledIfMLDSAAvailable;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.internal.asn1.der.ASN1OctetString;
 import com.webauthn4j.data.internal.asn1.der.ASN1Sequence;
@@ -60,7 +61,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void validate_test() {
         // Given
         AKPCOSEKey key = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, DUMMY_PUB, DUMMY_PRIV);
@@ -79,7 +80,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void validate_with_null_pub_test() {
         // Given
         AKPCOSEKey key = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, null, DUMMY_PRIV);
@@ -187,7 +188,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void create_from_publicKey_test() throws Exception {
         // Given
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65");
@@ -203,7 +204,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void signAndVerify_ML_DSA_65_test() throws Exception {
         // Given
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65");
@@ -230,7 +231,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void signAndVerify_ML_DSA_44_test() throws Exception {
         // Given
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-44");
@@ -255,7 +256,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void signAndVerify_ML_DSA_87_test() throws Exception {
         // Given
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-87");
@@ -280,7 +281,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void cborRoundtrip_test() throws Exception {
         // Given
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65");
@@ -319,7 +320,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void getPublicKey_throws_when_algorithm_is_null_test() throws Exception {
         // Given
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65");
@@ -355,7 +356,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void validate_with_wrong_ml_dsa_seed_length_throws_test() {
         // Given - priv is not 32 bytes (not a valid ML-DSA seed)
         byte[] wrongLengthPriv = new byte[64];
@@ -366,7 +367,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void validate_with_wrong_ml_dsa_pub_length_throws_test() {
         // Given - pub is not the expected length for ML-DSA-65
         byte[] wrongLengthPub = new byte[100];
@@ -400,7 +401,7 @@ class AKPCOSEKeyTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void seed_expansion_produces_sun_compatible_pkcs8_test() throws Exception {
         Provider sunProvider = Security.getProvider("SUN");
         assumeThat(sunProvider).as("SUN provider must be available").isNotNull();
