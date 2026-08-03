@@ -41,12 +41,8 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.RSAUtil;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.MLDSAKeyGenerationParameters;
-import org.bouncycastle.crypto.generators.MLDSAKeyPairGenerator;
-import org.bouncycastle.crypto.params.MLDSAParameters;
-import org.bouncycastle.crypto.params.MLDSAPrivateKeyParameters;
-import org.bouncycastle.crypto.params.MLDSAPublicKeyParameters;
+import com.webauthn4j.test.internal.MLDSAKeyMaterial;
+import com.webauthn4j.test.internal.MLDSAUtil;
 import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.nio.ByteBuffer;
@@ -251,18 +247,10 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
             }
             else if(Arrays.asList(COSEAlgorithmIdentifier.ML_DSA_44, COSEAlgorithmIdentifier.ML_DSA_65, COSEAlgorithmIdentifier.ML_DSA_87).contains(alg)){
                 String jcaName = alg.toSignatureAlgorithm().getJcaName();
-                MLDSAParameters mldsaParams = getMLDSAParameters(jcaName);
-                MLDSAKeyPairGenerator bcKpg = new MLDSAKeyPairGenerator();
-                bcKpg.init(new MLDSAKeyGenerationParameters(new SecureRandom(), mldsaParams));
-                AsymmetricCipherKeyPair bcKp = bcKpg.generateKeyPair();
-                MLDSAPrivateKeyParameters bcPriv = (MLDSAPrivateKeyParameters) bcKp.getPrivate();
-                MLDSAPublicKeyParameters bcPub = (MLDSAPublicKeyParameters) bcKp.getPublic();
+                MLDSAKeyMaterial keyMaterial = MLDSAUtil.generateKeyMaterial(jcaName);
 
-                byte[] seed = bcPriv.getSeed();
-                byte[] rawPub = bcPub.getEncoded();
-
-                AKPCOSEKey akpKey = new AKPCOSEKey(null, alg, null, rawPub, seed);
-                cosePublicKey = new AKPCOSEKey(null, alg, null, rawPub, null);
+                AKPCOSEKey akpKey = new AKPCOSEKey(null, alg, null, keyMaterial.getRawPublicKey(), keyMaterial.getSeed());
+                cosePublicKey = new AKPCOSEKey(null, alg, null, keyMaterial.getRawPublicKey(), null);
                 cosePrivateKey = akpKey;
                 coseKeyPair = akpKey;
 
@@ -472,19 +460,6 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     public boolean isCapableOfStoringClientSideResidentCredential() {
         return true;
-    }
-
-    private static MLDSAParameters getMLDSAParameters(String jcaName) {
-        switch (jcaName) {
-            case "ML-DSA-44":
-                return MLDSAParameters.ml_dsa_44;
-            case "ML-DSA-65":
-                return MLDSAParameters.ml_dsa_65;
-            case "ML-DSA-87":
-                return MLDSAParameters.ml_dsa_87;
-            default:
-                throw new IllegalArgumentException("Unsupported ML-DSA algorithm: " + jcaName);
-        }
     }
 
     private boolean isCapableOfHandling(PublicKeyCredentialParameters publicKeyCredentialParameters) {
