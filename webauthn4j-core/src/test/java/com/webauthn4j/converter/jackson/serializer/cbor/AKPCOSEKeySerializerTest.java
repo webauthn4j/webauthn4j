@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter.jackson.serializer.cbor;
 
+import com.webauthn4j.test.EnabledIfMLDSAAvailable;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AKPCOSEKey;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
@@ -30,7 +31,7 @@ import java.security.KeyPairGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@EnabledForJreRange(min = JRE.JAVA_24)
+@EnabledIfMLDSAAvailable
 class AKPCOSEKeySerializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

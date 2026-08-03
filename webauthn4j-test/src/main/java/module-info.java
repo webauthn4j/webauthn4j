@@ -9,6 +9,8 @@ module com.webauthn4j.test {
     requires org.bouncycastle.pkix;
     requires org.bouncycastle.provider;
 
+    requires org.junit.jupiter.api;
+
     requires static org.jetbrains.annotations;
 
     exports com.webauthn4j.test;

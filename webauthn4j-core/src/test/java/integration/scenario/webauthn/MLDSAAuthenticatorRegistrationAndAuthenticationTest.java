@@ -16,6 +16,7 @@
 
 package integration.scenario.webauthn;
 
+import com.webauthn4j.test.EnabledIfMLDSAAvailable;
 import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
@@ -50,7 +51,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * Integration test for ML-DSA (FIPS 204) post-quantum signature algorithms.
  * Tests the full WebAuthn registration + authentication flow using ML-DSA authenticator emulation.
  */
-@EnabledForJreRange(min = JRE.JAVA_24)
+@EnabledIfMLDSAAvailable
 class MLDSAAuthenticatorRegistrationAndAuthenticationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

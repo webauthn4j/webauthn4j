@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.jws;
 
+import com.webauthn4j.test.EnabledIfMLDSAAvailable;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.ECUtil;
 import org.bouncycastle.cert.X509CertificateHolder;
@@ -64,7 +65,7 @@ class JWSFactoryTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void create_with_ml_dsa_65_private_key_test() throws Exception {
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65");
         KeyPair keyPair = kpg.generateKeyPair();
@@ -76,7 +77,7 @@ class JWSFactoryTest {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_24)
+    @EnabledIfMLDSAAvailable
     void create_and_verify_ml_dsa_65_roundtrip_test() throws Exception {
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA-65");
         KeyPair keyPair = kpg.generateKeyPair();
