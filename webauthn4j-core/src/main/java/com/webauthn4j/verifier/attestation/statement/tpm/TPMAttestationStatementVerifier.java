@@ -27,6 +27,7 @@ import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.attestation.statement.AbstractStatementVerifier;
+import com.webauthn4j.verifier.attestation.statement.tpm.internal.TPMDevicePropertyParser;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +43,6 @@ import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EllipticCurve;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -69,7 +69,6 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
     // ================================================================================================
 
     private TPMDevicePropertyVerifier tpmDevicePropertyVerifier = new NullTPMDevicePropertyVerifier();
-    private TPMDevicePropertyDecoder tpmDevicePropertyDecoder = new DefaultTPMDevicePropertyDecoder();
 
     @Override
     public @NotNull AttestationType verify(@NotNull CoreRegistrationObject registrationObject) {
@@ -238,14 +237,6 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
         this.tpmDevicePropertyVerifier = tpmDevicePropertyVerifier;
     }
 
-    public TPMDevicePropertyDecoder getTPMDevicePropertyDecoder() {
-        return tpmDevicePropertyDecoder;
-    }
-
-    public void setTPMDevicePropertyDecoder(TPMDevicePropertyDecoder tpmDevicePropertyDecoder) {
-        this.tpmDevicePropertyDecoder = tpmDevicePropertyDecoder;
-    }
-
     private void verifyPublicKeyEquality(TPMTPublic pubArea, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         //noinspection ConstantConditions as null check is already done in caller
         PublicKey publicKeyInAuthData = authenticatorData.getAttestedCredentialData().getCOSEKey().getPublicKey();
@@ -310,19 +301,9 @@ public class TPMAttestationStatementVerifier extends AbstractStatementVerifier<T
         }
     }
 
-    private void verifySubjectAlternativeName(X509Certificate certificate) throws CertificateParsingException {
-        try {
-            for (List<?> entry : certificate.getSubjectAlternativeNames()) {
-                if (entry.get(0).equals(4)) {
-                    TPMDeviceProperty tpmDeviceProperty = tpmDevicePropertyDecoder.decode((String) entry.get(1));
-                    tpmDevicePropertyVerifier.verify(tpmDeviceProperty);
-                    return;
-                }
-            }
-        } catch (RuntimeException e) {
-            throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", e);
-        }
-        throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property");
+    private void verifySubjectAlternativeName(X509Certificate certificate) {
+        TPMDeviceProperty tpmDeviceProperty = TPMDevicePropertyParser.parse(certificate);
+        tpmDevicePropertyVerifier.verify(tpmDeviceProperty);
     }
 
     private byte[] getAttToBeSigned(CoreRegistrationObject registrationObject) {

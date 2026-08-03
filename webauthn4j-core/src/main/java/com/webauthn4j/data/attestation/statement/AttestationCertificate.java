@@ -16,48 +16,45 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.webauthn4j.data.internal.asn1.der.ASN1;
+import com.webauthn4j.data.internal.asn1.der.ASN1ObjectIdentifier;
+import com.webauthn4j.data.internal.asn1.der.ASN1Primitive;
+import com.webauthn4j.data.internal.asn1.der.ASN1Structure;
+import com.webauthn4j.data.internal.asn1.der.ASN1Utf8String;
 import com.webauthn4j.verifier.exception.CertificateException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.naming.InvalidNameException;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
+import java.nio.charset.StandardCharsets;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 public class AttestationCertificate {
 
     private static final int CERTIFICATE_VERSION_3 = 3;
     private static final int NON_CA = -1;
+
+    private static final String OID_CN = "2.5.4.3";
+    private static final String OID_C = "2.5.4.6";
+    private static final String OID_O = "2.5.4.10";
+    private static final String OID_OU = "2.5.4.11";
+
+    private static final int ASN1_TAG_UTF8_STRING = 0x0C;
+
+    private static final Map<String, String> NAME_TO_OID = Map.of(
+            "CN", OID_CN,
+            "C", OID_C,
+            "O", OID_O,
+            "OU", OID_OU
+    );
+
     private final X509Certificate certificate;
 
     public AttestationCertificate(@NotNull X509Certificate certificate) {
         this.certificate = certificate;
-    }
-
-    private static Map<String, Object> toMap(Rdn rdn) {
-        try {
-            Map<String, Object> map = new HashMap<>();
-            Attributes attributes = rdn.toAttributes();
-            NamingEnumeration<String> ids = rdn.toAttributes().getIDs();
-
-            while (ids.hasMore()) {
-                String id = ids.next();
-                map.put(id, attributes.get(id).get());
-            }
-            return map;
-
-        } catch (NamingException e) {
-            throw new IllegalArgumentException(e);
-        }
     }
 
     public @NotNull X509Certificate getCertificate() {
@@ -129,12 +126,36 @@ public class AttestationCertificate {
     }
 
     @Nullable String getValue(@NotNull String name) {
-        try {
-            LdapName subjectDN = new LdapName(getCertificate().getSubjectX500Principal().getName());
-            Map<String, Object> map = subjectDN.getRdns().stream().flatMap(rdn -> toMap(rdn).entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            return (String) map.get(name);
-        } catch (InvalidNameException e) {
-            throw new IllegalArgumentException(e);
+        String oid = NAME_TO_OID.get(name);
+        if (oid == null) {
+            return null;
         }
+        byte[] encoded = certificate.getSubjectX500Principal().getEncoded();
+        Map<String, String> attributes = parseRdnSequence(encoded);
+        return attributes.get(oid);
+    }
+
+    private static Map<String, String> parseRdnSequence(byte[] encoded) {
+        Map<String, String> attributes = new HashMap<>();
+        ASN1Structure rdnSequence = (ASN1Structure) ASN1.parse(encoded);
+
+        for (ASN1 rdnElement : rdnSequence) {
+            ASN1Structure rdn = (ASN1Structure) rdnElement;
+            for (ASN1 attrElement : rdn) {
+                ASN1Structure attributeTypeAndValue = (ASN1Structure) attrElement;
+                ASN1ObjectIdentifier oid = ASN1ObjectIdentifier.parse(attributeTypeAndValue.get(0).toBytes());
+                ASN1 value = attributeTypeAndValue.get(1);
+                attributes.put(oid.getContent(), decodeStringValue(value));
+            }
+        }
+        return attributes;
+    }
+
+    private static String decodeStringValue(ASN1 value) {
+        int tagNumber = value.getTagNumber();
+        if (tagNumber == ASN1_TAG_UTF8_STRING) {
+            return ASN1Utf8String.parse(value.toBytes()).getContent();
+        }
+        return new String(((ASN1Primitive) value).getValue(), StandardCharsets.US_ASCII);
     }
 }
