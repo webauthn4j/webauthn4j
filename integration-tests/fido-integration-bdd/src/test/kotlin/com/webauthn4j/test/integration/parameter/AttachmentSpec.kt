@@ -22,11 +22,11 @@ class AttachmentSpec : BehaviorSpec({
 
         When("registering a credential") {
             Then("registration should succeed") {
-                env.scenario.server.createRegistrationOptions(
+                env.scenario.relyingParty.createRegistrationOptions(
                     authenticatorAttachment = AuthenticatorAttachment.PLATFORM
                 )
                     .clientPlatform.createCredential()
-                    .server.verify()
+                    .relyingParty.verify()
             }
         }
     }
@@ -42,11 +42,11 @@ class AttachmentSpec : BehaviorSpec({
         When("attempting to register") {
             Then("WebAuthnClientException should be thrown") {
                 val ex = shouldThrow<WebAuthnClientException> {
-                    env.scenario.server.createRegistrationOptions(
+                    env.scenario.relyingParty.createRegistrationOptions(
                         authenticatorAttachment = AuthenticatorAttachment.PLATFORM
                     )
                         .clientPlatform.createCredential()
-                        .server.verify()
+                        .relyingParty.verify()
                 }
                 ex.message.shouldContain("Matching authenticator doesn't exist")
             }
@@ -64,11 +64,11 @@ class AttachmentSpec : BehaviorSpec({
         When("attempting to register") {
             Then("WebAuthnClientException should be thrown") {
                 val ex = shouldThrow<WebAuthnClientException> {
-                    env.scenario.server.createRegistrationOptions(
+                    env.scenario.relyingParty.createRegistrationOptions(
                         authenticatorAttachment = AuthenticatorAttachment.CROSS_PLATFORM
                     )
                         .clientPlatform.createCredential()
-                        .server.verify()
+                        .relyingParty.verify()
                 }
                 ex.message.shouldContain("Matching authenticator doesn't exist")
             }
@@ -85,11 +85,11 @@ class AttachmentSpec : BehaviorSpec({
 
         When("registering a credential") {
             Then("registration should succeed") {
-                env.scenario.server.createRegistrationOptions(
+                env.scenario.relyingParty.createRegistrationOptions(
                     authenticatorAttachment = AuthenticatorAttachment.CROSS_PLATFORM
                 )
                     .clientPlatform.createCredential()
-                    .server.verify()
+                    .relyingParty.verify()
             }
         }
     }

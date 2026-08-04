@@ -64,9 +64,9 @@ class ResidentKeySpec : BehaviorSpec({
                                 PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, reg.credential.rawId, null)
                             )
                             shouldNotThrowAny {
-                                env.scenario.server.createAuthenticationOptions(allowCredentials = allowCredentials)
+                                env.scenario.relyingParty.createAuthenticationOptions(allowCredentials = allowCredentials)
                                     .clientPlatform.getAssertion()
-                                    .server.verify()
+                                    .relyingParty.verify()
                             }
                         }
                     }

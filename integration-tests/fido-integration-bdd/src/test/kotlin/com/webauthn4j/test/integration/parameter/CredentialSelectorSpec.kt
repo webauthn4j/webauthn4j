@@ -33,7 +33,7 @@ class CredentialSelectorSpec : BehaviorSpec({
 
             When("authenticating without allowCredentials (discoverable flow)") {
                 var candidateCount = 0
-                val options = env.scenario.server.createAuthenticationOptions(allowCredentials = null)
+                val options = env.scenario.relyingParty.createAuthenticationOptions(allowCredentials = null)
                 val context = PublicKeyCredentialRequestContext(
                     env.clientPlatform.origin,
                     publicKeyCredentialSelectionHandler = {

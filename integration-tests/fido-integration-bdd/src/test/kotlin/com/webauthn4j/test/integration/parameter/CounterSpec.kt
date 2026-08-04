@@ -22,14 +22,14 @@ class CounterSpec : BehaviorSpec({
             val allowCredentials = listOf(
                 PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, registration.credential.rawId, null)
             )
-            val auth1 = env.scenario.server.createAuthenticationOptions(allowCredentials = allowCredentials)
+            val auth1 = env.scenario.relyingParty.createAuthenticationOptions(allowCredentials = allowCredentials)
                 .clientPlatform.getAssertion()
-                .server.verify()
+                .relyingParty.verify()
             val counter1 = auth1.authenticationData.authenticatorData.shouldNotBeNull().signCount
 
-            val auth2 = env.scenario.server.createAuthenticationOptions(allowCredentials = allowCredentials)
+            val auth2 = env.scenario.relyingParty.createAuthenticationOptions(allowCredentials = allowCredentials)
                 .clientPlatform.getAssertion()
-                .server.verify()
+                .relyingParty.verify()
             val counter2 = auth2.authenticationData.authenticatorData.shouldNotBeNull().signCount
 
             Then("the counter should increment with each authentication") {

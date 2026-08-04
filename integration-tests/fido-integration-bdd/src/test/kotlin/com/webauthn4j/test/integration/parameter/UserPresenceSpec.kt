@@ -72,23 +72,23 @@ class UserPresenceSpec : BehaviorSpec({
                 if (!clientSuccess) {
                     Then("client-side error should be thrown") {
                         shouldThrow<UPNotSupportedException> {
-                            env.scenario.server.createRegistrationOptions()
+                            env.scenario.relyingParty.createRegistrationOptions()
                                 .clientPlatform.createCredential()
                         }
                     }
                 } else if (!serverSuccess) {
                     Then("UserNotPresentException should be thrown") {
                         shouldThrow<UserNotPresentException> {
-                            env.scenario.server.createRegistrationOptions()
+                            env.scenario.relyingParty.createRegistrationOptions()
                                 .clientPlatform.createCredential()
-                                .server.verify()
+                                .relyingParty.verify()
                         }
                     }
                 } else {
                     Then("registration should succeed with UP=$expectedUPFlag") {
-                        val reg = env.scenario.server.createRegistrationOptions()
+                        val reg = env.scenario.relyingParty.createRegistrationOptions()
                             .clientPlatform.createCredential()
-                            .server.verify()
+                            .relyingParty.verify()
                         if (expectedUPFlag != null) {
                             reg.registrationData.attestationObject!!.authenticatorData.isFlagUP shouldBe expectedUPFlag
                         }

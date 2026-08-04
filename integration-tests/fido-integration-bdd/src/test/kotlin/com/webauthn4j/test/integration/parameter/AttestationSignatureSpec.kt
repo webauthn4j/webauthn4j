@@ -15,12 +15,12 @@ class AttestationSignatureSpec : BehaviorSpec({
         val env = WebAuthnTestEnvironment.forTestsWithAttestationVerification()
 
         When("registering with a tampered attestation signature") {
-            val credentialCreated = env.scenario.server.createRegistrationOptions()
+            val credentialCreated = env.scenario.relyingParty.createRegistrationOptions()
                 .clientPlatform.createCredential()
 
             Then("BadSignatureException should be thrown") {
                 shouldThrow<BadSignatureException> {
-                    credentialCreated.server.verify(
+                    credentialCreated.relyingParty.verify(
                         attestationObject = {
                             val stmt = it.attestationStatement as PackedAttestationStatement
                             val tamperedSig = ByteArray(stmt.sig.size) { i -> stmt.sig[i].toInt().inv().toByte() }

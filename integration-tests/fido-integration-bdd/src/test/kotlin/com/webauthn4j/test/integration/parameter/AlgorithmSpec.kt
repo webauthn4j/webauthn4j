@@ -54,9 +54,9 @@ class AlgorithmSpec : BehaviorSpec({
             When("registering a credential") {
                 if (case.success) {
                     Then("registration should succeed with ${case.expectedKeyType!!.simpleName}") {
-                        val reg = env.scenario.server.createRegistrationOptions(pubKeyCredParams = pubKeyCredParams)
+                        val reg = env.scenario.relyingParty.createRegistrationOptions(pubKeyCredParams = pubKeyCredParams)
                             .clientPlatform.createCredential()
-                            .server.verify()
+                            .relyingParty.verify()
                         val coseKey = reg.registrationData.attestationObject!!.authenticatorData
                             .attestedCredentialData.shouldNotBeNull().coseKey
                         coseKey!!::class shouldBe case.expectedKeyType
@@ -64,9 +64,9 @@ class AlgorithmSpec : BehaviorSpec({
                 } else {
                     Then("CTAP2_ERR_UNSUPPORTED_ALGORITHM should be thrown") {
                         val ex = shouldThrow<CtapErrorException> {
-                            env.scenario.server.createRegistrationOptions(pubKeyCredParams = pubKeyCredParams)
+                            env.scenario.relyingParty.createRegistrationOptions(pubKeyCredParams = pubKeyCredParams)
                                 .clientPlatform.createCredential()
-                                .server.verify()
+                                .relyingParty.verify()
                         }
                         ex.message.shouldContain("CTAP2_ERR_UNSUPPORTED_ALGORITHM")
                     }
@@ -114,16 +114,16 @@ class AlgorithmSpec : BehaviorSpec({
             When("registering and verifying on server") {
                 if (case.success) {
                     Then("the server should accept the credential") {
-                        env.scenario.server.createRegistrationOptions(pubKeyCredParams = rpPubKeyCredParams)
+                        env.scenario.relyingParty.createRegistrationOptions(pubKeyCredParams = rpPubKeyCredParams)
                             .clientPlatform.createCredential()
-                            .server.verify(pubKeyCredParams = serverPubKeyCredParams)
+                            .relyingParty.verify(pubKeyCredParams = serverPubKeyCredParams)
                     }
                 } else {
                     Then("NotAllowedAlgorithmException should be thrown") {
                         shouldThrow<NotAllowedAlgorithmException> {
-                            env.scenario.server.createRegistrationOptions(pubKeyCredParams = rpPubKeyCredParams)
+                            env.scenario.relyingParty.createRegistrationOptions(pubKeyCredParams = rpPubKeyCredParams)
                                 .clientPlatform.createCredential()
-                                .server.verify(pubKeyCredParams = serverPubKeyCredParams)
+                                .relyingParty.verify(pubKeyCredParams = serverPubKeyCredParams)
                         }
                     }
                 }

@@ -29,39 +29,39 @@ import com.webauthn4j.server.ServerProperty
  * protocol flow between a [RelyingParty] and a [ClientPlatform].
  *
  * Each flow is decomposed into step objects representing protocol states,
- * with actor-scoped accessors ([server] / [clientPlatform][RegistrationOptionsCreated.clientPlatform])
+ * with actor-scoped accessors ([relyingParty] / [clientPlatform][RegistrationOptionsCreated.clientPlatform])
  * that make it clear which entity performs each step:
  *
  * ```
- * scenario.server.createRegistrationOptions()
+ * scenario.relyingParty.createRegistrationOptions()
  *     .clientPlatform.createCredential()
- *     .server.verify()
+ *     .relyingParty.verify()
  * ```
  */
 class StandardScenario internal constructor(
-    val relyingParty: RelyingParty,
+    private val relyingPartyObject: RelyingParty,
     val defaultClientPlatform: ClientPlatform,
     private val objectConverter: ObjectConverter,
 ) {
-    val server = ServerActions()
+    val relyingParty = RelyingPartyActions()
 
     /** Convenience: full registration flow with all defaults. */
     suspend fun register(): RegistrationResult =
-        server.createRegistrationOptions()
+        relyingParty.createRegistrationOptions()
             .clientPlatform.createCredential()
-            .server.verify()
+            .relyingParty.verify()
 
     /** Convenience: full authentication flow with all defaults. */
     suspend fun authenticate(): AuthenticationResult =
-        server.createAuthenticationOptions()
+        relyingParty.createAuthenticationOptions()
             .clientPlatform.getAssertion()
-            .server.verify()
+            .relyingParty.verify()
 
     // ============================================================
-    // Server Actions (top-level)
+    // Relying Party Actions (top-level)
     // ============================================================
 
-    inner class ServerActions {
+    inner class RelyingPartyActions {
         fun createRegistrationOptions(
             pubKeyCredParams: List<PublicKeyCredentialParameters>? = null,
             excludeCredentials: List<PublicKeyCredentialDescriptor>? = null,
@@ -74,7 +74,7 @@ class StandardScenario internal constructor(
             hints: List<PublicKeyCredentialHints>? = null,
             attestationFormats: List<String>? = null,
         ): RegistrationOptionsCreated {
-            val rp = relyingParty
+            val rp = relyingPartyObject
             val challenge = DefaultChallenge()
             val effectiveResidentKeyRequirement = residentKeyRequirement ?: rp.residentKeyRequirement
             val options = PublicKeyCredentialCreationOptions(
@@ -107,7 +107,7 @@ class StandardScenario internal constructor(
             timeout: Long? = null,
             hints: List<PublicKeyCredentialHints>? = null,
         ): AuthenticationOptionsCreated {
-            val rp = relyingParty
+            val rp = relyingPartyObject
             val challenge = DefaultChallenge()
             val options = PublicKeyCredentialRequestOptions(
                 challenge, timeout, rp.rpId, allowCredentials,
@@ -173,9 +173,9 @@ class StandardScenario internal constructor(
         private val challenge: Challenge,
         private val scenario: StandardScenario,
     ) {
-        val server = ServerActions()
+        val relyingParty = RelyingPartyActions()
 
-        inner class ServerActions {
+        inner class RelyingPartyActions {
             /** Server verifies the registration response. */
             fun verify(
                 rpId: String? = null,
@@ -185,7 +185,7 @@ class StandardScenario internal constructor(
                 attestationObject: ((AttestationObject) -> AttestationObject)? = null,
                 clientData: ((CollectedClientData) -> CollectedClientData)? = null,
             ): RegistrationResult {
-                val rp = scenario.relyingParty
+                val rp = scenario.relyingPartyObject
                 val originalAttestationObject = credential.response!!.attestationObject
                 val effectiveAttestationObject = if (attestationObject != null) {
                     val converter = AttestationObjectConverter(scenario.objectConverter)
@@ -284,9 +284,9 @@ class StandardScenario internal constructor(
         private val challenge: Challenge,
         private val scenario: StandardScenario,
     ) {
-        val server = ServerActions()
+        val relyingParty = RelyingPartyActions()
 
-        inner class ServerActions {
+        inner class RelyingPartyActions {
             /** Server verifies the authentication response. */
             fun verify(
                 rpId: String? = null,
@@ -297,7 +297,7 @@ class StandardScenario internal constructor(
                 authenticatorData: ((AuthenticatorData<AuthenticationExtensionAuthenticatorOutput>) -> AuthenticatorData<AuthenticationExtensionAuthenticatorOutput>)? = null,
                 clientData: ((CollectedClientData) -> CollectedClientData)? = null,
             ): AuthenticationResult {
-                val rp = scenario.relyingParty
+                val rp = scenario.relyingPartyObject
                 val credentialRecord = rp.lookupCredential(credential.rawId)
                     ?: error("No credential found for ID. Did you register first?")
 

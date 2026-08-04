@@ -16,9 +16,9 @@ class OriginSpec : BehaviorSpec({
         When("registering from a different origin than the server expects") {
             Then("BadOriginException should be thrown") {
                 shouldThrow<BadOriginException> {
-                    env.scenario.server.createRegistrationOptions()
+                    env.scenario.relyingParty.createRegistrationOptions()
                         .clientPlatform.createCredential(origin = Origin("https://evil.example.com"))
-                        .server.verify()
+                        .relyingParty.verify()
                 }
             }
         }
@@ -31,9 +31,9 @@ class OriginSpec : BehaviorSpec({
         When("authenticating from a different origin than the server expects") {
             Then("BadOriginException should be thrown") {
                 shouldThrow<BadOriginException> {
-                    env.scenario.server.createAuthenticationOptions()
+                    env.scenario.relyingParty.createAuthenticationOptions()
                         .clientPlatform.getAssertion(origin = Origin("https://evil.example.com"))
-                        .server.verify()
+                        .relyingParty.verify()
                 }
             }
         }

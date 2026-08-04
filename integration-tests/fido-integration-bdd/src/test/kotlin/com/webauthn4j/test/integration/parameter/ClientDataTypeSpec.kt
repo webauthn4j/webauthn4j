@@ -16,12 +16,12 @@ class ClientDataTypeSpec : BehaviorSpec({
         env.scenario.register()
 
         When("authenticating with clientData type 'webauthn.create' instead of 'webauthn.get'") {
-            val assertionCreated = env.scenario.server.createAuthenticationOptions()
+            val assertionCreated = env.scenario.relyingParty.createAuthenticationOptions()
                 .clientPlatform.getAssertion()
 
             Then("InconsistentClientDataTypeException should be thrown") {
                 shouldThrow<InconsistentClientDataTypeException> {
-                    assertionCreated.server.verify(
+                    assertionCreated.relyingParty.verify(
                         clientData = { it.withType(ClientDataType.WEBAUTHN_CREATE) }
                     )
                 }
@@ -33,12 +33,12 @@ class ClientDataTypeSpec : BehaviorSpec({
         val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("registering with clientData type 'webauthn.get' instead of 'webauthn.create'") {
-            val credentialCreated = env.scenario.server.createRegistrationOptions()
+            val credentialCreated = env.scenario.relyingParty.createRegistrationOptions()
                 .clientPlatform.createCredential()
 
             Then("InconsistentClientDataTypeException should be thrown") {
                 shouldThrow<InconsistentClientDataTypeException> {
-                    credentialCreated.server.verify(
+                    credentialCreated.relyingParty.verify(
                         clientData = { it.withType(ClientDataType.WEBAUTHN_GET) }
                     )
                 }
