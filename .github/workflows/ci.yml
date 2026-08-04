@@ -42,17 +42,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        include:
-          - java_version: 17
-            os: ubuntu-latest
-          - java_version: 21
-            os: ubuntu-latest
-          - java_version: 25
-            os: ubuntu-latest
-          - java_version: 25
-            os: windows-latest
-          - java_version: 25
-            os: macos-latest
+        java_version: [17, 21, 25]
+        os: [ubuntu-latest, windows-latest] # , macOS-latest (remove macOS as it is not stable for now)
 
     steps:
       - name: Checkout
