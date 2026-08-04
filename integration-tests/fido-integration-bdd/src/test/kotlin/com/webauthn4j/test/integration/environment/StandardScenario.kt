@@ -1,5 +1,6 @@
 package com.webauthn4j.test.integration.environment
 
+import com.webauthn4j.converter.AuthenticatorDataConverter
 import com.webauthn4j.converter.CollectedClientDataConverter
 import com.webauthn4j.converter.util.ObjectConverter
 import com.webauthn4j.credential.CredentialRecord
@@ -7,11 +8,13 @@ import com.webauthn4j.credential.CredentialRecordImpl
 import com.webauthn4j.ctap.client.PublicKeyCredentialCreationContext
 import com.webauthn4j.ctap.client.PublicKeyCredentialRequestContext
 import com.webauthn4j.data.*
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier
 import com.webauthn4j.data.client.CollectedClientData
 import com.webauthn4j.data.client.Origin
 import com.webauthn4j.data.client.challenge.Challenge
 import com.webauthn4j.data.client.challenge.DefaultChallenge
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput
@@ -281,13 +284,21 @@ class StandardScenario internal constructor(
                 allowCredentials: List<ByteArray>? = null,
                 userPresenceRequired: Boolean? = null,
                 signature: ByteArray? = null,
-                authenticatorData: ByteArray? = null,
+                authenticatorData: ((AuthenticatorData<AuthenticationExtensionAuthenticatorOutput>) -> AuthenticatorData<AuthenticationExtensionAuthenticatorOutput>)? = null,
                 clientData: ((CollectedClientData) -> CollectedClientData)? = null,
             ): AuthenticationResult {
                 val rp = scenario.relyingParty
                 val credentialRecord = rp.lookupCredential(credential.rawId)
                     ?: error("No credential found for ID. Did you register first?")
 
+                val originalAuthenticatorData = credential.response!!.authenticatorData
+                val effectiveAuthenticatorData = if (authenticatorData != null) {
+                    val converter = AuthenticatorDataConverter(scenario.objectConverter)
+                    val original = converter.convert<AuthenticationExtensionAuthenticatorOutput>(originalAuthenticatorData)
+                    converter.convert(authenticatorData(original))
+                } else {
+                    originalAuthenticatorData
+                }
                 val originalClientDataJSON = credential.response!!.clientDataJSON
                 val effectiveClientDataJSON = if (clientData != null) {
                     val converter = CollectedClientDataConverter(scenario.objectConverter)
@@ -298,7 +309,7 @@ class StandardScenario internal constructor(
                 }
                 val request = AuthenticationRequest(
                     credential.rawId, ByteArray(32),
-                    authenticatorData ?: credential.response!!.authenticatorData,
+                    effectiveAuthenticatorData,
                     effectiveClientDataJSON,
                     scenario.objectConverter.jsonMapper.writeValueAsString(credential.clientExtensionResults),
                     signature ?: credential.response!!.signature
