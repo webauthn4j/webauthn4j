@@ -19,22 +19,19 @@ import io.kotest.matchers.shouldBe
 @Tags("Parameter")
 class UserVerificationSpec : BehaviorSpec({
 
-    // ============================================================
-    // Registration: RP requirement × Authenticator state matrix
-    // ============================================================
-
-    // --- Axis 1: RP requirement + server verification condition ---
+    // --- Axis 1: RP client-facing requirement + server-side verification ---
 
     data class RPConfig(
         val requirement: UserVerificationRequirement,
-        val uvRequired: Boolean,
+        val userVerificationRequired: Boolean,
     ) {
-        override fun toString() = requirement.toString()
+        override fun toString() = "$requirement, userVerificationRequired=$userVerificationRequired"
     }
 
-    val REQUIRE_UV    = RPConfig(REQUIRED,    uvRequired = true)
-    val PREFER_UV     = RPConfig(PREFERRED,   uvRequired = false)
-    val DISCOURAGE_UV = RPConfig(DISCOURAGED, uvRequired = false)
+    val REQUIRE_UV             = RPConfig(REQUIRED,    userVerificationRequired = true)
+    val PREFER_UV              = RPConfig(PREFERRED,   userVerificationRequired = false)
+    val DISCOURAGE_UV          = RPConfig(DISCOURAGED, userVerificationRequired = false)
+    val DISCOURAGE_BUT_REQUIRE = RPConfig(DISCOURAGED, userVerificationRequired = true)
 
     // --- Axis 2: Authenticator UV capability + ClientPIN state ---
 
@@ -52,95 +49,152 @@ class UserVerificationSpec : BehaviorSpec({
     val NOT_READY_NO_PIN  = AuthenticatorState(NOT_READY,     DISABLED)
     val NO_UV_NO_PIN      = AuthenticatorState(NOT_SUPPORTED, DISABLED)
 
-    // --- Matrix: RP × Authenticator → expected result ---
+    // ============================================================
+    // Registration
+    // ============================================================
 
-    data class MatrixEntry(
+    data class RegistrationEntry(
         val rp: RPConfig,
         val auth: AuthenticatorState,
-        val success: Boolean,
+        val clientSuccess: Boolean,
+        val serverSuccess: Boolean = true,
         val uvFlag: Boolean? = null,
     )
 
     listOf(
-        //          RP               Authenticator          success  UV flag
-        MatrixEntry(REQUIRE_UV,      READY_WITH_PIN,        true,    true),
-        MatrixEntry(REQUIRE_UV,      READY_NO_PIN,          true,    true),
-        MatrixEntry(REQUIRE_UV,      NOT_READY_SET_PIN,     true,    true),
-        MatrixEntry(REQUIRE_UV,      NOT_READY_NO_PIN,      false),
-        MatrixEntry(REQUIRE_UV,      NO_UV_NO_PIN,          false),
-        MatrixEntry(PREFER_UV,       READY_WITH_PIN,        true,    true),
-        MatrixEntry(PREFER_UV,       READY_NO_PIN,          true,    true),
-        MatrixEntry(PREFER_UV,       NOT_READY_SET_PIN,     true,    true),
-        MatrixEntry(PREFER_UV,       NOT_READY_NO_PIN,      true,    false),
-        MatrixEntry(PREFER_UV,       NO_UV_NO_PIN,          true,    false),
-        MatrixEntry(DISCOURAGE_UV,   READY_WITH_PIN,        true,    false),
-        MatrixEntry(DISCOURAGE_UV,   READY_NO_PIN,          true,    false),
-        MatrixEntry(DISCOURAGE_UV,   NOT_READY_SET_PIN,     true,    false),
-        MatrixEntry(DISCOURAGE_UV,   NOT_READY_NO_PIN,      true,    false),
-        MatrixEntry(DISCOURAGE_UV,   NO_UV_NO_PIN,          true,    false),
-    ).forEach { (rp, auth, success, uvFlag) ->
+        //                    RP                         Authenticator         client  server  UV flag
+        RegistrationEntry(REQUIRE_UV,                READY_WITH_PIN,       true,   true,   true),
+        RegistrationEntry(REQUIRE_UV,                READY_NO_PIN,         true,   true,   true),
+        RegistrationEntry(REQUIRE_UV,                NOT_READY_SET_PIN,    true,   true,   true),
+        RegistrationEntry(REQUIRE_UV,                NOT_READY_NO_PIN,     false),
+        RegistrationEntry(REQUIRE_UV,                NO_UV_NO_PIN,         false),
+        RegistrationEntry(PREFER_UV,                 READY_WITH_PIN,       true,   true,   true),
+        RegistrationEntry(PREFER_UV,                 READY_NO_PIN,         true,   true,   true),
+        RegistrationEntry(PREFER_UV,                 NOT_READY_SET_PIN,    true,   true,   true),
+        RegistrationEntry(PREFER_UV,                 NOT_READY_NO_PIN,     true,   true,   false),
+        RegistrationEntry(PREFER_UV,                 NO_UV_NO_PIN,         true,   true,   false),
+        RegistrationEntry(DISCOURAGE_UV,             READY_WITH_PIN,       true,   true,   false),
+        RegistrationEntry(DISCOURAGE_UV,             READY_NO_PIN,         true,   true,   false),
+        RegistrationEntry(DISCOURAGE_UV,             NOT_READY_SET_PIN,    true,   true,   false),
+        RegistrationEntry(DISCOURAGE_UV,             NOT_READY_NO_PIN,     true,   true,   false),
+        RegistrationEntry(DISCOURAGE_UV,             NO_UV_NO_PIN,         true,   true,   false),
+        RegistrationEntry(DISCOURAGE_BUT_REQUIRE,    READY_WITH_PIN,       true,   false,  false),
+        RegistrationEntry(DISCOURAGE_BUT_REQUIRE,    READY_NO_PIN,         true,   false,  false),
+        RegistrationEntry(DISCOURAGE_BUT_REQUIRE,    NOT_READY_SET_PIN,    true,   false,  false),
+        RegistrationEntry(DISCOURAGE_BUT_REQUIRE,    NOT_READY_NO_PIN,     true,   false,  false),
+        RegistrationEntry(DISCOURAGE_BUT_REQUIRE,    NO_UV_NO_PIN,         true,   false,  false),
+    ).forEach { (rp, auth, clientSuccess, serverSuccess, uvFlag) ->
 
-        Given("RP $rp × authenticator $auth") {
+        Given("registration: RP $rp × authenticator $auth") {
             val env = WebAuthnTestEnvironment.create {
                 clientPlatform {
                     authenticator { userVerification = auth.uv; clientPIN = auth.pin }
                 }
-                relyingParty { userVerificationRequirement = rp.requirement; userVerificationRequired = rp.uvRequired }
+                relyingParty { userVerificationRequirement = rp.requirement; userVerificationRequired = rp.userVerificationRequired }
             }
             if (auth.setPIN) env.clientPlatform.ctapService.setPIN("clientPIN")
 
             When("registering a credential") {
-                if (success) {
+                if (!clientSuccess) {
+                    Then("client-side error should be thrown") {
+                        shouldThrow<WebAuthnClientException> {
+                            env.scenario.server.createRegistrationOptions()
+                                .clientPlatform.createCredential()
+                        }
+                    }
+                } else if (!serverSuccess) {
+                    Then("UserNotVerifiedException should be thrown") {
+                        shouldThrow<UserNotVerifiedException> {
+                            env.scenario.server.createRegistrationOptions()
+                                .clientPlatform.createCredential()
+                                .server.verify()
+                        }
+                    }
+                } else {
                     Then("registration should succeed") {
-                        val reg = env.scenario.register()
+                        val reg = env.scenario.server.createRegistrationOptions()
+                            .clientPlatform.createCredential()
+                            .server.verify()
                         if (uvFlag != null) {
                             reg.registrationData.attestationObject!!.authenticatorData.isFlagUV shouldBe uvFlag
                         }
                     }
-                } else {
-                    Then("an error should be thrown") {
-                        shouldThrow<WebAuthnClientException> { env.scenario.register() }
+                }
+            }
+        }
+    }
+
+    // ============================================================
+    // Authentication
+    // ============================================================
+
+    data class AuthenticationEntry(
+        val rp: RPConfig,
+        val auth: AuthenticatorState,
+        val clientSuccess: Boolean,
+        val serverSuccess: Boolean = true,
+    )
+
+    listOf(
+        //                       RP                         Authenticator         client  server
+        AuthenticationEntry(REQUIRE_UV,                READY_WITH_PIN,       true,   true),
+        AuthenticationEntry(REQUIRE_UV,                READY_NO_PIN,         true,   true),
+        AuthenticationEntry(REQUIRE_UV,                NOT_READY_SET_PIN,    true,   true),
+        AuthenticationEntry(REQUIRE_UV,                NOT_READY_NO_PIN,     false),
+        AuthenticationEntry(REQUIRE_UV,                NO_UV_NO_PIN,         false),
+        AuthenticationEntry(PREFER_UV,                 READY_WITH_PIN,       true,   true),
+        AuthenticationEntry(PREFER_UV,                 READY_NO_PIN,         true,   true),
+        AuthenticationEntry(PREFER_UV,                 NOT_READY_SET_PIN,    true,   true),
+        AuthenticationEntry(PREFER_UV,                 NOT_READY_NO_PIN,     true,   true),
+        AuthenticationEntry(PREFER_UV,                 NO_UV_NO_PIN,         true,   true),
+        AuthenticationEntry(DISCOURAGE_UV,             READY_WITH_PIN,       true,   true),
+        AuthenticationEntry(DISCOURAGE_UV,             READY_NO_PIN,         true,   true),
+        AuthenticationEntry(DISCOURAGE_UV,             NOT_READY_SET_PIN,    true,   true),
+        AuthenticationEntry(DISCOURAGE_UV,             NOT_READY_NO_PIN,     true,   true),
+        AuthenticationEntry(DISCOURAGE_UV,             NO_UV_NO_PIN,         true,   true),
+        AuthenticationEntry(DISCOURAGE_BUT_REQUIRE,    READY_WITH_PIN,       true,   false),
+        AuthenticationEntry(DISCOURAGE_BUT_REQUIRE,    READY_NO_PIN,         true,   false),
+        AuthenticationEntry(DISCOURAGE_BUT_REQUIRE,    NOT_READY_SET_PIN,    true,   false),
+        AuthenticationEntry(DISCOURAGE_BUT_REQUIRE,    NOT_READY_NO_PIN,     true,   false),
+        AuthenticationEntry(DISCOURAGE_BUT_REQUIRE,    NO_UV_NO_PIN,         true,   false),
+    ).forEach { (rp, auth, clientSuccess, serverSuccess) ->
+
+        Given("authentication: RP $rp × authenticator $auth") {
+            val env = WebAuthnTestEnvironment.create {
+                clientPlatform {
+                    authenticator { userVerification = auth.uv; clientPIN = auth.pin }
+                }
+                relyingParty { userVerificationRequirement = rp.requirement; userVerificationRequired = false }
+            }
+            if (auth.setPIN) env.clientPlatform.ctapService.setPIN("clientPIN")
+
+            When("authenticating") {
+                if (!clientSuccess) {
+                    Then("registration should fail before authentication") {
+                        shouldThrow<WebAuthnClientException> {
+                            env.scenario.register()
+                        }
                     }
-                }
-            }
-        }
-    }
+                } else {
+                    env.scenario.register()
 
-    // ============================================================
-    // Authentication: server UV requirement vs client UV behavior
-    // ============================================================
-
-    Given("server requires UV but client authenticates with DISCOURAGED") {
-        val env = WebAuthnTestEnvironment.create {
-            clientPlatform { authenticator() }
-            relyingParty { userVerificationRequirement = REQUIRED; userVerificationRequired = true }
-        }
-        env.scenario.register()
-
-        When("authenticating without UV while server requires it") {
-            Then("UserNotVerifiedException should be thrown") {
-                shouldThrow<UserNotVerifiedException> {
-                    env.scenario.server.createAuthenticationOptions(userVerificationRequirement = DISCOURAGED)
-                        .clientPlatform.getAssertion()
-                        .server.verify(userVerificationRequired = true)
-                }
-            }
-        }
-    }
-
-    Given("server does not require UV and client authenticates with DISCOURAGED") {
-        val env = WebAuthnTestEnvironment.create {
-            clientPlatform { authenticator() }
-            relyingParty { userVerificationRequirement = DISCOURAGED; userVerificationRequired = false }
-        }
-        env.scenario.register()
-
-        When("authenticating without UV") {
-            Then("the server should accept the authentication") {
-                shouldNotThrowAny {
-                    env.scenario.server.createAuthenticationOptions(userVerificationRequirement = DISCOURAGED)
-                        .clientPlatform.getAssertion()
-                        .server.verify(userVerificationRequired = false)
+                    if (!serverSuccess) {
+                        Then("UserNotVerifiedException should be thrown") {
+                            shouldThrow<UserNotVerifiedException> {
+                                env.scenario.server.createAuthenticationOptions(userVerificationRequirement = rp.requirement)
+                                    .clientPlatform.getAssertion()
+                                    .server.verify(userVerificationRequired = rp.userVerificationRequired)
+                            }
+                        }
+                    } else {
+                        Then("authentication should succeed") {
+                            shouldNotThrowAny {
+                                env.scenario.server.createAuthenticationOptions(userVerificationRequirement = rp.requirement)
+                                    .clientPlatform.getAssertion()
+                                    .server.verify(userVerificationRequired = rp.userVerificationRequired)
+                            }
+                        }
+                    }
                 }
             }
         }

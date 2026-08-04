@@ -10,10 +10,10 @@ import io.kotest.core.spec.style.BehaviorSpec
 @Tags("Parameter")
 class OriginSpec : BehaviorSpec({
 
-    Given("a registration from a malicious origin") {
+    Given("a default test environment") {
         val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
-        When("the credential is created from a different origin than the server expects") {
+        When("registering from a different origin than the server expects") {
             Then("BadOriginException should be thrown") {
                 shouldThrow<BadOriginException> {
                     env.scenario.server.createRegistrationOptions()
@@ -24,11 +24,11 @@ class OriginSpec : BehaviorSpec({
         }
     }
 
-    Given("an authentication from a malicious origin") {
+    Given("a registered credential") {
         val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
-        When("the assertion is created from a different origin than the server expects") {
+        When("authenticating from a different origin than the server expects") {
             Then("BadOriginException should be thrown") {
                 shouldThrow<BadOriginException> {
                     env.scenario.server.createAuthenticationOptions()
