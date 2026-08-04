@@ -15,31 +15,31 @@ class ChallengeSpec : BehaviorSpec({
     val fixedChallenge = DefaultChallenge(ByteArray(32) { 0x41 })
 
     Given("a registration with a tampered challenge (challenge fixation attack)") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("the credential is created with an attacker's fixed challenge instead of the server's") {
-            val credentialCreated = env.scenario.createRegistrationOptions()
-                .createCredential(overrideChallenge = fixedChallenge)
+            val credentialCreated = env.scenario.server.createRegistrationOptions()
+                .clientPlatform.createCredential(challenge = fixedChallenge)
 
             Then("BadChallengeException should be thrown") {
                 shouldThrow<BadChallengeException> {
-                    credentialCreated.verifyOnServer()
+                    credentialCreated.server.verify()
                 }
             }
         }
     }
 
     Given("an authentication with a tampered challenge (challenge fixation attack)") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("the assertion is created with an attacker's fixed challenge instead of the server's") {
-            val assertionCreated = env.scenario.createAuthenticationOptions()
-                .getAssertion(overrideChallenge = fixedChallenge)
+            val assertionCreated = env.scenario.server.createAuthenticationOptions()
+                .clientPlatform.getAssertion(challenge = fixedChallenge)
 
             Then("BadChallengeException should be thrown") {
                 shouldThrow<BadChallengeException> {
-                    assertionCreated.verifyOnServer()
+                    assertionCreated.server.verify()
                 }
             }
         }

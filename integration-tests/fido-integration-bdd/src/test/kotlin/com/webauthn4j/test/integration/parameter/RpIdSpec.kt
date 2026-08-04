@@ -10,29 +10,29 @@ import io.kotest.core.spec.style.BehaviorSpec
 class RpIdSpec : BehaviorSpec({
 
     Given("a credential presented to a different RP during registration") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("the server verifies with a different rpId") {
             Then("BadRpIdException should be thrown") {
                 shouldThrow<BadRpIdException> {
-                    env.scenario.createRegistrationOptions()
-                        .createCredential()
-                        .verifyOnServer(rpId = "another.site.example.net")
+                    env.scenario.server.createRegistrationOptions()
+                        .clientPlatform.createCredential()
+                        .server.verify(rpId = "another.site.example.net")
                 }
             }
         }
     }
 
     Given("a credential presented to a different RP during authentication") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("the server verifies with a different rpId") {
             Then("BadRpIdException should be thrown") {
                 shouldThrow<BadRpIdException> {
-                    env.scenario.createAuthenticationOptions()
-                        .getAssertion()
-                        .verifyOnServer(rpId = "another.site.example.net")
+                    env.scenario.server.createAuthenticationOptions()
+                        .clientPlatform.getAssertion()
+                        .server.verify(rpId = "another.site.example.net")
                 }
             }
         }

@@ -17,7 +17,7 @@ class BackupStateSpec : BehaviorSpec({
     // --- Single-device credential (BE=0) ---
 
     Given("a single-device credential (BE=0)") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val reg = env.scenario.register()
 
         When("checking flags after registration") {

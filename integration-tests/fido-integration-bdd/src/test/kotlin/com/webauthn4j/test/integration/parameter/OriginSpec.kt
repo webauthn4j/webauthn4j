@@ -10,30 +10,30 @@ import io.kotest.core.spec.style.BehaviorSpec
 @Tags("Parameter")
 class OriginSpec : BehaviorSpec({
 
-    Given("a registration from a malicious origin") {
-        val env = WebAuthnTestEnvironment.createDefault()
+    Given("a default test environment") {
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
-        When("the credential is created from a different origin than the server expects") {
+        When("registering from a different origin than the server expects") {
             Then("BadOriginException should be thrown") {
                 shouldThrow<BadOriginException> {
-                    env.scenario.createRegistrationOptions()
-                        .createCredential(overrideOrigin = Origin("https://evil.example.com"))
-                        .verifyOnServer()
+                    env.scenario.server.createRegistrationOptions()
+                        .clientPlatform.createCredential(origin = Origin("https://evil.example.com"))
+                        .server.verify()
                 }
             }
         }
     }
 
-    Given("an authentication from a malicious origin") {
-        val env = WebAuthnTestEnvironment.createDefault()
+    Given("a registered credential") {
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
-        When("the assertion is created from a different origin than the server expects") {
+        When("authenticating from a different origin than the server expects") {
             Then("BadOriginException should be thrown") {
                 shouldThrow<BadOriginException> {
-                    env.scenario.createAuthenticationOptions()
-                        .getAssertion(overrideOrigin = Origin("https://evil.example.com"))
-                        .verifyOnServer()
+                    env.scenario.server.createAuthenticationOptions()
+                        .clientPlatform.getAssertion(origin = Origin("https://evil.example.com"))
+                        .server.verify()
                 }
             }
         }

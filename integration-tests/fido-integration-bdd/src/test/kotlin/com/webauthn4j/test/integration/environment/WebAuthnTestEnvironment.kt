@@ -1,7 +1,16 @@
 package com.webauthn4j.test.integration.environment
 
+import com.webauthn4j.WebAuthnManager
 import com.webauthn4j.converter.util.ObjectConverter
+import com.webauthn4j.ctap.authenticator.attestation.PackedBasicAttestationStatementProvider
 import com.webauthn4j.ctap.client.CtapClient
+import com.webauthn4j.data.AttestationConveyancePreference
+import com.webauthn4j.data.SignatureAlgorithm
+import com.webauthn4j.test.TestAttestationUtil
+import com.webauthn4j.verifier.attestation.statement.packed.PackedAttestationStatementVerifier
+import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier
+import com.webauthn4j.verifier.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessVerifier
+import java.security.KeyPair
 import com.webauthn4j.ctap.client.CtapService
 import com.webauthn4j.ctap.client.WebAuthnClient
 import com.webauthn4j.ctap.client.transport.InProcessAdaptor
@@ -29,9 +38,39 @@ class WebAuthnTestEnvironment internal constructor(
             return dsl.build()
         }
 
-        fun createDefault(): WebAuthnTestEnvironment = create {
+        fun forTestsWithoutAttestationVerification(): WebAuthnTestEnvironment = create {
             clientPlatform { authenticator() }
             relyingParty()
+        }
+
+        fun forTestsWithAttestationVerification(): WebAuthnTestEnvironment {
+            val attestationKeyPair = KeyPair(
+                TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey(),
+                TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey()
+            )
+            val intermediateCAPrivateKey = TestAttestationUtil.load3tierTestIntermediateCAPrivateKey()
+            val intermediateCACert = TestAttestationUtil.load3tierTestIntermediateCACertificate()
+            val trustAnchorRepository = TestAttestationUtil.createTrustAnchorRepositoryWith3tierTestRootCACertificate()
+
+            return create {
+                clientPlatform {
+                    authenticator {
+                        attestationStatementProvider = PackedBasicAttestationStatementProvider(
+                            "CN=Test Authenticator, OU=Authenticator Attestation, O=Test, C=US",
+                            attestationKeyPair, intermediateCAPrivateKey,
+                            SignatureAlgorithm.ES256, listOf(intermediateCACert), ObjectConverter()
+                        )
+                    }
+                }
+                relyingParty {
+                    attestation = AttestationConveyancePreference.DIRECT
+                    webAuthnManager = WebAuthnManager(
+                        listOf(PackedAttestationStatementVerifier()),
+                        DefaultCertPathTrustworthinessVerifier(trustAnchorRepository),
+                        DefaultSelfAttestationTrustworthinessVerifier()
+                    )
+                }
+            }
         }
     }
 }

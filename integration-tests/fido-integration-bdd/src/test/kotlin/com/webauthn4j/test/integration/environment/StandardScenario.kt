@@ -1,16 +1,26 @@
 package com.webauthn4j.test.integration.environment
 
+import com.webauthn4j.converter.AttestationObjectConverter
+import com.webauthn4j.converter.AuthenticatorDataConverter
+import com.webauthn4j.converter.CollectedClientDataConverter
 import com.webauthn4j.converter.util.ObjectConverter
 import com.webauthn4j.credential.CredentialRecord
 import com.webauthn4j.credential.CredentialRecordImpl
 import com.webauthn4j.ctap.client.PublicKeyCredentialCreationContext
 import com.webauthn4j.ctap.client.PublicKeyCredentialRequestContext
 import com.webauthn4j.data.*
+import com.webauthn4j.data.attestation.AttestationObject
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier
+import com.webauthn4j.data.client.CollectedClientData
 import com.webauthn4j.data.client.Origin
 import com.webauthn4j.data.client.challenge.Challenge
 import com.webauthn4j.data.client.challenge.DefaultChallenge
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput
 import com.webauthn4j.server.ServerProperty
 
@@ -18,75 +28,94 @@ import com.webauthn4j.server.ServerProperty
  * Standard WebAuthn scenario that orchestrates the registration/authentication
  * protocol flow between a [RelyingParty] and a [ClientPlatform].
  *
- * Each flow is decomposed into step objects representing protocol states:
- * - Registration: [RegistrationOptionsCreated] → [RegistrationCredentialCreated] → [RegistrationResult]
- * - Authentication: [AuthenticationOptionsCreated] → [AuthenticationAssertionCreated] → [AuthenticationResult]
+ * Each flow is decomposed into step objects representing protocol states,
+ * with actor-scoped accessors ([server] / [clientPlatform][RegistrationOptionsCreated.clientPlatform])
+ * that make it clear which entity performs each step:
+ *
+ * ```
+ * scenario.server.createRegistrationOptions()
+ *     .clientPlatform.createCredential()
+ *     .server.verify()
+ * ```
  */
 class StandardScenario internal constructor(
     val relyingParty: RelyingParty,
     val defaultClientPlatform: ClientPlatform,
     private val objectConverter: ObjectConverter,
 ) {
-    // ============================================================
-    // Registration Flow
-    // ============================================================
-
-    fun createRegistrationOptions(
-        pubKeyCredParams: List<PublicKeyCredentialParameters>? = null,
-        excludeCredentials: List<PublicKeyCredentialDescriptor>? = null,
-        authenticatorAttachment: AuthenticatorAttachment? = null,
-    ): RegistrationOptionsCreated {
-        val rp = relyingParty
-        val challenge = DefaultChallenge()
-        val options = PublicKeyCredentialCreationOptions(
-            PublicKeyCredentialRpEntity(rp.rpId, rp.rpName),
-            PublicKeyCredentialUserEntity(ByteArray(32), "user@example.com", "Test User"),
-            challenge,
-            pubKeyCredParams ?: listOf(
-                PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256)
-            ),
-            null,
-            excludeCredentials ?: emptyList(),
-            AuthenticatorSelectionCriteria(
-                authenticatorAttachment,
-                rp.residentKeyRequirement == ResidentKeyRequirement.REQUIRED,
-                rp.residentKeyRequirement,
-                rp.userVerificationRequirement
-            ),
-            rp.attestation,
-            null
-        )
-        return RegistrationOptionsCreated(options, challenge, this)
-    }
+    val server = ServerActions()
 
     /** Convenience: full registration flow with all defaults. */
     suspend fun register(): RegistrationResult =
-        createRegistrationOptions()
-            .createCredential(defaultClientPlatform)
-            .verifyOnServer()
-
-    // ============================================================
-    // Authentication Flow
-    // ============================================================
-
-    fun createAuthenticationOptions(
-        allowCredentials: List<PublicKeyCredentialDescriptor>? = null,
-        userVerificationRequirement: UserVerificationRequirement? = null,
-    ): AuthenticationOptionsCreated {
-        val rp = relyingParty
-        val challenge = DefaultChallenge()
-        val options = PublicKeyCredentialRequestOptions(
-            challenge, null, rp.rpId, allowCredentials,
-            userVerificationRequirement ?: rp.userVerificationRequirement, null
-        )
-        return AuthenticationOptionsCreated(options, challenge, this)
-    }
+        server.createRegistrationOptions()
+            .clientPlatform.createCredential()
+            .server.verify()
 
     /** Convenience: full authentication flow with all defaults. */
     suspend fun authenticate(): AuthenticationResult =
-        createAuthenticationOptions()
-            .getAssertion()
-            .verifyOnServer()
+        server.createAuthenticationOptions()
+            .clientPlatform.getAssertion()
+            .server.verify()
+
+    // ============================================================
+    // Server Actions (top-level)
+    // ============================================================
+
+    inner class ServerActions {
+        fun createRegistrationOptions(
+            pubKeyCredParams: List<PublicKeyCredentialParameters>? = null,
+            excludeCredentials: List<PublicKeyCredentialDescriptor>? = null,
+            authenticatorAttachment: AuthenticatorAttachment? = null,
+            residentKeyRequirement: ResidentKeyRequirement? = null,
+            userVerificationRequirement: UserVerificationRequirement? = null,
+            attestation: AttestationConveyancePreference? = null,
+            extensions: AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>? = null,
+            timeout: Long? = null,
+            hints: List<PublicKeyCredentialHints>? = null,
+            attestationFormats: List<String>? = null,
+        ): RegistrationOptionsCreated {
+            val rp = relyingParty
+            val challenge = DefaultChallenge()
+            val effectiveResidentKeyRequirement = residentKeyRequirement ?: rp.residentKeyRequirement
+            val options = PublicKeyCredentialCreationOptions(
+                PublicKeyCredentialRpEntity(rp.rpId, rp.rpName),
+                PublicKeyCredentialUserEntity(ByteArray(32), "user@example.com", "Test User"),
+                challenge,
+                pubKeyCredParams ?: listOf(
+                    PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256)
+                ),
+                timeout,
+                excludeCredentials ?: emptyList(),
+                AuthenticatorSelectionCriteria(
+                    authenticatorAttachment,
+                    effectiveResidentKeyRequirement == ResidentKeyRequirement.REQUIRED,
+                    effectiveResidentKeyRequirement,
+                    userVerificationRequirement ?: rp.userVerificationRequirement
+                ),
+                hints,
+                attestation ?: rp.attestation,
+                attestationFormats,
+                extensions
+            )
+            return RegistrationOptionsCreated(options, challenge, this@StandardScenario)
+        }
+
+        fun createAuthenticationOptions(
+            allowCredentials: List<PublicKeyCredentialDescriptor>? = null,
+            userVerificationRequirement: UserVerificationRequirement? = null,
+            extensions: AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>? = null,
+            timeout: Long? = null,
+            hints: List<PublicKeyCredentialHints>? = null,
+        ): AuthenticationOptionsCreated {
+            val rp = relyingParty
+            val challenge = DefaultChallenge()
+            val options = PublicKeyCredentialRequestOptions(
+                challenge, timeout, rp.rpId, allowCredentials,
+                userVerificationRequirement ?: rp.userVerificationRequirement, hints, extensions
+            )
+            return AuthenticationOptionsCreated(options, challenge, this@StandardScenario)
+        }
+    }
 
     // ============================================================
     // Step Objects — Registration
@@ -98,37 +127,43 @@ class StandardScenario internal constructor(
         internal val challenge: Challenge,
         internal val scenario: StandardScenario,
     ) {
-        /**
-         * Send to client platform: calls WebAuthnClient.create().
-         * @param overrideChallenge If set, replaces the challenge (simulates challenge fixation attack).
-         * @param overrideOrigin If set, replaces the origin (simulates cross-origin attack).
-         */
-        suspend fun createCredential(
-            clientPlatform: ClientPlatform = scenario.defaultClientPlatform,
-            overrideChallenge: Challenge? = null,
-            overrideOrigin: Origin? = null,
-        ): RegistrationCredentialCreated {
-            val effectiveOptions = if (overrideChallenge != null) {
-                PublicKeyCredentialCreationOptions(
-                    publicKeyCredentialCreationOptions.rp,
-                    publicKeyCredentialCreationOptions.user,
-                    overrideChallenge,
-                    publicKeyCredentialCreationOptions.pubKeyCredParams,
-                    publicKeyCredentialCreationOptions.timeout,
-                    publicKeyCredentialCreationOptions.excludeCredentials,
-                    publicKeyCredentialCreationOptions.authenticatorSelection,
-                    publicKeyCredentialCreationOptions.attestation,
-                    publicKeyCredentialCreationOptions.extensions
+        val clientPlatform = ClientPlatformActions()
+
+        inner class ClientPlatformActions {
+            /**
+             * Send to client platform: calls WebAuthnClient.create().
+             * @param challenge If set, replaces the challenge (simulates challenge fixation attack).
+             * @param origin If set, replaces the origin (simulates cross-origin attack).
+             */
+            suspend fun createCredential(
+                clientPlatform: ClientPlatform = scenario.defaultClientPlatform,
+                challenge: Challenge? = null,
+                origin: Origin? = null,
+            ): RegistrationCredentialCreated {
+                val effectiveOptions = if (challenge != null) {
+                    PublicKeyCredentialCreationOptions(
+                        publicKeyCredentialCreationOptions.rp,
+                        publicKeyCredentialCreationOptions.user,
+                        challenge,
+                        publicKeyCredentialCreationOptions.pubKeyCredParams,
+                        publicKeyCredentialCreationOptions.timeout,
+                        publicKeyCredentialCreationOptions.excludeCredentials,
+                        publicKeyCredentialCreationOptions.authenticatorSelection,
+                        publicKeyCredentialCreationOptions.hints,
+                        publicKeyCredentialCreationOptions.attestation,
+                        publicKeyCredentialCreationOptions.attestationFormats,
+                        publicKeyCredentialCreationOptions.extensions
+                    )
+                } else {
+                    publicKeyCredentialCreationOptions
+                }
+                val context = PublicKeyCredentialCreationContext(
+                    origin ?: clientPlatform.origin,
+                    clientPINProvider = { clientPlatform.clientPINValue.toByteArray() }
                 )
-            } else {
-                publicKeyCredentialCreationOptions
+                val credential = clientPlatform.webAuthnClient.create(effectiveOptions, context)
+                return RegistrationCredentialCreated(credential, this@RegistrationOptionsCreated.challenge, scenario)
             }
-            val context = PublicKeyCredentialCreationContext(
-                overrideOrigin ?: clientPlatform.origin,
-                clientPINProvider = { clientPlatform.clientPINValue.toByteArray() }
-            )
-            val credential = clientPlatform.webAuthnClient.create(effectiveOptions, context)
-            return RegistrationCredentialCreated(credential, challenge, scenario)
         }
     }
 
@@ -138,35 +173,61 @@ class StandardScenario internal constructor(
         private val challenge: Challenge,
         private val scenario: StandardScenario,
     ) {
-        /** Server verifies the registration response. */
-        fun verifyOnServer(
-            rpId: String? = null,
-            pubKeyCredParams: List<PublicKeyCredentialParameters>? = null,
-        ): RegistrationResult {
-            val rp = scenario.relyingParty
-            val registrationRequest = RegistrationRequest(
-                credential.response!!.attestationObject,
-                credential.response!!.clientDataJSON,
-                scenario.objectConverter.jsonMapper.writeValueAsString(credential.clientExtensionResults),
-                credential.response!!.transports.map { it.value }.toSet()
-            )
-            val serverProperty = ServerProperty.builder()
-                .origin(rp.origin)
-                .rpId(rpId ?: rp.rpId)
-                .challenge(this.challenge)
-                .build()
-            val params = RegistrationParameters(
-                serverProperty, pubKeyCredParams, rp.userVerificationRequired, rp.userPresenceRequired
-            )
-            val data = rp.webAuthnManager.verify(registrationRequest, params)
-            val record = CredentialRecordImpl(
-                data.attestationObject!!, data.collectedClientData, data.clientExtensions, data.transports
-            )
+        val server = ServerActions()
 
-            // Store credential in RP for later authentication lookup
-            rp.storeCredential(credential.rawId, record)
+        inner class ServerActions {
+            /** Server verifies the registration response. */
+            fun verify(
+                rpId: String? = null,
+                pubKeyCredParams: List<PublicKeyCredentialParameters>? = null,
+                userVerificationRequired: Boolean? = null,
+                userPresenceRequired: Boolean? = null,
+                attestationObject: ((AttestationObject) -> AttestationObject)? = null,
+                clientData: ((CollectedClientData) -> CollectedClientData)? = null,
+            ): RegistrationResult {
+                val rp = scenario.relyingParty
+                val originalAttestationObject = credential.response!!.attestationObject
+                val effectiveAttestationObject = if (attestationObject != null) {
+                    val converter = AttestationObjectConverter(scenario.objectConverter)
+                    val original = converter.convert(originalAttestationObject)!!
+                    converter.convertToBytes(attestationObject(original))
+                } else {
+                    originalAttestationObject
+                }
+                val originalClientDataJSON = credential.response!!.clientDataJSON
+                val effectiveClientDataJSON = if (clientData != null) {
+                    val converter = CollectedClientDataConverter(scenario.objectConverter)
+                    val original = converter.convert(originalClientDataJSON)!!
+                    converter.convertToBytes(clientData(original))
+                } else {
+                    originalClientDataJSON
+                }
+                val registrationRequest = RegistrationRequest(
+                    effectiveAttestationObject,
+                    effectiveClientDataJSON,
+                    scenario.objectConverter.jsonMapper.writeValueAsString(credential.clientExtensionResults),
+                    credential.response!!.transports.map { it.value }.toSet()
+                )
+                val serverProperty = ServerProperty.builder()
+                    .origin(rp.origin)
+                    .rpId(rpId ?: rp.rpId)
+                    .challenge(challenge)
+                    .build()
+                val params = RegistrationParameters(
+                    serverProperty, pubKeyCredParams,
+                    userVerificationRequired ?: rp.userVerificationRequired,
+                    userPresenceRequired ?: rp.userPresenceRequired
+                )
+                val data = rp.webAuthnManager.verify(registrationRequest, params)
+                val record = CredentialRecordImpl(
+                    data.attestationObject!!, data.collectedClientData, data.clientExtensions, data.transports
+                )
 
-            return RegistrationResult(credential, data, record)
+                // Store credential in RP for later authentication lookup
+                rp.storeCredential(credential.rawId, record)
+
+                return RegistrationResult(credential, data, record)
+            }
         }
     }
 
@@ -180,35 +241,40 @@ class StandardScenario internal constructor(
         private val challenge: Challenge,
         private val scenario: StandardScenario,
     ) {
-        /**
-         * Send to client platform: calls WebAuthnClient.get().
-         * @param overrideChallenge If set, replaces the challenge (simulates challenge fixation attack).
-         * @param overrideOrigin If set, replaces the origin (simulates cross-origin attack).
-         */
-        suspend fun getAssertion(
-            clientPlatform: ClientPlatform = scenario.defaultClientPlatform,
-            overrideChallenge: Challenge? = null,
-            overrideOrigin: Origin? = null,
-        ): AuthenticationAssertionCreated {
-            val effectiveOptions = if (overrideChallenge != null) {
-                PublicKeyCredentialRequestOptions(
-                    overrideChallenge,
-                    publicKeyCredentialRequestOptions.timeout,
-                    publicKeyCredentialRequestOptions.rpId,
-                    publicKeyCredentialRequestOptions.allowCredentials,
-                    publicKeyCredentialRequestOptions.userVerification,
-                    publicKeyCredentialRequestOptions.extensions
+        val clientPlatform = ClientPlatformActions()
+
+        inner class ClientPlatformActions {
+            /**
+             * Send to client platform: calls WebAuthnClient.get().
+             * @param challenge If set, replaces the challenge (simulates challenge fixation attack).
+             * @param origin If set, replaces the origin (simulates cross-origin attack).
+             */
+            suspend fun getAssertion(
+                clientPlatform: ClientPlatform = scenario.defaultClientPlatform,
+                challenge: Challenge? = null,
+                origin: Origin? = null,
+            ): AuthenticationAssertionCreated {
+                val effectiveOptions = if (challenge != null) {
+                    PublicKeyCredentialRequestOptions(
+                        challenge,
+                        publicKeyCredentialRequestOptions.timeout,
+                        publicKeyCredentialRequestOptions.rpId,
+                        publicKeyCredentialRequestOptions.allowCredentials,
+                        publicKeyCredentialRequestOptions.userVerification,
+                        publicKeyCredentialRequestOptions.hints,
+                        publicKeyCredentialRequestOptions.extensions
+                    )
+                } else {
+                    publicKeyCredentialRequestOptions
+                }
+                val context = PublicKeyCredentialRequestContext(
+                    origin ?: clientPlatform.origin,
+                    publicKeyCredentialSelectionHandler = { it.first() },
+                    clientPINProvider = { clientPlatform.clientPINValue.toByteArray() }
                 )
-            } else {
-                publicKeyCredentialRequestOptions
+                val credential = clientPlatform.webAuthnClient.get(effectiveOptions, context)
+                return AuthenticationAssertionCreated(credential, this@AuthenticationOptionsCreated.challenge, scenario)
             }
-            val context = PublicKeyCredentialRequestContext(
-                overrideOrigin ?: clientPlatform.origin,
-                publicKeyCredentialSelectionHandler = { it.first() },
-                clientPINProvider = { clientPlatform.clientPINValue.toByteArray() }
-            )
-            val credential = clientPlatform.webAuthnClient.get(effectiveOptions, context)
-            return AuthenticationAssertionCreated(credential, challenge, scenario)
         }
     }
 
@@ -218,34 +284,59 @@ class StandardScenario internal constructor(
         private val challenge: Challenge,
         private val scenario: StandardScenario,
     ) {
-        /** Server verifies the authentication response. */
-        fun verifyOnServer(
-            rpId: String? = null,
-            userVerificationRequired: Boolean? = null,
-            allowCredentials: List<ByteArray>? = null,
-        ): AuthenticationResult {
-            val rp = scenario.relyingParty
-            val credentialRecord = rp.lookupCredential(credential.rawId)
-                ?: error("No credential found for ID. Did you register first?")
+        val server = ServerActions()
 
-            val request = AuthenticationRequest(
-                credential.rawId, ByteArray(32),
-                credential.response!!.authenticatorData,
-                credential.response!!.clientDataJSON,
-                scenario.objectConverter.jsonMapper.writeValueAsString(credential.clientExtensionResults),
-                credential.response!!.signature
-            )
-            val serverProperty = ServerProperty.builder()
-                .origin(rp.origin)
-                .rpId(rpId ?: rp.rpId)
-                .challenge(this.challenge)
-                .build()
-            val params = AuthenticationParameters(
-                serverProperty, credentialRecord, allowCredentials,
-                userVerificationRequired ?: rp.userVerificationRequired, rp.userPresenceRequired
-            )
-            val data = rp.webAuthnManager.verify(request, params)
-            return AuthenticationResult(credential, data)
+        inner class ServerActions {
+            /** Server verifies the authentication response. */
+            fun verify(
+                rpId: String? = null,
+                userVerificationRequired: Boolean? = null,
+                allowCredentials: List<ByteArray>? = null,
+                userPresenceRequired: Boolean? = null,
+                signature: ByteArray? = null,
+                authenticatorData: ((AuthenticatorData<AuthenticationExtensionAuthenticatorOutput>) -> AuthenticatorData<AuthenticationExtensionAuthenticatorOutput>)? = null,
+                clientData: ((CollectedClientData) -> CollectedClientData)? = null,
+            ): AuthenticationResult {
+                val rp = scenario.relyingParty
+                val credentialRecord = rp.lookupCredential(credential.rawId)
+                    ?: error("No credential found for ID. Did you register first?")
+
+                val originalAuthenticatorData = credential.response!!.authenticatorData
+                val effectiveAuthenticatorData = if (authenticatorData != null) {
+                    val converter = AuthenticatorDataConverter(scenario.objectConverter)
+                    val original = converter.convert<AuthenticationExtensionAuthenticatorOutput>(originalAuthenticatorData)
+                    converter.convert(authenticatorData(original))
+                } else {
+                    originalAuthenticatorData
+                }
+                val originalClientDataJSON = credential.response!!.clientDataJSON
+                val effectiveClientDataJSON = if (clientData != null) {
+                    val converter = CollectedClientDataConverter(scenario.objectConverter)
+                    val original = converter.convert(originalClientDataJSON)!!
+                    converter.convertToBytes(clientData(original))
+                } else {
+                    originalClientDataJSON
+                }
+                val request = AuthenticationRequest(
+                    credential.rawId, ByteArray(32),
+                    effectiveAuthenticatorData,
+                    effectiveClientDataJSON,
+                    scenario.objectConverter.jsonMapper.writeValueAsString(credential.clientExtensionResults),
+                    signature ?: credential.response!!.signature
+                )
+                val serverProperty = ServerProperty.builder()
+                    .origin(rp.origin)
+                    .rpId(rpId ?: rp.rpId)
+                    .challenge(challenge)
+                    .build()
+                val params = AuthenticationParameters(
+                    serverProperty, credentialRecord, allowCredentials,
+                    userVerificationRequired ?: rp.userVerificationRequired,
+                    userPresenceRequired ?: rp.userPresenceRequired
+                )
+                val data = rp.webAuthnManager.verify(request, params)
+                return AuthenticationResult(credential, data)
+            }
         }
     }
 

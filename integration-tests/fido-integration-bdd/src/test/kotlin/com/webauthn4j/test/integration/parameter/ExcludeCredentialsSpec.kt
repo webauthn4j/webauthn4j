@@ -14,7 +14,7 @@ import io.kotest.matchers.string.shouldContain
 class ExcludeCredentialsSpec : BehaviorSpec({
 
     Given("an existing registered credential") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val firstRegistration = env.scenario.register()
         val existingCredentialId = firstRegistration.credential.rawId
 
@@ -25,9 +25,9 @@ class ExcludeCredentialsSpec : BehaviorSpec({
 
             Then("CTAP2_ERR_CREDENTIAL_EXCLUDED should be thrown") {
                 val ex = shouldThrow<CtapErrorException> {
-                    env.scenario.createRegistrationOptions(excludeCredentials = excludeList)
-                        .createCredential()
-                        .verifyOnServer()
+                    env.scenario.server.createRegistrationOptions(excludeCredentials = excludeList)
+                        .clientPlatform.createCredential()
+                        .server.verify()
                 }
                 ex.message.shouldContain("CTAP2_ERR_CREDENTIAL_EXCLUDED")
             }
@@ -40,9 +40,9 @@ class ExcludeCredentialsSpec : BehaviorSpec({
 
             Then("registration should succeed") {
                 shouldNotThrowAny {
-                    env.scenario.createRegistrationOptions(excludeCredentials = excludeList)
-                        .createCredential()
-                        .verifyOnServer()
+                    env.scenario.server.createRegistrationOptions(excludeCredentials = excludeList)
+                        .clientPlatform.createCredential()
+                        .server.verify()
                 }
             }
         }

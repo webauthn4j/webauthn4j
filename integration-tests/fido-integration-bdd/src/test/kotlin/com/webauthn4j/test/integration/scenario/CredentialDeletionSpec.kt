@@ -9,7 +9,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 class CredentialDeletionSpec : BehaviorSpec({
 
     Given("a registered credential that is then deleted from the server") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val registration = env.scenario.register()
         env.relyingParty.deleteCredential(registration.credential.rawId)
 

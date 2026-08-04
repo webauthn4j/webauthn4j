@@ -15,21 +15,21 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 class CounterSpec : BehaviorSpec({
 
     Given("a registered credential with counter enabled") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val registration = env.scenario.register()
 
         When("authenticating multiple times") {
             val allowCredentials = listOf(
                 PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, registration.credential.rawId, null)
             )
-            val auth1 = env.scenario.createAuthenticationOptions(allowCredentials = allowCredentials)
-                .getAssertion()
-                .verifyOnServer()
+            val auth1 = env.scenario.server.createAuthenticationOptions(allowCredentials = allowCredentials)
+                .clientPlatform.getAssertion()
+                .server.verify()
             val counter1 = auth1.authenticationData.authenticatorData.shouldNotBeNull().signCount
 
-            val auth2 = env.scenario.createAuthenticationOptions(allowCredentials = allowCredentials)
-                .getAssertion()
-                .verifyOnServer()
+            val auth2 = env.scenario.server.createAuthenticationOptions(allowCredentials = allowCredentials)
+                .clientPlatform.getAssertion()
+                .server.verify()
             val counter2 = auth2.authenticationData.authenticatorData.shouldNotBeNull().signCount
 
             Then("the counter should increment with each authentication") {
@@ -42,7 +42,7 @@ class CounterSpec : BehaviorSpec({
     //  A true authenticator clone test would require deep-copying ResidentUserCredential objects
     //  from the AuthenticatorPropertyStore, which is not supported by the current API.
     Given("clone detection with counter rollback") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("the server's stored counter is higher than the authenticator's counter") {
             val registration = env.scenario.register()

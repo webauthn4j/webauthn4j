@@ -16,7 +16,7 @@ import io.kotest.matchers.ints.shouldBeLessThanOrEqual
 class CredentialIdSpec : BehaviorSpec({
 
     Given("a registered credential") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val reg = env.scenario.register()
 
         When("checking the credential ID length") {
@@ -27,7 +27,7 @@ class CredentialIdSpec : BehaviorSpec({
     }
 
     Given("a credential already registered on the server") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val reg1 = env.scenario.register()
 
         When("attempting to authenticate with the registered credential") {
@@ -36,9 +36,9 @@ class CredentialIdSpec : BehaviorSpec({
             )
 
             Then("the credential should be found in the server's store") {
-                env.scenario.createAuthenticationOptions(allowCredentials = allowCredentials)
-                    .getAssertion()
-                    .verifyOnServer()
+                env.scenario.server.createAuthenticationOptions(allowCredentials = allowCredentials)
+                    .clientPlatform.getAssertion()
+                    .server.verify()
             }
         }
     }

@@ -12,20 +12,20 @@ import io.kotest.core.spec.style.BehaviorSpec
 class AllowCredentialsSpec : BehaviorSpec({
 
     Given("server verification with allowCredentials=null (accept any credential)") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("authenticating") {
             Then("the server should accept any credential") {
-                env.scenario.createAuthenticationOptions()
-                    .getAssertion()
-                    .verifyOnServer(allowCredentials = null)
+                env.scenario.server.createAuthenticationOptions()
+                    .clientPlatform.getAssertion()
+                    .server.verify(allowCredentials = null)
             }
         }
     }
 
     Given("server verification with allowCredentials containing multiple credential IDs") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val reg1 = env.scenario.register()
 
         When("authenticating with both IDs in server allowCredentials") {
@@ -33,9 +33,9 @@ class AllowCredentialsSpec : BehaviorSpec({
                 val clientAllow = listOf(
                     PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, reg1.credential.rawId, null)
                 )
-                env.scenario.createAuthenticationOptions(allowCredentials = clientAllow)
-                    .getAssertion()
-                    .verifyOnServer(
+                env.scenario.server.createAuthenticationOptions(allowCredentials = clientAllow)
+                    .clientPlatform.getAssertion()
+                    .server.verify(
                         allowCredentials = listOf(reg1.credential.rawId, ByteArray(32))
                     )
             }
@@ -43,15 +43,15 @@ class AllowCredentialsSpec : BehaviorSpec({
     }
 
     Given("server verification with empty allowCredentials list") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("authenticating with empty list") {
             Then("NotAllowedCredentialIdException should be thrown") {
                 shouldThrow<NotAllowedCredentialIdException> {
-                    env.scenario.createAuthenticationOptions()
-                        .getAssertion()
-                        .verifyOnServer(allowCredentials = emptyList())
+                    env.scenario.server.createAuthenticationOptions()
+                        .clientPlatform.getAssertion()
+                        .server.verify(allowCredentials = emptyList())
                 }
             }
         }
