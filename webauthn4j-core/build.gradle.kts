@@ -50,7 +50,7 @@ testing {
         }
         // Re-runs src/test/java tests with BouncyCastle FIPS as the primary JCA provider.
         // BC and BC-FIPS are mutually exclusive and cannot coexist on the same classpath.
-        // Skipped on Windows because the JENT entropy provider requires native code
+        // Runs only on Linux because the JENT entropy provider requires native code
         // that is only available on Intel/ARM Linux (see BC-FJA User Guide Section 2.4).
         register<JvmTestSuite>("testWithBouncyCastleFIPS") {
             dependencies {
@@ -72,7 +72,7 @@ testing {
                         description = "Runs tests with BouncyCastle FIPS as the primary JCA provider (Linux only)"
                         testClassesDirs = sourceSets["test"].output.classesDirs
                         classpath += sourceSets["test"].output
-                        onlyIf { !System.getProperty("os.name").lowercase().contains("windows") }
+                        onlyIf { System.getProperty("os.name").lowercase().contains("linux") }
                     }
                 }
             }
