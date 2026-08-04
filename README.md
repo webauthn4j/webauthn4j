@@ -5,6 +5,7 @@
 [![Actions Status](https://github.com/webauthn4j/webauthn4j/workflows/CI/badge.svg)](https://github.com/webauthn4j/webauthn4j/actions)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=webauthn4j&metric=coverage)](https://sonarcloud.io/dashboard?id=webauthn4j)
 [![Build Status](https://img.shields.io/maven-central/v/com.webauthn4j/webauthn4j-core.svg)](https://search.maven.org/#search%7Cga%7C1%7Cwebauthn4j)
+[![Reproducible Builds](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/com/webauthn4j/badge.json)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/com/webauthn4j/README.md)
 [![license](https://img.shields.io/github/license/webauthn4j/webauthn4j.svg)](https://github.com/webauthn4j/webauthn4j/blob/master/LICENSE.txt)
 
 A portable Java library for WebAuthn(Passkeys) server side verification
