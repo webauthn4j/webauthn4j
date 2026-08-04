@@ -120,9 +120,9 @@ class UserVerificationSpec : BehaviorSpec({
         When("authenticating without UV while server requires it") {
             Then("UserNotVerifiedException should be thrown") {
                 shouldThrow<UserNotVerifiedException> {
-                    env.scenario.createAuthenticationOptions(userVerificationRequirement = DISCOURAGED)
-                        .getAssertion()
-                        .verifyOnServer(userVerificationRequired = true)
+                    env.scenario.server.createAuthenticationOptions(userVerificationRequirement = DISCOURAGED)
+                        .clientPlatform.getAssertion()
+                        .server.verify(userVerificationRequired = true)
                 }
             }
         }
@@ -138,9 +138,9 @@ class UserVerificationSpec : BehaviorSpec({
         When("authenticating without UV") {
             Then("the server should accept the authentication") {
                 shouldNotThrowAny {
-                    env.scenario.createAuthenticationOptions(userVerificationRequirement = DISCOURAGED)
-                        .getAssertion()
-                        .verifyOnServer(userVerificationRequired = false)
+                    env.scenario.server.createAuthenticationOptions(userVerificationRequirement = DISCOURAGED)
+                        .clientPlatform.getAssertion()
+                        .server.verify(userVerificationRequired = false)
                 }
             }
         }

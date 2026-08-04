@@ -36,9 +36,9 @@ class CredentialIdSpec : BehaviorSpec({
             )
 
             Then("the credential should be found in the server's store") {
-                env.scenario.createAuthenticationOptions(allowCredentials = allowCredentials)
-                    .getAssertion()
-                    .verifyOnServer()
+                env.scenario.server.createAuthenticationOptions(allowCredentials = allowCredentials)
+                    .clientPlatform.getAssertion()
+                    .server.verify()
             }
         }
     }

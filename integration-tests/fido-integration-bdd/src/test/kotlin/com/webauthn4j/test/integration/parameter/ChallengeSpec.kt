@@ -18,12 +18,12 @@ class ChallengeSpec : BehaviorSpec({
         val env = WebAuthnTestEnvironment.createDefault()
 
         When("the credential is created with an attacker's fixed challenge instead of the server's") {
-            val credentialCreated = env.scenario.createRegistrationOptions()
-                .createCredential(challenge = fixedChallenge)
+            val credentialCreated = env.scenario.server.createRegistrationOptions()
+                .clientPlatform.createCredential(challenge = fixedChallenge)
 
             Then("BadChallengeException should be thrown") {
                 shouldThrow<BadChallengeException> {
-                    credentialCreated.verifyOnServer()
+                    credentialCreated.server.verify()
                 }
             }
         }
@@ -34,12 +34,12 @@ class ChallengeSpec : BehaviorSpec({
         env.scenario.register()
 
         When("the assertion is created with an attacker's fixed challenge instead of the server's") {
-            val assertionCreated = env.scenario.createAuthenticationOptions()
-                .getAssertion(challenge = fixedChallenge)
+            val assertionCreated = env.scenario.server.createAuthenticationOptions()
+                .clientPlatform.getAssertion(challenge = fixedChallenge)
 
             Then("BadChallengeException should be thrown") {
                 shouldThrow<BadChallengeException> {
-                    assertionCreated.verifyOnServer()
+                    assertionCreated.server.verify()
                 }
             }
         }

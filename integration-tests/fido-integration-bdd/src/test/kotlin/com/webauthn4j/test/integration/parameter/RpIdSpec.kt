@@ -15,9 +15,9 @@ class RpIdSpec : BehaviorSpec({
         When("the server verifies with a different rpId") {
             Then("BadRpIdException should be thrown") {
                 shouldThrow<BadRpIdException> {
-                    env.scenario.createRegistrationOptions()
-                        .createCredential()
-                        .verifyOnServer(rpId = "another.site.example.net")
+                    env.scenario.server.createRegistrationOptions()
+                        .clientPlatform.createCredential()
+                        .server.verify(rpId = "another.site.example.net")
                 }
             }
         }
@@ -30,9 +30,9 @@ class RpIdSpec : BehaviorSpec({
         When("the server verifies with a different rpId") {
             Then("BadRpIdException should be thrown") {
                 shouldThrow<BadRpIdException> {
-                    env.scenario.createAuthenticationOptions()
-                        .getAssertion()
-                        .verifyOnServer(rpId = "another.site.example.net")
+                    env.scenario.server.createAuthenticationOptions()
+                        .clientPlatform.getAssertion()
+                        .server.verify(rpId = "another.site.example.net")
                 }
             }
         }
