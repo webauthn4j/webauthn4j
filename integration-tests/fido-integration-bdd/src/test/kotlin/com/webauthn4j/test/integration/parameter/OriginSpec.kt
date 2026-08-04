@@ -17,7 +17,7 @@ class OriginSpec : BehaviorSpec({
             Then("BadOriginException should be thrown") {
                 shouldThrow<BadOriginException> {
                     env.scenario.createRegistrationOptions()
-                        .createCredential(overrideOrigin = Origin("https://evil.example.com"))
+                        .createCredential(origin = Origin("https://evil.example.com"))
                         .verifyOnServer()
                 }
             }
@@ -32,7 +32,7 @@ class OriginSpec : BehaviorSpec({
             Then("BadOriginException should be thrown") {
                 shouldThrow<BadOriginException> {
                     env.scenario.createAuthenticationOptions()
-                        .getAssertion(overrideOrigin = Origin("https://evil.example.com"))
+                        .getAssertion(origin = Origin("https://evil.example.com"))
                         .verifyOnServer()
                 }
             }

@@ -19,7 +19,7 @@ class ChallengeSpec : BehaviorSpec({
 
         When("the credential is created with an attacker's fixed challenge instead of the server's") {
             val credentialCreated = env.scenario.createRegistrationOptions()
-                .createCredential(overrideChallenge = fixedChallenge)
+                .createCredential(challenge = fixedChallenge)
 
             Then("BadChallengeException should be thrown") {
                 shouldThrow<BadChallengeException> {
@@ -35,7 +35,7 @@ class ChallengeSpec : BehaviorSpec({
 
         When("the assertion is created with an attacker's fixed challenge instead of the server's") {
             val assertionCreated = env.scenario.createAuthenticationOptions()
-                .getAssertion(overrideChallenge = fixedChallenge)
+                .getAssertion(challenge = fixedChallenge)
 
             Then("BadChallengeException should be thrown") {
                 shouldThrow<BadChallengeException> {

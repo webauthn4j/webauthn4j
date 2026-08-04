@@ -10,7 +10,10 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier
 import com.webauthn4j.data.client.Origin
 import com.webauthn4j.data.client.challenge.Challenge
 import com.webauthn4j.data.client.challenge.DefaultChallenge
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput
 import com.webauthn4j.server.ServerProperty
 
@@ -35,9 +38,17 @@ class StandardScenario internal constructor(
         pubKeyCredParams: List<PublicKeyCredentialParameters>? = null,
         excludeCredentials: List<PublicKeyCredentialDescriptor>? = null,
         authenticatorAttachment: AuthenticatorAttachment? = null,
+        residentKeyRequirement: ResidentKeyRequirement? = null,
+        userVerificationRequirement: UserVerificationRequirement? = null,
+        attestation: AttestationConveyancePreference? = null,
+        extensions: AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>? = null,
+        timeout: Long? = null,
+        hints: List<PublicKeyCredentialHints>? = null,
+        attestationFormats: List<String>? = null,
     ): RegistrationOptionsCreated {
         val rp = relyingParty
         val challenge = DefaultChallenge()
+        val effectiveResidentKeyRequirement = residentKeyRequirement ?: rp.residentKeyRequirement
         val options = PublicKeyCredentialCreationOptions(
             PublicKeyCredentialRpEntity(rp.rpId, rp.rpName),
             PublicKeyCredentialUserEntity(ByteArray(32), "user@example.com", "Test User"),
@@ -45,16 +56,18 @@ class StandardScenario internal constructor(
             pubKeyCredParams ?: listOf(
                 PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256)
             ),
-            null,
+            timeout,
             excludeCredentials ?: emptyList(),
             AuthenticatorSelectionCriteria(
                 authenticatorAttachment,
-                rp.residentKeyRequirement == ResidentKeyRequirement.REQUIRED,
-                rp.residentKeyRequirement,
-                rp.userVerificationRequirement
+                effectiveResidentKeyRequirement == ResidentKeyRequirement.REQUIRED,
+                effectiveResidentKeyRequirement,
+                userVerificationRequirement ?: rp.userVerificationRequirement
             ),
-            rp.attestation,
-            null
+            hints,
+            attestation ?: rp.attestation,
+            attestationFormats,
+            extensions
         )
         return RegistrationOptionsCreated(options, challenge, this)
     }
@@ -72,12 +85,15 @@ class StandardScenario internal constructor(
     fun createAuthenticationOptions(
         allowCredentials: List<PublicKeyCredentialDescriptor>? = null,
         userVerificationRequirement: UserVerificationRequirement? = null,
+        extensions: AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>? = null,
+        timeout: Long? = null,
+        hints: List<PublicKeyCredentialHints>? = null,
     ): AuthenticationOptionsCreated {
         val rp = relyingParty
         val challenge = DefaultChallenge()
         val options = PublicKeyCredentialRequestOptions(
-            challenge, null, rp.rpId, allowCredentials,
-            userVerificationRequirement ?: rp.userVerificationRequirement, null
+            challenge, timeout, rp.rpId, allowCredentials,
+            userVerificationRequirement ?: rp.userVerificationRequirement, hints, extensions
         )
         return AuthenticationOptionsCreated(options, challenge, this)
     }
@@ -100,35 +116,37 @@ class StandardScenario internal constructor(
     ) {
         /**
          * Send to client platform: calls WebAuthnClient.create().
-         * @param overrideChallenge If set, replaces the challenge (simulates challenge fixation attack).
-         * @param overrideOrigin If set, replaces the origin (simulates cross-origin attack).
+         * @param challenge If set, replaces the challenge (simulates challenge fixation attack).
+         * @param origin If set, replaces the origin (simulates cross-origin attack).
          */
         suspend fun createCredential(
             clientPlatform: ClientPlatform = scenario.defaultClientPlatform,
-            overrideChallenge: Challenge? = null,
-            overrideOrigin: Origin? = null,
+            challenge: Challenge? = null,
+            origin: Origin? = null,
         ): RegistrationCredentialCreated {
-            val effectiveOptions = if (overrideChallenge != null) {
+            val effectiveOptions = if (challenge != null) {
                 PublicKeyCredentialCreationOptions(
                     publicKeyCredentialCreationOptions.rp,
                     publicKeyCredentialCreationOptions.user,
-                    overrideChallenge,
+                    challenge,
                     publicKeyCredentialCreationOptions.pubKeyCredParams,
                     publicKeyCredentialCreationOptions.timeout,
                     publicKeyCredentialCreationOptions.excludeCredentials,
                     publicKeyCredentialCreationOptions.authenticatorSelection,
+                    publicKeyCredentialCreationOptions.hints,
                     publicKeyCredentialCreationOptions.attestation,
+                    publicKeyCredentialCreationOptions.attestationFormats,
                     publicKeyCredentialCreationOptions.extensions
                 )
             } else {
                 publicKeyCredentialCreationOptions
             }
             val context = PublicKeyCredentialCreationContext(
-                overrideOrigin ?: clientPlatform.origin,
+                origin ?: clientPlatform.origin,
                 clientPINProvider = { clientPlatform.clientPINValue.toByteArray() }
             )
             val credential = clientPlatform.webAuthnClient.create(effectiveOptions, context)
-            return RegistrationCredentialCreated(credential, challenge, scenario)
+            return RegistrationCredentialCreated(credential, this.challenge, scenario)
         }
     }
 
@@ -142,11 +160,15 @@ class StandardScenario internal constructor(
         fun verifyOnServer(
             rpId: String? = null,
             pubKeyCredParams: List<PublicKeyCredentialParameters>? = null,
+            userVerificationRequired: Boolean? = null,
+            userPresenceRequired: Boolean? = null,
+            attestationObject: ByteArray? = null,
+            clientDataJSON: ByteArray? = null,
         ): RegistrationResult {
             val rp = scenario.relyingParty
             val registrationRequest = RegistrationRequest(
-                credential.response!!.attestationObject,
-                credential.response!!.clientDataJSON,
+                attestationObject ?: credential.response!!.attestationObject,
+                clientDataJSON ?: credential.response!!.clientDataJSON,
                 scenario.objectConverter.jsonMapper.writeValueAsString(credential.clientExtensionResults),
                 credential.response!!.transports.map { it.value }.toSet()
             )
@@ -156,7 +178,9 @@ class StandardScenario internal constructor(
                 .challenge(this.challenge)
                 .build()
             val params = RegistrationParameters(
-                serverProperty, pubKeyCredParams, rp.userVerificationRequired, rp.userPresenceRequired
+                serverProperty, pubKeyCredParams,
+                userVerificationRequired ?: rp.userVerificationRequired,
+                userPresenceRequired ?: rp.userPresenceRequired
             )
             val data = rp.webAuthnManager.verify(registrationRequest, params)
             val record = CredentialRecordImpl(
@@ -182,33 +206,34 @@ class StandardScenario internal constructor(
     ) {
         /**
          * Send to client platform: calls WebAuthnClient.get().
-         * @param overrideChallenge If set, replaces the challenge (simulates challenge fixation attack).
-         * @param overrideOrigin If set, replaces the origin (simulates cross-origin attack).
+         * @param challenge If set, replaces the challenge (simulates challenge fixation attack).
+         * @param origin If set, replaces the origin (simulates cross-origin attack).
          */
         suspend fun getAssertion(
             clientPlatform: ClientPlatform = scenario.defaultClientPlatform,
-            overrideChallenge: Challenge? = null,
-            overrideOrigin: Origin? = null,
+            challenge: Challenge? = null,
+            origin: Origin? = null,
         ): AuthenticationAssertionCreated {
-            val effectiveOptions = if (overrideChallenge != null) {
+            val effectiveOptions = if (challenge != null) {
                 PublicKeyCredentialRequestOptions(
-                    overrideChallenge,
+                    challenge,
                     publicKeyCredentialRequestOptions.timeout,
                     publicKeyCredentialRequestOptions.rpId,
                     publicKeyCredentialRequestOptions.allowCredentials,
                     publicKeyCredentialRequestOptions.userVerification,
+                    publicKeyCredentialRequestOptions.hints,
                     publicKeyCredentialRequestOptions.extensions
                 )
             } else {
                 publicKeyCredentialRequestOptions
             }
             val context = PublicKeyCredentialRequestContext(
-                overrideOrigin ?: clientPlatform.origin,
+                origin ?: clientPlatform.origin,
                 publicKeyCredentialSelectionHandler = { it.first() },
                 clientPINProvider = { clientPlatform.clientPINValue.toByteArray() }
             )
             val credential = clientPlatform.webAuthnClient.get(effectiveOptions, context)
-            return AuthenticationAssertionCreated(credential, challenge, scenario)
+            return AuthenticationAssertionCreated(credential, this.challenge, scenario)
         }
     }
 
@@ -223,6 +248,10 @@ class StandardScenario internal constructor(
             rpId: String? = null,
             userVerificationRequired: Boolean? = null,
             allowCredentials: List<ByteArray>? = null,
+            userPresenceRequired: Boolean? = null,
+            signature: ByteArray? = null,
+            authenticatorData: ByteArray? = null,
+            clientDataJSON: ByteArray? = null,
         ): AuthenticationResult {
             val rp = scenario.relyingParty
             val credentialRecord = rp.lookupCredential(credential.rawId)
@@ -230,10 +259,10 @@ class StandardScenario internal constructor(
 
             val request = AuthenticationRequest(
                 credential.rawId, ByteArray(32),
-                credential.response!!.authenticatorData,
-                credential.response!!.clientDataJSON,
+                authenticatorData ?: credential.response!!.authenticatorData,
+                clientDataJSON ?: credential.response!!.clientDataJSON,
                 scenario.objectConverter.jsonMapper.writeValueAsString(credential.clientExtensionResults),
-                credential.response!!.signature
+                signature ?: credential.response!!.signature
             )
             val serverProperty = ServerProperty.builder()
                 .origin(rp.origin)
@@ -242,7 +271,8 @@ class StandardScenario internal constructor(
                 .build()
             val params = AuthenticationParameters(
                 serverProperty, credentialRecord, allowCredentials,
-                userVerificationRequired ?: rp.userVerificationRequired, rp.userPresenceRequired
+                userVerificationRequired ?: rp.userVerificationRequired,
+                userPresenceRequired ?: rp.userPresenceRequired
             )
             val data = rp.webAuthnManager.verify(request, params)
             return AuthenticationResult(credential, data)
