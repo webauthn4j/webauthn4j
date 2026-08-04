@@ -1,5 +1,6 @@
 package com.webauthn4j.test.integration.environment
 
+import com.webauthn4j.converter.AttestationObjectConverter
 import com.webauthn4j.converter.AuthenticatorDataConverter
 import com.webauthn4j.converter.CollectedClientDataConverter
 import com.webauthn4j.converter.util.ObjectConverter
@@ -8,6 +9,7 @@ import com.webauthn4j.credential.CredentialRecordImpl
 import com.webauthn4j.ctap.client.PublicKeyCredentialCreationContext
 import com.webauthn4j.ctap.client.PublicKeyCredentialRequestContext
 import com.webauthn4j.data.*
+import com.webauthn4j.data.attestation.AttestationObject
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier
 import com.webauthn4j.data.client.CollectedClientData
@@ -180,10 +182,18 @@ class StandardScenario internal constructor(
                 pubKeyCredParams: List<PublicKeyCredentialParameters>? = null,
                 userVerificationRequired: Boolean? = null,
                 userPresenceRequired: Boolean? = null,
-                attestationObject: ByteArray? = null,
+                attestationObject: ((AttestationObject) -> AttestationObject)? = null,
                 clientData: ((CollectedClientData) -> CollectedClientData)? = null,
             ): RegistrationResult {
                 val rp = scenario.relyingParty
+                val originalAttestationObject = credential.response!!.attestationObject
+                val effectiveAttestationObject = if (attestationObject != null) {
+                    val converter = AttestationObjectConverter(scenario.objectConverter)
+                    val original = converter.convert(originalAttestationObject)!!
+                    converter.convertToBytes(attestationObject(original))
+                } else {
+                    originalAttestationObject
+                }
                 val originalClientDataJSON = credential.response!!.clientDataJSON
                 val effectiveClientDataJSON = if (clientData != null) {
                     val converter = CollectedClientDataConverter(scenario.objectConverter)
@@ -193,7 +203,7 @@ class StandardScenario internal constructor(
                     originalClientDataJSON
                 }
                 val registrationRequest = RegistrationRequest(
-                    attestationObject ?: credential.response!!.attestationObject,
+                    effectiveAttestationObject,
                     effectiveClientDataJSON,
                     scenario.objectConverter.jsonMapper.writeValueAsString(credential.clientExtensionResults),
                     credential.response!!.transports.map { it.value }.toSet()

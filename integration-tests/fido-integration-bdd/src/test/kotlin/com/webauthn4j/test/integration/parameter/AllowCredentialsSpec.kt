@@ -12,7 +12,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 class AllowCredentialsSpec : BehaviorSpec({
 
     Given("server verification with allowCredentials=null (accept any credential)") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("authenticating") {
@@ -25,7 +25,7 @@ class AllowCredentialsSpec : BehaviorSpec({
     }
 
     Given("server verification with allowCredentials containing multiple credential IDs") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val reg1 = env.scenario.register()
 
         When("authenticating with both IDs in server allowCredentials") {
@@ -43,7 +43,7 @@ class AllowCredentialsSpec : BehaviorSpec({
     }
 
     Given("server verification with empty allowCredentials list") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("authenticating with empty list") {

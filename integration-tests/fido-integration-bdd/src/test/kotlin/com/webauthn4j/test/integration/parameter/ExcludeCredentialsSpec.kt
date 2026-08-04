@@ -14,7 +14,7 @@ import io.kotest.matchers.string.shouldContain
 class ExcludeCredentialsSpec : BehaviorSpec({
 
     Given("an existing registered credential") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val firstRegistration = env.scenario.register()
         val existingCredentialId = firstRegistration.credential.rawId
 

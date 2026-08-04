@@ -15,7 +15,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 class CounterSpec : BehaviorSpec({
 
     Given("a registered credential with counter enabled") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         val registration = env.scenario.register()
 
         When("authenticating multiple times") {
@@ -42,7 +42,7 @@ class CounterSpec : BehaviorSpec({
     //  A true authenticator clone test would require deep-copying ResidentUserCredential objects
     //  from the AuthenticatorPropertyStore, which is not supported by the current API.
     Given("clone detection with counter rollback") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("the server's stored counter is higher than the authenticator's counter") {
             val registration = env.scenario.register()

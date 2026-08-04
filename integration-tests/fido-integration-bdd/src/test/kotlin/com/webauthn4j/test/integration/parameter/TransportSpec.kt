@@ -107,7 +107,7 @@ class TransportSpec : BehaviorSpec({
     }
 
     Given("an authenticator with default transports (USB)") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("registering a credential") {
             Then("the registration response should contain USB transport") {

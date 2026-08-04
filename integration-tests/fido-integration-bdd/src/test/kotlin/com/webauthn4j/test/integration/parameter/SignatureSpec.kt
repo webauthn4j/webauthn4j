@@ -10,7 +10,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 class SignatureSpec : BehaviorSpec({
 
     Given("a registered credential") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("authenticating with a tampered signature (same length, incorrect value)") {

@@ -12,7 +12,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 class AuthenticatorDataSpec : BehaviorSpec({
 
     Given("a registered credential") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("authenticating with rpIdHash replaced to a different RP") {

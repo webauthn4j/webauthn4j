@@ -12,7 +12,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 class ClientDataTypeSpec : BehaviorSpec({
 
     Given("a registered credential") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("authenticating with clientData type 'webauthn.create' instead of 'webauthn.get'") {
@@ -30,7 +30,7 @@ class ClientDataTypeSpec : BehaviorSpec({
     }
 
     Given("a default test environment") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("registering with clientData type 'webauthn.get' instead of 'webauthn.create'") {
             val credentialCreated = env.scenario.server.createRegistrationOptions()

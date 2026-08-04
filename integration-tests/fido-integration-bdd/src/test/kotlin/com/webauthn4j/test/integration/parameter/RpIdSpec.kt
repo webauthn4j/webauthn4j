@@ -10,7 +10,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 class RpIdSpec : BehaviorSpec({
 
     Given("a credential presented to a different RP during registration") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("the server verifies with a different rpId") {
             Then("BadRpIdException should be thrown") {
@@ -24,7 +24,7 @@ class RpIdSpec : BehaviorSpec({
     }
 
     Given("a credential presented to a different RP during authentication") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("the server verifies with a different rpId") {

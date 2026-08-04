@@ -13,7 +13,7 @@ import io.kotest.matchers.string.shouldContain
 class ClientPINManagementSpec : BehaviorSpec({
 
     Given("an authenticator with clientPIN already set") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         // Explicitly set the initial PIN
         env.clientPlatform.ctapService.setPIN("clientPIN")
 
@@ -28,7 +28,7 @@ class ClientPINManagementSpec : BehaviorSpec({
     }
 
     Given("an authenticator with clientPIN set for PIN change") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         // Explicitly set the initial PIN
         env.clientPlatform.ctapService.setPIN("clientPIN")
 
@@ -40,7 +40,7 @@ class ClientPINManagementSpec : BehaviorSpec({
     }
 
     Given("a registered credential and then PIN is changed") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         // Explicitly set the initial PIN before registration
         env.clientPlatform.ctapService.setPIN("clientPIN")
         env.scenario.register()
@@ -55,7 +55,7 @@ class ClientPINManagementSpec : BehaviorSpec({
     }
 
     Given("an authenticator for retry count verification") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("checking the initial retry count") {
             val retries = env.clientPlatform.ctapService.getRetries()

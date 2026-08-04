@@ -15,7 +15,7 @@ class ChallengeSpec : BehaviorSpec({
     val fixedChallenge = DefaultChallenge(ByteArray(32) { 0x41 })
 
     Given("a registration with a tampered challenge (challenge fixation attack)") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
 
         When("the credential is created with an attacker's fixed challenge instead of the server's") {
             val credentialCreated = env.scenario.server.createRegistrationOptions()
@@ -30,7 +30,7 @@ class ChallengeSpec : BehaviorSpec({
     }
 
     Given("an authentication with a tampered challenge (challenge fixation attack)") {
-        val env = WebAuthnTestEnvironment.createDefault()
+        val env = WebAuthnTestEnvironment.forTestsWithoutAttestationVerification()
         env.scenario.register()
 
         When("the assertion is created with an attacker's fixed challenge instead of the server's") {
