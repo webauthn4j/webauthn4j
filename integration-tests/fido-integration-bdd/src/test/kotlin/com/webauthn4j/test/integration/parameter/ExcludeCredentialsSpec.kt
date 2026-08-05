@@ -25,9 +25,9 @@ class ExcludeCredentialsSpec : BehaviorSpec({
 
             Then("CTAP2_ERR_CREDENTIAL_EXCLUDED should be thrown") {
                 val ex = shouldThrow<CtapErrorException> {
-                    env.scenario.server.createRegistrationOptions(excludeCredentials = excludeList)
+                    env.scenario.relyingParty.createRegistrationOptions(excludeCredentials = excludeList)
                         .clientPlatform.createCredential()
-                        .server.verify()
+                        .relyingParty.verify()
                 }
                 ex.message.shouldContain("CTAP2_ERR_CREDENTIAL_EXCLUDED")
             }
@@ -40,9 +40,9 @@ class ExcludeCredentialsSpec : BehaviorSpec({
 
             Then("registration should succeed") {
                 shouldNotThrowAny {
-                    env.scenario.server.createRegistrationOptions(excludeCredentials = excludeList)
+                    env.scenario.relyingParty.createRegistrationOptions(excludeCredentials = excludeList)
                         .clientPlatform.createCredential()
-                        .server.verify()
+                        .relyingParty.verify()
                 }
             }
         }

@@ -14,27 +14,27 @@ class SignatureSpec : BehaviorSpec({
         env.scenario.register()
 
         When("authenticating with a tampered signature (same length, incorrect value)") {
-            val assertionCreated = env.scenario.server.createAuthenticationOptions()
+            val assertionCreated = env.scenario.relyingParty.createAuthenticationOptions()
                 .clientPlatform.getAssertion()
             val realSignature = assertionCreated.credential.response!!.signature
             val tamperedSignature = ByteArray(realSignature.size) { i -> realSignature[i].toInt().inv().toByte() }
 
             Then("BadSignatureException should be thrown") {
                 shouldThrow<BadSignatureException> {
-                    assertionCreated.server.verify(signature = tamperedSignature)
+                    assertionCreated.relyingParty.verify(signature = tamperedSignature)
                 }
             }
         }
 
         When("authenticating with a truncated signature (first half only)") {
-            val assertionCreated = env.scenario.server.createAuthenticationOptions()
+            val assertionCreated = env.scenario.relyingParty.createAuthenticationOptions()
                 .clientPlatform.getAssertion()
             val realSignature = assertionCreated.credential.response!!.signature
             val truncatedSignature = realSignature.copyOfRange(0, realSignature.size / 2)
 
             Then("BadSignatureException should be thrown") {
                 shouldThrow<BadSignatureException> {
-                    assertionCreated.server.verify(signature = truncatedSignature)
+                    assertionCreated.relyingParty.verify(signature = truncatedSignature)
                 }
             }
         }

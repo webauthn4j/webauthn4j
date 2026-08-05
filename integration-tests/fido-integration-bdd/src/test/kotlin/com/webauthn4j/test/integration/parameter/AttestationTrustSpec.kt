@@ -232,4 +232,21 @@ class AttestationTrustSpec : BehaviorSpec({
             }
         }
     }
+
+    // --- Self Attestation ---
+    // Requires PackedSelfAttestationStatementProvider to produce x5c=null (credential key signs).
+    // Blocked on webauthn4j-ctap fix: https://github.com/webauthn4j/webauthn4j-ctap/pull/XXX
+
+    xGiven("server configured to accept self attestation with Packed authenticator") {
+        When("registering a credential with self attestation") {
+            Then("the server should accept the attestation") {}
+            Then("authentication should succeed") {}
+        }
+    }
+
+    xGiven("server configured to prohibit self attestation with Packed authenticator") {
+        When("registering a credential with self attestation") {
+            Then("SelfAttestationProhibitedException should be thrown") {}
+        }
+    }
 })

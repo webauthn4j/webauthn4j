@@ -19,12 +19,12 @@ class AuthenticatorDataSpec : BehaviorSpec({
             val evilRpIdHash = MessageDigestUtil.createSHA256()
                 .digest("evil.example.com".toByteArray())
 
-            val assertionCreated = env.scenario.server.createAuthenticationOptions()
+            val assertionCreated = env.scenario.relyingParty.createAuthenticationOptions()
                 .clientPlatform.getAssertion()
 
             Then("BadRpIdException should be thrown") {
                 shouldThrow<BadRpIdException> {
-                    assertionCreated.server.verify(
+                    assertionCreated.relyingParty.verify(
                         authenticatorData = {
                             AuthenticatorData(evilRpIdHash, it.flags, it.signCount)
                         }

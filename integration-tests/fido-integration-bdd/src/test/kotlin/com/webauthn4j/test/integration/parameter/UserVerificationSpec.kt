@@ -98,23 +98,23 @@ class UserVerificationSpec : BehaviorSpec({
                 if (!clientSuccess) {
                     Then("client-side error should be thrown") {
                         shouldThrow<WebAuthnClientException> {
-                            env.scenario.server.createRegistrationOptions()
+                            env.scenario.relyingParty.createRegistrationOptions()
                                 .clientPlatform.createCredential()
                         }
                     }
                 } else if (!serverSuccess) {
                     Then("UserNotVerifiedException should be thrown") {
                         shouldThrow<UserNotVerifiedException> {
-                            env.scenario.server.createRegistrationOptions()
+                            env.scenario.relyingParty.createRegistrationOptions()
                                 .clientPlatform.createCredential()
-                                .server.verify()
+                                .relyingParty.verify()
                         }
                     }
                 } else {
                     Then("registration should succeed") {
-                        val reg = env.scenario.server.createRegistrationOptions()
+                        val reg = env.scenario.relyingParty.createRegistrationOptions()
                             .clientPlatform.createCredential()
-                            .server.verify()
+                            .relyingParty.verify()
                         if (uvFlag != null) {
                             reg.registrationData.attestationObject!!.authenticatorData.isFlagUV shouldBe uvFlag
                         }
@@ -181,17 +181,17 @@ class UserVerificationSpec : BehaviorSpec({
                     if (!serverSuccess) {
                         Then("UserNotVerifiedException should be thrown") {
                             shouldThrow<UserNotVerifiedException> {
-                                env.scenario.server.createAuthenticationOptions(userVerificationRequirement = rp.requirement)
+                                env.scenario.relyingParty.createAuthenticationOptions(userVerificationRequirement = rp.requirement)
                                     .clientPlatform.getAssertion()
-                                    .server.verify(userVerificationRequired = rp.userVerificationRequired)
+                                    .relyingParty.verify(userVerificationRequired = rp.userVerificationRequired)
                             }
                         }
                     } else {
                         Then("authentication should succeed") {
                             shouldNotThrowAny {
-                                env.scenario.server.createAuthenticationOptions(userVerificationRequirement = rp.requirement)
+                                env.scenario.relyingParty.createAuthenticationOptions(userVerificationRequirement = rp.requirement)
                                     .clientPlatform.getAssertion()
-                                    .server.verify(userVerificationRequired = rp.userVerificationRequired)
+                                    .relyingParty.verify(userVerificationRequired = rp.userVerificationRequired)
                             }
                         }
                     }

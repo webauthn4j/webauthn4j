@@ -17,9 +17,9 @@ class AllowCredentialsSpec : BehaviorSpec({
 
         When("authenticating") {
             Then("the server should accept any credential") {
-                env.scenario.server.createAuthenticationOptions()
+                env.scenario.relyingParty.createAuthenticationOptions()
                     .clientPlatform.getAssertion()
-                    .server.verify(allowCredentials = null)
+                    .relyingParty.verify(allowCredentials = null)
             }
         }
     }
@@ -33,9 +33,9 @@ class AllowCredentialsSpec : BehaviorSpec({
                 val clientAllow = listOf(
                     PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, reg1.credential.rawId, null)
                 )
-                env.scenario.server.createAuthenticationOptions(allowCredentials = clientAllow)
+                env.scenario.relyingParty.createAuthenticationOptions(allowCredentials = clientAllow)
                     .clientPlatform.getAssertion()
-                    .server.verify(
+                    .relyingParty.verify(
                         allowCredentials = listOf(reg1.credential.rawId, ByteArray(32))
                     )
             }
@@ -49,9 +49,9 @@ class AllowCredentialsSpec : BehaviorSpec({
         When("authenticating with empty list") {
             Then("NotAllowedCredentialIdException should be thrown") {
                 shouldThrow<NotAllowedCredentialIdException> {
-                    env.scenario.server.createAuthenticationOptions()
+                    env.scenario.relyingParty.createAuthenticationOptions()
                         .clientPlatform.getAssertion()
-                        .server.verify(allowCredentials = emptyList())
+                        .relyingParty.verify(allowCredentials = emptyList())
                 }
             }
         }

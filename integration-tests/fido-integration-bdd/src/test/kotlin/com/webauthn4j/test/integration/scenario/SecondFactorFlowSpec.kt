@@ -33,12 +33,12 @@ class SecondFactorFlowSpec : BehaviorSpec({
             )
             Then("the authentication should succeed") {
                 shouldNotThrowAny {
-                    env.scenario.server.createAuthenticationOptions(
+                    env.scenario.relyingParty.createAuthenticationOptions(
                         allowCredentials = allowCredentials,
                         userVerificationRequirement = UserVerificationRequirement.DISCOURAGED
                     )
                         .clientPlatform.getAssertion()
-                        .server.verify(userVerificationRequired = false)
+                        .relyingParty.verify(userVerificationRequired = false)
                 }
             }
         }
