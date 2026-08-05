@@ -39,6 +39,9 @@ class SignatureAlgorithmTest {
     @Test
     void getMessageDigestAlgorithm_pure_signature_scheme_returns_null_test() {
         assertThat(SignatureAlgorithm.Ed25519.getMessageDigestAlgorithm()).isNull();
+        assertThat(SignatureAlgorithm.ML_DSA_44.getMessageDigestAlgorithm()).isNull();
+        assertThat(SignatureAlgorithm.ML_DSA_65.getMessageDigestAlgorithm()).isNull();
+        assertThat(SignatureAlgorithm.ML_DSA_87.getMessageDigestAlgorithm()).isNull();
     }
 
     @Test

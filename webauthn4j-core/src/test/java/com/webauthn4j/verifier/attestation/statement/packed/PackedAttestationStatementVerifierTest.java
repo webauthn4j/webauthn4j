@@ -1,5 +1,6 @@
 package com.webauthn4j.verifier.attestation.statement.packed;
 
+import com.webauthn4j.test.EnabledIfMLDSAAvailable;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
@@ -30,6 +31,9 @@ import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.verifier.RegistrationObject;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
 import com.webauthn4j.verifier.exception.BadSignatureException;
+import com.webauthn4j.data.attestation.authenticator.AKPCOSEKey;
+import com.webauthn4j.test.internal.MLDSAKeyMaterial;
+import com.webauthn4j.test.internal.MLDSAUtil;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -40,6 +44,8 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -137,6 +143,25 @@ class PackedAttestationStatementVerifierTest {
         verify(clientData, attestationObject);
     }
 
+    @Test
+    @EnabledIfMLDSAAvailable
+    void verify_with_MLDSAx5C_test() throws Exception {
+        MLDSAKeyMaterial keyMaterial = MLDSAUtil.generateKeyMaterial("ML-DSA-65");
+
+        AKPCOSEKey cosePublicKey = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, keyMaterial.getRawPublicKey(), null);
+        AKPCOSEKey cosePrivateKey = new AKPCOSEKey(null, COSEAlgorithmIdentifier.ML_DSA_65, null, keyMaterial.getRawPublicKey(), keyMaterial.getSeed());
+        KeyPair jcaKeyPair = new KeyPair(cosePublicKey.getPublicKey(), cosePrivateKey.getPrivateKey());
+
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData(cosePublicKey);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
+        byte[] signature = generateSignature("ML-DSA-65", jcaKeyPair, authenticatorData, clientData);
+
+        AttestationCertificatePath x5c = generateCertPath(jcaKeyPair, "ML-DSA-65");
+        PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ML_DSA_65, signature, x5c);
+        AttestationObject attestationObject = new AttestationObject(authenticatorData, packedAttestationStatement);
+
+        verify(clientData, attestationObject);
+    }
 
     @Test
     void verify_with_yubikey_fido2_data_test() {
@@ -174,6 +199,16 @@ class PackedAttestationStatementVerifierTest {
 
         verify(clientData, attestationObject);
 
+    }
+
+    @Test
+    @EnabledIfMLDSAAvailable
+    void verify_with_MLDSASelfAttestation_test() {
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
+        byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithSelfPackedMLDSAAttestationStatement(clientDataHash);
+
+        verify(clientData, attestationObject);
     }
 
     @Test

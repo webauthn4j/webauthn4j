@@ -47,6 +47,9 @@ class COSEAlgorithmIdentifierTest {
                 () -> assertThat(COSEAlgorithmIdentifier.create(-37)).isEqualTo(COSEAlgorithmIdentifier.PS256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-38)).isEqualTo(COSEAlgorithmIdentifier.PS384),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-39)).isEqualTo(COSEAlgorithmIdentifier.PS512),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-48)).isEqualTo(COSEAlgorithmIdentifier.ML_DSA_44),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-49)).isEqualTo(COSEAlgorithmIdentifier.ML_DSA_65),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-50)).isEqualTo(COSEAlgorithmIdentifier.ML_DSA_87),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-9)).isEqualTo(COSEAlgorithmIdentifier.ESP256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-51)).isEqualTo(COSEAlgorithmIdentifier.ESP384),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-52)).isEqualTo(COSEAlgorithmIdentifier.ESP512),
@@ -71,7 +74,10 @@ class COSEAlgorithmIdentifierTest {
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.Ed25519)).isEqualTo(COSEAlgorithmIdentifier.Ed25519),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.PS256)).isEqualTo(COSEAlgorithmIdentifier.PS256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.PS384)).isEqualTo(COSEAlgorithmIdentifier.PS384),
-                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.PS512)).isEqualTo(COSEAlgorithmIdentifier.PS512)
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.PS512)).isEqualTo(COSEAlgorithmIdentifier.PS512),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ML_DSA_44)).isEqualTo(COSEAlgorithmIdentifier.ML_DSA_44),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ML_DSA_65)).isEqualTo(COSEAlgorithmIdentifier.ML_DSA_65),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ML_DSA_87)).isEqualTo(COSEAlgorithmIdentifier.ML_DSA_87)
         );
     }
 
@@ -91,6 +97,9 @@ class COSEAlgorithmIdentifierTest {
                 () -> assertThat(COSEAlgorithmIdentifier.PS256).hasToString("PS256"),
                 () -> assertThat(COSEAlgorithmIdentifier.PS384).hasToString("PS384"),
                 () -> assertThat(COSEAlgorithmIdentifier.PS512).hasToString("PS512"),
+                () -> assertThat(COSEAlgorithmIdentifier.ML_DSA_44).hasToString("ML-DSA-44"),
+                () -> assertThat(COSEAlgorithmIdentifier.ML_DSA_65).hasToString("ML-DSA-65"),
+                () -> assertThat(COSEAlgorithmIdentifier.ML_DSA_87).hasToString("ML-DSA-87"),
                 () -> assertThat(COSEAlgorithmIdentifier.ESP256).hasToString("ESP256"),
                 () -> assertThat(COSEAlgorithmIdentifier.ESP384).hasToString("ESP384"),
                 () -> assertThat(COSEAlgorithmIdentifier.ESP512).hasToString("ESP512"),
