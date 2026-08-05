@@ -130,4 +130,32 @@ class AlgorithmSpec : BehaviorSpec({
             }
         }
     }
+
+    // --- EdDSA (Ed25519 / Ed448) ---
+    // Blocked on ctap-authenticator adding EdDSA key pair generation support
+    // (KeyPairUtil.createCredentialKeyPair does not handle EdDSA algorithms)
+
+    xGiven("RP requests [Ed25519] × authenticator supports [Ed25519]") {
+        When("registering a credential") {
+            Then("registration should succeed with EdDSACOSEKey") {}
+        }
+    }
+
+    xGiven("RP requests [Ed448] × authenticator supports [Ed448]") {
+        When("registering a credential") {
+            Then("registration should succeed with EdDSACOSEKey") {}
+        }
+    }
+
+    xGiven("server verification: authenticator=Ed25519, pubKeyCredParams=[Ed25519]") {
+        When("registering and verifying on server") {
+            Then("the server should accept the credential") {}
+        }
+    }
+
+    xGiven("server verification: authenticator=Ed448, pubKeyCredParams=[Ed448]") {
+        When("registering and verifying on server") {
+            Then("the server should accept the credential") {}
+        }
+    }
 })
