@@ -37,7 +37,8 @@ jobs:
         run: |
           rm -rf docs
           mv build/docs/asciidoc/html5 docs
+          git checkout --orphan gh-pages
+          git rm -rf --cached .
           git add docs
           git commit -m "Update docs"
-          git checkout -b gh-pages
           git push origin gh-pages -f
