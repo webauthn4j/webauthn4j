@@ -7,11 +7,18 @@ env:
   JAVA_VERSION: 25
 
 jobs:
-  release:
+  build:
+    name: Build
     permissions:
       contents: write
 
     runs-on: ubuntu-24.04
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      commit-sha: ${{ steps.push-commit.outputs.sha }}
+      jdk-version: ${{ steps.setup-java.outputs.version }}
+      gradle-version: ${{ steps.gradle-version.outputs.version }}
 
     steps:
       - name: Generate GitHub App(webauthn4j-github-app-bot) Token
@@ -46,36 +53,66 @@ jobs:
         run: |
           ./gradlew build javadoc generateReferenceEN generateReferenceJA
 
-      - name: Commit changes
+      - name: Extract version
+        id: version
         shell: bash
         run: |
           VERSION=$(grep "webAuthn4JVersion" gradle.properties | cut -d'=' -f2)
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract Gradle version
+        id: gradle-version
+        shell: bash
+        run: |
+          GRADLE_VERSION=$(grep "distributionUrl" gradle/wrapper/gradle-wrapper.properties | sed 's/.*gradle-\(.*\)-bin.zip/\1/')
+          echo "version=${GRADLE_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
           git config user.name "webauthn4j-bot"
           git config user.email  "info@webauthn4j.com"
           git add .
           git commit --allow-empty -m "Release ${VERSION}"
 
       - name: Push commit
+        id: push-commit
         shell: bash
         run: |
           git fetch
           git rebase origin/master
           git push
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Tag commit
-        shell: bash
-        run: |
-          VERSION=$(grep "webAuthn4JVersion" gradle.properties | cut -d'=' -f2)
-          git tag "${VERSION}.RELEASE"
+  publish:
+    name: Publish and Release
+    needs: build
+    permissions:
+      contents: write
 
-      - name: Push tag
-        shell: bash
-        run: |
-          VERSION=$(grep "webAuthn4JVersion" gradle.properties | cut -d'=' -f2)
-          git fetch
-          git rebase origin/master
-          git push origin "${VERSION}.RELEASE"
+    runs-on: ubuntu-24.04
 
+    steps:
+      - name: Generate GitHub App(webauthn4j-github-app-bot) Token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.build.outputs.commit-sha }}
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: 'gradle'
 
       - name: Publish to Maven Central
         env:
@@ -86,19 +123,28 @@ jobs:
         run: |
           ./gradlew publishToCentralPortal
 
+      - name: Tag commit
+        shell: bash
+        run: |
+          VERSION=${{ needs.build.outputs.version }}
+          git config user.name "webauthn4j-bot"
+          git config user.email  "info@webauthn4j.com"
+          git tag "${VERSION}.RELEASE"
+          git push origin "${VERSION}.RELEASE"
+
       - name: Create draft release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         shell: bash
         run: |
-          VERSION=$(grep "webAuthn4JVersion" gradle.properties | cut -d'=' -f2)
-          JDK_VERSION="${{ steps.setup-java.outputs.version }}"
+          VERSION=${{ needs.build.outputs.version }}
+          JDK_VERSION=${{ needs.build.outputs.jdk-version }}
+          GRADLE_VERSION=${{ needs.build.outputs.gradle-version }}
           gh release create "${VERSION}.RELEASE" \
             --draft \
             --generate-notes \
             --title "${VERSION}.RELEASE"
           EXISTING_NOTES=$(gh release view "${VERSION}.RELEASE" --json body --jq .body)
-          GRADLE_VERSION=$(grep "distributionUrl" gradle/wrapper/gradle-wrapper.properties | sed 's/.*gradle-\(.*\)-bin.zip/\1/')
           gh release edit "${VERSION}.RELEASE" --notes "$(cat <<EOF
           ${EXISTING_NOTES}
 
