@@ -32,11 +32,12 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew javadoc generateReferenceJA generateReferenceEN
+          ./gradlew javadoc generateReferenceJA generateReferenceEN :integration-tests:fido-integration-bdd:check
       - name: Commit & Push pages
         run: |
           rm -rf docs
           mv build/docs/asciidoc/html5 docs
+          cp -r integration-tests/fido-integration-bdd/build/reports/bdd docs/bdd-report
           git checkout --orphan gh-pages
           git rm -rf --cached .
           git add docs
