@@ -85,6 +85,8 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addSerializer(new PackedAttestationStatementSerializer());
         this.addSerializer(new PublicKeyCredentialDescriptorSerializer());
         this.addSerializer(new PublicKeyCredentialParametersSerializer());
+        this.addSerializer(new PublicKeyCredentialRpEntitySerializer());
+        this.addSerializer(new PublicKeyCredentialUserEntitySerializer());
         this.addSerializer(new RSACOSEKeySerializer());
         this.addSerializer(new TPMAttestationStatementSerializer());
         this.addSerializer(new TPMSAttestSerializer());
