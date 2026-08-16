@@ -28,19 +28,23 @@ public class RSACOSEKeySerializer extends AbstractCtapCanonicalCborSerializer<RS
 
     public RSACOSEKeySerializer() {
         super(RSACOSEKey.class, Arrays.asList(
-                new FieldSerializationRule<>(-8, RSACOSEKey::getQInv),
-                new FieldSerializationRule<>(-7, RSACOSEKey::getDQ),
-                new FieldSerializationRule<>(-6, RSACOSEKey::getDP),
-                new FieldSerializationRule<>(-5, RSACOSEKey::getQ),
-                new FieldSerializationRule<>(-4, RSACOSEKey::getP),
-                new FieldSerializationRule<>(-3, RSACOSEKey::getD),
-                new FieldSerializationRule<>(-2, RSACOSEKey::getE),
-                new FieldSerializationRule<>(-1, RSACOSEKey::getN),
+                // CTAP2 canonical CBOR order: positive labels (major type 0)
+                // before negative labels (major type 1), each ascending by the
+                // encoded key bytes. Matches EC2COSEKeySerializer /
+                // EdDSACOSEKeySerializer.
                 new FieldSerializationRule<>(1, RSACOSEKey::getKeyType),
                 new FieldSerializationRule<>(2, RSACOSEKey::getKeyId),
                 new FieldSerializationRule<>(3, RSACOSEKey::getAlgorithm),
                 new FieldSerializationRule<>(4, RSACOSEKey::getKeyOps),
-                new FieldSerializationRule<>(5, RSACOSEKey::getBaseIV)
+                new FieldSerializationRule<>(5, RSACOSEKey::getBaseIV),
+                new FieldSerializationRule<>(-1, RSACOSEKey::getN),
+                new FieldSerializationRule<>(-2, RSACOSEKey::getE),
+                new FieldSerializationRule<>(-3, RSACOSEKey::getD),
+                new FieldSerializationRule<>(-4, RSACOSEKey::getP),
+                new FieldSerializationRule<>(-5, RSACOSEKey::getQ),
+                new FieldSerializationRule<>(-6, RSACOSEKey::getDP),
+                new FieldSerializationRule<>(-7, RSACOSEKey::getDQ),
+                new FieldSerializationRule<>(-8, RSACOSEKey::getQInv)
         ));
     }
 

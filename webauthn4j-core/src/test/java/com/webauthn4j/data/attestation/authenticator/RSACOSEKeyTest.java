@@ -108,6 +108,20 @@ class RSACOSEKeyTest {
     }
 
     @Test
+    void cbor_serialize_uses_ctap2_canonical_key_order_test() {
+        // CTAP2 canonical CBOR orders map keys by their encoded bytes: positive
+        // COSE labels (major type 0: 1=kty -> 0x01, 3=alg -> 0x03) sort before
+        // negative labels (major type 1: -1=n -> 0x20, -2=e -> 0x21). The map
+        // must therefore begin with kty (0x01), not with a negative label.
+        RSACOSEKey original = TestDataUtil.createRSACOSEPublicKey();
+
+        byte[] serialized = cborMapper.writeValueAsBytes(original);
+
+        assertThat(serialized[0] & 0xE0).isEqualTo(0xA0); // CBOR map header
+        assertThat(serialized[1]).isEqualTo((byte) 0x01); // first key is kty (label 1)
+    }
+
+    @Test
     void json_serialize_deserialize_test() {
         // Given
         RSACOSEKey original = TestDataUtil.createRSACOSEPublicKey();
