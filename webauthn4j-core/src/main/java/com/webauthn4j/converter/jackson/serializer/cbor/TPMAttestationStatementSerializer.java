@@ -24,10 +24,14 @@ public class TPMAttestationStatementSerializer extends AbstractCtapCanonicalCbor
 
     public TPMAttestationStatementSerializer() {
         super(TPMAttestationStatement.class, Arrays.asList(
+                // CTAP2 canonical CBOR order: string keys sorted by length ascending,
+                // then lexicographically by encoded bytes (for same-length keys only).
+                // For 3-byte keys: "ver" (0x766572) comes before "x5c" (0x783563) since 0x76 < 0x78.
+                // For different lengths: "pubArea" (7 bytes) comes before "certInfo" (8 bytes).
                 new FieldSerializationRule<>("alg", TPMAttestationStatement::getAlg),
                 new FieldSerializationRule<>("sig", TPMAttestationStatement::getSig),
-                new FieldSerializationRule<>("x5c", TPMAttestationStatement::getX5c),
                 new FieldSerializationRule<>("ver", TPMAttestationStatement::getVer),
+                new FieldSerializationRule<>("x5c", TPMAttestationStatement::getX5c),
                 new FieldSerializationRule<>("pubArea", TPMAttestationStatement::getPubArea),
                 new FieldSerializationRule<>("certInfo", TPMAttestationStatement::getCertInfo)
         ));
