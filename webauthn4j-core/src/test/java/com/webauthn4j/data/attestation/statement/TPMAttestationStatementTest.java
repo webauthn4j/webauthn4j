@@ -16,10 +16,12 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.verifier.RegistrationObject;
 import com.webauthn4j.verifier.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
+import tools.jackson.dataformat.cbor.CBORMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,6 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ConstantConditions")
 class TPMAttestationStatementTest {
+
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final CBORMapper cborMapper = objectConverter.getCborMapper();
 
     @Test
     void constructor_test() {
@@ -73,5 +78,25 @@ class TPMAttestationStatementTest {
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
         );
+    }
+
+    @Test
+    void cbor_serialize_uses_ctap2_canonical_key_order_test() {
+        // CTAP2 canonical CBOR orders map keys by length, then lexicographically
+        // by encoded bytes. For 3-byte string keys, "ver" (0x766572) sorts before
+        // "x5c" (0x783563) since 0x76 < 0x78. The serialized map should begin with
+        // "alg" (the shortest key, 3 bytes, starting with 0x61).
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
+        TPMAttestationStatement original = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+
+        byte[] serialized = cborMapper.writeValueAsBytes(original);
+
+        // Verify the map starts correctly
+        assertThat(serialized[0] & 0xE0).isEqualTo(0xA0); // CBOR map header
+        // First key should be "alg" (3-byte string: 0x63='text(3)', 0x616c67='alg')
+        assertThat(serialized[1]).isEqualTo((byte) 0x63); // text string of length 3
+        assertThat(serialized[2]).isEqualTo((byte) 0x61); // 'a'
+        assertThat(serialized[3]).isEqualTo((byte) 0x6c); // 'l'
+        assertThat(serialized[4]).isEqualTo((byte) 0x67); // 'g'
     }
 }
