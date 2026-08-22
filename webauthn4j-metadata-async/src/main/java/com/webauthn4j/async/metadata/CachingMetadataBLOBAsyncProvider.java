@@ -18,65 +18,91 @@ package com.webauthn4j.async.metadata;
 
 import com.webauthn4j.metadata.data.MetadataBLOB;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class CachingMetadataBLOBAsyncProvider implements MetadataBLOBAsyncProvider {
 
-    private MetadataBLOB cachedMetadataBLOB = null;
-    private CompletableFuture<MetadataBLOB> metadataBLOBFuture = new CompletableFuture<>();
-    private LocalDate metadataBLOBLastUpdate = null;
-    private final Object metadataBLOBFutureLock = new Object();
-    private final Lock metadataBLOBRefreshingLock = new ReentrantLock();
+    private final Clock clock;
+    // CacheState is an immutable snapshot published by replacing the reference.
+    @SuppressWarnings("java:S3077")
+    private volatile CacheState cache = null;
+    private final AtomicReference<CompletableFuture<MetadataBLOB>> inFlight = new AtomicReference<>();
+
+    public CachingMetadataBLOBAsyncProvider() {
+        this(Clock.system(ZoneOffset.UTC));
+    }
+
+    CachingMetadataBLOBAsyncProvider(@NotNull Clock clock) {
+        this.clock = clock;
+    }
 
     @Override
     public @NotNull CompletionStage<MetadataBLOB> provide(){
 
-        if(!needsMetadataBLOBUpdate(cachedMetadataBLOB, metadataBLOBLastUpdate)){
-            return CompletableFuture.completedFuture(cachedMetadataBLOB);
+        CacheState current = cache;
+        if(!needsMetadataBLOBUpdate(current, clock)){
+            return CompletableFuture.completedFuture(current.blob);
         }
 
-        CompletableFuture<MetadataBLOB> response;
-        synchronized (metadataBLOBFutureLock){
-            response = metadataBLOBFuture;
-        }
+        while(true) {
+            CompletableFuture<MetadataBLOB> existing = inFlight.get();
+            if (existing != null) {
+                return existing;
+            }
 
-        if(metadataBLOBRefreshingLock.tryLock()){
-            doProvide()
-                    .thenAccept(metadataBLOB -> {
-                        cachedMetadataBLOB = metadataBLOB;
-                        metadataBLOBLastUpdate = LocalDate.now(ZoneOffset.UTC);
-                        synchronized (metadataBLOBFutureLock){
-                            metadataBLOBFuture.complete(metadataBLOB);
-                            metadataBLOBFuture = new CompletableFuture<>();
-                        }
-                    })
-                    .exceptionally(e ->{
-                        synchronized (metadataBLOBFutureLock){
-                            metadataBLOBFuture.completeExceptionally(e);
-                            metadataBLOBFuture = new CompletableFuture<>();
-                        }
-                        metadataBLOBRefreshingLock.unlock();
-                        return null;
-                    });
+            CompletableFuture<MetadataBLOB> future = new CompletableFuture<>();
+            if (inFlight.compareAndSet(null, future)) {
+                CompletionStage<MetadataBLOB> stage;
+                try {
+                    stage = doProvide();
+                }
+                catch (Throwable e) {
+                    inFlight.compareAndSet(future, null);
+                    future.completeExceptionally(e);
+                    return future;
+                }
+                stage.whenComplete((metadataBLOB, e) -> {
+                    if (e != null) {
+                        inFlight.compareAndSet(future, null);
+                        future.completeExceptionally(e);
+                    }
+                    else {
+                        cache = new CacheState(metadataBLOB, LocalDate.now(clock));
+                        inFlight.compareAndSet(future, null);
+                        future.complete(metadataBLOB);
+                    }
+                });
+                return future;
+            }
         }
-        return response;
     }
 
     protected abstract @NotNull CompletionStage<MetadataBLOB> doProvide();
 
-    static boolean needsMetadataBLOBUpdate(MetadataBLOB cachedMetadataBLOB, LocalDate metadataBLOBLastUpdate){
-        if(cachedMetadataBLOB == null){
+    static boolean needsMetadataBLOBUpdate(@Nullable CacheState cache, @NotNull Clock clock){
+        if(cache == null){
             return true;
         }
-        LocalDate today = LocalDate.now(ZoneOffset.UTC);
-        LocalDate nextUpdate = cachedMetadataBLOB.getPayload().getNextUpdate();
-        return (nextUpdate.isBefore(today) || nextUpdate.isEqual(today)) && metadataBLOBLastUpdate.isBefore(today);
+        LocalDate today = LocalDate.now(clock);
+        LocalDate nextUpdate = cache.blob.getPayload().getNextUpdate();
+        return (nextUpdate.isBefore(today) || nextUpdate.isEqual(today)) && cache.lastUpdate.isBefore(today);
+    }
+
+    static class CacheState {
+        final MetadataBLOB blob;
+        final LocalDate lastUpdate;
+
+        CacheState(@NotNull MetadataBLOB blob, @NotNull LocalDate lastUpdate) {
+            this.blob = blob;
+            this.lastUpdate = lastUpdate;
+        }
     }
 
 }
