@@ -21,16 +21,14 @@ import com.webauthn4j.metadata.data.MetadataBLOB;
 import com.webauthn4j.metadata.data.MetadataBLOBFactory;
 import com.webauthn4j.metadata.exception.CertPathCheckException;
 import com.webauthn4j.metadata.exception.MDSException;
-import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.metadata.util.internal.DefaultCertPathChecker;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -115,27 +113,5 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
     public void setCertPathChecker(@NotNull CertPathChecker certPathChecker) {
         this.certPathChecker = certPathChecker;
-    }
-
-    private class DefaultCertPathChecker implements CertPathChecker {
-
-        @Override
-        public void check(CertPathCheckContext context) throws MDSException {
-            CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
-            PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
-            certPathParameters.setRevocationEnabled(revocationCheckEnabled);
-            if(revocationCheckEnabled){
-                PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker) certPathValidator.getRevocationChecker();
-                pkixRevocationChecker.setOptions(EnumSet.of(PKIXRevocationChecker.Option.PREFER_CRLS));
-                certPathParameters.addCertPathChecker(pkixRevocationChecker);
-            }
-            try {
-                certPathValidator.validate(context.getCertPath(), certPathParameters);
-            } catch (InvalidAlgorithmParameterException e) {
-                throw new CertPathCheckException("invalid algorithm parameter", e);
-            } catch (CertPathValidatorException e) {
-                throw new CertPathCheckException("invalid cert path", e);
-            }
-        }
     }
 }
