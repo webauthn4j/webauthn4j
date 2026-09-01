@@ -421,7 +421,7 @@ Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)と�
 <properties>
   ...
   <!-- Use the latest version whenever possible. -->
-  <webauthn4j.version>0.31.9.RELEASE</webauthn4j.version>
+  <webauthn4j.version>0.31.10.RELEASE</webauthn4j.version>
   ...
 </properties>
 
