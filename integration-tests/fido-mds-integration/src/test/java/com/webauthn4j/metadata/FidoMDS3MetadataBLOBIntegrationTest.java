@@ -2,7 +2,6 @@ package com.webauthn4j.metadata;
 
 import com.webauthn4j.async.metadata.FidoMDS3MetadataBLOBAsyncProvider;
 import com.webauthn4j.async.metadata.HttpAsyncClient;
-import com.webauthn4j.async.util.internal.FileAsyncUtil;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.metadata.data.MetadataBLOB;
@@ -15,9 +14,7 @@ import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
@@ -87,40 +84,15 @@ class FidoMDS3MetadataBLOBIntegrationTest {
 
     @Test
     void async_test() throws ExecutionException, InterruptedException {
-        Path rootR46CertificatePath = new File("src/test/resources/integration/component/root-r46.crt").toPath();
-        byte[] rootR46CertificateBytes = FileAsyncUtil.load(rootR46CertificatePath).toCompletableFuture().get();
-        X509Certificate rootR46Certificate = CertificateUtil.generateX509Certificate(rootR46CertificateBytes);
-
-        Path rootR3CertificatePath = new File("src/test/resources/integration/component/root-r3.crt").toPath();
-        byte[] rootR3CertificateBytes = FileAsyncUtil.load(rootR3CertificatePath).toCompletableFuture().get();
-        X509Certificate rootR3Certificate = CertificateUtil.generateX509Certificate(rootR3CertificateBytes);
-
-        Path gsgccr46evtlsca2025CrlPath = new File("src/test/resources/integration/component/gsgccr46evtlsca2025.crl").toPath();
-        byte[] crlBytes = FileAsyncUtil.load(gsgccr46evtlsca2025CrlPath).toCompletableFuture().get();
-
-        Path rootR46CrlPath = new File("src/test/resources/integration/component/root-r46.crl").toPath();
-        byte[] rootR46CrlBytes = FileAsyncUtil.load(rootR46CrlPath).toCompletableFuture().get();
-
-        Path rootR3CrlPath = new File("src/test/resources/integration/component/root-r3.crl").toPath();
-        byte[] rootR3CrlBytes = FileAsyncUtil.load(rootR3CrlPath).toCompletableFuture().get();
-
         HttpAsyncClient httpAsyncClient = mock(HttpAsyncClient.class);
         when(httpAsyncClient.fetch(FidoMDS3MetadataBLOBAsyncProvider.DEFAULT_BLOB_ENDPOINT))
                 .thenReturn(CompletableFuture.completedFuture(new HttpClient.Response(200, new ByteArrayInputStream(blobBytes))));
-        when(httpAsyncClient.fetch("http://crl.globalsign.com/gsgccr46evtlsca2025.crl"))
-                .thenReturn(CompletableFuture.completedFuture(new HttpClient.Response(200, new ByteArrayInputStream(crlBytes))));
-        when(httpAsyncClient.fetch("http://crl.globalsign.com/rootr46.crl"))
-                .thenReturn(CompletableFuture.completedFuture(new HttpClient.Response(200, new ByteArrayInputStream(rootR46CrlBytes))));
-        when(httpAsyncClient.fetch("http://crl.globalsign.com/root-r3.crl"))
-                .thenReturn(CompletableFuture.completedFuture(new HttpClient.Response(200, new ByteArrayInputStream(rootR3CrlBytes))));
 
         FidoMDS3MetadataBLOBAsyncProvider target = new FidoMDS3MetadataBLOBAsyncProvider(
                 new ObjectConverter(),
                 FidoMDS3MetadataBLOBAsyncProvider.DEFAULT_BLOB_ENDPOINT,
                 httpAsyncClient,
-                Set.of(
-                        new TrustAnchor(rootR46Certificate, null),
-                        new TrustAnchor(rootR3Certificate, null)));
+                TRUST_ANCHORS);
         var metadataBlob = target.provide().toCompletableFuture().get();
         assertThatCode(metadataBlob::getPayload).doesNotThrowAnyException();
         assertThat(metadataBlob.getPayload().getEntries()).isNotEmpty();
