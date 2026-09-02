@@ -44,6 +44,8 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
+import com.webauthn4j.test.internal.MLDSAKeyMaterial;
+import com.webauthn4j.test.internal.MLDSAUtil;
 import com.webauthn4j.util.*;
 import com.webauthn4j.verifier.CoreRegistrationObject;
 import com.webauthn4j.verifier.RegistrationObject;
@@ -269,6 +271,19 @@ public class TestDataUtil {
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
+        return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(alg, signature));
+    }
+
+    public static AttestationObject createAttestationObjectWithSelfPackedMLDSAAttestationStatement(byte[] clientDataHash) {
+        MLDSAKeyMaterial keyMaterial = MLDSAUtil.generateKeyMaterial("ML-DSA-65");
+
+        COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ML_DSA_65;
+        AKPCOSEKey cosePrivateKey = new AKPCOSEKey(null, alg, null, keyMaterial.getRawPublicKey(), keyMaterial.getSeed());
+        AKPCOSEKey cosePublicKey = new AKPCOSEKey(null, alg, null, keyMaterial.getRawPublicKey(), null);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(cosePublicKey);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignature(cosePrivateKey, signedData);
         return new AttestationObject(authenticatorData, TestAttestationStatementUtil.createSelfPackedAttestationStatement(alg, signature));
     }
 

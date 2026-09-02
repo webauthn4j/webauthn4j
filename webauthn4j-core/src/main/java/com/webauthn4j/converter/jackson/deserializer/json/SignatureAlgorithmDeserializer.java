@@ -41,6 +41,12 @@ public class SignatureAlgorithmDeserializer extends StdDeserializer<SignatureAlg
                 return SignatureAlgorithm.PS384;
             case "SHA512withRSA/PSS":
                 return SignatureAlgorithm.PS512;
+            case "ML-DSA-44":
+                return SignatureAlgorithm.ML_DSA_44;
+            case "ML-DSA-65":
+                return SignatureAlgorithm.ML_DSA_65;
+            case "ML-DSA-87":
+                return SignatureAlgorithm.ML_DSA_87;
             default:
                 throw new InvalidFormatException(p, "value is out of range", value, SignatureAlgorithm.class);
         }
