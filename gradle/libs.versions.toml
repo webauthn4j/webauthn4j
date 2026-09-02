@@ -25,7 +25,7 @@ spring-dependency-management = "1.1.7"
 
 sonarqube = "7.3.1.8318"
 
-quarkus = "3.38.0"
+quarkus = "3.39.1"
 
 selenium = "4.48.0"
 
