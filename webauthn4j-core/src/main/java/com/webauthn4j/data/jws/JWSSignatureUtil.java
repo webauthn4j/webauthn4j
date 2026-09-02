@@ -87,7 +87,7 @@ class JWSSignatureUtil {
      * @param derSignature signature in DER format
      * @return signature in JWS format
      */
-    public static @NotNull byte[] convertDerSignatureToJwsSignature(@NotNull byte[] derSignature) {
+    public static @NotNull byte[] convertDerSignatureToJwsSignature(@NotNull byte[] derSignature, @NotNull JWAIdentifier alg) {
         ASN1Sequence seq;
         try {
             seq = ASN1Sequence.parse(derSignature);
@@ -103,17 +103,28 @@ class JWSSignatureUtil {
         BigInteger r = ((ASN1Integer) seq.get(0)).getContent();
         BigInteger s = ((ASN1Integer) seq.get(1)).getContent();
 
-        // Determine raw component length from the larger of the two
+        int componentLength = getComponentLength(alg);
         byte[] rUnsigned = toUnsignedByteArray(r);
         byte[] sUnsigned = toUnsignedByteArray(s);
-        int rawLen = Math.max(rUnsigned.length, sUnsigned.length);
 
-        // Pad to fixed-length and concatenate
-        byte[] concatSignature = new byte[2 * rawLen];
-        System.arraycopy(rUnsigned, 0, concatSignature, rawLen - rUnsigned.length, rUnsigned.length);
-        System.arraycopy(sUnsigned, 0, concatSignature, 2 * rawLen - sUnsigned.length, sUnsigned.length);
+        byte[] concatSignature = new byte[2 * componentLength];
+        System.arraycopy(rUnsigned, 0, concatSignature, componentLength - rUnsigned.length, rUnsigned.length);
+        System.arraycopy(sUnsigned, 0, concatSignature, 2 * componentLength - sUnsigned.length, sUnsigned.length);
 
         return concatSignature;
+    }
+
+    private static int getComponentLength(@NotNull JWAIdentifier alg) {
+        if (alg == JWAIdentifier.ES256) {
+            return 32;
+        }
+        else if (alg == JWAIdentifier.ES384) {
+            return 48;
+        }
+        else if (alg == JWAIdentifier.ES512) {
+            return 66;
+        }
+        throw new IllegalArgumentException("Unsupported algorithm for ECDSA signature conversion: " + alg);
     }
 
     private static byte[] toUnsignedByteArray(BigInteger value) {
