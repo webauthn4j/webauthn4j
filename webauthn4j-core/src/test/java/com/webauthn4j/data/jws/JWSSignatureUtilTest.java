@@ -16,9 +16,10 @@
 
 package com.webauthn4j.data.jws;
 
+import com.webauthn4j.data.internal.asn1.der.ASN1Integer;
+import com.webauthn4j.data.internal.asn1.der.ASN1Sequence;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -39,33 +40,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class JWSSignatureUtilTest {
 
     private static byte[] derSignature(BigInteger r, BigInteger s) {
-        byte[] rEnc = derInteger(r);
-        byte[] sEnc = derInteger(s);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        out.write(0x30);
-        writeDerLength(out, rEnc.length + sEnc.length);
-        out.write(rEnc, 0, rEnc.length);
-        out.write(sEnc, 0, sEnc.length);
-        return out.toByteArray();
-    }
-
-    private static byte[] derInteger(BigInteger value) {
-        byte[] content = value.toByteArray(); // minimal two's complement, keeps a sign byte when needed
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        out.write(0x02);
-        writeDerLength(out, content.length);
-        out.write(content, 0, content.length);
-        return out.toByteArray();
-    }
-
-    private static void writeDerLength(ByteArrayOutputStream out, int length) {
-        if (length < 128) {
-            out.write(length);
-        }
-        else {
-            out.write(0x81); // definite long form, one length octet (sufficient up to 255)
-            out.write(length);
-        }
+        ASN1Integer rInteger = ASN1Integer.create(r.toByteArray());
+        ASN1Integer sInteger = ASN1Integer.create(s.toByteArray());
+        return ASN1Sequence.create(rInteger, sInteger).toBytes();
     }
 
     /** A positive value whose magnitude occupies exactly {@code length} bytes with the top bit clear. */
@@ -91,6 +68,8 @@ class JWSSignatureUtilTest {
         BigInteger s = positiveOfLength(47);
         byte[] jws = JWSSignatureUtil.convertDerSignatureToJwsSignature(derSignature(r, s), JWAIdentifier.ES384);
         assertThat(jws).hasSize(96);
+        assertThat(jws[0]).isEqualTo((byte) 0x00);
+        assertThat(jws[48]).isEqualTo((byte) 0x00);
     }
 
     @Test
