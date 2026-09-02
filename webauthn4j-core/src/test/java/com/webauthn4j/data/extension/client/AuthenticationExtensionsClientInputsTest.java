@@ -166,6 +166,30 @@ class AuthenticationExtensionsClientInputsTest {
     }
 
     @Test
+    void registration_prf_test() {
+        AuthenticationExtensionsClientInputs.BuilderForRegistration builder = new AuthenticationExtensionsClientInputs.BuilderForRegistration();
+        AuthenticationExtensionsPRFInputs prfInputs = new AuthenticationExtensionsPRFInputs(
+                new AuthenticationExtensionsPRFValues(new byte[]{1, 2}, null), null);
+        builder.setPrf(prfInputs);
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> target = builder.build();
+
+        assertThat(target.getPrf()).isNotNull();
+        assertThat(target.getPrf().getEval().getFirst()).isEqualTo(new byte[]{1, 2});
+    }
+
+    @Test
+    void authentication_prf_test() {
+        AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
+        AuthenticationExtensionsPRFInputs prfInputs = new AuthenticationExtensionsPRFInputs(
+                new AuthenticationExtensionsPRFValues(new byte[]{3, 4}, null), null);
+        builder.setPrf(prfInputs);
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> target = builder.build();
+
+        assertThat(target.getPrf()).isNotNull();
+        assertThat(target.getPrf().getEval().getFirst()).isEqualTo(new byte[]{3, 4});
+    }
+
+    @Test
     void equals_hashCode_test() {
         AuthenticationExtensionsClientInputs.BuilderForAuthentication builder1 = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
         builder1.setAppid("dummyAppid");
