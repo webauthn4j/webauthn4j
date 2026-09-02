@@ -57,6 +57,33 @@ class JWSFactoryTest {
         assertThatThrownBy(() -> target.create(header, payload, privateKey)).isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    void signature_length_es256_test() {
+        JWSHeader header = new JWSHeader(JWAIdentifier.ES256, CertificateUtil.generateCertPath(Collections.emptyList()));
+        Payload payload = new Payload();
+        KeyPair keyPair = ECUtil.createKeyPair();
+        JWS<Payload> jws = target.create(header, payload, keyPair.getPrivate());
+        assertThat(jws.getSignature()).hasSize(64); // RFC 7518 Section 3.4: ES256 = 32+32 bytes
+    }
+
+    @Test
+    void signature_length_es384_test() {
+        JWSHeader header = new JWSHeader(JWAIdentifier.ES384, CertificateUtil.generateCertPath(Collections.emptyList()));
+        Payload payload = new Payload();
+        KeyPair keyPair = ECUtil.createKeyPair(ECUtil.P_384_SPEC);
+        JWS<Payload> jws = target.create(header, payload, keyPair.getPrivate());
+        assertThat(jws.getSignature()).hasSize(96); // RFC 7518 Section 3.4: ES384 = 48+48 bytes
+    }
+
+    @Test
+    void signature_length_es512_test() {
+        JWSHeader header = new JWSHeader(JWAIdentifier.ES512, CertificateUtil.generateCertPath(Collections.emptyList()));
+        Payload payload = new Payload();
+        KeyPair keyPair = ECUtil.createKeyPair(ECUtil.P_521_SPEC);
+        JWS<Payload> jws = target.create(header, payload, keyPair.getPrivate());
+        assertThat(jws.getSignature()).hasSize(132); // RFC 7518 Section 3.4: ES512 = 66+66 bytes
+    }
+
 
     private static class Payload {
         private String dummy;
