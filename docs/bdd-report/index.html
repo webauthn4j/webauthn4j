@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BDD Specification Report</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; color: #212529; line-height: 1.6; }
+.container { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+.timestamp { color: #6c757d; font-size: 0.85rem; margin-bottom: 1rem; }
+.summary { margin-bottom: 1.5rem; font-size: 0.9rem; }
+.summary span { margin-right: 1rem; padding: 0.2rem 0.6rem; border-radius: 4px; }
+.total { background: #e9ecef; }
+.pass-count { background: #d4edda; color: #155724; }
+.fail-count { background: #f8d7da; color: #721c24; }
+.skip-count { background: #fff3cd; color: #856404; }
+.category { margin-bottom: 2rem; }
+.category-header { font-size: 1.2rem; color: #495057; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid #adb5bd; }
+.spec { background: #fff; border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 1rem; padding: 1rem 1.25rem; }
+.spec h3 { font-size: 1rem; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
+.spec h3.pass { color: #155724; }
+.spec h3.fail { color: #721c24; }
+.spec h3.skip { color: #856404; }
+details { margin-left: 1rem; }
+summary.test-container { cursor: pointer; font-weight: 500; padding: 0.2rem 0; color: #495057; }
+summary.test-container:hover { color: #212529; }
+.children { margin-left: 0.5rem; border-left: 2px solid #e9ecef; padding-left: 0.75rem; }
+.test-leaf { padding: 0.15rem 0; margin-left: 1rem; }
+.test-leaf.pass { color: #155724; }
+.test-leaf.fail { color: #721c24; }
+.test-leaf.skip { color: #856404; }
+.icon { font-weight: bold; margin-right: 0.25rem; }
+.keyword { display: inline-block; font-weight: 700; font-size: 0.8rem; padding: 0.05rem 0.4rem; border-radius: 3px; margin-right: 0.3rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.keyword-given { background: #cce5ff; color: #004085; }
+.keyword-when { background: #d4edda; color: #155724; }
+.keyword-then { background: #fff3cd; color: #856404; }
+.keyword-and { background: #e2e3e5; color: #383d41; }
+.error { margin: 0.25rem 0 0.5rem 1.5rem; padding: 0.5rem; background: #fff5f5; border: 1px solid #f8d7da; border-radius: 4px; font-size: 0.8rem; color: #721c24; white-space: pre-wrap; word-break: break-word; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>BDD Specification Report</h1>
+<p class="timestamp">Generated: 2026-09-02 08:02:52</p>
+<div class="summary">
+<span class="total">145 tests</span>
+<span class="pass-count">145 passed</span>
+</div>
+<section class="category">
+<h2 class="category-header">Parameter</h2>
+<div class="spec">
+<h3 class="pass">AAGUIDSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with a custom AAGUID</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the attested credential data should contain the custom AAGUID
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">AlgorithmSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP requests [ES256] × authenticator supports [ES256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed with EC2COSEKey
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP requests [RS256] × authenticator supports [RS256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed with RSACOSEKey
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP requests [RS256, ES256] × authenticator supports [ES256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed with EC2COSEKey
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP requests [ES256] × authenticator supports [ES256, RS256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed with EC2COSEKey
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP requests [ES256] × authenticator supports [RS256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+CTAP2_ERR_UNSUPPORTED_ALGORITHM should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP requests [RS256] × authenticator supports [ES256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+CTAP2_ERR_UNSUPPORTED_ALGORITHM should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP requests [RS512] × authenticator supports [ES256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+CTAP2_ERR_UNSUPPORTED_ALGORITHM should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification: authenticator=ES256, pubKeyCredParams=null</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering and verifying on server</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept the credential
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification: authenticator=RS256, pubKeyCredParams=null</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering and verifying on server</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept the credential
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification: authenticator=ES256, pubKeyCredParams=[ES256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering and verifying on server</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept the credential
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification: authenticator=RS256, pubKeyCredParams=[RS256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering and verifying on server</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept the credential
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification: authenticator=ES256, pubKeyCredParams=[RS256, ES256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering and verifying on server</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept the credential
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification: authenticator=ES256, pubKeyCredParams=[RS256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering and verifying on server</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+NotAllowedAlgorithmException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification: authenticator=RS256, pubKeyCredParams=[ES256]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering and verifying on server</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+NotAllowedAlgorithmException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification: authenticator=ES256, pubKeyCredParams=[RS512]</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering and verifying on server</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+NotAllowedAlgorithmException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">AllowCredentialsSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification with allowCredentials=null (accept any credential)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept any credential
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification with allowCredentials containing multiple credential IDs</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating with both IDs in server allowCredentials</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept when credential is in the list
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server verification with empty allowCredentials list</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating with empty list</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+NotAllowedCredentialIdException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">AttachmentSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a PLATFORM authenticator and RP requests PLATFORM attachment</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a CROSS_PLATFORM authenticator and RP requests PLATFORM attachment</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> attempting to register</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+WebAuthnClientException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a PLATFORM authenticator and RP requests CROSS_PLATFORM attachment</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> attempting to register</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+WebAuthnClientException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a CROSS_PLATFORM authenticator and RP requests CROSS_PLATFORM attachment</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> both PLATFORM and CROSS_PLATFORM authenticators with no attachment preference</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering without attachment preference</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">AttestationConveyanceSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> attestation conveyance preference is DIRECT</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with a Packed authenticator</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the attestation statement should be preserved as PackedAttestationStatement
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> attestation conveyance preference is NONE</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with a Packed authenticator</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the attestation statement should be replaced with NoneAttestationStatement
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> attestation conveyance preference is INDIRECT</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with a Packed authenticator</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the attestation statement should pass through as PackedAttestationStatement
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> attestation conveyance preference is ENTERPRISE</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with a Packed authenticator</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the attestation statement should pass through as PackedAttestationStatement
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">AttestationFormatSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a Packed attestation authenticator</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the attestation statement should be PackedAttestationStatement with AT flag set
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a FIDO U2F attestation authenticator</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the attestation statement should be FIDOU2FAttestationStatement
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a None attestation authenticator</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the attestation statement should be NoneAttestationStatement
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">AttestationSignatureSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a Packed attestation environment with signature verification</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with a tampered attestation signature</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadSignatureException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a FIDO U2F attestation environment with signature verification</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with a tampered attestation signature</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadSignatureException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">AttestationTrustSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server configured with trusted root CA and Packed attestation authenticator</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential with a certificate chaining to the trusted root</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept the attestation
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server configured with a different trust anchor than the authenticator's certificate</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential with a certificate NOT chaining to the trusted root</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should reject the attestation
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server configured with trusted root CA and FIDO U2F attestation authenticator</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential with a certificate chaining to the trusted root</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept the attestation
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server configured with wrong trust anchor and FIDO U2F attestation authenticator</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential with a certificate NOT chaining to the trusted root</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should reject the attestation
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server configured with NoneAttestationStatementVerifier</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with None attestation</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should accept the attestation
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server configured with NoneAttestationStatementVerifier but authenticator sends Packed</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with mismatched attestation format</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should reject the attestation
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> server configured with PackedAttestationStatementVerifier but authenticator sends None</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with mismatched attestation format</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the server should reject the attestation
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">AuthenticatorDataSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a registered credential</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating with rpIdHash replaced to a different RP</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadRpIdException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">BackupStateSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a single-device credential (BE=0)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> checking flags after registration</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BE should be 0
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BS should be 0 (since BE=0, backup is not possible)
+</div>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BE should remain 0 (must not change after registration)
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BS should be 0
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">ChallengeSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a registration with a tampered challenge (challenge fixation attack)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> the credential is created with an attacker's fixed challenge instead of the server's</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadChallengeException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authentication with a tampered challenge (challenge fixation attack)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> the assertion is created with an attacker's fixed challenge instead of the server's</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadChallengeException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">ClientDataTypeSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a registered credential</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating with clientData type 'webauthn.create' instead of 'webauthn.get'</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+InconsistentClientDataTypeException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a default test environment</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with clientData type 'webauthn.get' instead of 'webauthn.create'</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+InconsistentClientDataTypeException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">ClientPINSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> clientPIN ENABLED with UV REQUIRED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed with UV flag set
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> clientPIN DISABLED with UV READY</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed with UV flag set (built-in UV, no PIN needed)
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> clientPIN ENABLED with UV NOT_READY</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> setting PIN and registering</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed via PIN-based UV fallback
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">CounterSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a registered credential with counter enabled</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating multiple times</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the counter should increment with each authentication
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> clone detection with counter rollback</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> the server's stored counter is higher than the authenticator's counter</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+MaliciousCounterValueException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">CredentialIdSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a registered credential</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> checking the credential ID length</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the credential ID should be ≤ 1023 bytes
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a credential already registered on the server</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> attempting to authenticate with the registered credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the credential should be found in the server's store
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">CredentialSelectorSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> two discoverable credentials with CLIENT_PLATFORM credential selector</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating without allowCredentials (discoverable flow)</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the client-side selector should receive multiple candidates
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> two discoverable credentials with AUTHENTICATOR credential selector</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating without allowCredentials (discoverable flow)</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the authenticator should have already selected (client receives single candidate)
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">ExcludeCredentialsSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an existing registered credential</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with the existing credential in excludeCredentials</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+CTAP2_ERR_CREDENTIAL_EXCLUDED should be thrown
+</div>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering with a different credential in excludeCredentials</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">OriginSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a default test environment</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering from a different origin than the server expects</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadOriginException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a registered credential</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating from a different origin than the server expects</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadOriginException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">ResetProtectionSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with resetProtection=ENABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> attempting to reset the authenticator</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+CTAP2_ERR_OPERATION_DENIED should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with resetProtection=DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> resetting the authenticator</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the reset should succeed without error
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">ResidentKeySpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP required × authenticator ALWAYS</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+a discoverable credential should be created (no allowCredentials needed)
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP required × authenticator IF_REQUIRED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+a discoverable credential should be created (no allowCredentials needed)
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP required × authenticator NEVER</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> attempting to register</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+WebAuthnClientException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP preferred × authenticator ALWAYS</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+a discoverable credential should be created (no allowCredentials needed)
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP preferred × authenticator IF_REQUIRED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+a non-discoverable credential should be created (requires allowCredentials)
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> RP discouraged × authenticator ALWAYS</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+a discoverable credential should be created (no allowCredentials needed)
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">RpIdSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a credential presented to a different RP during registration</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> the server verifies with a different rpId</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadRpIdException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a credential presented to a different RP during authentication</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> the server verifies with a different rpId</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadRpIdException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">SignatureSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a registered credential</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating with a tampered signature (same length, incorrect value)</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadSignatureException should be thrown
+</div>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating with a truncated signature (first half only)</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+BadSignatureException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">TransportSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with transports={INTERNAL}</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the registration response should contain INTERNAL transport
+</div>
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the credential record should store the transport
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with transports={USB, NFC}</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the registration response should contain both transports
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with transports={BLE}</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the registration response should contain BLE transport
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with transports={HYBRID}</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the registration response should contain HYBRID transport
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with transports={SMART_CARD}</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the registration response should contain SMART_CARD transport
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with default transports (USB)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the registration response should contain USB transport
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">UserPresenceSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP conditionalMediation=false, userPresenceRequired=true × authenticator SUPPORTED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed with UP=true
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP conditionalMediation=false, userPresenceRequired=true × authenticator SUPPORTED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed with UP=true
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP conditionalMediation=false, userPresenceRequired=true × authenticator NOT_SUPPORTED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+client-side error should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP conditionalMediation=false, userPresenceRequired=true × authenticator NOT_SUPPORTED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should fail before authentication
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP conditionalMediation=false, userPresenceRequired=false × authenticator SUPPORTED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed with UP=true
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP conditionalMediation=false, userPresenceRequired=false × authenticator SUPPORTED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed with UP=true
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP conditionalMediation=false, userPresenceRequired=false × authenticator NOT_SUPPORTED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+client-side error should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP conditionalMediation=false, userPresenceRequired=false × authenticator NOT_SUPPORTED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should fail before authentication
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">UserVerificationSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP required, userVerificationRequired=true × authenticator READY, PIN ENABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP required, userVerificationRequired=true × authenticator READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP required, userVerificationRequired=true × authenticator NOT_READY, PIN ENABLED (+setPIN)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP required, userVerificationRequired=true × authenticator NOT_READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+client-side error should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP required, userVerificationRequired=true × authenticator NOT_SUPPORTED, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+client-side error should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP preferred, userVerificationRequired=false × authenticator READY, PIN ENABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP preferred, userVerificationRequired=false × authenticator READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP preferred, userVerificationRequired=false × authenticator NOT_READY, PIN ENABLED (+setPIN)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP preferred, userVerificationRequired=false × authenticator NOT_READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP preferred, userVerificationRequired=false × authenticator NOT_SUPPORTED, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=false × authenticator READY, PIN ENABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=false × authenticator READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=false × authenticator NOT_READY, PIN ENABLED (+setPIN)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=false × authenticator NOT_READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=false × authenticator NOT_SUPPORTED, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=true × authenticator READY, PIN ENABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=true × authenticator READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=true × authenticator NOT_READY, PIN ENABLED (+setPIN)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=true × authenticator NOT_READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> registration: RP discouraged, userVerificationRequired=true × authenticator NOT_SUPPORTED, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> registering a credential</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP required, userVerificationRequired=true × authenticator READY, PIN ENABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP required, userVerificationRequired=true × authenticator READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP required, userVerificationRequired=true × authenticator NOT_READY, PIN ENABLED (+setPIN)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP required, userVerificationRequired=true × authenticator NOT_READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should fail before authentication
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP required, userVerificationRequired=true × authenticator NOT_SUPPORTED, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+registration should fail before authentication
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP preferred, userVerificationRequired=false × authenticator READY, PIN ENABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP preferred, userVerificationRequired=false × authenticator READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP preferred, userVerificationRequired=false × authenticator NOT_READY, PIN ENABLED (+setPIN)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP preferred, userVerificationRequired=false × authenticator NOT_READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP preferred, userVerificationRequired=false × authenticator NOT_SUPPORTED, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=false × authenticator READY, PIN ENABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=false × authenticator READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=false × authenticator NOT_READY, PIN ENABLED (+setPIN)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=false × authenticator NOT_READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=false × authenticator NOT_SUPPORTED, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=true × authenticator READY, PIN ENABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=true × authenticator READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=true × authenticator NOT_READY, PIN ENABLED (+setPIN)</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=true × authenticator NOT_READY, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> authentication: RP discouraged, userVerificationRequired=true × authenticator NOT_SUPPORTED, PIN DISABLED</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+UserNotVerifiedException should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+</section>
+<section class="category">
+<h2 class="category-header">Scenario</h2>
+<div class="spec">
+<h3 class="pass">ClientPINManagementSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with clientPIN already set</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> attempting to set a new PIN without resetting</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+CTAP2_ERR_PIN_AUTH_INVALID should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator with clientPIN set for PIN change</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> changing the PIN with the correct current PIN</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the PIN change should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a registered credential and then PIN is changed</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> changing the PIN and then authenticating</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+authentication should still succeed with the existing credential
+</div>
+</div>
+</details>
+</div>
+</details>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> an authenticator for retry count verification</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> checking the initial retry count</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the retry count should be the maximum
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">CredentialDeletionSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a registered credential that is then deleted from the server</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> attempting to authenticate</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+credential not found error should be thrown
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">CrossPlatformAuthenticationSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> two client platforms sharing the same authenticator</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> a credential is registered via the first client platform and authenticated via the second</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">PasswordlessFlowSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a relying party requiring resident key</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> a user registers a credential</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-and">And</span> the user authenticates without providing credential ID</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+</details>
+</div>
+<div class="spec">
+<h3 class="pass">SecondFactorFlowSpec</h3>
+<details open>
+<summary class="test-container"><span class="keyword keyword-given">Given</span> a relying party with resident key not required and UV preferred</summary>
+<div class="children">
+<details open>
+<summary class="test-container"><span class="keyword keyword-when">When</span> a user registers and authenticates with credential ID in allowCredentials</summary>
+<div class="children">
+<div class="test-leaf pass">
+<span class="icon">✓</span>
+<span class="keyword keyword-then">Then</span>
+the authentication should succeed
+</div>
+</div>
+</details>
+</div>
+</details>
+</div>
+</section>
+</div>
+</body>
+</html>
