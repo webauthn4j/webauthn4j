@@ -47,7 +47,7 @@ import java.util.List;
  * <p>
  * ML-DSA algorithms require JDK 24 or later at runtime.
  *
- * @see <a href="https://datatracker.ietf.org/doc/draft-ietf-cose-dilithium/">Use of ML-DSA in COSE and JOSE</a>
+ * @see <a href="https://www.rfc-editor.org/rfc/rfc9964.html">RFC 9964 - Use of ML-DSA in COSE and JOSE</a>
  */
 public class AKPCOSEKey extends AbstractCOSEKey {
 
