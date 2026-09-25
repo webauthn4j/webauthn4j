@@ -131,7 +131,7 @@ public class AuthenticatorDataConverter {
             AuthenticationExtensionsAuthenticatorOutputs<T> extensions;
             if (AuthenticatorData.checkFlagAT(flags)) {
                 if (byteBuffer.hasRemaining()) {
-                    attestedCredentialData = attestedCredentialDataConverter.convert(byteBuffer);
+                    attestedCredentialData = convertToAttestedCredentialDataLeniently(byteBuffer);
                 }
                 else {
                     attestedCredentialData = null; // Apple App Attest API assertion has AT flag even though they don't have attestedCredentialData.
@@ -142,6 +142,9 @@ public class AuthenticatorDataConverter {
             }
             if (AuthenticatorData.checkFlagED(flags)) {
                 extensions = convertToExtensions(byteBuffer);
+            }
+            else if (byteBuffer.hasRemaining()) {
+                extensions = convertToUnflaggedExtensions(byteBuffer);
             }
             else {
                 extensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
@@ -198,6 +201,33 @@ public class AuthenticatorDataConverter {
         else {
             return objectConverter.getCborMapper().writeValueAsBytes(extensions);
         }
+    }
+
+    @SuppressWarnings("RedundantCast")
+    @Nullable AttestedCredentialData convertToAttestedCredentialDataLeniently(@NotNull ByteBuffer byteBuffer) {
+        int position = ((Buffer) byteBuffer).position();
+        try {
+            return attestedCredentialDataConverter.convert(byteBuffer);
+        }
+        catch (RuntimeException e) {
+            ((Buffer) byteBuffer).position(position);
+            return null;
+        }
+    }
+
+    @SuppressWarnings("RedundantCast")
+    <T extends ExtensionAuthenticatorOutput> @NotNull AuthenticationExtensionsAuthenticatorOutputs<T> convertToUnflaggedExtensions(@NotNull ByteBuffer byteBuffer) {
+        int position = ((Buffer) byteBuffer).position();
+        try {
+            AuthenticationExtensionsAuthenticatorOutputs<T> extensions = convertToExtensions(byteBuffer);
+            if (extensions != null) {
+                return extensions;
+            }
+        }
+        catch (RuntimeException ignored) {
+        }
+        ((Buffer) byteBuffer).position(position);
+        return new AuthenticationExtensionsAuthenticatorOutputs<>();
     }
 
     @SuppressWarnings("RedundantCast")
