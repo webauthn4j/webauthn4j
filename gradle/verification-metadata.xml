@@ -54,6 +54,7 @@
             <trusting group="org.glassfish.jaxb" />
          </trusted-key>
          <trusted-key id="066263ABA3F9AA7BC0A1087D40B4D7ECFEAF091D" group="org.eclipse.parsson" />
+         <trusted-key id="06D0369BE1D0B06997DA66E8C33B56C147B01975" group="^org[.]sonarsource($|([.].*))" regex="true" />
          <trusted-key id="073F7A9345756F3B40CDB99E6C70A3B7599C5736">
             <trusting group="org.apache.maven" />
             <trusting group="org.codehaus.plexus" />
