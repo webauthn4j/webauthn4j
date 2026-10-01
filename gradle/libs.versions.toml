@@ -39,7 +39,7 @@ playwright = "1.62.0"
 
 # fido-integration-bdd dependencies
 
-kotlin = "2.4.10"
+kotlin = "2.4.20"
 
 kotest = "5.9.1"
 
