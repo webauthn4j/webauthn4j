@@ -40,6 +40,7 @@ class COSEKeyTypeTest {
                 () -> assertThat(COSEKeyType.create(2)).isEqualTo(COSEKeyType.EC2),
                 () -> assertThat(COSEKeyType.create(3)).isEqualTo(COSEKeyType.RSA),
                 () -> assertThat(COSEKeyType.create(4)).isEqualTo(COSEKeyType.SYMMETRIC),
+                () -> assertThat(COSEKeyType.create(7)).isEqualTo(COSEKeyType.AKP),
                 () -> assertThatThrownBy(() -> COSEKeyType.create(-1)).isInstanceOf(IllegalArgumentException.class)
         );
     }

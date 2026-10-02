@@ -41,6 +41,8 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.RSAUtil;
+import com.webauthn4j.test.internal.MLDSAKeyMaterial;
+import com.webauthn4j.test.internal.MLDSAUtil;
 import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.nio.ByteBuffer;
@@ -242,6 +244,17 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
                 cosePublicKey = RSACOSEKey.create(publicKey, alg);
                 cosePrivateKey = RSACOSEKey.create(privateKey, alg);
                 coseKeyPair= RSACOSEKey.create(credentialKeyPair, alg);
+            }
+            else if(Arrays.asList(COSEAlgorithmIdentifier.ML_DSA_44, COSEAlgorithmIdentifier.ML_DSA_65, COSEAlgorithmIdentifier.ML_DSA_87).contains(alg)){
+                String jcaName = alg.toSignatureAlgorithm().getJcaName();
+                MLDSAKeyMaterial keyMaterial = MLDSAUtil.generateKeyMaterial(jcaName);
+
+                AKPCOSEKey akpKey = new AKPCOSEKey(null, alg, null, keyMaterial.getRawPublicKey(), keyMaterial.getSeed());
+                cosePublicKey = new AKPCOSEKey(null, alg, null, keyMaterial.getRawPublicKey(), null);
+                cosePrivateKey = akpKey;
+                coseKeyPair = akpKey;
+
+                credentialKeyPair = new KeyPair(akpKey.getPublicKey(), akpKey.getPrivateKey());
             }
             else{
                 throw new NotSupportedException("Specified alg are not supported");
@@ -450,8 +463,15 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     }
 
     private boolean isCapableOfHandling(PublicKeyCredentialParameters publicKeyCredentialParameters) {
-        return publicKeyCredentialParameters.getType().equals(PublicKeyCredentialType.PUBLIC_KEY) &&
-                (COSEAlgorithmIdentifier.ES256.equals(publicKeyCredentialParameters.getAlg()) || COSEAlgorithmIdentifier.PS256.equals(publicKeyCredentialParameters.getAlg()));
+        if (!publicKeyCredentialParameters.getType().equals(PublicKeyCredentialType.PUBLIC_KEY)) {
+            return false;
+        }
+        COSEAlgorithmIdentifier alg = publicKeyCredentialParameters.getAlg();
+        return COSEAlgorithmIdentifier.ES256.equals(alg)
+                || COSEAlgorithmIdentifier.PS256.equals(alg)
+                || COSEAlgorithmIdentifier.ML_DSA_44.equals(alg)
+                || COSEAlgorithmIdentifier.ML_DSA_65.equals(alg)
+                || COSEAlgorithmIdentifier.ML_DSA_87.equals(alg);
     }
 
     public boolean isCountUpEnabled() {

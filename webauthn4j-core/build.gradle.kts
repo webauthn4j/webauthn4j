@@ -16,6 +16,7 @@
 
 plugins {
     id("webauthn4j.java-library-conventions")
+    id("com.webauthn4j.optional-dependencies")
     id("com.webauthn4j.test-with-security-provider")
 }
 
@@ -23,6 +24,29 @@ description = "WebAuthn4J Core library"
 
 testing {
     suites {
+        register<JvmTestSuite>("testOnJDK17") {
+            dependencies {
+                implementation(project())
+                implementation(platform(libs.spring.boot.bom))
+                implementation("org.assertj:assertj-core")
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        javaLauncher.set(javaToolchains.launcherFor {
+                            languageVersion.set(JavaLanguageVersion.of(17))
+                        })
+                    }
+                }
+            }
+        }
+        register<JvmTestSuite>("testWithoutBouncyCastle") {
+            dependencies {
+                implementation(project())
+                implementation(platform(libs.spring.boot.bom))
+                implementation("org.assertj:assertj-core")
+            }
+        }
         // Re-runs src/test/java tests with BouncyCastle as the primary JCA provider,
         // simulating environments where BC is registered at highest priority.
         register<JvmTestSuite>("testWithBouncyCastle") {
@@ -80,6 +104,16 @@ testing {
     }
 }
 
+// OptionalDependenciesPlugin adds `optional` dependencies to all source sets' classpaths.
+// For testWithoutBouncyCastle, we explicitly exclude Bouncy Castle to simulate a consumer
+// environment where BC is not present, verifying that core functionality works without it.
+configurations.named("testWithoutBouncyCastleCompileClasspath") {
+    exclude(group = "org.bouncycastle")
+}
+configurations.named("testWithoutBouncyCastleRuntimeClasspath") {
+    exclude(group = "org.bouncycastle")
+}
+
 // Exclude regular BouncyCastle from the BC-FIPS test suite classpaths.
 // The OptionalDependenciesPlugin adds optional dependencies (including bcprov) to all
 // source sets' classpaths, so we must explicitly exclude them here.
@@ -118,6 +152,8 @@ testWithSecurityProvider {
 }
 
 tasks.named("test") {
+    dependsOn(testing.suites.named("testOnJDK17"))
+    dependsOn(testing.suites.named("testWithoutBouncyCastle"))
     dependsOn(testing.suites.named("testWithBouncyCastle"))
     dependsOn(testing.suites.named("testWithBouncyCastleFIPS"))
 }
@@ -126,6 +162,9 @@ dependencies {
     api(libs.jackson.databind)
     api(libs.jackson.dataformat.cbor)
     implementation(libs.slf4j.api)
+
+    //Optional
+    optional(libs.bouncycastle.bcprov.jdk18on)
 
     //CompileOnly
     compileOnly(libs.jetbrains.annotations)

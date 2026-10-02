@@ -82,10 +82,11 @@ public class WebSecurityConfig {
                     .name("WebAuthn4J Spring Security Integration Test")
                     .and()
                     .pubKeyCredParams(
+                            new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ML_DSA_44),
                             new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256),
                             new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.RS256)
                     )
-                    .attestation(AttestationConveyancePreference.NONE)
+                    .attestation(AttestationConveyancePreference.DIRECT)
                     .extensions()
                     .uvm(true)
                     .credProps(true)
