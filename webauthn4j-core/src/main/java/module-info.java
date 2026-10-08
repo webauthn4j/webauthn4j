@@ -5,6 +5,7 @@ module com.webauthn4j.core {
     requires org.slf4j;
 
     requires static org.jetbrains.annotations;
+    requires static org.bouncycastle.provider;
 
     exports com.webauthn4j;
     exports com.webauthn4j.anchor;

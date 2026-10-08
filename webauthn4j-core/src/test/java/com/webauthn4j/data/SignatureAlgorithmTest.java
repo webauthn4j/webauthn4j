@@ -51,6 +51,10 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.create("SHA384withRSA")).isEqualTo(SignatureAlgorithm.RS384),
                 () -> assertThat(SignatureAlgorithm.create("SHA512withRSA")).isEqualTo(SignatureAlgorithm.RS512),
                 () -> assertThat(SignatureAlgorithm.create("ed25519")).isEqualTo(SignatureAlgorithm.Ed25519),
+                () -> assertThat(SignatureAlgorithm.create("ed448")).isEqualTo(SignatureAlgorithm.Ed448),
+                () -> assertThat(SignatureAlgorithm.create("ML-DSA-44")).isEqualTo(SignatureAlgorithm.ML_DSA_44),
+                () -> assertThat(SignatureAlgorithm.create("ML-DSA-65")).isEqualTo(SignatureAlgorithm.ML_DSA_65),
+                () -> assertThat(SignatureAlgorithm.create("ML-DSA-87")).isEqualTo(SignatureAlgorithm.ML_DSA_87),
                 () -> assertThatThrownBy(()->SignatureAlgorithm.create("invalid")).isInstanceOf(IllegalArgumentException.class)
         );
     }
@@ -66,9 +70,13 @@ class SignatureAlgorithmTest {
                 () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA384withRSA\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.RS384),
                 () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA512withRSA\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.RS512),
                 () -> assertThat(jsonMapper.readValue("{\"alg\":\"ed25519\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.Ed25519),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"ed448\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.Ed448),
                 () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA256withRSA/PSS\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.PS256),
                 () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA384withRSA/PSS\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.PS384),
                 () -> assertThat(jsonMapper.readValue("{\"alg\":\"SHA512withRSA/PSS\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.PS512),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"ML-DSA-44\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.ML_DSA_44),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"ML-DSA-65\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.ML_DSA_65),
+                () -> assertThat(jsonMapper.readValue("{\"alg\":\"ML-DSA-87\"}", TestDto.class).getAlg()).isEqualTo(SignatureAlgorithm.ML_DSA_87),
                 () -> assertThatThrownBy(() -> jsonMapper.readValue("{\"alg\":\"invalid\"}", TestDto.class)).isInstanceOf(InvalidFormatException.class)
         );
     }
@@ -84,9 +92,13 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.RS384).hasToString("RS384"),
                 () -> assertThat(SignatureAlgorithm.RS512).hasToString("RS512"),
                 () -> assertThat(SignatureAlgorithm.Ed25519).hasToString("Ed25519"),
+                () -> assertThat(SignatureAlgorithm.Ed448).hasToString("Ed448"),
                 () -> assertThat(SignatureAlgorithm.PS256).hasToString("PS256"),
                 () -> assertThat(SignatureAlgorithm.PS384).hasToString("PS384"),
-                () -> assertThat(SignatureAlgorithm.PS512).hasToString("PS512")
+                () -> assertThat(SignatureAlgorithm.PS512).hasToString("PS512"),
+                () -> assertThat(SignatureAlgorithm.ML_DSA_44).hasToString("ML-DSA-44"),
+                () -> assertThat(SignatureAlgorithm.ML_DSA_65).hasToString("ML-DSA-65"),
+                () -> assertThat(SignatureAlgorithm.ML_DSA_87).hasToString("ML-DSA-87")
         );
     }
 

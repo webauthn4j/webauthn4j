@@ -31,6 +31,8 @@ dependencies {
     implementation(libs.bouncycastle.bcprov.jdk18on)
     implementation(libs.bouncycastle.bcpkix.jdk18on)
 
+    implementation(libs.junit.jupiter)
+
     //CompileOnly
     compileOnly(libs.jetbrains.annotations)
 

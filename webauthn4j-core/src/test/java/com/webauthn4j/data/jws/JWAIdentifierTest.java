@@ -44,6 +44,9 @@ class JWAIdentifierTest {
                 () -> assertThat(JWAIdentifier.create("RS256")).isEqualTo(JWAIdentifier.RS256),
                 () -> assertThat(JWAIdentifier.create("RS384")).isEqualTo(JWAIdentifier.RS384),
                 () -> assertThat(JWAIdentifier.create("RS512")).isEqualTo(JWAIdentifier.RS512),
+                () -> assertThat(JWAIdentifier.create("ML-DSA-44")).isEqualTo(JWAIdentifier.ML_DSA_44),
+                () -> assertThat(JWAIdentifier.create("ML-DSA-65")).isEqualTo(JWAIdentifier.ML_DSA_65),
+                () -> assertThat(JWAIdentifier.create("ML-DSA-87")).isEqualTo(JWAIdentifier.ML_DSA_87),
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> JWAIdentifier.create("invalid")),
                 () -> assertThrows(IllegalArgumentException.class,
@@ -88,7 +91,10 @@ class JWAIdentifierTest {
                 () -> assertThat(JWAIdentifier.RS512.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.RS512),
                 () -> assertThat(JWAIdentifier.ES256.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ES256),
                 () -> assertThat(JWAIdentifier.ES384.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ES384),
-                () -> assertThat(JWAIdentifier.ES512.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ES512)
+                () -> assertThat(JWAIdentifier.ES512.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ES512),
+                () -> assertThat(JWAIdentifier.ML_DSA_44.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ML_DSA_44),
+                () -> assertThat(JWAIdentifier.ML_DSA_65.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ML_DSA_65),
+                () -> assertThat(JWAIdentifier.ML_DSA_87.toSignatureAlgorithm()).isEqualTo(SignatureAlgorithm.ML_DSA_87)
         );
     }
 

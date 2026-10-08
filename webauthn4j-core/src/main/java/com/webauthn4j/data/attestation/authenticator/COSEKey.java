@@ -34,7 +34,8 @@ import java.util.List;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = EdDSACOSEKey.class, name = "1"),
         @JsonSubTypes.Type(value = EC2COSEKey.class, name = "2"),
-        @JsonSubTypes.Type(value = RSACOSEKey.class, name = "3")
+        @JsonSubTypes.Type(value = RSACOSEKey.class, name = "3"),
+        @JsonSubTypes.Type(value = AKPCOSEKey.class, name = "7")
 })
 public interface COSEKey {
 
