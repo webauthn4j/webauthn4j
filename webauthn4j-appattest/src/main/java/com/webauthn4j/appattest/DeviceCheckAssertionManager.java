@@ -21,6 +21,7 @@ import com.webauthn4j.appattest.data.DCAssertionData;
 import com.webauthn4j.appattest.data.DCAssertionParameters;
 import com.webauthn4j.appattest.data.DCAssertionRequest;
 import com.webauthn4j.appattest.verifier.DCAssertionDataVerifier;
+import com.webauthn4j.appattest.converter.DCAssertionAuthenticatorDataConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -49,16 +50,16 @@ public class DeviceCheckAssertionManager {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
         dcAssertionDataValidator = new DCAssertionDataVerifier(customAuthenticationValidators);
-        authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        authenticatorDataConverter = new DCAssertionAuthenticatorDataConverter(objectConverter);
         this.objectConverter = objectConverter;
     }
 
     public DeviceCheckAssertionManager(@NotNull List<CustomCoreAuthenticationVerifier> customAuthenticationValidators) {
-        this(customAuthenticationValidators, new ObjectConverter());
+        this(customAuthenticationValidators, DeviceCheckManager.createObjectConverter());
     }
 
     public DeviceCheckAssertionManager() {
-        this(Collections.emptyList(), new ObjectConverter());
+        this(Collections.emptyList());
     }
 
     @SuppressWarnings("squid:S1130")

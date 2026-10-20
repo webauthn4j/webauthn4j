@@ -11,6 +11,7 @@ module com.webauthn4j.appattest {
     exports com.webauthn4j.appattest.converter.jackson.serializer;
     exports com.webauthn4j.appattest.data;
     exports com.webauthn4j.appattest.data.attestation.statement;
+    exports com.webauthn4j.appattest.data.extension;
     exports com.webauthn4j.appattest.server;
     exports com.webauthn4j.appattest.verifier;
 

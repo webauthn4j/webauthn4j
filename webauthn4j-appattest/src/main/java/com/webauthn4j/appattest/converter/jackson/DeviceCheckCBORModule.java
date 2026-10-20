@@ -16,8 +16,15 @@
 
 package com.webauthn4j.appattest.converter.jackson;
 
+import com.webauthn4j.appattest.converter.jackson.deserializer.AppleBundleVersion01ExtensionAuthenticatorOutputDeserializer;
+import com.webauthn4j.appattest.converter.jackson.deserializer.AppleValidationCategory01ExtensionAuthenticatorOutputDeserializer;
 import com.webauthn4j.appattest.converter.jackson.serializer.AppleAppAttestAttestationStatementSerializer;
+import com.webauthn4j.appattest.converter.jackson.serializer.ValidationCategorySerializer;
+import com.webauthn4j.appattest.converter.jackson.deserializer.ValidationCategoryDeserializer;
+import com.webauthn4j.appattest.data.ValidationCategory;
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
+import com.webauthn4j.appattest.data.extension.AppleBundleVersion01ExtensionAuthenticatorOutput;
+import com.webauthn4j.appattest.data.extension.AppleValidationCategory01ExtensionAuthenticatorOutput;
 import tools.jackson.databind.jsontype.NamedType;
 import tools.jackson.databind.module.SimpleModule;
 
@@ -27,6 +34,13 @@ public class DeviceCheckCBORModule extends SimpleModule {
         super("DeviceCheckCBORModule");
 
         this.addSerializer(new AppleAppAttestAttestationStatementSerializer());
+        this.addSerializer(new ValidationCategorySerializer());
+        this.addDeserializer(ValidationCategory.class, new ValidationCategoryDeserializer());
+
+        this.addDeserializer(AppleBundleVersion01ExtensionAuthenticatorOutput.class,
+                new AppleBundleVersion01ExtensionAuthenticatorOutputDeserializer());
+        this.addDeserializer(AppleValidationCategory01ExtensionAuthenticatorOutput.class,
+                new AppleValidationCategory01ExtensionAuthenticatorOutputDeserializer());
 
         this.registerSubtypes(new NamedType(AppleAppAttestAttestationStatement.class, AppleAppAttestAttestationStatement.FORMAT));
     }

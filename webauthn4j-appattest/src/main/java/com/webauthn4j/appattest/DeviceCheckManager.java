@@ -95,11 +95,7 @@ public class DeviceCheckManager {
      * @return configured {@link DeviceCheckManager}
      */
     public static @NotNull DeviceCheckManager createNonStrictDeviceCheckManager() {
-        JsonMapper jsonMapper = new JsonMapper();
-        CBORMapper cborMapper = CBORMapper.builder()
-                .addModule(new DeviceCheckCBORModule())
-                .build();
-        ObjectConverter objectConverter = new ObjectConverter(jsonMapper, cborMapper);
+        ObjectConverter objectConverter = createObjectConverter();
         return createNonStrictDeviceCheckManager(objectConverter);
     }
 
