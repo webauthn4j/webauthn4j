@@ -16,7 +16,6 @@
 
 package com.webauthn4j.appattest;
 
-import com.webauthn4j.anchor.KeyStoreTrustAnchorRepository;
 import com.webauthn4j.appattest.data.extension.AppleBundleVersion01ExtensionAuthenticatorOutput;
 import com.webauthn4j.appattest.data.extension.AppleValidationCategory01ExtensionAuthenticatorOutput;
 import com.webauthn4j.appattest.data.*;
@@ -32,10 +31,9 @@ import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.verifier.exception.BadSignatureException;
-import com.webauthn4j.verifier.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessVerifier;
 import org.junit.jupiter.api.Test;
+import test.AppAttestTestUtil;
 import org.mockito.MockedStatic;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.node.ObjectNode;
@@ -46,8 +44,6 @@ import java.io.UncheckedIOException;
 import java.nio.BufferUnderflowException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
-import java.security.GeneralSecurityException;
-import java.security.KeyStore;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -86,17 +82,12 @@ class DeviceCheckManagerIOS27Test {
     }
 
     @Test
-    void validate_ios27_attestation_test() throws GeneralSecurityException, IOException {
+    void validate_ios27_attestation_test() {
         byte[] keyId = Base64UrlUtil.decode("5wvMiiwopebQYSxU76gBmh-9evrXbDwi2hdEIr8FXzM");
         byte[] attestationObject = Base64UrlUtil.decode(loadResource("apple-app-attest/ios27-sample-attestation-object.b64url").trim());
         byte[] clientDataHash = HexUtil.decode("5b1e4a7f3c2d8e91a605b3d472f8196ce347aa582c9d310e8467b2531fc09e77");
 
-        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        trustStore.load(null, null);
-        trustStore.setCertificateEntry("apple-app-attest", TestAttestationUtil.loadCertificateFromClassPath(
-                "apple-app-attest/Apple_App_Attestation_Root_CA.pem"));
-        DeviceCheckManager manager = new DeviceCheckManager(
-                new DefaultCertPathTrustworthinessVerifier(new KeyStoreTrustAnchorRepository(trustStore)));
+        DeviceCheckManager manager = AppAttestTestUtil.createDeviceCheckManager();
 
         // Keep verification within the sample credential certificate's validity period.
         Instant timestamp = Instant.parse("2026-10-20T00:00:00Z");
@@ -125,7 +116,7 @@ class DeviceCheckManagerIOS27Test {
         byte[] authenticatorData = TestDataUtil.createAppAttestAssertionAuthenticatorData(APP_IDENTIFIER, 1, HexUtil.decode(IOS27_EXTENSIONS));
         byte[] assertion = TestDataUtil.createAppAttestAssertion(keyPair, authenticatorData, clientDataHash);
 
-        DCAssertionData dcAssertionData = DeviceCheckManager.createNonStrictDeviceCheckManager().validate(
+        DCAssertionData dcAssertionData = AppAttestTestUtil.createDeviceCheckManager().validate(
                 new DCAssertionRequest(keyId, assertion, clientDataHash),
                 new DCAssertionParameters(new DCServerProperty(APP_IDENTIFIER, new DefaultChallenge(challenge)), TestDataUtil.createAppAttestDevice(keyPair, keyId))
         );
@@ -149,7 +140,7 @@ class DeviceCheckManagerIOS27Test {
         tamperedAuthenticatorData[tamperedAuthenticatorData.length - 4] = 0x02;
         byte[] assertion = TestDataUtil.createAppAttestAssertion(keyPair, signedAuthenticatorData, clientDataHash, tamperedAuthenticatorData);
 
-        DeviceCheckManager deviceCheckManager = DeviceCheckManager.createNonStrictDeviceCheckManager();
+        DeviceCheckManager deviceCheckManager = AppAttestTestUtil.createDeviceCheckManager();
         DCAssertionRequest dcAssertionRequest = new DCAssertionRequest(keyId, assertion, clientDataHash);
         DCAssertionParameters dcAssertionParameters = new DCAssertionParameters(new DCServerProperty(APP_IDENTIFIER, new DefaultChallenge(challenge)), TestDataUtil.createAppAttestDevice(keyPair, keyId));
 
@@ -165,7 +156,7 @@ class DeviceCheckManagerIOS27Test {
         node.put("authData", TestDataUtil.createAppAttestAssertionAuthenticatorData(APP_IDENTIFIER, 0, HexUtil.decode(IOS27_EXTENSIONS)));
         byte[] malformedAttestationObject = objectConverter.getCborMapper().writeValueAsBytes(node);
         DCAttestationRequest request = new DCAttestationRequest(new byte[32], malformedAttestationObject, new byte[32]);
-        DeviceCheckManager manager = DeviceCheckManager.createNonStrictDeviceCheckManager();
+        DeviceCheckManager manager = AppAttestTestUtil.createDeviceCheckManager();
 
         assertThatThrownBy(() -> manager.parse(request))
                 .hasRootCauseInstanceOf(BufferUnderflowException.class);
