@@ -18,6 +18,12 @@ package com.webauthn4j.test;
 
 import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
 import com.webauthn4j.appattest.data.DCAttestationParameters;
+import com.webauthn4j.appattest.data.DCAssertion;
+import com.webauthn4j.appattest.data.ValidationCategory;
+import com.webauthn4j.appattest.authenticator.DCAppleDevice;
+import com.webauthn4j.appattest.authenticator.DCAppleDeviceImpl;
+import com.webauthn4j.appattest.data.extension.AppleBundleVersion01ExtensionAuthenticatorOutput;
+import com.webauthn4j.appattest.data.extension.AppleValidationCategory01ExtensionAuthenticatorOutput;
 import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.appattest.verifier.DCRegistrationObject;
 import com.webauthn4j.authenticator.Authenticator;
@@ -39,6 +45,8 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
@@ -54,6 +62,7 @@ import tools.jackson.dataformat.cbor.CBORMapper;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
@@ -334,6 +343,49 @@ public class TestDataUtil {
     public static <T extends RegistrationExtensionAuthenticatorOutput> AuthenticatorData<T> createAuthenticatorData(COSEKey coseKey) {
         byte flags = BIT_UP | BIT_AT;
         return new AuthenticatorData<>(new byte[32], flags, 1, createAttestedCredentialData(coseKey));
+    }
+
+    public static AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> createAppAttestAssertionAuthenticatorData() {
+        // App Attest assertions set AT without including attested credential data.
+        return new AuthenticatorData<>(new byte[32], BIT_AT, 1, null, new AuthenticationExtensionsAuthenticatorOutputs<>());
+    }
+
+    public static AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> createAppAttestAuthenticatorExtensions(
+            String bundleVersion, ValidationCategory validationCategory) {
+        return new AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication()
+                .setObjectConverter(objectConverter)
+                .set(AppleBundleVersion01ExtensionAuthenticatorOutput.ID, bundleVersion)
+                .set(AppleValidationCategory01ExtensionAuthenticatorOutput.ID, validationCategory)
+                .build();
+    }
+
+    public static byte[] createAppAttestAssertionAuthenticatorData(String appId, long counter, byte[] extensions) {
+        byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(appId.getBytes(StandardCharsets.UTF_8));
+        return ByteBuffer.allocate(rpIdHash.length + 1 + 4 + extensions.length)
+                .put(rpIdHash)
+                .put((byte) (BIT_AT | AuthenticatorData.BIT_ED))
+                .putInt((int) counter)
+                .put(extensions)
+                .array();
+    }
+
+    public static byte[] createAppAttestAssertion(KeyPair keyPair, byte[] authenticatorData, byte[] clientDataHash) {
+        return createAppAttestAssertion(keyPair, authenticatorData, clientDataHash, authenticatorData);
+    }
+
+    public static byte[] createAppAttestAssertion(KeyPair keyPair, byte[] signedAuthenticatorData, byte[] clientDataHash, byte[] sentAuthenticatorData) {
+        byte[] nonce = MessageDigestUtil.createSHA256().digest(createSignedData(signedAuthenticatorData, clientDataHash));
+        EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) keyPair.getPrivate(), COSEAlgorithmIdentifier.ES256);
+        return objectConverter.getCborMapper().writeValueAsBytes(
+                new DCAssertion(calculateSignature(privateKey, nonce), sentAuthenticatorData));
+    }
+
+    public static DCAppleDevice createAppAttestDevice(KeyPair keyPair, byte[] keyId) {
+        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(
+                new AAGUID("appattest\0\0\0\0\0\0\0".getBytes(StandardCharsets.UTF_8)),
+                keyId,
+                EC2COSEKey.create((ECPublicKey) keyPair.getPublic(), COSEAlgorithmIdentifier.ES256));
+        return new DCAppleDeviceImpl(attestedCredentialData, null, 0, new AuthenticationExtensionsAuthenticatorOutputs<>());
     }
 
     public static AttestedCredentialData createAttestedCredentialData() {

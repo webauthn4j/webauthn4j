@@ -19,10 +19,14 @@ package com.webauthn4j.appattest;
 import com.webauthn4j.appattest.data.DCAssertion;
 import com.webauthn4j.appattest.data.DCAssertionData;
 import com.webauthn4j.appattest.data.DCAssertionRequest;
+import com.webauthn4j.appattest.data.ValidationCategory;
+import com.webauthn4j.appattest.data.extension.AppleBundleVersion01ExtensionAuthenticatorOutput;
+import com.webauthn4j.appattest.data.extension.AppleValidationCategory01ExtensionAuthenticatorOutput;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
@@ -43,9 +47,9 @@ class DeviceCheckAssertionManagerTest {
     }
 
     @Test
-    void parse_DCAssertion_with_signature_null_authenticatorData_null_test() {
+    void parse_DCAssertion_test() {
         DeviceCheckAssertionManager deviceCheckAssertionManager = new DeviceCheckAssertionManager();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAppAttestAssertionAuthenticatorData();
         byte[] keyId = new byte[64];
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] assertion = objectConverter.getCborMapper().writeValueAsBytes(new DCAssertion(new byte[32], authenticatorDataBytes));
@@ -56,6 +60,63 @@ class DeviceCheckAssertionManagerTest {
         assertThat(dcAssertionData.getSignature()).isEqualTo(new byte[32]);
         assertThat(dcAssertionData.getAuthenticatorData()).isEqualTo(authenticatorData);
         assertThat(dcAssertionData.getClientDataHash()).isEqualTo(new byte[32]);
+    }
+
+    @Test
+    void parse_extensions_with_default_constructor_test() {
+        assertAppleExtensions(new DeviceCheckAssertionManager());
+    }
+
+    @Test
+    void parse_without_ed_flag_returns_null_for_absent_apple_extensions_test() {
+        assertAbsentAppleExtensions(AuthenticatorData.BIT_AT);
+    }
+
+    @Test
+    void parse_with_ed_flag_without_extension_bytes_returns_null_for_absent_apple_extensions_test() {
+        assertAbsentAppleExtensions((byte) (AuthenticatorData.BIT_AT | AuthenticatorData.BIT_ED));
+    }
+
+    @Test
+    void parse_extensions_with_custom_validators_constructor_test() {
+        assertAppleExtensions(new DeviceCheckAssertionManager(Collections.emptyList()));
+    }
+
+    private void assertAbsentAppleExtensions(byte flags) {
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAppAttestAssertionAuthenticatorData();
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        authenticatorDataBytes[32] = flags;
+        byte[] assertion = objectConverter.getCborMapper().writeValueAsBytes(new DCAssertion(new byte[32], authenticatorDataBytes));
+
+        DCAssertionData data = new DeviceCheckAssertionManager().parse(
+                new DCAssertionRequest(new byte[32], assertion, new byte[32]));
+
+        assertThat(data.getAuthenticatorData().getExtensions().getKeys()).isEmpty();
+        assertThat(data.getAuthenticatorData().getExtensions().getExtension(AppleBundleVersion01ExtensionAuthenticatorOutput.class)).isNull();
+        assertThat(data.getAuthenticatorData().getExtensions().getExtension(AppleValidationCategory01ExtensionAuthenticatorOutput.class)).isNull();
+    }
+
+    private void assertAppleExtensions(DeviceCheckAssertionManager manager) {
+        ValidationCategory validationCategory = ValidationCategory.DEVELOPMENT;
+        AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> extensions =
+                new AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication()
+                        .setObjectConverter(DeviceCheckManager.createObjectConverter())
+                        .set(AppleBundleVersion01ExtensionAuthenticatorOutput.ID, "1")
+                        .set(AppleValidationCategory01ExtensionAuthenticatorOutput.ID, validationCategory)
+                        .build();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(
+                new byte[32], (byte) (AuthenticatorData.BIT_AT | AuthenticatorData.BIT_ED), 1, null, extensions);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        byte[] assertion = objectConverter.getCborMapper().writeValueAsBytes(new DCAssertion(new byte[32], authenticatorDataBytes));
+
+        DCAssertionData data = manager.parse(new DCAssertionRequest(new byte[32], assertion, new byte[32]));
+
+        assertThat(data.getAuthenticatorDataBytes()).isEqualTo(authenticatorDataBytes);
+        assertThat(data.getAuthenticatorData().getAttestedCredentialData()).isNull();
+        assertThat(data.getAuthenticatorData().getExtensions()
+                .getExtension(AppleBundleVersion01ExtensionAuthenticatorOutput.class).getBundleVersion()).isEqualTo("1");
+        assertThat(data.getAuthenticatorData().getExtensions()
+                .getExtension(AppleValidationCategory01ExtensionAuthenticatorOutput.class).getValidationCategory()).isEqualTo(validationCategory);
     }
 
 }

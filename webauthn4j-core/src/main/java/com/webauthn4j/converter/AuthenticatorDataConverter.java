@@ -127,25 +127,9 @@ public class AuthenticatorDataConverter {
             byte flags = byteBuffer.get();
             long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
-            AttestedCredentialData attestedCredentialData;
-            AuthenticationExtensionsAuthenticatorOutputs<T> extensions;
-            if (AuthenticatorData.checkFlagAT(flags)) {
-                if (byteBuffer.hasRemaining()) {
-                    attestedCredentialData = attestedCredentialDataConverter.convert(byteBuffer);
-                }
-                else {
-                    attestedCredentialData = null; // Apple App Attest API assertion has AT flag even though they don't have attestedCredentialData.
-                }
-            }
-            else {
-                attestedCredentialData = null;
-            }
-            if (AuthenticatorData.checkFlagED(flags)) {
-                extensions = convertToExtensions(byteBuffer);
-            }
-            else {
-                extensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
-            }
+            AttestedCredentialData attestedCredentialData = parseAttestedCredentialData(flags, byteBuffer);
+            AuthenticationExtensionsAuthenticatorOutputs<T> extensions = parseExtensions(flags, byteBuffer);
+
             if (byteBuffer.hasRemaining()) {
                 throw new DataConversionException("provided data does not have proper byte layout");
             }
@@ -157,6 +141,21 @@ public class AuthenticatorDataConverter {
         } catch (BufferUnderflowException e) {
             throw new DataConversionException("provided data does not have proper byte layout", e);
         }
+    }
+
+    protected @Nullable AttestedCredentialData parseAttestedCredentialData(byte flags, @NotNull ByteBuffer byteBuffer) {
+        if (AuthenticatorData.checkFlagAT(flags)) {
+            return attestedCredentialDataConverter.convert(byteBuffer);
+        }
+        return null;
+    }
+
+    protected <T extends ExtensionAuthenticatorOutput> @NotNull AuthenticationExtensionsAuthenticatorOutputs<T> parseExtensions(byte flags, @NotNull ByteBuffer byteBuffer) {
+        if (AuthenticatorData.checkFlagED(flags)) {
+            return convertToExtensions(byteBuffer);
+        }
+        return new AuthenticationExtensionsAuthenticatorOutputs<>(
+                objectConverter.getCborMapper().createObjectNode(), objectConverter);
     }
 
     /**
@@ -201,10 +200,11 @@ public class AuthenticatorDataConverter {
     }
 
     @SuppressWarnings("RedundantCast")
-    <T extends ExtensionAuthenticatorOutput> @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NotNull ByteBuffer byteBuffer) {
+    protected <T extends ExtensionAuthenticatorOutput> @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NotNull ByteBuffer byteBuffer) {
         // Since convertToExtensions is called when ED flag is set, return empty AuthenticationExtensionsAuthenticatorOutputs even when remaining is zero.
         if (byteBuffer.remaining() == 0) {
-            return new AuthenticationExtensionsAuthenticatorOutputs<>();
+            return new AuthenticationExtensionsAuthenticatorOutputs<>(
+                    objectConverter.getCborMapper().createObjectNode(), objectConverter);
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
