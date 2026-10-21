@@ -90,21 +90,37 @@ public class DeviceCheckManager {
     // ========================================================================================================
 
     /**
-     * Creates {@link DeviceCheckManager} with non strict configuration
+     * Creates a {@link DeviceCheckManager} that skips attestation certificate path trust verification.
+     *
+     * <p><strong>Warning:</strong> This configuration does not verify that the attestation certificate
+     * chains to Apple's App Attestation Root CA. Other checks, including nonce and public key checks,
+     * do not establish that Apple issued the attestation. Do not use this factory for production
+     * App Attest attestation verification.
      *
      * @return configured {@link DeviceCheckManager}
+     * @deprecated Use {@link #DeviceCheckManager(CertPathTrustworthinessVerifier)} with a certificate
+     * path verifier configured to trust Apple's App Attestation Root CA.
      */
+    @Deprecated
     public static @NotNull DeviceCheckManager createNonStrictDeviceCheckManager() {
         ObjectConverter objectConverter = createObjectConverter();
         return createNonStrictDeviceCheckManager(objectConverter);
     }
 
     /**
-     * Creates {@link DeviceCheckManager} with non strict configuration
+     * Creates a {@link DeviceCheckManager} that skips attestation certificate path trust verification.
+     *
+     * <p><strong>Warning:</strong> This configuration does not verify that the attestation certificate
+     * chains to Apple's App Attestation Root CA. Other checks, including nonce and public key checks,
+     * do not establish that Apple issued the attestation. Do not use this factory for production
+     * App Attest attestation verification.
      *
      * @param objectConverter ObjectConverter
      * @return configured {@link DeviceCheckManager}
+     * @deprecated Use {@link #DeviceCheckManager(CertPathTrustworthinessVerifier, ObjectConverter)}
+     * with a certificate path verifier configured to trust Apple's App Attestation Root CA.
      */
+    @Deprecated
     public static @NotNull DeviceCheckManager createNonStrictDeviceCheckManager(@NotNull ObjectConverter objectConverter) {
         return new DeviceCheckManager(
                 new NullCertPathTrustworthinessVerifier(),
