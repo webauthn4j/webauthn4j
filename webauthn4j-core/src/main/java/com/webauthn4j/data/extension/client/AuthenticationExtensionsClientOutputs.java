@@ -30,7 +30,8 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             CredentialPropertiesExtensionClientOutput.class,
             HMACSecretRegistrationExtensionClientOutput.class,
             HMACSecretAuthenticationExtensionClientOutput.class,
-            LargeBlobExtensionClientOutput.class
+            LargeBlobExtensionClientOutput.class,
+            PRFExtensionClientOutput.class
     );
 
     private static final Set<String> KNOWN_KEYS = Set.of(
@@ -40,7 +41,8 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             CredentialPropertiesExtensionClientOutput.KEY_CRED_PROPS,
             HMACSecretRegistrationExtensionClientOutput.KEY_HMAC_CREATE_SECRET,
             HMACSecretAuthenticationExtensionClientOutput.KEY_HMAC_GET_SECRET,
-            LargeBlobExtensionClientOutput.KEY_LARGE_BLOB
+            LargeBlobExtensionClientOutput.KEY_LARGE_BLOB,
+            PRFExtensionClientOutput.KEY_PRF
     );
 
     @JsonIgnore
@@ -115,6 +117,8 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
                 return getHMACGetSecret();
             case LargeBlobExtensionClientOutput.KEY_LARGE_BLOB:
                 return getLargeBlob();
+            case PRFExtensionClientOutput.KEY_PRF:
+                return getPrf();
             default:
                 JsonNode node = rawData.get(key);
                 if (node == null || node.isNull()) return null;
@@ -169,6 +173,11 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
         return ext != null ? ext.getValue() : null;
     }
 
+    @JsonIgnore
+    public @Nullable AuthenticationExtensionsPRFOutputs getPrf() {
+        PRFExtensionClientOutput ext = lookupExtension(PRFExtensionClientOutput.class);
+        return ext != null ? ext.getValue() : null;
+    }
 
 
     @SuppressWarnings("unchecked")
@@ -270,6 +279,11 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             return this;
         }
 
+        public @NotNull BuilderForRegistration setPrf(@Nullable AuthenticationExtensionsPRFOutputs prf) {
+            if (prf != null) values.put("prf", prf);
+            return this;
+        }
+
         public @NotNull BuilderForRegistration set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
@@ -315,6 +329,11 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
         public @NotNull BuilderForAuthentication setLargeBlob(@Nullable AuthenticationExtensionsLargeBlobOutputs largeBlob) {
             if (largeBlob != null) values.put("largeBlob", largeBlob);
+            return this;
+        }
+
+        public @NotNull BuilderForAuthentication setPrf(@Nullable AuthenticationExtensionsPRFOutputs prf) {
+            if (prf != null) values.put("prf", prf);
             return this;
         }
 

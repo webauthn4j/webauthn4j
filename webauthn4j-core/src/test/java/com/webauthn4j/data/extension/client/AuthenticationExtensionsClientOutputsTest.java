@@ -157,6 +157,27 @@ class AuthenticationExtensionsClientOutputsTest {
     }
 
     @Test
+    void registration_prf_test() {
+        AuthenticationExtensionsClientOutputs.BuilderForRegistration builder = new AuthenticationExtensionsClientOutputs.BuilderForRegistration();
+        builder.setPrf(new AuthenticationExtensionsPRFOutputs(true, null));
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> target = builder.build();
+
+        assertThat(target.getPrf()).isNotNull();
+        assertThat(target.getPrf().getEnabled()).isTrue();
+    }
+
+    @Test
+    void authentication_prf_test() {
+        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
+        AuthenticationExtensionsPRFValues results = new AuthenticationExtensionsPRFValues(new byte[]{1, 2}, null);
+        builder.setPrf(new AuthenticationExtensionsPRFOutputs(null, results));
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> target = builder.build();
+
+        assertThat(target.getPrf()).isNotNull();
+        assertThat(target.getPrf().getResults().getFirst()).isEqualTo(new byte[]{1, 2});
+    }
+
+    @Test
     void equals_hashCode_test() {
         UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder1 = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
