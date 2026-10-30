@@ -63,15 +63,18 @@ public class COSEAlgorithmIdentifier {
     public static final COSEAlgorithmIdentifier PS384;
     public static final COSEAlgorithmIdentifier PS512;
     /**
-     * ML-DSA-44 is only supported on JDK 24 or later
+     * ML-DSA-44 requires a JDK that includes the ML-DSA provider
+     * (e.g. JDK 24+, or backport builds such as 21.0.7+ / 17.0.21+)
      */
     public static final COSEAlgorithmIdentifier ML_DSA_44;
     /**
-     * ML-DSA-65 is only supported on JDK 24 or later
+     * ML-DSA-65 requires a JDK that includes the ML-DSA provider
+     * (e.g. JDK 24+, or backport builds such as 21.0.7+ / 17.0.21+)
      */
     public static final COSEAlgorithmIdentifier ML_DSA_65;
     /**
-     * ML-DSA-87 is only supported on JDK 24 or later
+     * ML-DSA-87 requires a JDK that includes the ML-DSA provider
+     * (e.g. JDK 24+, or backport builds such as 21.0.7+ / 17.0.21+)
      */
     public static final COSEAlgorithmIdentifier ML_DSA_87;
 
