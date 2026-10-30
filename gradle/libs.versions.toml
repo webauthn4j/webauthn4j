@@ -27,7 +27,7 @@ sonarqube = "7.5.0.8588"
 
 quarkus = "3.39.5"
 
-selenium = "4.49.0"
+selenium = "4.51.0"
 
 assertj = "3.27.7"
 
