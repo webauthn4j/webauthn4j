@@ -45,7 +45,8 @@ import java.util.List;
  * COSE key implementation for the AKP (Algorithm Key Pair) key type.
  * AKP is used by post-quantum cryptographic algorithms such as ML-DSA, SLH-DSA, and FN-DSA.
  * <p>
- * ML-DSA algorithms require JDK 24 or later at runtime.
+ * ML-DSA algorithms require a JDK that includes the ML-DSA provider
+ * (e.g. JDK 24+, or backport builds such as 21.0.7+ / 17.0.21+).
  *
  * @see <a href="https://www.rfc-editor.org/rfc/rfc9964.html">RFC 9964 - Use of ML-DSA in COSE and JOSE</a>
  */
@@ -211,7 +212,7 @@ public class AKPCOSEKey extends AbstractCOSEKey {
                 KeyFactory.getInstance(getAlgorithm().toSignatureAlgorithm().getJcaName());
             } catch (NoSuchAlgorithmException e) {
                 throw new ConstraintViolationException(
-                        "ML-DSA is not supported on this runtime. JDK 24 or later is required.", e);
+                        "ML-DSA is not supported on this runtime.", e);
             }
             int expectedPubLength = getExpectedMLDSAPublicKeyLength();
             if (pub != null && pub.length != expectedPubLength) {

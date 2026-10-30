@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Verifies that ML-DSA credential registration is rejected with a meaningful error
- * on JDK versions that do not support ML-DSA (< 24).
+ * on JDK versions that do not include the ML-DSA provider.
  */
 class MLDSARegistrationOnUnsupportedJDKTest {
 
@@ -52,6 +52,6 @@ class MLDSARegistrationOnUnsupportedJDKTest {
 
         assertThatThrownBy(() -> webAuthnManager.verify(registrationRequest, registrationParameters))
                 .isInstanceOf(ConstraintViolationException.class)
-                .hasMessage("ML-DSA is not supported on this runtime. JDK 24 or later is required.");
+                .hasMessage("ML-DSA is not supported on this runtime.");
     }
 }

@@ -24,7 +24,7 @@ description = "WebAuthn4J Core library"
 
 testing {
     suites {
-        register<JvmTestSuite>("testOnJDK17") {
+        register<JvmTestSuite>("testOnMLDSAUnsupportedJDK") {
             dependencies {
                 implementation(project())
                 implementation(platform(libs.spring.boot.bom))
@@ -152,7 +152,6 @@ testWithSecurityProvider {
 }
 
 tasks.named("test") {
-    dependsOn(testing.suites.named("testOnJDK17"))
     dependsOn(testing.suites.named("testWithoutBouncyCastle"))
     dependsOn(testing.suites.named("testWithBouncyCastle"))
     dependsOn(testing.suites.named("testWithBouncyCastleFIPS"))

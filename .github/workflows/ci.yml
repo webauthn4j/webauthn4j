@@ -58,13 +58,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Set up JDK 17 (for testOnJDK17 suite)
-        if: matrix.java_version != 17
-        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5
-        with:
-          distribution: 'temurin'
-          java-version: 17
-
       - name: Set up JDK ${{ matrix.java_version }}
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
@@ -96,6 +89,25 @@ jobs:
 
       - name: Run FIDO MDS integration tests
         run: ./gradlew :integration-tests:fido-mds-integration:check
+
+  ml-dsa-unsupported-jdk-test:
+    name: ML-DSA Unsupported JDK Test
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK 17.0.20 (ML-DSA unsupported)
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: 'temurin'
+          java-version: '17.0.20'
+          cache: 'gradle'
+
+      - name: Run ML-DSA unsupported JDK test
+        run: ./gradlew :webauthn4j-core:testOnMLDSAUnsupportedJDK
 
   code-analysis:
     name: Code Analysis
