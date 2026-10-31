@@ -68,6 +68,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew check -PtoolchainJdkVersion=${{ matrix.java_version }} -x :integration-tests:fido-mds-integration:check
 
+      - name: Check build plugins
+        run: >-
+          ./gradlew :maven-central-publish-plugin:check :optional-dependencies-plugin:check
+          :toolchain-pinning-plugin:check :test-with-security-provider-plugin:check
+          --dependency-verification strict
+
   # Run FIDO MDS integration tests separately to avoid rate limiting
   # from the FIDO Metadata Service (https://mds.fidoalliance.org/).
   # These tests must not run in parallel with other jobs that hit the same endpoint.
