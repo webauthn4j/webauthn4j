@@ -139,6 +139,10 @@
          <trusted-key id="59A8E169739301FD48139CA00E325BECB6962A24" group="jakarta.annotation" name="jakarta.annotation-api" />
          <trusted-key id="5B51871EA3910573DCD83A1B0AF99366B4D6DE14" group="com.aayushatharva.brotli4j" />
          <trusted-key id="5CBA19E56141E78D54BF716F08A4A4958D61FC3D" group="io.kotest" />
+         <trusted-key id="5DD80B0DDCCBE005F0A47FD66751E1A6E2001B8D">
+            <trusting group="com.squareup.okhttp3" />
+            <trusting group="com.squareup.okio" />
+         </trusted-key>
          <trusted-key id="60200AC4AE761F1614D6C46766D68DAA073BE985">
             <trusting group="ch.qos.logback" />
             <trusting group="org.slf4j" />

@@ -23,7 +23,7 @@ object BundleCreator {
                 stagingDir.walkTopDown()
                     .filter { it.isFile }
                     .forEach { file ->
-                        val relativePath = stagingDir.toPath().relativize(file.toPath()).toString()
+                        val relativePath = file.relativeTo(stagingDir).invariantSeparatorsPath
                         zos.putNextEntry(ZipEntry(relativePath))
                         Files.copy(file.toPath(), zos)
                         zos.closeEntry()
