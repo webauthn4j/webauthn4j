@@ -34,6 +34,8 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.verifier.exception.BadClientDataHashException;
 import org.junit.jupiter.api.Test;
 import test.AppAttestTestUtil;
 import org.mockito.MockedStatic;
@@ -41,6 +43,7 @@ import org.mockito.MockedStatic;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mockStatic;
 
 class DeviceCheckManagerTest {
@@ -49,6 +52,20 @@ class DeviceCheckManagerTest {
     private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
     private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
     private final AttestedCredentialDataConverter attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
+
+    @Test
+    void validate_attestation_with_wrong_expected_hash_test() {
+        var registrationObject = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
+        DCAttestationRequest request = new DCAttestationRequest(registrationObject.getKeyId(),
+                registrationObject.getAttestationObjectBytes(), registrationObject.getClientDataHash());
+        DCAttestationParameters parameters = new DCAttestationParameters(
+                new DCServerProperty("8YE23NZS57.com.kayak.travel", new DefaultChallenge(new byte[]{9})));
+        DeviceCheckManager manager = AppAttestTestUtil.createDeviceCheckManager();
+        assertThatThrownBy(() -> manager.validate(request, parameters))
+                .isInstanceOf(BadClientDataHashException.class);
+        assertThatThrownBy(() -> manager.validate(manager.parse(request), parameters))
+                .isInstanceOf(BadClientDataHashException.class);
+    }
 
     @Test
     void parse_attestation_test() {

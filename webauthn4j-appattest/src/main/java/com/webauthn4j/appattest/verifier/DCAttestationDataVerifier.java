@@ -16,6 +16,7 @@
 
 package com.webauthn4j.appattest.verifier;
 
+import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.appattest.data.DCAttestationData;
 import com.webauthn4j.appattest.data.DCAttestationParameters;
 import com.webauthn4j.appattest.verifier.attestation.statement.appleappattest.AppleAppAttestAttestationStatementVerifier;
@@ -86,6 +87,8 @@ public class DCAttestationDataVerifier extends CoreRegistrationDataVerifier {
 
         DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
         DCAttestationParameters dcAttestationParameters = (DCAttestationParameters) registrationParameters;
+        DCClientDataHashVerifier.verify(registrationData.getClientDataHash(),
+                (DCServerProperty) registrationParameters.getServerProperty());
         //noinspection ConstantConditions null check is already done in caller
         return new DCRegistrationObject(
                 dcAttestationData.getKeyId(),
