@@ -35,4 +35,17 @@ class DCServerPropertyTest {
                 .hasSameHashCodeAs(instanceB);
     }
 
+    @Test
+    void constructor_with_client_data_hash_test() {
+        byte[] clientDataHash = new byte[32];
+        DCServerProperty instanceA = new DCServerProperty("8YE23NZS57.com.kayak.travel", clientDataHash);
+        DCServerProperty instanceB = new DCServerProperty("8YE23NZS57", "com.kayak.travel", clientDataHash);
+
+        assertThat(instanceA.getClientDataHash()).isEqualTo(clientDataHash);
+        assertThat(instanceB.getClientDataHash()).isEqualTo(clientDataHash);
+        assertThat(instanceA).isEqualTo(instanceB).hasSameHashCodeAs(instanceB);
+        byte[] differentHash = new byte[32];
+        differentHash[0] = 1;
+        assertThat(instanceA).isNotEqualTo(new DCServerProperty("8YE23NZS57.com.kayak.travel", differentHash));
+    }
 }

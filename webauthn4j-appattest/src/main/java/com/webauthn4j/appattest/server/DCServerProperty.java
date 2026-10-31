@@ -18,11 +18,17 @@ package com.webauthn4j.appattest.server;
 
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.CoreServerProperty;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.MessageDigestUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 public class DCServerProperty extends CoreServerProperty {
+
+    private final byte[] clientDataHash;
 
     /**
      * Constructor of {@link DCServerProperty}
@@ -30,8 +36,10 @@ public class DCServerProperty extends CoreServerProperty {
      * @param rpId      rpId or in other words, App ID, which is the concatenation of your 10-digit team identifier, a period, and your app’s CFBundleIdentifier value.
      * @param challenge challenge
      */
-    public DCServerProperty(@NotNull String rpId, @Nullable Challenge challenge) {
+    public DCServerProperty(@NotNull String rpId, @NotNull Challenge challenge) {
         super(rpId, challenge);
+        AssertUtil.notNull(challenge, "challenge must not be null");
+        this.clientDataHash = MessageDigestUtil.createSHA256().digest(challenge.getValue());
     }
 
     /**
@@ -41,8 +49,47 @@ public class DCServerProperty extends CoreServerProperty {
      * @param cfBundleIdentifier CFBundleIdentifier
      * @param challenge          challenge
      */
-    public DCServerProperty(@NotNull String teamIdentifier, @NotNull String cfBundleIdentifier, @Nullable Challenge challenge) {
-        super(formatRpId(teamIdentifier, cfBundleIdentifier), challenge);
+    public DCServerProperty(@NotNull String teamIdentifier, @NotNull String cfBundleIdentifier, @NotNull Challenge challenge) {
+        this(formatRpId(teamIdentifier, cfBundleIdentifier), challenge);
+    }
+
+    /**
+     * @param rpId expected App ID
+     * @param clientDataHash expected SHA-256 hash computed by the server from validated data;
+     *                       the caller must verify the embedded challenge before construction
+     */
+    public DCServerProperty(@NotNull String rpId, @NotNull byte[] clientDataHash) {
+        super(rpId, null);
+        this.clientDataHash = ArrayUtil.clone(clientDataHash);
+    }
+
+    /**
+     * @param teamIdentifier team identifier
+     * @param cfBundleIdentifier bundle identifier
+     * @param clientDataHash expected SHA-256 hash computed by the server from validated data
+     * @see #DCServerProperty(String, byte[])
+     */
+    public DCServerProperty(@NotNull String teamIdentifier, @NotNull String cfBundleIdentifier,
+                            @NotNull byte[] clientDataHash) {
+        this(formatRpId(teamIdentifier, cfBundleIdentifier), clientDataHash);
+    }
+
+    public @Nullable byte[] getClientDataHash() {
+        return ArrayUtil.clone(clientDataHash);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        DCServerProperty that = (DCServerProperty) o;
+        return Arrays.equals(clientDataHash, that.clientDataHash);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + Arrays.hashCode(clientDataHash);
     }
 
     private static @NotNull String formatRpId(@NotNull String teamIdentifier, @NotNull String cfBundleIdentifier) {
