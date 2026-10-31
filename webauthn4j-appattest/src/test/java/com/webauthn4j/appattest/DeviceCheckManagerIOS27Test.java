@@ -95,7 +95,7 @@ class DeviceCheckManagerIOS27Test {
         try (MockedStatic<Instant> mocked = mockStatic(Instant.class)) {
             mocked.when(Instant::now).thenReturn(timestamp);
             dcAttestationData = manager.validate(new DCAttestationRequest(keyId, attestationObject, clientDataHash),
-                    new DCAttestationParameters(new DCServerProperty(APP_IDENTIFIER, new DefaultChallenge(clientDataHash))));
+                    new DCAttestationParameters(new DCServerProperty(APP_IDENTIFIER, clientDataHash)));
         }
 
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = dcAttestationData.getAttestationObject().getAuthenticatorData();
