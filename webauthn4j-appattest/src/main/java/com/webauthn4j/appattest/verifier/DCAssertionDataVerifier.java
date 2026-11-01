@@ -16,6 +16,7 @@
 
 package com.webauthn4j.appattest.verifier;
 
+import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.appattest.data.DCAssertionParameters;
 import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.data.CoreAuthenticationParameters;
@@ -47,6 +48,8 @@ public class DCAssertionDataVerifier extends CoreAuthenticationDataVerifier {
         byte[] clientDataHash = authenticationData.getClientDataHash();
 
         DCAssertionParameters dcAssertionParameters = (DCAssertionParameters) authenticationParameters;
+        DCClientDataHashVerifier.verify(clientDataHash,
+                (DCServerProperty) authenticationParameters.getServerProperty());
         //noinspection ConstantConditions null check is already done in caller
         return new DCAuthenticationObject(
                 credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, dcAssertionParameters
