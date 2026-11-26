@@ -137,6 +137,25 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
     }
 
     @Test
+    void shouldDeserializePRFInput() {
+        //Given
+        String json = "{ \"prf\": { \"eval\": { \"first\": \"AQ\" } } }";
+
+        //When
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensionInputs =
+                jsonMapper.readValue(
+                        json,
+                        new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {
+                        }
+                );
+
+        //Then
+        assertAll(
+                () -> assertThat(extensionInputs.getExtension(PRFExtensionClientInput.class).getValue().getEval().getFirst()).isEqualTo(new byte[]{1})
+        );
+    }
+
+    @Test
     void shouldThrowExceptionForInvalidInput() {
         //Given
         String invalidJson = "{invalid-json}";
